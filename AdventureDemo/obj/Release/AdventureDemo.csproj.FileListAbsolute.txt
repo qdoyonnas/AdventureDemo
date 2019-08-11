@@ -1,0 +1,17 @@
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\bin\Release\AdventureDemo.exe.config
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\bin\Release\AdventureDemo.exe
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\bin\Release\AdventureDemo.pdb
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\bin\Release\Newtonsoft.Json.dll
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\bin\Release\WaywardEngine.dll
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\bin\Release\WaywardEngine.pdb
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\bin\Release\WaywardEngine.dll.config
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\bin\Release\Newtonsoft.Json.xml
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Release\AdventureDemo.csprojAssemblyReference.cache
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Release\App.g.cs
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Release\AdventureDemo_MarkupCompile.cache
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Release\AdventureDemo.Properties.Resources.resources
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Release\AdventureDemo.csproj.GenerateResource.cache
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Release\AdventureDemo.csproj.CoreCompileInputs.cache
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Release\AdventureDemo.csproj.CopyComplete
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Release\AdventureDemo.exe
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Release\AdventureDemo.pdb

@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:WaywardEngine">
+
+    <Border x:Key="BlankPage" x:Shared="false">
+        <ScrollViewer MinHeight="400" MinWidth="650" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
+</ResourceDictionary>
