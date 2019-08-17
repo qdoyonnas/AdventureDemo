@@ -1,4 +1,3 @@
-C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\App.g.cs
 C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo_MarkupCompile.cache
 C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo.Properties.Resources.resources
 C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo.csproj.GenerateResource.cache
@@ -15,9 +14,10 @@ C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo.e
 C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo.pdb
 C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\bin\Debug\Newtonsoft.Json.xml
-C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\App.baml
 C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo.g.resources
 C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo_MarkupCompile.lref
 C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\ResourceDictionaries\Brushes.baml
 C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\ResourceDictionaries\Styles.baml
 C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\ResourceDictionaries\Pages.baml
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo.baml
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo.g.cs

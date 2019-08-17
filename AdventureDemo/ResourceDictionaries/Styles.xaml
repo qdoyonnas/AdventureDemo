@@ -9,6 +9,7 @@
     
     <Style x:Key="WindowBackground">
         <Setter Property="Window.Background" Value="{StaticResource WindowBackgroundBrush}" />
+        <Setter Property="Canvas.Background" Value="{StaticResource WindowBackgroundBrush}" />
     </Style>
     <Style TargetType="ContextMenu">
         <Setter Property="SnapsToDevicePixels" Value="True" />

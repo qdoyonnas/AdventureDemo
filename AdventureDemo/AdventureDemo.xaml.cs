@@ -14,13 +14,13 @@ namespace AdventureDemo
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class AdventureApp : Application
     {
-        MainWindow window;
-
         private void Application_Startup( object sender, StartupEventArgs e )
         {
-            window = new MainWindow();
+            WaywardManager.instance.Init(this);
+            MainWindow window = WaywardManager.instance.window;
+
             // Fetch WaywardEngine Resources
             Resources.MergedDictionaries.Add( new ResourceDictionary {
                 Source = new Uri("/WaywardEngine;component/ResourceDictionaries/Pages.xaml", UriKind.RelativeOrAbsolute)
@@ -63,25 +63,34 @@ namespace AdventureDemo
 
             // Game Setup
             window.Title = "AdventureDemo";
-            window.Style = Resources["WindowBackground"] as Style;
+            window.mainCanvas.Style = Resources["WindowBackground"] as Style;
+
             MenuItem newPageMenuItem = new MenuItem();
             newPageMenuItem.Header = "New Page";
-            newPageMenuItem.Click += CreateNewPage;
+            newPageMenuItem.Click += CreateBlankPage;
             window.ContextMenu.Items.Insert(0, newPageMenuItem );
 
             window.Show();
         }
 
-        private void CreateNewPage( object sender, RoutedEventArgs e )
+        private void CreateBlankPage( object sender, RoutedEventArgs e )
         {
-            Point mousePosition = Mouse.GetPosition(window.mainCanvas);
+            Point mousePosition = WaywardManager.instance.GetMousePosition();
 
-            FrameworkElement newPage = Resources["BlankPage"] as FrameworkElement;
-            newPage.Style = Resources["PageStyle"] as Style;
-            window.mainCanvas.Children.Add(newPage);
+            FrameworkElement element = Resources["BlankPage"] as FrameworkElement;
+            element.Style = Resources["PageStyle"] as Style;
 
-            Canvas.SetLeft(newPage, mousePosition.X);
-            Canvas.SetTop(newPage, mousePosition.Y);
+            CreateNewPage( element, mousePosition );
+        }
+
+        private void CreateNewPage( FrameworkElement element, Point position )
+        {
+            WaywardManager.instance.window.mainCanvas.Children.Add(element);
+
+            Canvas.SetLeft(element, position.X);
+            Canvas.SetTop(element, position.Y);
+
+            WaywardEngine.Page newPage = new WaywardEngine.Page(element);
         }
 
         private void Application_DispatcherUnhandledException( object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e )

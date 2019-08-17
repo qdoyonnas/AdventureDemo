@@ -31,6 +31,7 @@ namespace WaywardEngine
             //mainView.Stretch = Stretch.Uniform;
 
             mainCanvas = new Canvas();
+            //mainCanvas.Background = Brushes.Yellow;
             //mainView.Child = mainCanvas;
 
             this.AddChild( mainCanvas );
