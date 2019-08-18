@@ -21,7 +21,22 @@ namespace WaywardEngine
             element.PreviewMouseDown += OnMouseDown;
             element.PreviewMouseUp += OnMouseUp;
 
+            int maxZ = Utilities.GetMaxZOfCanvas( WaywardManager.instance.window.mainCanvas );
+            Canvas.SetZIndex( element, maxZ + 1 );
+
+            SetupContextMenu();
+
             WaywardManager.instance.pages.Add(this);
+        }
+
+        private void SetupContextMenu()
+        {
+            ContextMenu contextMenu = new ContextMenu();
+            element.ContextMenu = contextMenu;
+            MenuItem closeMenuItem = new MenuItem();
+            closeMenuItem.Header = "Close";
+            closeMenuItem.Click += CloseAction;
+            element.ContextMenu.Items.Insert(0, closeMenuItem );
         }
 
         private void OnMouseDown( object sender, MouseButtonEventArgs e )
@@ -32,6 +47,8 @@ namespace WaywardEngine
             grabOffset = new Point( Canvas.GetLeft(element), Canvas.GetTop(element) ) - WaywardManager.instance.GetMousePosition();
             WaywardManager.instance.SetMouseMoveHandler( OnMouseMove, true );
             WaywardManager.instance.SetMouseUpHandler( OnMouseUp, true );
+
+            Utilities.BringToFrontOfCanvas(WaywardManager.instance.window.mainCanvas, element);
         }
         private void OnMouseUp( object sender, MouseButtonEventArgs e )
         {
@@ -49,6 +66,12 @@ namespace WaywardEngine
 
             Canvas.SetLeft( element, offsetPosition.X );
             Canvas.SetTop( element, offsetPosition.Y );
+        }
+        
+        private void CloseAction( object sender, RoutedEventArgs e )
+        {
+            WaywardManager.instance.window.mainCanvas.Children.Remove(element);
+            WaywardManager.instance.pages.Remove(this);
         }
     }
 }

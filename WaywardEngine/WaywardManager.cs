@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace WaywardEngine
@@ -70,6 +71,16 @@ namespace WaywardEngine
                 window.mainCanvas.MouseUp -= handler;
                 window.mainCanvas.PreviewMouseUp -= handler;
             }
+        }
+
+        public void CreateNewPage( FrameworkElement element, Point position )
+        {
+            window.mainCanvas.Children.Add(element);
+
+            Canvas.SetLeft(element, position.X);
+            Canvas.SetTop(element, position.Y);
+
+            Page newPage = new Page(element);
         }
     }
 }

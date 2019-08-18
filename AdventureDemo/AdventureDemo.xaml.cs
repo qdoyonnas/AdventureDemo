@@ -65,12 +65,16 @@ namespace AdventureDemo
             window.Title = "AdventureDemo";
             window.mainCanvas.Style = Resources["WindowBackground"] as Style;
 
+            SetupContextMenu();
+
+            window.Show();
+        }
+        private void SetupContextMenu()
+        {
             MenuItem newPageMenuItem = new MenuItem();
             newPageMenuItem.Header = "New Page";
             newPageMenuItem.Click += CreateBlankPage;
-            window.ContextMenu.Items.Insert(0, newPageMenuItem );
-
-            window.Show();
+            WaywardManager.instance.window.ContextMenu.Items.Insert(0, newPageMenuItem );
         }
 
         private void CreateBlankPage( object sender, RoutedEventArgs e )
@@ -80,17 +84,7 @@ namespace AdventureDemo
             FrameworkElement element = Resources["BlankPage"] as FrameworkElement;
             element.Style = Resources["PageStyle"] as Style;
 
-            CreateNewPage( element, mousePosition );
-        }
-
-        private void CreateNewPage( FrameworkElement element, Point position )
-        {
-            WaywardManager.instance.window.mainCanvas.Children.Add(element);
-
-            Canvas.SetLeft(element, position.X);
-            Canvas.SetTop(element, position.Y);
-
-            WaywardEngine.Page newPage = new WaywardEngine.Page(element);
+            WaywardManager.instance.CreateNewPage( element, mousePosition );
         }
 
         private void Application_DispatcherUnhandledException( object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e )
