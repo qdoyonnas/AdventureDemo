@@ -18,7 +18,7 @@ C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo.g
 C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo_MarkupCompile.lref
 C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\ResourceDictionaries\Brushes.baml
 C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\ResourceDictionaries\Pages.baml
-C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo.baml
-C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo.g.cs
 C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\ResourceDictionaries\MiscStyles.baml
 C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\ResourceDictionaries\ContextMenuStyle.baml
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureApp.baml
+C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureApp.g.cs

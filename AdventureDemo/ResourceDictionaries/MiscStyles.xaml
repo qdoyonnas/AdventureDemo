@@ -28,10 +28,11 @@
                 <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
                 <Setter Property="BorderThickness" Value="{StaticResource BorderThickness}" />
             </Style>
-            <Style x:Key="Header" TargetType="Label">
+            <Style x:Key="Header" TargetType="TextBlock">
                 <Setter Property="Padding" Value="0" />
                 <Setter Property="Margin" Value="0 0 0 10" />
-                <Setter Property="FontSize" Value="32" />
+                <Setter Property="FontSize" Value="24" />
+                <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
             </Style>
             <Style TargetType="Separator">
                 <Setter Property="Background">

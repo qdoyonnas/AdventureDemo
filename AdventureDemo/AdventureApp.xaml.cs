@@ -16,6 +16,9 @@ namespace AdventureDemo
     /// </summary>
     public partial class AdventureApp : Application
     {
+        PlaceholderObject room1;
+        PlaceholderObject room2;
+
         private void Application_Startup( object sender, StartupEventArgs e )
         {
             WaywardManager.instance.Init(this);
@@ -67,6 +70,8 @@ namespace AdventureDemo
 
             SetupContextMenu();
 
+            SetupGame();
+
             window.Show();
         }
         private void SetupContextMenu()
@@ -83,6 +88,30 @@ namespace AdventureDemo
             openItem.Items.Insert(0, newItem );
         }
         
+        private void SetupGame()
+        {
+            room1 = new PlaceholderObject("Dim Room", string.Empty, string.Empty);
+            room1.contents.Add( new PlaceholderObject("You", "--", "??") );
+            room1.contents.Add( new PlaceholderObject("Door", string.Empty, string.Empty) );
+
+            PlaceholderObject table = new PlaceholderObject("Table", string.Empty, string.Empty);
+            room1.contents.Add(table);
+
+            table.contents.Add( new PlaceholderObject("Candle", string.Empty, string.Empty) );
+            table.contents.Add( new PlaceholderObject("Mouse", "Cheese", "Eating Cheese") );
+            table.contents.Add( new PlaceholderObject("Box", string.Empty, string.Empty) );
+
+            PlaceholderObject bust = new PlaceholderObject("Bust", string.Empty, string.Empty);
+            room1.contents.Add( bust );
+            bust.contents.Add( new PlaceholderObject("Raven", "Scroll", "??") );
+
+            room1.contents.Add( new PlaceholderObject("Torch", string.Empty, string.Empty) );
+
+            room2 = new PlaceholderObject("Round Room", string.Empty, string.Empty);
+            room2.contents.Add( new PlaceholderObject("Door", string.Empty, string.Empty) );
+            room2.contents.Add( new PlaceholderObject("Chest", string.Empty, string.Empty) );
+        }
+
         private void CreateOverviewPage( object sender, RoutedEventArgs e )
         {
             Point mousePosition = WaywardManager.instance.GetMousePosition();
@@ -90,11 +119,11 @@ namespace AdventureDemo
             FrameworkElement element = Resources["OverviewPage"] as FrameworkElement;
             OverviewPage page = new OverviewPage(element);
             WaywardManager.instance.AddPage( page, mousePosition );
-
-            page.SetLocation("Dim Room");
-            page.AddContent("You", "--", "??");
-            page.AddContent("Door", "--", "--");
+            
+            page.DisplayObject(room1);
+            page.DisplayObject(room2);
             page.AddEvent("You wake up.");
+            page.AddEvent("The mouse eats the Cheese");
 
             StackPanel events = LogicalTreeHelper.FindLogicalNode( element, "Events") as StackPanel;
         }

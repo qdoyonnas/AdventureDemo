@@ -53,17 +53,19 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="AdventureDemo.xaml">
+    <ApplicationDefinition Include="AdventureApp.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AdventureDemo.xaml.cs">
-      <DependentUpon>AdventureDemo.xaml</DependentUpon>
+    <Compile Include="AdventureApp.xaml.cs">
+      <DependentUpon>AdventureApp.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameManager.cs" />
     <Compile Include="OverviewPage.cs" />
+    <Compile Include="PlaceholderObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
