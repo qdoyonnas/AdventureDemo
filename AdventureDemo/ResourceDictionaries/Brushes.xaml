@@ -7,6 +7,11 @@
         <GradientStop Offset="1" Color="Black" />
     </RadialGradientBrush>
 
+    <Color x:Key="WaywardAuburn">#A07F00</Color>
+    <SolidColorBrush x:Key="WaywardAuburnBrush" Color="{StaticResource WaywardAuburn}" />
+    <Color x:Key="WaywardGold">#F5C50D</Color>
+    <SolidColorBrush x:Key="WaywardGoldBrush" Color="{StaticResource WaywardGold}" />
+
     <LinearGradientBrush x:Key="BackgroundBrush">
         <GradientStop Offset="0" Color="Black" />
         <GradientStop Offset="1" Color="Black" />
@@ -17,12 +22,12 @@
     </LinearGradientBrush>
     
     <LinearGradientBrush x:Key="BorderBrush">
-        <GradientStop Offset="0" Color="#A07F00" />
-        <GradientStop Offset="1" Color="#A07F00" />
+        <GradientStop Offset="0" Color="{StaticResource WaywardAuburn}" />
+        <GradientStop Offset="1" Color="{StaticResource WaywardAuburn}" />
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="HighlightedBorderBrush">
-        <GradientStop Offset="0" Color="#F5C50D" />
-        <GradientStop Offset="1" Color="#F5C50D" />
+        <GradientStop Offset="0" Color="{StaticResource WaywardGold}" />
+        <GradientStop Offset="1" Color="{StaticResource WaywardGold}" />
     </LinearGradientBrush>
     
     <LinearGradientBrush x:Key="ForegroundBrush">
@@ -32,6 +37,10 @@
     <LinearGradientBrush x:Key="HighlightedForegroundBrush">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="1" Color="White" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="DisabledForegroundBrush">
+        <GradientStop Offset="0" Color="#666666" />
+        <GradientStop Offset="1" Color="#666666" />
     </LinearGradientBrush>
 
 </ResourceDictionary>

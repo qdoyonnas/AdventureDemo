@@ -73,14 +73,12 @@ namespace WaywardEngine
             }
         }
 
-        public void CreateNewPage( FrameworkElement element, Point position )
+        public void AddPage( Page page, Point position )
         {
-            window.mainCanvas.Children.Add(element);
+            window.mainCanvas.Children.Add(page.element);
 
-            Canvas.SetLeft(element, position.X);
-            Canvas.SetTop(element, position.Y);
-
-            Page newPage = new Page(element);
+            Canvas.SetLeft(page.element, position.X);
+            Canvas.SetTop(page.element, position.Y);
         }
     }
 }

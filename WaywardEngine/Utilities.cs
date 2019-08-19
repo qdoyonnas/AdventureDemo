@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace WaywardEngine
 {
@@ -24,7 +25,6 @@ namespace WaywardEngine
 
         public static void BringToFrontOfCanvas( Canvas parent, FrameworkElement target )
         {
-            Console.WriteLine("IN BringToFrontOfCanvas");
             int currentIndex = Canvas.GetZIndex(target);
             int zIndex = 0;
             int maxZ = 0;

@@ -71,20 +71,32 @@ namespace AdventureDemo
         }
         private void SetupContextMenu()
         {
-            MenuItem newPageMenuItem = new MenuItem();
-            newPageMenuItem.Header = "New Page";
-            newPageMenuItem.Click += CreateBlankPage;
-            WaywardManager.instance.window.ContextMenu.Items.Insert(0, newPageMenuItem );
-        }
+            ContextMenu menu = WaywardManager.instance.window.ContextMenu;
 
-        private void CreateBlankPage( object sender, RoutedEventArgs e )
+            MenuItem openItem = new MenuItem();
+            openItem.Header = "Open";
+            menu.Items.Insert(0, openItem );
+
+            MenuItem newItem = new MenuItem();
+            newItem.Header = "Overview Page";
+            newItem.Click += CreateOverviewPage;
+            openItem.Items.Insert(0, newItem );
+        }
+        
+        private void CreateOverviewPage( object sender, RoutedEventArgs e )
         {
             Point mousePosition = WaywardManager.instance.GetMousePosition();
 
-            FrameworkElement element = Resources["BlankPage"] as FrameworkElement;
-            element.Style = Resources["PageStyle"] as Style;
+            FrameworkElement element = Resources["OverviewPage"] as FrameworkElement;
+            OverviewPage page = new OverviewPage(element);
+            WaywardManager.instance.AddPage( page, mousePosition );
 
-            WaywardManager.instance.CreateNewPage( element, mousePosition );
+            page.SetLocation("Dim Room");
+            page.AddContent("You", "--", "??");
+            page.AddContent("Door", "--", "--");
+            page.AddEvent("You wake up.");
+
+            StackPanel events = LogicalTreeHelper.FindLogicalNode( element, "Events") as StackPanel;
         }
 
         private void Application_DispatcherUnhandledException( object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e )

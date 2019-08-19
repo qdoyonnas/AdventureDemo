@@ -11,7 +11,7 @@ namespace WaywardEngine
 {
     public class Page
     {
-        FrameworkElement element;
+        public FrameworkElement element;
 
         Vector grabOffset;
 

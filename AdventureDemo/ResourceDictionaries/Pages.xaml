@@ -2,6 +2,34 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:AdventureDemo">
 
-    
+    <Grid x:Key="OverviewEntry" x:Shared="false">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="1" Name="ObjectName">Name</TextBlock>
+        <TextBlock Grid.Column="2" Name="ObjectHolding">Holding</TextBlock>
+        <TextBlock Grid.Column="3" Name="ObjectAction">Action</TextBlock>
+    </Grid>
+
+    <Border x:Key="OverviewPage" x:Shared="false" Style="{StaticResource OverviewPageStyle}">
+        <StackPanel>
+            <Border>
+                <ScrollViewer MinHeight="300" MinWidth="650" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Name="Contents">
+                        <Label Style="{DynamicResource Header}" Name="Location"></Label>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+            <Border>
+                <ScrollViewer MinHeight="500" MinWidth="650" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Name="Events">
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </StackPanel>
+    </Border>
 
 </ResourceDictionary>
