@@ -11,6 +11,7 @@ namespace WaywardEngine
 {
     public class Page
     {
+        // FrameworkElement that this Page is connected to
         public FrameworkElement element;
 
         Vector grabOffset;
@@ -18,17 +19,21 @@ namespace WaywardEngine
         public Page(FrameworkElement element)
         {
             this.element = element;
+
+            // Mouse drag handlers
             element.PreviewMouseDown += OnMouseDown;
             element.PreviewMouseUp += OnMouseUp;
 
+            // Newest Page is always in front (also assures no overlapping zIndex values)
             int maxZ = Utilities.GetMaxZOfCanvas( WaywardManager.instance.window.mainCanvas );
             Canvas.SetZIndex( element, maxZ + 1 );
 
             SetupContextMenu();
-
-            WaywardManager.instance.pages.Add(this);
         }
 
+        /// <summary>
+        /// Adds default context menu with a close item to element.
+        /// </summary>
         private void SetupContextMenu()
         {
             ContextMenu contextMenu = new ContextMenu();
@@ -41,10 +46,13 @@ namespace WaywardEngine
 
         private void OnMouseDown( object sender, MouseButtonEventArgs e )
         {
+            // If no page is already grabbed
             if( WaywardManager.instance.grabbedPage != null ) { return; }
 
             WaywardManager.instance.grabbedPage = this;
             grabOffset = new Point( Canvas.GetLeft(element), Canvas.GetTop(element) ) - WaywardManager.instance.GetMousePosition();
+
+            // Add handlers to mainCanvas to avoivd lose of control when moving mouse too fast
             WaywardManager.instance.SetMouseMoveHandler( OnMouseMove, true );
             WaywardManager.instance.SetMouseUpHandler( OnMouseUp, true );
 
@@ -55,6 +63,8 @@ namespace WaywardEngine
             if( WaywardManager.instance.grabbedPage != this ) { return; }
 
             WaywardManager.instance.grabbedPage = null;
+
+            // Remove previously added handlers
             WaywardManager.instance.SetMouseMoveHandler( OnMouseMove, false );
             WaywardManager.instance.SetMouseUpHandler( OnMouseUp, false );
         }

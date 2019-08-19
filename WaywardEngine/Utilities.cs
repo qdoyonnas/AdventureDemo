@@ -11,6 +11,11 @@ namespace WaywardEngine
 {
     public static class Utilities
     {
+        /// <summary>
+        /// Returns highest zIndex value of elements inside Canvas Parent.
+        /// </summary>
+        /// <param name="parent">The Canvas to search.</param>
+        /// <returns></returns>
         public static int GetMaxZOfCanvas( Canvas parent )
         {
             int zIndex = 0;
@@ -23,6 +28,11 @@ namespace WaywardEngine
             return maxZ;
         }
 
+        /// <summary>
+        /// Places FrameworkElement target at highest zIndex value in Canvas parent.
+        /// </summary>
+        /// <param name="parent">Containing Canvas.</param>
+        /// <param name="target">FramworkElement to be moved to front.</param>
         public static void BringToFrontOfCanvas( Canvas parent, FrameworkElement target )
         {
             int currentIndex = Canvas.GetZIndex(target);
