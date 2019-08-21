@@ -24,7 +24,7 @@ namespace AdventureDemo
         /// Adds Object obj to the OverviewPage's content section.
         /// </summary>
         /// <param name="obj">Object to be displayed.</param>
-        public void DisplayObject( PlaceholderObject obj )
+        public void DisplayObject( GameObject obj )
         {
             AddContent( contents, obj );
         }
@@ -33,7 +33,7 @@ namespace AdventureDemo
         /// </summary>
         /// <param name="parent">Stackpanel being populated.</param>
         /// <param name="obj">Object to add.</param>
-        private void AddContent( StackPanel parent, PlaceholderObject obj )
+        private void AddContent( StackPanel parent, GameObject obj )
         {
             // Add separator from previous entry
             if( parent.Children.Count > 0 ) {
@@ -44,35 +44,28 @@ namespace AdventureDemo
             if( parent != null ) {
                 FrameworkElement entry = WaywardManager.instance.application.Resources["OverviewEntry"] as FrameworkElement;
                 // Name
-                TextBlock text = LogicalTreeHelper.FindLogicalNode( entry, "ObjectName") as TextBlock;
+                TextBlock text = LogicalTreeHelper.FindLogicalNode( entry, "Data1") as TextBlock;
                 if( text != null ) {
                     if( parent == contents ) {
                         text.FontSize = 24;
                     }
-                    text.Text = obj.name;
-                }
-                // Held Object
-                text = LogicalTreeHelper.FindLogicalNode( entry, "ObjectHolding") as TextBlock;
-                if( text != null ) {
-                    text.Text = obj.holding;
-                }
-                // Action
-                text = LogicalTreeHelper.FindLogicalNode( entry, "ObjectAction") as TextBlock;
-                if( text != null ) {
-                    text.Text = obj.action;
+                    text.Text = obj.GetData("name");
                 }
 
                 parent.Children.Add(entry);
 
-                // Populate substack for contained visible objects
-                StackPanel objectContents = LogicalTreeHelper.FindLogicalNode( entry, "ObjectContents" ) as StackPanel;
-                if( objectContents != null ) {
-                    if( obj.contents.Count > 0 ) {
-                        foreach( PlaceholderObject child in obj.contents ) {
-                            AddContent( objectContents, child );
+                // Populate subdata
+                if( obj is IContainer ) {
+                    IContainer container = obj as IContainer;
+                    StackPanel objectContents = LogicalTreeHelper.FindLogicalNode( entry, "SubData" ) as StackPanel;
+                    if( objectContents != null ) {
+                        if( container.ContentCount() > 0 ) {
+                            for( int i = 0; i < container.ContentCount(); i++ ) {
+                                AddContent( objectContents, container.GetContent(i) );
+                            }
+                        } else {
+                            objectContents.Visibility = Visibility.Hidden;
                         }
-                    } else {
-                        objectContents.Visibility = Visibility.Hidden;
                     }
                 }
             }

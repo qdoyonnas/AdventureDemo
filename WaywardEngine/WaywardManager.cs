@@ -103,7 +103,7 @@ namespace WaywardEngine
             Canvas.SetLeft(page.element, position.X);
             Canvas.SetTop(page.element, position.Y);
 
-            WaywardManager.instance.pages.Add(this);
+            WaywardManager.instance.pages.Add(page);
         }
     }
 }

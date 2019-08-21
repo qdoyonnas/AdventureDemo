@@ -13,12 +13,12 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Name="ObjectName">Name</TextBlock>
-            <TextBlock Grid.Column="1" Name="ObjectHolding">Holding</TextBlock>
-            <TextBlock Grid.Column="2" Name="ObjectAction">Action</TextBlock>
+            <TextBlock Grid.Column="0" Name="Data1"></TextBlock>
+            <TextBlock Grid.Column="1" Name="Data2"></TextBlock>
+            <TextBlock Grid.Column="2" Name="Data3"></TextBlock>
         </Grid>
         <Grid Grid.Row="1">
-            <StackPanel Name="ObjectContents" Margin="20 0 20 0">
+            <StackPanel Name="SubData" Margin="20 0 20 0">
             </StackPanel>
         </Grid>
     </Grid>

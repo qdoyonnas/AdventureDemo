@@ -64,8 +64,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameManager.cs" />
-    <Compile Include="OverviewPage.cs" />
-    <Compile Include="PlaceholderObject.cs" />
+    <Compile Include="Objects\Container.cs" />
+    <Compile Include="Objects\GameObject.cs" />
+    <Compile Include="Objects\IContainer.cs" />
+    <Compile Include="Pages\OverviewPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
