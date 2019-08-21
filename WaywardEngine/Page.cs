@@ -13,12 +13,26 @@ namespace WaywardEngine
     {
         // FrameworkElement that this Page is connected to
         public FrameworkElement element;
+        Label title;
+        StackPanel contents;
 
         Vector grabOffset;
 
-        public Page(FrameworkElement element)
+        public Page()
         {
-            this.element = element;
+            // Initialize Page Framework Element
+            element = WaywardManager.instance.application.Resources["BlankPage"] as FrameworkElement;
+            if( element == null ) {
+                throw new System.NullReferenceException("Page could not load 'BlankPage' resource");
+            }
+            title = LogicalTreeHelper.FindLogicalNode( element, "Title" ) as Label;
+            if( title == null ) {
+                throw new System.NullReferenceException("Page could not find Label 'Title' in template");
+            }
+            contents = LogicalTreeHelper.FindLogicalNode( element, "Contents" ) as StackPanel;
+            if( contents == null ) {
+                throw new System.NullReferenceException("Page could not find StackPanel 'Contents' in template");
+            }
 
             // Mouse drag handlers
             element.PreviewMouseDown += OnMouseDown;
@@ -42,6 +56,27 @@ namespace WaywardEngine
             closeMenuItem.Header = "Close";
             closeMenuItem.Click += CloseAction;
             element.ContextMenu.Items.Insert(0, closeMenuItem );
+        }
+
+        public void SetTitle( string sTitle )
+        {
+            title.Content = sTitle;
+        }
+        /// <summary>
+        /// Add FrameworkElement to Page StackPanel.
+        /// </summary>
+        /// <param name="content"></param>
+        public void AddContent( FrameworkElement content )
+        {
+            contents.Children.Add( content );
+        }
+        /// <summary>
+        /// Remove FrameworkElement from Page StackPanel.
+        /// </summary>
+        /// <param name="content"></param>
+        public void RemoveContent( FrameworkElement content )
+        {
+            contents.Children.Remove(content);
         }
 
         private void OnMouseDown( object sender, MouseButtonEventArgs e )

@@ -19,14 +19,10 @@
         <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
         <Setter Property="BorderThickness" Value="{StaticResource BorderThickness}" />
+        <Setter Property="Margin" Value="{StaticResource Padding}" />
         <Style.Resources>
             <Style TargetType="StackPanel">
                 <Setter Property="Margin" Value="{StaticResource Padding}" />
-            </Style>
-            <Style TargetType="Border">
-                <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
-                <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
-                <Setter Property="BorderThickness" Value="{StaticResource BorderThickness}" />
             </Style>
             <Style x:Key="Header" TargetType="TextBlock">
                 <Setter Property="Padding" Value="0" />

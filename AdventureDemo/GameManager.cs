@@ -21,6 +21,8 @@ namespace AdventureDemo
         }
         #endregion
 
+        public AdventureApp application;
+
         // Prevents most functionality until after init
         public bool isInitialized = false;
 
@@ -31,8 +33,9 @@ namespace AdventureDemo
             rootObjects = new List<GameObject>();
         }
 
-        public void Init()
+        public void Init(AdventureApp app)
         {
+            application = app;
             SetupGame();
             isInitialized = true;
         }

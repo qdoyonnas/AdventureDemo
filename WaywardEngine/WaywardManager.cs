@@ -39,10 +39,20 @@ namespace WaywardEngine
             pages = new List<Page>();
         }
 
-        public void Init( Application app )
+        /// <summary>
+        /// Initialize the WaywardManager preparing the engine for use.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="resources"></param>
+        public void Init( Application app, ResourceDictionary resources )
         {
             application = app;
             window = new MainWindow();
+
+            // Load all WaywardEngine resources and pass them to the application
+            resources.MergedDictionaries.Add( new ResourceDictionary {
+                Source = new Uri("/WaywardEngine;component/ResourceDictionaries/Pages.xaml", UriKind.RelativeOrAbsolute)
+            } );
 
             isInitialized = true;
         }

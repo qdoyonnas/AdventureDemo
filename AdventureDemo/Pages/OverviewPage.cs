@@ -11,73 +11,116 @@ namespace AdventureDemo
 {
     class OverviewPage : WaywardEngine.Page
     {
-        public StackPanel contents;
-        public StackPanel events;
+        public Dictionary<string, StackPanel> overviewContentPanels;
+        public Dictionary<string, StackPanel> overviewEventPanels;
 
-        public OverviewPage( FrameworkElement element ) : base(element)
+        public OverviewPage() : base()
         {
-            contents = LogicalTreeHelper.FindLogicalNode( element, "Contents") as StackPanel;
-            events = LogicalTreeHelper.FindLogicalNode( element, "Events") as StackPanel;
+            overviewContentPanels = new Dictionary<string, StackPanel>();
+            overviewEventPanels = new Dictionary<string, StackPanel>();
+
+            SetTitle("Overview");
         }
         
+        /// <summary>
+        /// Add a new Overview Contents panel to the page.
+        /// </summary>
+        /// <param name="key">String used to reference this panel.</param>
+        public void AddOverview( string key )
+        {
+            FrameworkElement overviewContent = GameManager.instance.application.Resources["OverviewContents"] as FrameworkElement;
+            if( overviewContent == null ) {
+                throw new System.NullReferenceException("OverviewPage could not find 'OverviewContents' resource");
+            }
+            AddContent(overviewContent);
+
+            StackPanel contents = LogicalTreeHelper.FindLogicalNode(overviewContent, "Contents") as StackPanel;
+            if( overviewContent == null ) {
+                throw new System.NullReferenceException("OverviewPage could not find StackPanel 'Contents'");
+            }
+            overviewContentPanels.Add(key, contents);
+        }
+        public void AddEventPanel( string key )
+        {
+            FrameworkElement overviewEvents = GameManager.instance.application.Resources["OverviewEvents"] as FrameworkElement;
+            if( overviewEvents == null ) {
+                throw new System.NullReferenceException("OverviewPage could not find 'OverviewEvents' resource");
+            }
+            AddContent(overviewEvents);
+
+            StackPanel events = LogicalTreeHelper.FindLogicalNode(overviewEvents, "Events") as StackPanel;
+            if( overviewEvents == null ) {
+                throw new System.NullReferenceException("OverviewPage could not find StackPanel 'Events'");
+            }
+            overviewEventPanels.Add(key, events);
+        }
+
         /// <summary>
         /// Adds Object obj to the OverviewPage's content section.
         /// </summary>
         /// <param name="obj">Object to be displayed.</param>
-        public void DisplayObject( GameObject obj )
+        public void DisplayObject( string key, GameObject obj )
         {
-            AddContent( contents, obj );
+            StackPanel parent = overviewContentPanels[key];
+            if( parent == null ) {
+                Console.WriteLine($"ERROR: OverviewPage does not contain content panel with key '{key}'");
+                return;
+            }
+            DisplayObject( parent, obj );
         }
         /// <summary>
         /// Recursively Populates Stackpanel parent with entries relevant to Object obj.
         /// </summary>
         /// <param name="parent">Stackpanel being populated.</param>
         /// <param name="obj">Object to add.</param>
-        private void AddContent( StackPanel parent, GameObject obj )
+        private void DisplayObject( StackPanel parent, GameObject obj )
         {
+            if( parent == null || obj == null ) { return; }
+
             // Add separator from previous entry
             if( parent.Children.Count > 0 ) {
                 Separator separator = new Separator();
                 parent.Children.Add(separator);
             }
 
-            if( parent != null ) {
-                FrameworkElement entry = WaywardManager.instance.application.Resources["OverviewEntry"] as FrameworkElement;
-                // Name
-                TextBlock text = LogicalTreeHelper.FindLogicalNode( entry, "Data1") as TextBlock;
-                if( text != null ) {
-                    if( parent == contents ) {
-                        text.FontSize = 24;
-                    }
-                    text.Text = obj.GetData("name");
-                }
+            FrameworkElement entry = WaywardManager.instance.application.Resources["OverviewEntry"] as FrameworkElement;
+            if( entry == null ) {
+                throw new System.NullReferenceException("OverviewPage could not find 'OverviewEntry' resource");
+            }
 
-                parent.Children.Add(entry);
+            TextBlock text = LogicalTreeHelper.FindLogicalNode( entry, "Data1") as TextBlock;
+            if( text != null ) {
+                text.Text = obj.GetData("name");
+            }
 
-                // Populate subdata
-                if( obj is IContainer ) {
-                    IContainer container = obj as IContainer;
-                    StackPanel objectContents = LogicalTreeHelper.FindLogicalNode( entry, "SubData" ) as StackPanel;
-                    if( objectContents != null ) {
-                        if( container.ContentCount() > 0 ) {
-                            for( int i = 0; i < container.ContentCount(); i++ ) {
-                                AddContent( objectContents, container.GetContent(i) );
-                            }
-                        } else {
-                            objectContents.Visibility = Visibility.Hidden;
+            parent.Children.Add(entry);
+
+            // Populate subdata
+            if( obj is IContainer ) {
+                IContainer container = obj as IContainer;
+                StackPanel objectContents = LogicalTreeHelper.FindLogicalNode( entry, "SubData" ) as StackPanel;
+                if( objectContents != null ) {
+                    if( container.ContentCount() > 0 ) {
+                        for( int i = 0; i < container.ContentCount(); i++ ) {
+                            DisplayObject( objectContents, container.GetContent(i) );
                         }
+                    } else {
+                        objectContents.Visibility = Visibility.Hidden;
                     }
                 }
             }
         }
 
-        public void AddEvent( string description )
+        public void DisplayEvent( string key, string e )
         {
-            if( events != null ) {
-                TextBlock text = new TextBlock();
-                text.Text = description;
-                events.Children.Add(text);
+            StackPanel panel = overviewEventPanels[key];
+            if( panel == null ) {
+                Console.WriteLine($"ERROR: OverviewPage does not contain events panel with key '{key}'");
+                return;
             }
+            TextBlock text = new TextBlock();
+            text.Text = e;
+            panel.Children.Add( text );
         }
     }
 }

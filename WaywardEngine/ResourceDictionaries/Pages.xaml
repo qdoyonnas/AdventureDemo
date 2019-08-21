@@ -2,11 +2,20 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:WaywardEngine">
 
-    <Border x:Key="BlankPage" x:Shared="false">
-        <ScrollViewer MinHeight="400" MinWidth="650" VerticalScrollBarVisibility="Auto">
-            <StackPanel>
-            </StackPanel>
-        </ScrollViewer>
+    <Style x:Key="PageStyle" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="{StaticResource BorderThickness}" />
+    </Style>
+
+    <Border x:Key="BlankPage" x:Shared="false" Style="{StaticResource PageStyle}">
+        <StackPanel>
+            <Label Name="Title" HorizontalAlignment="Center" Margin="0" FontSize="16">New Page</Label>
+            <ScrollViewer MinHeight="10" MinWidth="10" VerticalScrollBarVisibility="Auto">
+                <StackPanel Name="Contents">
+                </StackPanel>
+            </ScrollViewer>
+        </StackPanel>
     </Border>
 
 </ResourceDictionary>

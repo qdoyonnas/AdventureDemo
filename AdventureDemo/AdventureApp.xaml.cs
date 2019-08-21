@@ -18,14 +18,10 @@ namespace AdventureDemo
     {
         private void Application_Startup( object sender, StartupEventArgs e )
         {
-            WaywardManager.instance.Init(this);
+            // Init the WaywardEngine
+            WaywardManager.instance.Init(this, Resources);
             MainWindow window = WaywardManager.instance.window;
-
-            // Fetch WaywardEngine Resources
-            Resources.MergedDictionaries.Add( new ResourceDictionary {
-                Source = new Uri("/WaywardEngine;component/ResourceDictionaries/Pages.xaml", UriKind.RelativeOrAbsolute)
-            } );
-
+            
             #region Load Settings
             Settings settings = new Settings();
 
@@ -66,7 +62,7 @@ namespace AdventureDemo
             window.mainCanvas.Style = Resources["WindowBackground"] as Style;
             SetupContextMenu();
 
-            GameManager.instance.Init();
+            GameManager.instance.Init(this);
 
             window.Show();
         }
@@ -87,16 +83,19 @@ namespace AdventureDemo
         private void CreateOverviewPage( object sender, RoutedEventArgs e )
         {
             Point mousePosition = WaywardManager.instance.GetMousePosition();
-
-            FrameworkElement element = Resources["OverviewPage"] as FrameworkElement;
-            OverviewPage page = new OverviewPage(element);
+            
+            OverviewPage page = new OverviewPage();
+            
             WaywardManager.instance.AddPage( page, mousePosition );
 
             for( int i = 0; i < GameManager.instance.RootCount(); i++ ) {
-                page.DisplayObject( GameManager.instance.GetRoot(i) );
+                string key = "primary" + i;
+                page.AddOverview(key);
+                page.DisplayObject( key, GameManager.instance.GetRoot(i) );
             }
 
-            StackPanel events = LogicalTreeHelper.FindLogicalNode( element, "Events") as StackPanel;
+            page.AddEventPanel("main");
+            page.DisplayEvent("main", "You wake up.");
         }
 
         private void Application_DispatcherUnhandledException( object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e )
