@@ -16,3 +16,21 @@ C:\Users\Ivor Darsil\repos\AdventureDemo\WaywardEngine\bin\Debug\Newtonsoft.Json
 C:\Users\Ivor Darsil\repos\AdventureDemo\WaywardEngine\obj\Debug\WaywardEngine.csproj.CopyComplete
 C:\Users\Ivor Darsil\repos\AdventureDemo\WaywardEngine\obj\Debug\WaywardEngine.csprojAssemblyReference.cache
 C:\Users\Ivor Darsil\repos\AdventureDemo\WaywardEngine\obj\Debug\ResourceDictionaries\Pages.baml
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\bin\Debug\WaywardEngine.dll.config
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\bin\Debug\WaywardEngine.dll
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\bin\Debug\WaywardEngine.pdb
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\bin\Debug\Newtonsoft.Json.dll
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\bin\Debug\Newtonsoft.Json.xml
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\obj\Debug\WaywardEngine.csprojAssemblyReference.cache
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\obj\Debug\MainWindow.g.cs
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\obj\Debug\WaywardEngine_MarkupCompile.cache
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\obj\Debug\WaywardEngine_MarkupCompile.lref
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\obj\Debug\MainWindow.baml
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\obj\Debug\ResourceDictionaries\Pages.baml
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\obj\Debug\WaywardEngine.g.resources
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\obj\Debug\WaywardEngine.Properties.Resources.resources
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\obj\Debug\WaywardEngine.csproj.GenerateResource.cache
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\obj\Debug\WaywardEngine.csproj.CoreCompileInputs.cache
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\obj\Debug\WaywardEngine.csproj.CopyComplete
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\obj\Debug\WaywardEngine.dll
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\obj\Debug\WaywardEngine.pdb

@@ -21,15 +21,23 @@ namespace AdventureDemo
         /// </summary>
         /// <param name="data">A String identifying the desired data.</param>
         /// <returns></returns>
-        public virtual string GetData( string data )
+        public virtual GameObjectData GetData( string data )
         {
+            GameObjectData objectData = new GameObjectData();
+
             switch( data.ToLower() ) {
                 case "name":
                     return name;
                 default:
                     // No relevant data
-                    return string.Empty;
+                    return null;
             }
         }
+    }
+
+    struct GameObjectData
+    {
+        string text;
+
     }
 }
