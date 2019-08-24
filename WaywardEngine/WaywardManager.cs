@@ -58,6 +58,24 @@ namespace WaywardEngine
         }
 
         /// <summary>
+        /// Retrieve resource from application resources."
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public T GetResource<T>( string key )
+            where T : class
+        {
+            if( !isInitialized ) { return null; }
+
+            T resource = application.Resources[key] as T;
+            if( resource == null ) {
+                throw new System.NullReferenceException($"WaywardManager could not find '{key}' resource");
+            }
+            return resource;
+        }
+
+        /// <summary>
         /// Return mouse position relative to window.mainCanvas.
         /// </summary>
         /// <returns></returns>
@@ -77,10 +95,8 @@ namespace WaywardEngine
 
             if( add ) {
                 window.mainCanvas.MouseMove += handler;
-                window.mainCanvas.PreviewMouseMove += handler; // PreviewMouseMove borrows down to lower elements
             } else {
                 window.mainCanvas.MouseMove -= handler;
-                window.mainCanvas.PreviewMouseMove -= handler;
             }
         }
         /// <summary>
@@ -94,10 +110,8 @@ namespace WaywardEngine
 
             if( add ) {
                 window.mainCanvas.MouseUp += handler;
-                window.mainCanvas.PreviewMouseUp += handler;
             } else {
                 window.mainCanvas.MouseUp -= handler;
-                window.mainCanvas.PreviewMouseUp -= handler;
             }
         }
 

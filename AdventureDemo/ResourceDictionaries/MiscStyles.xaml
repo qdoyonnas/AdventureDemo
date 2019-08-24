@@ -1,9 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:AdventureDemo">
+                    xmlns:local="clr-namespace:AdventureDemo"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <Thickness x:Key="BorderThickness">1</Thickness>
     <Thickness x:Key="Padding">10</Thickness>
+    <sys:Double x:Key="PageWidth">600</sys:Double>
 
     <Style x:Key="WindowBackground">
         <Setter Property="Window.Background" Value="{StaticResource WindowBackgroundBrush}" />
@@ -15,7 +17,16 @@
         <Setter Property="Margin" Value="0 0 0 4" />
     </Style>
 
-    <Style x:Key="OverviewPageStyle" TargetType="Border">
+    <Style x:Key="Link" TargetType="Span">
+        <Setter Property="Foreground" Value="{StaticResource WaywardAuburnBrush}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource WaywardGoldBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="PageStyle" TargetType="Border">
         <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
         <Setter Property="BorderThickness" Value="{StaticResource BorderThickness}" />
@@ -27,7 +38,7 @@
             <Style x:Key="Header" TargetType="TextBlock">
                 <Setter Property="Padding" Value="0" />
                 <Setter Property="Margin" Value="0 0 0 10" />
-                <Setter Property="FontSize" Value="24" />
+                <Setter Property="FontSize" Value="16" />
                 <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
             </Style>
             <Style TargetType="Separator">

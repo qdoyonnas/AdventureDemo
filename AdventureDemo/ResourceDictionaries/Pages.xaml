@@ -23,16 +23,34 @@
         </Grid>
     </Grid>
 
-    <Border x:Key="OverviewContents" x:Shared="false" Style="{StaticResource OverviewPageStyle}">
-        <ScrollViewer MaxHeight="300" MinWidth="650" VerticalScrollBarVisibility="Auto">
+    <Border x:Key="OverviewContents" x:Shared="false" Style="{StaticResource PageStyle}">
+        <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
             <StackPanel Name="Contents">
             </StackPanel>
         </ScrollViewer>
     </Border>
 
-    <Border x:Key="OverviewEvents" x:Shared="false" Style="{StaticResource OverviewPageStyle}">
-        <ScrollViewer MinHeight="400" MaxHeight="400" MinWidth="650" VerticalScrollBarVisibility="Auto">
+    <Border x:Key="OverviewEvents" x:Shared="false" Style="{StaticResource PageStyle}">
+        <ScrollViewer MinHeight="400" MaxHeight="400" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
             <StackPanel Name="Events">
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
+    <Border x:Key="DescriptiveDescription" x:Shared="false" Style="{StaticResource PageStyle}">
+        <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Name="Description"></TextBlock>
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
+    <Border x:Key="DescriptiveContents" x:Shared="false" Style="{StaticResource PageStyle}">
+        <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Style="{DynamicResource Header}">Contents</TextBlock>
+                <StackPanel Name="Contents">
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
     </Border>

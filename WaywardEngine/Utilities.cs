@@ -52,5 +52,18 @@ namespace WaywardEngine
             }
             Canvas.SetZIndex(target, maxZ+1);
         }
+
+        public static T FindNode<T>( DependencyObject parent, string name )
+            where T : class
+        {
+            if( parent == null || string.IsNullOrEmpty(name) ) { return null; }
+
+            T node = LogicalTreeHelper.FindLogicalNode(parent, name) as T;
+            if( node == null ) {
+                throw new System.NullReferenceException($"Could not find {typeof(T).Name} '{name}' in {parent}");
+            }
+
+            return node;
+        }
     }
 }

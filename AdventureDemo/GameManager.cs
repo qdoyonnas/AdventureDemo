@@ -33,6 +33,10 @@ namespace AdventureDemo
             rootObjects = new List<GameObject>();
         }
 
+        /// <summary>
+        /// Init the GameManager and start the game.
+        /// </summary>
+        /// <param name="app"></param>
         public void Init(AdventureApp app)
         {
             application = app;
@@ -40,6 +44,9 @@ namespace AdventureDemo
             isInitialized = true;
         }
 
+        /// <summary>
+        /// Generate the world.
+        /// </summary>
         private void SetupGame()
         {
             Container room1 = new Container( "Dim Room" );
@@ -59,6 +66,24 @@ namespace AdventureDemo
             room2.AddContent( new GameObject("Door") );
             room2.AddContent( new Container("Chest") );
             room2.AddContent( new GameObject("Torch") );
+        }
+
+        /// <summary>
+        /// Retrieve resource from application resources."
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public T GetResource<T>( string key )
+            where T : class
+        {
+            if( !isInitialized ) { return null; }
+
+            T resource = application.Resources[key] as T;
+            if( resource == null ) {
+                throw new System.NullReferenceException($"GameManager could not find '{key}' resource");
+            }
+            return resource;
         }
 
         public void AddRoot( GameObject obj )

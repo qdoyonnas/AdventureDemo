@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Controls;
 using WaywardEngine;
 
@@ -28,30 +29,18 @@ namespace AdventureDemo
         /// <param name="key">String used to reference this panel.</param>
         public void AddOverview( string key )
         {
-            FrameworkElement overviewContent = GameManager.instance.application.Resources["OverviewContents"] as FrameworkElement;
-            if( overviewContent == null ) {
-                throw new System.NullReferenceException("OverviewPage could not find 'OverviewContents' resource");
-            }
+            FrameworkElement overviewContent = GameManager.instance.GetResource<FrameworkElement>("OverviewContents");
             AddContent(overviewContent);
 
-            StackPanel contents = LogicalTreeHelper.FindLogicalNode(overviewContent, "Contents") as StackPanel;
-            if( overviewContent == null ) {
-                throw new System.NullReferenceException("OverviewPage could not find StackPanel 'Contents'");
-            }
+            StackPanel contents = Utilities.FindNode<StackPanel>(overviewContent, "Contents");
             overviewContentPanels.Add(key, contents);
         }
         public void AddEventPanel( string key )
         {
-            FrameworkElement overviewEvents = GameManager.instance.application.Resources["OverviewEvents"] as FrameworkElement;
-            if( overviewEvents == null ) {
-                throw new System.NullReferenceException("OverviewPage could not find 'OverviewEvents' resource");
-            }
+            FrameworkElement overviewEvents = GameManager.instance.GetResource<FrameworkElement>("OverviewEvents");
             AddContent(overviewEvents);
 
-            StackPanel events = LogicalTreeHelper.FindLogicalNode(overviewEvents, "Events") as StackPanel;
-            if( overviewEvents == null ) {
-                throw new System.NullReferenceException("OverviewPage could not find StackPanel 'Events'");
-            }
+            StackPanel events = Utilities.FindNode<StackPanel>(overviewEvents, "Events");
             overviewEventPanels.Add(key, events);
         }
 
@@ -83,30 +72,30 @@ namespace AdventureDemo
                 parent.Children.Add(separator);
             }
 
-            FrameworkElement entry = WaywardManager.instance.application.Resources["OverviewEntry"] as FrameworkElement;
-            if( entry == null ) {
-                throw new System.NullReferenceException("OverviewPage could not find 'OverviewEntry' resource");
-            }
-
-            TextBlock text = LogicalTreeHelper.FindLogicalNode( entry, "Data1") as TextBlock;
-            if( text != null ) {
-                text.Text = obj.GetData("name");
-            }
-
+            FrameworkElement entry = GameManager.instance.GetResource<FrameworkElement>("OverviewEntry");
             parent.Children.Add(entry);
+            
+            TextBlock text = Utilities.FindNode<TextBlock>( entry, "Data1");
+            if( text != null ) {
+                Span objectData = obj.GetData("name").span;
+                text.Inlines.Add(objectData);
+            }
 
-            // Populate subdata
-            if( obj is IContainer ) {
-                IContainer container = obj as IContainer;
-                StackPanel objectContents = LogicalTreeHelper.FindLogicalNode( entry, "SubData" ) as StackPanel;
-                if( objectContents != null ) {
-                    if( container.ContentCount() > 0 ) {
-                        for( int i = 0; i < container.ContentCount(); i++ ) {
-                            DisplayObject( objectContents, container.GetContent(i) );
-                        }
-                    } else {
-                        objectContents.Visibility = Visibility.Hidden;
+            FetchObjectContents(entry, obj);
+        }
+        private void FetchObjectContents( FrameworkElement entry, GameObject obj )
+        {
+            IContainer container = obj as IContainer;
+            if( container == null ) { return; }
+
+            StackPanel objectContents = Utilities.FindNode<StackPanel>( entry, "SubData" );
+            if( objectContents != null ) {
+                if( container.ContentCount() > 0 ) {
+                    for( int i = 0; i < container.ContentCount(); i++ ) {
+                        DisplayObject( objectContents, container.GetContent(i) );
                     }
+                } else {
+                    objectContents.Visibility = Visibility.Hidden;
                 }
             }
         }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -35,8 +36,8 @@ namespace WaywardEngine
             }
 
             // Mouse drag handlers
-            element.PreviewMouseDown += OnMouseDown;
-            element.PreviewMouseUp += OnMouseUp;
+            element.MouseDown += OnMouseDown;
+            element.MouseUp += OnMouseUp;
 
             // Newest Page is always in front (also assures no overlapping zIndex values)
             int maxZ = Utilities.GetMaxZOfCanvas( WaywardManager.instance.window.mainCanvas );
