@@ -29,10 +29,14 @@ namespace AdventureDemo
         }
         public void AddContent( GameObject obj )
         {
+            // Security check to confirm this came from the relevant gameobject
+            if( obj.container != this ) { return; }
             contents.Add(obj);
         }
         public void RemoveContent( GameObject obj )
         {
+            // Security check to confirm this came from the relevant gameobject
+            if( obj.container == this ) { return; }
             contents.Remove(obj);
         }
     }

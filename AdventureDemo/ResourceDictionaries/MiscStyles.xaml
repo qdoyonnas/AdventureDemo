@@ -17,7 +17,7 @@
         <Setter Property="Margin" Value="0 0 0 4" />
     </Style>
 
-    <Style x:Key="Link" TargetType="Span">
+    <Style x:Key="Link" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource WaywardAuburnBrush}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Controls;
 using WaywardEngine;
 
@@ -11,7 +12,16 @@ namespace AdventureDemo
 {
     class DescriptivePage : WaywardEngine.Page
     {
-        GameObject target;
+        GameObject _target;
+        public GameObject target {
+            get {
+                return _target;
+            }
+            set {
+                _target = value;
+                DisplayTarget();
+            }
+        }
 
         TextBlock descriptionText;
 
@@ -19,17 +29,20 @@ namespace AdventureDemo
             : base()
         {
             target = obj;
-            SetTitle(target.GetData("name").text);
+        }
 
+        private void DisplayTarget()
+        {
             FrameworkElement content = GameManager.instance.GetResource<FrameworkElement>("DescriptiveDescription");
             AddContent(content);
+
+            SetTitle(target.GetData("name").text);
 
             descriptionText = Utilities.FindNode<TextBlock>(content, "Description");
             descriptionText.Inlines.Add( target.GetData("description").span );
 
             FetchObjectContents();
         }
-
         private void FetchObjectContents()
         {
             IContainer container = target as Container;
@@ -44,6 +57,8 @@ namespace AdventureDemo
                     for( int i = 0; i < container.ContentCount(); i++ ) {
                         DisplayContent( inventory, container.GetContent(i) );
                     }
+                } else {
+                    inventory.Children.Add( new TextBlock(new Italic(new Run("empty"))) ); // XXX: Hate this - WaywardManager text parser needed
                 }
             }
         }
@@ -67,6 +82,12 @@ namespace AdventureDemo
         public void SetDescription( string text )
         {
             descriptionText.Text = text;
+        }
+
+        public override void Update()
+        {
+            Clear();
+            DisplayTarget();
         }
     }
 }

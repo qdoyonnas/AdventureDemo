@@ -26,6 +26,7 @@ namespace AdventureDemo
         // Prevents most functionality until after init
         public bool isInitialized = false;
 
+        public Character playerObject;
         private List<GameObject> rootObjects;
 
         private GameManager()
@@ -49,23 +50,25 @@ namespace AdventureDemo
         /// </summary>
         private void SetupGame()
         {
+            playerObject = new Character("You");
+
             Container room1 = new Container( "Dim Room" );
             AddRoot(room1);
-            room1.AddContent( new GameObject("You") );
-            room1.AddContent( new GameObject("Door") );
+            playerObject.container = room1;
+            new GameObject("Door").container = room1;
 
             Container table = new Container("Table");
-            room1.AddContent(table);
-            table.AddContent( new GameObject("Candle") );
-            table.AddContent( new GameObject("Mouse") );
+            table.container = room1;
+            new GameObject("Candle").container = table;
+            new GameObject("Mouse").container = table;
 
-            room1.AddContent( new GameObject("Torch") );
+            new GameObject("Torch").container = room1;
 
             Container room2 = new Container( "Round Room" );
             AddRoot(room2);
-            room2.AddContent( new GameObject("Door") );
-            room2.AddContent( new Container("Chest") );
-            room2.AddContent( new GameObject("Torch") );
+            new GameObject("Door").container = room2;
+            new Container("Chest").container = room2;
+            new GameObject("Torch").container = room2;
         }
 
         /// <summary>

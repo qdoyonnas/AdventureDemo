@@ -80,6 +80,11 @@ namespace WaywardEngine
             contents.Children.Remove(content);
         }
 
+        public virtual void Clear()
+        {
+            contents.Children.Clear();
+        }
+
         private void OnMouseDown( object sender, MouseButtonEventArgs e )
         {
             // If no page is already grabbed
@@ -118,6 +123,11 @@ namespace WaywardEngine
         {
             WaywardManager.instance.window.mainCanvas.Children.Remove(element);
             WaywardManager.instance.pages.Remove(this);
+        }
+
+        public virtual void Update()
+        {
+            // Add your update behaviour here
         }
     }
 }

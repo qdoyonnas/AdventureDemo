@@ -68,16 +68,9 @@ namespace AdventureDemo
         }
         private void SetupContextMenu()
         {
-            ContextMenu menu = WaywardManager.instance.window.ContextMenu;
-
-            MenuItem openItem = new MenuItem();
-            openItem.Header = "Open";
-            menu.Items.Insert(0, openItem );
-
-            MenuItem newItem = new MenuItem();
-            newItem.Header = "Overview Page";
-            newItem.Click += CreateOverviewPage;
-            openItem.Items.Insert(0, newItem );
+            Utilities.AddContextMenuHeader(WaywardManager.instance.window, "Open", new Dictionary<string, RoutedEventHandler>() {
+                { "OverviewPage", CreateOverviewPage }
+            });
         }
 
         private void CreateOverviewPage( object sender, RoutedEventArgs e )
@@ -89,9 +82,7 @@ namespace AdventureDemo
 
             // XXX: This must be fetched from the PC's perspective
             for( int i = 0; i < GameManager.instance.RootCount(); i++ ) {
-                string key = "primary" + i;
-                page.AddOverview(key);
-                page.DisplayObject( key, GameManager.instance.GetRoot(i) );
+                page.DisplayObject( GameManager.instance.GetRoot(i) );
             }
 
             page.AddEventPanel("main"); // XXX: This must be made dynamic

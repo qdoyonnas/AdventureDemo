@@ -65,5 +65,95 @@ namespace WaywardEngine
 
             return node;
         }
+
+        public static void AddContextMenuItem( FrameworkElement control, string label, RoutedEventHandler action )
+        {
+            if( !CheckContextMenu(control) ) { return; }
+
+            AddMenuItem( control.ContextMenu, label, action );
+        }
+        private static void AddMenuItem( ItemsControl menu, string label, RoutedEventHandler action )
+        {
+            if( menu == null ) { return; }
+
+            MenuItem newItem = new MenuItem();
+            newItem.Header = label;
+            if( action != null ) {
+                newItem.Click += action;
+            }
+
+            menu.Items.Insert(0, newItem);
+        }
+
+        public static void AddContextMenuItems( FrameworkElement control, Dictionary<string, RoutedEventHandler> items )
+        {
+            AddContextMenuItems( control, string.Empty, items );
+        }
+        public static void AddContextMenuItems( FrameworkElement control, string header, Dictionary<string, RoutedEventHandler> items )
+        {
+            if( !CheckContextMenu(control) ) { return; }
+
+            MenuItem headerItem = null;
+            if( !string.IsNullOrEmpty(header) ) {
+                foreach( MenuItem item in control.ContextMenu.Items ) {
+                    if( (string)item.Header == header ) {
+                        headerItem = item;
+                    }
+                }
+                if( headerItem == null ) {
+                    AddContextMenuHeader( control, header, items );
+                    return;
+                }
+            }
+
+            AddContextMenuItems( control, headerItem, items );
+        }
+        public static void AddContextMenuItems( FrameworkElement control, MenuItem headerItem, Dictionary<string, RoutedEventHandler> items )
+        {
+            if( !CheckContextMenu(control) ) { return; }
+
+            items.Reverse();
+            foreach( KeyValuePair<string, RoutedEventHandler> item in items ) {
+                if( headerItem == null ) {
+                    AddMenuItem( control.ContextMenu, item.Key, item.Value );
+                } else {
+                    AddMenuItem( headerItem, item.Key, item.Value );
+                }
+            }
+        }
+
+        public static MenuItem AddContextMenuHeader( FrameworkElement control, string header, Dictionary<string, RoutedEventHandler> items )
+        {
+            if( !CheckContextMenu(control) ) { return null; }
+
+            MenuItem newHeader = AddContextMenuHeader( control, header );
+            AddContextMenuItems( control, newHeader, items );
+
+            return newHeader;
+        }
+        public static MenuItem AddContextMenuHeader( FrameworkElement control, string header )
+        {
+            if( !CheckContextMenu(control) ) { return null; }
+
+            MenuItem newHeader = null;
+            if( !string.IsNullOrEmpty(header) ) {
+                newHeader = new MenuItem();
+                newHeader.Header = header;
+                control.ContextMenu.Items.Insert(0, newHeader);
+            }
+
+            return newHeader;
+        }
+
+        private static bool CheckContextMenu( FrameworkElement control )
+        {
+            if( control == null ) { return false; }
+
+            if( control.ContextMenu == null ) {
+                control.ContextMenu = new ContextMenu();
+            }
+
+            return true;
+        }
     }
 }

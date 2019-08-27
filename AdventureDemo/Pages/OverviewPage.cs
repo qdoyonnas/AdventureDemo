@@ -12,28 +12,26 @@ namespace AdventureDemo
 {
     class OverviewPage : WaywardEngine.Page
     {
-        public Dictionary<string, StackPanel> overviewContentPanels;
-        public Dictionary<string, StackPanel> overviewEventPanels;
+        Dictionary<GameObject, StackPanel> overviewContentPanels;
+        Dictionary<string, StackPanel> overviewEventPanels;
 
         public OverviewPage() : base()
         {
-            overviewContentPanels = new Dictionary<string, StackPanel>();
+            overviewContentPanels = new Dictionary<GameObject, StackPanel>();
             overviewEventPanels = new Dictionary<string, StackPanel>();
 
             SetTitle("Overview");
         }
         
-        /// <summary>
-        /// Add a new Overview Contents panel to the page.
-        /// </summary>
-        /// <param name="key">String used to reference this panel.</param>
-        public void AddOverview( string key )
+        private StackPanel AddContentPanel( GameObject key )
         {
-            FrameworkElement overviewContent = GameManager.instance.GetResource<FrameworkElement>("OverviewContents");
-            AddContent(overviewContent);
+            FrameworkElement overviewContents = GameManager.instance.GetResource<FrameworkElement>("OverviewContents");
+            AddContent(overviewContents);
 
-            StackPanel contents = Utilities.FindNode<StackPanel>(overviewContent, "Contents");
+            StackPanel contents = Utilities.FindNode<StackPanel>(overviewContents, "Contents");
             overviewContentPanels.Add(key, contents);
+
+            return contents;
         }
         public void AddEventPanel( string key )
         {
@@ -43,18 +41,20 @@ namespace AdventureDemo
             StackPanel events = Utilities.FindNode<StackPanel>(overviewEvents, "Events");
             overviewEventPanels.Add(key, events);
         }
-
+        
         /// <summary>
         /// Adds Object obj to the OverviewPage's content section.
         /// </summary>
         /// <param name="obj">Object to be displayed.</param>
-        public void DisplayObject( string key, GameObject obj )
+        public void DisplayObject( GameObject obj )
         {
-            StackPanel parent = overviewContentPanels[key];
-            if( parent == null ) {
-                Console.WriteLine($"ERROR: OverviewPage does not contain content panel with key '{key}'");
-                return;
+            StackPanel parent;
+            if( overviewContentPanels.ContainsKey(obj) ) {
+                parent = overviewContentPanels[obj];
+            } else {
+                parent = AddContentPanel(obj);
             }
+
             DisplayObject( parent, obj );
         }
         /// <summary>
@@ -77,8 +77,7 @@ namespace AdventureDemo
             
             TextBlock text = Utilities.FindNode<TextBlock>( entry, "Data1");
             if( text != null ) {
-                Span objectData = obj.GetData("name").span;
-                text.Inlines.Add(objectData);
+                text.Inlines.Add( obj.GetData("name").span );
             }
 
             FetchObjectContents(entry, obj);
@@ -110,6 +109,24 @@ namespace AdventureDemo
             TextBlock text = new TextBlock();
             text.Text = e;
             panel.Children.Add( text );
+        }
+
+        public override void Clear()
+        {
+            foreach( StackPanel panel in overviewContentPanels.Values ) {
+                panel.Children.Clear();
+            }
+            /*foreach( StackPanel panel in overviewEventPanels.Values ) {
+                panel.Children.Clear();
+            }*/
+        }
+
+        public override void Update()
+        {
+            Clear();
+            foreach( KeyValuePair<GameObject, StackPanel> panel in overviewContentPanels ) {
+                DisplayObject(panel.Value, panel.Key);
+            }
         }
     }
 }

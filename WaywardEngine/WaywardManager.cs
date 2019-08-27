@@ -129,5 +129,12 @@ namespace WaywardEngine
 
             WaywardManager.instance.pages.Add(page);
         }
+
+        public void Update()
+        {
+            foreach( Page page in pages ) {
+                page.Update();
+            }
+        }
     }
 }
