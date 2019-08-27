@@ -12,18 +12,18 @@ namespace AdventureDemo
 {
     class OverviewPage : WaywardEngine.Page
     {
-        Dictionary<GameObject, StackPanel> overviewContentPanels;
+        Dictionary<IObserver, StackPanel> overviewContentPanels;
         Dictionary<string, StackPanel> overviewEventPanels;
 
         public OverviewPage() : base()
         {
-            overviewContentPanels = new Dictionary<GameObject, StackPanel>();
+            overviewContentPanels = new Dictionary<IObserver, StackPanel>();
             overviewEventPanels = new Dictionary<string, StackPanel>();
 
             SetTitle("Overview");
         }
         
-        private StackPanel AddContentPanel( GameObject key )
+        private StackPanel AddContentPanel( IObserver key )
         {
             FrameworkElement overviewContents = GameManager.instance.GetResource<FrameworkElement>("OverviewContents");
             AddContent(overviewContents);
@@ -46,7 +46,7 @@ namespace AdventureDemo
         /// Adds Object obj to the OverviewPage's content section.
         /// </summary>
         /// <param name="obj">Object to be displayed.</param>
-        public void DisplayObject( GameObject obj )
+        public void DisplayObject( IObserver obj )
         {
             StackPanel parent;
             if( overviewContentPanels.ContainsKey(obj) ) {
@@ -55,14 +55,14 @@ namespace AdventureDemo
                 parent = AddContentPanel(obj);
             }
 
-            DisplayObject( parent, obj );
+            DisplayObject( parent, obj, obj.PointOfView() );
         }
         /// <summary>
         /// Recursively Populates Stackpanel parent with entries relevant to Object obj.
         /// </summary>
         /// <param name="parent">Stackpanel being populated.</param>
         /// <param name="obj">Object to add.</param>
-        private void DisplayObject( StackPanel parent, GameObject obj )
+        private void DisplayObject( StackPanel parent, IObserver observer, GameObject obj )
         {
             if( parent == null || obj == null ) { return; }
 
@@ -77,12 +77,12 @@ namespace AdventureDemo
             
             TextBlock text = Utilities.FindNode<TextBlock>( entry, "Data1");
             if( text != null ) {
-                text.Inlines.Add( obj.GetData("name").span );
+                text.Inlines.Add( observer.Observe(obj, "name").span );
             }
 
-            FetchObjectContents(entry, obj);
+            FetchObjectContents(entry, observer, obj);
         }
-        private void FetchObjectContents( FrameworkElement entry, GameObject obj )
+        private void FetchObjectContents( FrameworkElement entry, IObserver observer, GameObject obj )
         {
             IContainer container = obj as IContainer;
             if( container == null ) { return; }
@@ -91,7 +91,7 @@ namespace AdventureDemo
             if( objectContents != null ) {
                 if( container.ContentCount() > 0 ) {
                     for( int i = 0; i < container.ContentCount(); i++ ) {
-                        DisplayObject( objectContents, container.GetContent(i) );
+                        DisplayObject( objectContents, observer, container.GetContent(i) );
                     }
                 } else {
                     objectContents.Visibility = Visibility.Hidden;
@@ -124,8 +124,8 @@ namespace AdventureDemo
         public override void Update()
         {
             Clear();
-            foreach( KeyValuePair<GameObject, StackPanel> panel in overviewContentPanels ) {
-                DisplayObject(panel.Value, panel.Key);
+            foreach( IObserver obj in overviewContentPanels.Keys ) {
+                DisplayObject(obj);
             }
         }
     }

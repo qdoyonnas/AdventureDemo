@@ -80,10 +80,7 @@ namespace AdventureDemo
             OverviewPage page = new OverviewPage();
             WaywardManager.instance.AddPage( page, mousePosition );
 
-            // XXX: This must be fetched from the PC's perspective
-            for( int i = 0; i < GameManager.instance.RootCount(); i++ ) {
-                page.DisplayObject( GameManager.instance.GetRoot(i) );
-            }
+            GameManager.instance.DisplayPerspectives( page );
 
             page.AddEventPanel("main"); // XXX: This must be made dynamic
             page.DisplayEvent("main", "You wake up.");

@@ -55,20 +55,18 @@ namespace AdventureDemo
             Container room1 = new Container( "Dim Room" );
             AddRoot(room1);
             playerObject.container = room1;
-            new GameObject("Door").container = room1;
 
             Container table = new Container("Table");
             table.container = room1;
-            new GameObject("Candle").container = table;
-            new GameObject("Mouse").container = table;
+            Container box = new Container("Box");
+            box.container = table;
+            new GameObject("Key").container = box;
 
-            new GameObject("Torch").container = room1;
+            new GameObject("Door").container = room1;
 
             Container room2 = new Container( "Round Room" );
             AddRoot(room2);
             new GameObject("Door").container = room2;
-            new Container("Chest").container = room2;
-            new GameObject("Torch").container = room2;
         }
 
         /// <summary>
@@ -104,6 +102,11 @@ namespace AdventureDemo
         public GameObject GetRoot( int i )
         {
             return rootObjects[i];
+        }
+
+        public void DisplayPerspectives( OverviewPage page )
+        {
+            page.DisplayObject( playerObject );
         }
     }
 }

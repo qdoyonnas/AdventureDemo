@@ -12,13 +12,13 @@ namespace AdventureDemo
     class GameObject
     {
         protected string name;
-        Container _container;
-        public Container container {
+        IContainer _container;
+        public IContainer container {
             get {
                 return _container;
             }
             set {
-                Container oldContainer = _container;
+                IContainer oldContainer = _container;
                 _container = value;
                 if( oldContainer != null ) { oldContainer.RemoveContent(this); }
                 _container.AddContent(this);

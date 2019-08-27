@@ -9,9 +9,14 @@ using WaywardEngine;
 
 namespace AdventureDemo
 {
-    class Character : Container
+    class Character : GameObject, IContainer, IObserver
     {
-        public Character( string name ) : base(name) {}
+        List<GameObject> contents;
+
+        public Character( string name ) : base(name)
+        {
+            contents = new List<GameObject>();
+        }
 
         public void PickUp( GameObject obj )
         {
@@ -59,6 +64,44 @@ namespace AdventureDemo
             }
 
             return data;
+        }
+
+        public GameObject GetContent( int i )
+        {
+            throw new NotImplementedException();
+        }
+        public int ContentCount()
+        {
+            return contents.Count;
+        }
+        public bool DoesContain( GameObject obj )
+        {
+            return contents.Contains( obj );
+        }
+        public void AddContent( GameObject obj )
+        {
+            if( obj.container != this ) { return; }
+
+            contents.Add(obj);
+        }
+        public void RemoveContent( GameObject obj )
+        {
+            if( obj.container == this ) { return; }
+
+            contents.Remove(obj);
+        }
+
+        public bool CanObserve( GameObject obj )
+        {
+            return true;
+        }
+        public GameObjectData Observe( GameObject obj, string key )
+        {
+            return obj.GetData(key);
+        }
+        public GameObject PointOfView()
+        {
+            return container as GameObject;
         }
     }
 }
