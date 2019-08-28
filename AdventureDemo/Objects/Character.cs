@@ -18,6 +18,23 @@ namespace AdventureDemo
             contents = new List<GameObject>();
         }
 
+        public bool CanPickUp( GameObject obj )
+        {
+            if( obj == null || obj == this || obj.container == null ) { return false; }
+
+            if( obj.container == this.container ) {
+                return true;
+            } else {
+                GameObject container = obj.container as GameObject;
+                if( container != null ) {
+                    if( CanPickUp(container) ) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
         public void PickUp( GameObject obj )
         {
             obj.container = this;
@@ -68,7 +85,7 @@ namespace AdventureDemo
 
         public GameObject GetContent( int i )
         {
-            throw new NotImplementedException();
+            return contents[i];
         }
         public int ContentCount()
         {
@@ -97,7 +114,17 @@ namespace AdventureDemo
         }
         public GameObjectData Observe( GameObject obj, string key )
         {
-            return obj.GetData(key);
+            GameObjectData data = obj.GetData(key);
+
+            if( this == GameManager.instance.playerObject ) { // XXX: playerObject might not always be the actively controlled object?
+                if( DoesContain(obj) ) {
+                    Utilities.AddContextMenuItem( data.span, "Drop", delegate { Drop(obj); } );
+                } else if( CanPickUp(obj) ) {
+                    Utilities.AddContextMenuItem( data.span, "Pickup", delegate { PickUp(obj); } );
+                }
+            }
+
+            return data;
         }
         public GameObject PointOfView()
         {

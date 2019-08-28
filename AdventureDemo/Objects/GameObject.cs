@@ -51,13 +51,6 @@ namespace AdventureDemo
                     data.span.Style = GameManager.instance.GetResource<Style>("Link");
                     data.span.MouseLeftButtonUp += DisplayDescriptivePage;
 
-                    Character playerObject = GameManager.instance.playerObject;
-                    if( container == playerObject ) {
-                        Utilities.AddContextMenuItem( data.span, "Drop", delegate { playerObject.Drop(this); } );
-                    } else if( container == playerObject.container ) {
-                        Utilities.AddContextMenuItem( data.span, "Pickup", delegate { playerObject.PickUp(this); } );
-                    }
-
                     Utilities.AddContextMenuItem( data.span, "View", DisplayDescriptivePage );
 
                     break;

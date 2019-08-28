@@ -64,7 +64,10 @@ namespace AdventureDemo
         /// <param name="obj">Object to add.</param>
         private void DisplayObject( StackPanel parent, IObserver observer, GameObject obj )
         {
-            if( parent == null || obj == null ) { return; }
+            if( parent == null || observer == null || obj == null ) { return; }
+
+            // Object can not be perceived by observer
+            if( !observer.CanObserve(obj) ) { return; }
 
             // Add separator from previous entry
             if( parent.Children.Count > 0 ) {
