@@ -66,6 +66,7 @@ namespace WaywardEngine
             return node;
         }
 
+        #region Context Menu Helper Mehtods
         public static void AddContextMenuItem( FrameworkElement control, string label, RoutedEventHandler action )
         {
             if( !CheckContextMenu(control) ) { return; }
@@ -154,6 +155,22 @@ namespace WaywardEngine
             }
 
             return true;
+        }
+        #endregion
+
+        public static double Distance( Point a, Point b )
+        {
+            double distance = Math.Sqrt( Math.Pow(a.X - b.X, 2) + Math.Pow(a.Y - b.Y, 2) );
+
+            return distance;
+        }
+
+        public static void DisplayMessage( string message )
+        {
+            Message box = new Message(message);
+            Point position = new Point( WaywardManager.instance.application.MainWindow.Width / 2,
+                                    WaywardManager.instance.application.MainWindow.Height / 4 );
+            WaywardManager.instance.AddPage( box, position );
         }
     }
 }

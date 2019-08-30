@@ -9,14 +9,17 @@ using WaywardEngine;
 
 namespace AdventureDemo
 {
-    class Character : GameObject, IContainer, IObserver
+    class Character : Container, IObserver
     {
-        List<GameObject> contents;
-
-        public Character( string name ) : base(name)
-        {
-            contents = new List<GameObject>();
-        }
+        public Character( string name, double innerVolume ) 
+            : base(name, innerVolume)
+        { }
+        public Character( string name, double innerVolume, double totalVolume )
+            : base(name, innerVolume, totalVolume)
+        { }
+        public Character( string name, double innerVolume, double totalVolume, double weight )
+            : base(name, innerVolume, totalVolume, weight)
+        { }
 
         public bool CanPickUp( GameObject obj )
         {
@@ -37,13 +40,13 @@ namespace AdventureDemo
         }
         public void PickUp( GameObject obj )
         {
-            obj.container = this;
+            AddContent(obj);
         }
         public void Drop( GameObject obj )
         {
             if( !DoesContain(obj) ) { return; }
 
-            obj.container = container;
+            container.AddContent(obj);
         }
 
         /// <summary>
@@ -81,31 +84,6 @@ namespace AdventureDemo
             }
 
             return data;
-        }
-
-        public GameObject GetContent( int i )
-        {
-            return contents[i];
-        }
-        public int ContentCount()
-        {
-            return contents.Count;
-        }
-        public bool DoesContain( GameObject obj )
-        {
-            return contents.Contains( obj );
-        }
-        public void AddContent( GameObject obj )
-        {
-            if( obj.container != this ) { return; }
-
-            contents.Add(obj);
-        }
-        public void RemoveContent( GameObject obj )
-        {
-            if( obj.container == this ) { return; }
-
-            contents.Remove(obj);
         }
 
         public bool CanObserve( GameObject obj )

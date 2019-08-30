@@ -13,27 +13,14 @@ namespace WaywardEngine
     public class Page
     {
         // FrameworkElement that this Page is connected to
-        public FrameworkElement element;
-        Label title;
-        StackPanel contents;
-
+        protected FrameworkElement element;
+        
         Vector grabOffset;
 
-        public Page()
+        public Page( string resourceKey )
         {
             // Initialize Page Framework Element
-            element = WaywardManager.instance.application.Resources["BlankPage"] as FrameworkElement;
-            if( element == null ) {
-                throw new System.NullReferenceException("Page could not load 'BlankPage' resource");
-            }
-            title = LogicalTreeHelper.FindLogicalNode( element, "Title" ) as Label;
-            if( title == null ) {
-                throw new System.NullReferenceException("Page could not find Label 'Title' in template");
-            }
-            contents = LogicalTreeHelper.FindLogicalNode( element, "Contents" ) as StackPanel;
-            if( contents == null ) {
-                throw new System.NullReferenceException("Page could not find StackPanel 'Contents' in template");
-            }
+            element = WaywardManager.instance.GetResource<FrameworkElement>(resourceKey);
 
             // Mouse drag handlers
             element.MouseDown += OnMouseDown;
@@ -42,50 +29,14 @@ namespace WaywardEngine
             // Newest Page is always in front (also assures no overlapping zIndex values)
             int maxZ = Utilities.GetMaxZOfCanvas( WaywardManager.instance.window.mainCanvas );
             Canvas.SetZIndex( element, maxZ + 1 );
-
-            SetupContextMenu();
         }
 
-        /// <summary>
-        /// Adds default context menu with a close item to element.
-        /// </summary>
-        private void SetupContextMenu()
+        public FrameworkElement GetElement()
         {
-            ContextMenu contextMenu = new ContextMenu();
-            element.ContextMenu = contextMenu;
-            MenuItem closeMenuItem = new MenuItem();
-            closeMenuItem.Header = "Close";
-            closeMenuItem.Click += CloseAction;
-            element.ContextMenu.Items.Insert(0, closeMenuItem );
+            return element;
         }
 
-        public void SetTitle( string sTitle )
-        {
-            title.Content = sTitle;
-        }
-        /// <summary>
-        /// Add FrameworkElement to Page StackPanel.
-        /// </summary>
-        /// <param name="content"></param>
-        public void AddContent( FrameworkElement content )
-        {
-            contents.Children.Add( content );
-        }
-        /// <summary>
-        /// Remove FrameworkElement from Page StackPanel.
-        /// </summary>
-        /// <param name="content"></param>
-        public void RemoveContent( FrameworkElement content )
-        {
-            contents.Children.Remove(content);
-        }
-
-        public virtual void Clear()
-        {
-            contents.Children.Clear();
-        }
-
-        private void OnMouseDown( object sender, MouseButtonEventArgs e )
+        protected virtual void OnMouseDown( object sender, MouseButtonEventArgs e )
         {
             // If no page is already grabbed
             if( WaywardManager.instance.grabbedPage != null ) { return; }
@@ -99,7 +50,7 @@ namespace WaywardEngine
 
             Utilities.BringToFrontOfCanvas(WaywardManager.instance.window.mainCanvas, element);
         }
-        private void OnMouseUp( object sender, MouseButtonEventArgs e )
+        protected virtual void OnMouseUp( object sender, MouseButtonEventArgs e )
         {
             if( WaywardManager.instance.grabbedPage != this ) { return; }
 
@@ -110,7 +61,7 @@ namespace WaywardEngine
             WaywardManager.instance.SetMouseUpHandler( OnMouseUp, false );
         }
 
-        private void OnMouseMove( object sender, MouseEventArgs e )
+        protected virtual void OnMouseMove( object sender, MouseEventArgs e )
         {
             Point mousePosition = WaywardManager.instance.GetMousePosition();
             Point offsetPosition = mousePosition + grabOffset;
@@ -119,7 +70,7 @@ namespace WaywardEngine
             Canvas.SetTop( element, offsetPosition.Y );
         }
         
-        private void CloseAction( object sender, RoutedEventArgs e )
+        public void CloseAction( object sender, RoutedEventArgs e )
         {
             WaywardManager.instance.window.mainCanvas.Children.Remove(element);
             WaywardManager.instance.pages.Remove(this);

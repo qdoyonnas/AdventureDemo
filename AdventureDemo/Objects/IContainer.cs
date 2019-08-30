@@ -10,6 +10,7 @@ namespace AdventureDemo
     {
         GameObject GetContent( int i );
         int ContentCount();
+        bool CanContain( GameObject obj );
         bool DoesContain( GameObject obj );
         void AddContent( GameObject obj );
         void RemoveContent( GameObject obj );

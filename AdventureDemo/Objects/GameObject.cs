@@ -18,10 +18,11 @@ namespace AdventureDemo
                 return _container;
             }
             set {
+                // Security check
+                if( !value.DoesContain(this) ) { return; }
                 IContainer oldContainer = _container;
                 _container = value;
                 if( oldContainer != null ) { oldContainer.RemoveContent(this); }
-                _container.AddContent(this);
 
                 WaywardManager.instance.Update(); // XXX: This probably shouldnt be handled here
             }

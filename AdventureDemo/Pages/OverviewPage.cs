@@ -10,7 +10,7 @@ using WaywardEngine;
 
 namespace AdventureDemo
 {
-    class OverviewPage : WaywardEngine.Page
+    class OverviewPage : WaywardEngine.ContentPage
     {
         Dictionary<IObserver, StackPanel> overviewContentPanels;
         Dictionary<string, StackPanel> overviewEventPanels;

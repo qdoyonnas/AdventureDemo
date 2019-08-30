@@ -50,23 +50,17 @@ namespace AdventureDemo
         /// </summary>
         private void SetupGame()
         {
-            playerObject = new Character("You");
+            playerObject = new Character( "You", 1, 3 );
 
-            Container room1 = new Container( "Dim Room" );
+            Container room1 = new Container( "Dim Room", 100 );
             AddRoot(room1);
-            playerObject.container = room1;
+            room1.AddContent(playerObject);
 
-            Container table = new Container("Table");
-            table.container = room1;
-            Container box = new Container("Box");
-            box.container = table;
-            new GameObject("Key").container = box;
-
-            new GameObject("Door").container = room1;
-
-            Container room2 = new Container( "Round Room" );
-            AddRoot(room2);
-            new GameObject("Door").container = room2;
+            Container table = new Container("Table", 6, 12);
+            room1.AddContent(table);
+            Container box = new Container("Box", 0.5, 0.6);
+            table.AddContent(box);
+            box.AddContent( new Physical("Key", 0.5) );
         }
 
         /// <summary>

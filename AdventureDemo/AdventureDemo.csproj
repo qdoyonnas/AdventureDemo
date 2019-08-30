@@ -69,6 +69,8 @@
     <Compile Include="Objects\GameObject.cs" />
     <Compile Include="Objects\IContainer.cs" />
     <Compile Include="Objects\IObserver.cs" />
+    <Compile Include="Objects\IPhysical.cs" />
+    <Compile Include="Objects\Physical.cs" />
     <Compile Include="Pages\DescriptivePage.cs" />
     <Compile Include="Pages\OverviewPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

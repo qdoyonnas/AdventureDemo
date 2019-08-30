@@ -10,7 +10,7 @@ using WaywardEngine;
 
 namespace AdventureDemo
 {
-    class DescriptivePage : WaywardEngine.Page
+    class DescriptivePage : WaywardEngine.ContentPage
     {
         GameObject _target;
         public GameObject target {

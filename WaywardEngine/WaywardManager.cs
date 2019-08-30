@@ -122,10 +122,10 @@ namespace WaywardEngine
         /// <param name="position">Position of page inside mainCanvas.</param>
         public void AddPage( Page page, Point position )
         {
-            window.mainCanvas.Children.Add(page.element);
+            window.mainCanvas.Children.Add(page.GetElement());
 
-            Canvas.SetLeft(page.element, position.X);
-            Canvas.SetTop(page.element, position.Y);
+            Canvas.SetLeft(page.GetElement(), position.X);
+            Canvas.SetTop(page.GetElement(), position.Y);
 
             WaywardManager.instance.pages.Add(page);
         }
