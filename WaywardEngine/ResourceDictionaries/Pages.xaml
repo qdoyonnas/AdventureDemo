@@ -19,14 +19,10 @@
     </Border>
 
     <Border x:Key="Message" x:Shared="false" Style="{StaticResource DefaultPageStyle}">
-        <StackPanel>
-            <ScrollViewer MinHeight="10" MaxHeight="300" MinWidth="10" VerticalScrollBarVisibility="Auto">
-                <StackPanel>
-                    <TextBlock Name="MessageText"></TextBlock>
-                    <TextBlock Name="Subtext"></TextBlock>
-                </StackPanel>
-            </ScrollViewer>
+        <StackPanel Margin="{StaticResource Padding}">
+            <TextBlock TextAlignment="Center" Name="MessageText"></TextBlock>
+            <TextBlock Foreground="{StaticResource DisabledForegroundBrush}" TextAlignment="Center" Name="Subtext"></TextBlock>
         </StackPanel>
     </Border>
-
+    
 </ResourceDictionary>

@@ -14,29 +14,50 @@ namespace WaywardEngine
         TextBlock messageText;
         TextBlock subtext;
 
-        Point initialPosition = new Point();
+        bool doCloseAction = false;
 
         public Message( string message )
             : base("Message")
         {
+            Construct(message, "Click to close");
+        }
+        public Message( string message, string subtext )
+            : base("Message")
+        {
+            Construct(message, subtext);
+        }
+        private void Construct( string message, string subtext )
+        {
             messageText = Utilities.FindNode<TextBlock>( element, "MessageText" );
-            subtext = Utilities.FindNode<TextBlock>( element, "Subtext" );
+            this.subtext = Utilities.FindNode<TextBlock>( element, "Subtext" );
 
             messageText.Text = message;
+            this.subtext.Text = subtext;
         }
 
         protected override void OnMouseDown( object sender, MouseButtonEventArgs e )
         {
+            Console.WriteLine("IN Message.OnMouseDown");
             base.OnMouseDown(sender, e);
-            initialPosition = new Point( Canvas.GetLeft(element), Canvas.GetTop(element) );
+            //initialPosition = new Point( Canvas.GetLeft(element), Canvas.GetTop(element) );
+            doCloseAction = true;
+        }
+        protected override void OnMouseMove( object sender, MouseEventArgs e )
+        {
+            Console.WriteLine("IN Message.OnMouseMove");
+            base.OnMouseMove(sender, e);
+            doCloseAction = false;
         }
         protected override void OnMouseUp( object sender, MouseButtonEventArgs e )
         {
+            Console.WriteLine("IN Message.OnMouseUp");
+            base.OnMouseUp(sender, e);
+
             Point newPosition = new Point( Canvas.GetLeft(element), Canvas.GetTop(element) );
-            if( Utilities.Distance(newPosition, initialPosition) > 1 ) {
+            //if( Utilities.Distance(newPosition, initialPosition) < 1 ) {
+            if( doCloseAction ) {
                 CloseAction(sender, e);
             }
-            base.OnMouseUp(sender, e);
         }
     }
 }

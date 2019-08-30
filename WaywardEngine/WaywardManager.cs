@@ -104,14 +104,14 @@ namespace WaywardEngine
         /// </summary>
         /// <param name="handler">MouseEventHandler to be added or removed.</param>
         /// <param name="add">true to add handler, false to remove.</param>
-        public void SetMouseUpHandler( MouseButtonEventHandler handler, bool add )
+        public void SetLeftMouseUpHandler( MouseButtonEventHandler handler, bool add )
         {
             if( !isInitialized ) { return; }
 
             if( add ) {
-                window.mainCanvas.MouseUp += handler;
+                window.mainCanvas.MouseLeftButtonUp += handler;
             } else {
-                window.mainCanvas.MouseUp -= handler;
+                window.mainCanvas.MouseLeftButtonUp -= handler;
             }
         }
 
@@ -128,6 +128,11 @@ namespace WaywardEngine
             Canvas.SetTop(page.GetElement(), position.Y);
 
             WaywardManager.instance.pages.Add(page);
+        }
+
+        public void StartTutorial()
+        {
+            Utilities.DisplayMessage("Welcome to the Wayward Engine!");
         }
 
         public void Update()

@@ -23,8 +23,8 @@ namespace WaywardEngine
             element = WaywardManager.instance.GetResource<FrameworkElement>(resourceKey);
 
             // Mouse drag handlers
-            element.MouseDown += OnMouseDown;
-            element.MouseUp += OnMouseUp;
+            element.MouseLeftButtonDown += OnMouseDown;
+            element.MouseLeftButtonUp += OnMouseUp;
 
             // Newest Page is always in front (also assures no overlapping zIndex values)
             int maxZ = Utilities.GetMaxZOfCanvas( WaywardManager.instance.window.mainCanvas );
@@ -38,6 +38,7 @@ namespace WaywardEngine
 
         protected virtual void OnMouseDown( object sender, MouseButtonEventArgs e )
         {
+            Console.WriteLine("IN Page.OnMouseDown");
             // If no page is already grabbed
             if( WaywardManager.instance.grabbedPage != null ) { return; }
 
@@ -46,23 +47,25 @@ namespace WaywardEngine
 
             // Add handlers to mainCanvas to avoivd lose of control when moving mouse too fast
             WaywardManager.instance.SetMouseMoveHandler( OnMouseMove, true );
-            WaywardManager.instance.SetMouseUpHandler( OnMouseUp, true );
+            WaywardManager.instance.SetLeftMouseUpHandler( OnMouseUp, true );
 
             Utilities.BringToFrontOfCanvas(WaywardManager.instance.window.mainCanvas, element);
         }
         protected virtual void OnMouseUp( object sender, MouseButtonEventArgs e )
         {
+            Console.WriteLine("IN Page.OnMouseUp");
             if( WaywardManager.instance.grabbedPage != this ) { return; }
 
             WaywardManager.instance.grabbedPage = null;
 
             // Remove previously added handlers
             WaywardManager.instance.SetMouseMoveHandler( OnMouseMove, false );
-            WaywardManager.instance.SetMouseUpHandler( OnMouseUp, false );
+            WaywardManager.instance.SetLeftMouseUpHandler( OnMouseUp, false );
         }
 
         protected virtual void OnMouseMove( object sender, MouseEventArgs e )
         {
+            Console.WriteLine("IN Page.OnMouseMove");
             Point mousePosition = WaywardManager.instance.GetMousePosition();
             Point offsetPosition = mousePosition + grabOffset;
 

@@ -65,11 +65,14 @@ namespace AdventureDemo
             GameManager.instance.Init(this);
 
             window.Show();
+
+            WaywardManager.instance.StartTutorial();
         }
         private void SetupContextMenu()
         {
             Utilities.AddContextMenuHeader(WaywardManager.instance.window, "Open", new Dictionary<string, RoutedEventHandler>() {
-                { "OverviewPage", CreateOverviewPage }
+                { "OverviewPage", CreateOverviewPage },
+                { "Message", CreateMessage }
             });
         }
 
@@ -84,6 +87,10 @@ namespace AdventureDemo
 
             page.AddEventPanel("main"); // XXX: This must be made dynamic
             page.DisplayEvent("main", "You wake up.");
+        }
+        private void CreateMessage( object sender, RoutedEventArgs e )
+        {
+            WaywardManager.instance.StartTutorial();
         }
 
         private void Application_DispatcherUnhandledException( object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e )

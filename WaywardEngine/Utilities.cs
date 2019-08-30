@@ -112,13 +112,13 @@ namespace WaywardEngine
         public static void AddContextMenuItems( FrameworkElement control, MenuItem headerItem, Dictionary<string, RoutedEventHandler> items )
         {
             if( !CheckContextMenu(control) ) { return; }
-
-            items.Reverse();
-            foreach( KeyValuePair<string, RoutedEventHandler> item in items ) {
+            
+            string[] keys = items.Keys.ToArray();
+            for( int i = keys.Length-1; i >= 0; i-- ) {
                 if( headerItem == null ) {
-                    AddMenuItem( control.ContextMenu, item.Key, item.Value );
+                    AddMenuItem( control.ContextMenu, keys[i], items[keys[i]] );
                 } else {
-                    AddMenuItem( headerItem, item.Key, item.Value );
+                    AddMenuItem( headerItem, keys[i], items[keys[i]] );
                 }
             }
         }
@@ -167,9 +167,24 @@ namespace WaywardEngine
 
         public static void DisplayMessage( string message )
         {
-            Message box = new Message(message);
+            DisplayMessage( message, "Click to close" );
+        }
+        public static void DisplayMessage( string message, string subtext )
+        {
             Point position = new Point( WaywardManager.instance.application.MainWindow.Width / 2,
                                     WaywardManager.instance.application.MainWindow.Height / 4 );
+
+            DisplayMessage( message, subtext, position );
+        }
+        public static void DisplayMessage( string message, Point position )
+        {
+            DisplayMessage( message, "Click to close", position );
+        }
+        public static void DisplayMessage( string message, string subtext, Point position )
+        {
+            Message box = new Message( message, subtext );
+            position = new Point( position.X - ( box.GetElement().ActualWidth / 2 ),
+                            position.Y - ( box.GetElement().ActualHeight / 2 ) );
             WaywardManager.instance.AddPage( box, position );
         }
     }
