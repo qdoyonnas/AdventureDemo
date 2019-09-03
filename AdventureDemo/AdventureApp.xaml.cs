@@ -71,26 +71,15 @@ namespace AdventureDemo
         private void SetupContextMenu()
         {
             Utilities.AddContextMenuHeader(WaywardManager.instance.window, "Open", new Dictionary<string, RoutedEventHandler>() {
-                { "OverviewPage", CreateOverviewPage },
-                { "Message", CreateMessage }
+                { "OverviewPage", CreateOverviewPage }
             });
         }
 
         private void CreateOverviewPage( object sender, RoutedEventArgs e )
         {
             Point mousePosition = WaywardManager.instance.GetMousePosition();
-            
-            OverviewPage page = new OverviewPage();
-            WaywardManager.instance.AddPage( page, mousePosition );
 
-            GameManager.instance.DisplayPerspectives( page );
-
-            page.AddEventPanel("main"); // XXX: This must be made dynamic
-            page.DisplayEvent("main", "You wake up.");
-        }
-        private void CreateMessage( object sender, RoutedEventArgs e )
-        {
-            WaywardManager.instance.StartTutorial();
+            GameManager.instance.DisplayPerspectives( mousePosition );
         }
 
         private void Application_DispatcherUnhandledException( object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e )

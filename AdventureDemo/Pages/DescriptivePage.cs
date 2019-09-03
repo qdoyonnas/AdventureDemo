@@ -10,7 +10,7 @@ using WaywardEngine;
 
 namespace AdventureDemo
 {
-    class DescriptivePage : WaywardEngine.ContentPage
+    class DescriptivePage : ContentPage
     {
         GameObject _target;
         public GameObject target {
@@ -19,74 +19,47 @@ namespace AdventureDemo
             }
             set {
                 _target = value;
-                DisplayTarget();
+                Clear();
+                SetTitle( _target.GetData("name").text );
             }
         }
 
-        TextBlock descriptionText;
+        List<DescriptivePageSection> sections;
 
-        public DescriptivePage( GameObject obj )
+        public DescriptivePage( GameObject target, DescriptivePageSection[] sections )
             : base()
         {
-            target = obj;
-        }
+            this.sections = new List<DescriptivePageSection>();
 
-        private void DisplayTarget()
-        {
-            FrameworkElement content = GameManager.instance.GetResource<FrameworkElement>("DescriptiveDescription");
-            AddContent(content);
+            this.target = target;
 
-            SetTitle(target.GetData("name").text);
-
-            descriptionText = Utilities.FindNode<TextBlock>(content, "Description");
-            descriptionText.Inlines.Add( target.GetData("description").span );
-
-            FetchObjectContents();
-        }
-        private void FetchObjectContents()
-        {
-            IContainer container = target as Container;
-            if( container == null ) { return; }
-
-            FrameworkElement content = GameManager.instance.GetResource<FrameworkElement>("DescriptiveContents");
-            AddContent(content);
-
-            StackPanel inventory = Utilities.FindNode<StackPanel>(content, "Contents");
-            if( inventory != null ) {
-                if( container.ContentCount() > 0 ) {
-                    for( int i = 0; i < container.ContentCount(); i++ ) {
-                        DisplayContent( inventory, container.GetContent(i) );
-                    }
-                } else {
-                    inventory.Children.Add( new TextBlock(new Italic(new Run("empty"))) ); // XXX: Hate this - WaywardManager text parser needed
-                }
-            }
-        }
-        private void DisplayContent(StackPanel inventory, GameObject child)
-        {
-            // Add separator from previous entry
-            if( inventory.Children.Count > 0 ) {
-                Separator separator = new Separator();
-                inventory.Children.Add(separator);
+            foreach( DescriptivePageSection section in sections ) {
+                AddSection(section, false);
             }
 
-            FrameworkElement entry = GameManager.instance.GetResource<FrameworkElement>("OverviewEntry");
-            if( entry == null ) { return; }
-            inventory.Children.Add(entry);
-
-            TextBlock nameText = Utilities.FindNode<TextBlock>(entry, "Data1");
-            GameObjectData data = child.GetData("name");
-            nameText.Inlines.Add(data.span);
+            Update();
         }
 
-        public void SetDescription( string text )
+        public void AddSection( DescriptivePageSection section, bool performUpdate = true )
         {
-            descriptionText.Text = text;
+            section.AssignPage(this);
+            sections.Add(section);
+
+            if( performUpdate ) {
+                Update();
+            }
         }
 
+        public void DisplayTarget()
+        {
+            foreach( DescriptivePageSection section in sections ) {
+                section.Clear();
+                section.DisplayContents();
+            }
+        }
+        
         public override void Update()
         {
-            Clear();
             DisplayTarget();
         }
     }

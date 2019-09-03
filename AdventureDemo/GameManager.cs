@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using WaywardEngine;
 
 namespace AdventureDemo
 {
@@ -52,7 +54,7 @@ namespace AdventureDemo
         {
             playerObject = new Character( "You", 1, 3 );
 
-            Container room1 = new Container( "Dim Room", 100 );
+            Container room1 = new Container( "First Room", 100 );
             AddRoot(room1);
             room1.AddContent(playerObject);
 
@@ -98,9 +100,28 @@ namespace AdventureDemo
             return rootObjects[i];
         }
 
-        public void DisplayPerspectives( OverviewPage page )
+        public void DisplayPerspectives( Point position )
         {
+            OverviewPage page = DisplayOverviewPage( position );
             page.DisplayObject( playerObject );
+
+            page.AddEventPanel("main"); // XXX: This must be made dynamic
+            page.DisplayEvent("main", "You wake up.");
+        }
+
+        public OverviewPage DisplayOverviewPage( Point position )
+        {
+            OverviewPage page = new OverviewPage();
+            WaywardManager.instance.AddPage( page, position );
+
+            return page;
+        }
+        public DescriptivePage DisplayDescriptivePage( Point position, GameObject target, DescriptivePageSection[] sections )
+        {
+            DescriptivePage page = new DescriptivePage( target, sections );
+            WaywardManager.instance.AddPage(page, position);
+
+            return page;
         }
     }
 }

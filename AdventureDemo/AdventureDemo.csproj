@@ -67,11 +67,14 @@
     <Compile Include="Objects\Character.cs" />
     <Compile Include="Objects\Container.cs" />
     <Compile Include="Objects\GameObject.cs" />
+    <Compile Include="Pages\ContainerDescriptivePageSection.cs" />
+    <Compile Include="Pages\GameObjectDescriptivePageSection.cs" />
     <Compile Include="Objects\IContainer.cs" />
     <Compile Include="Objects\IObserver.cs" />
     <Compile Include="Objects\IPhysical.cs" />
     <Compile Include="Objects\Physical.cs" />
     <Compile Include="Pages\DescriptivePage.cs" />
+    <Compile Include="Pages\DescriptivePageSection.cs" />
     <Compile Include="Pages\OverviewPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

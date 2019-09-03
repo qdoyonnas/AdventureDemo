@@ -37,7 +37,7 @@
         </ScrollViewer>
     </Border>
 
-    <Border x:Key="DescriptiveDescription" x:Shared="false" Style="{StaticResource PageStyle}">
+    <Border x:Key="DescriptiveGameObject" x:Shared="false" Style="{StaticResource PageStyle}">
         <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <TextBlock Name="Description"></TextBlock>
@@ -45,7 +45,7 @@
         </ScrollViewer>
     </Border>
 
-    <Border x:Key="DescriptiveContents" x:Shared="false" Style="{StaticResource PageStyle}">
+    <Border x:Key="DescriptiveContainer" x:Shared="false" Style="{StaticResource PageStyle}">
         <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <TextBlock Style="{DynamicResource Header}">Contents</TextBlock>

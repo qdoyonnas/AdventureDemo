@@ -74,8 +74,9 @@ namespace AdventureDemo
         {
             Point mousePosition = WaywardManager.instance.GetMousePosition();
 
-            DescriptivePage page = new DescriptivePage(this);
-            WaywardManager.instance.AddPage(page, mousePosition);
+            GameManager.instance.DisplayDescriptivePage( mousePosition, this, new DescriptivePageSection[] {
+                new GameObjectDescriptivePageSection()
+            });
         }
     }
 

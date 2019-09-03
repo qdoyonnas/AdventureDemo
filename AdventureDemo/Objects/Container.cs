@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using WaywardEngine;
 
 namespace AdventureDemo
@@ -112,6 +113,16 @@ namespace AdventureDemo
             }
 
             return totalWeight;
+        }
+
+        public override void DisplayDescriptivePage( object sender, RoutedEventArgs e )
+        {
+            Point mousePosition = WaywardManager.instance.GetMousePosition();
+
+            GameManager.instance.DisplayDescriptivePage( mousePosition, this, new DescriptivePageSection[] {
+                new GameObjectDescriptivePageSection(),
+                new ContainerDescriptivePageSection()
+            } );
         }
     }
 }
