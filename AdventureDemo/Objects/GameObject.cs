@@ -23,8 +23,6 @@ namespace AdventureDemo
                 IContainer oldContainer = _container;
                 _container = value;
                 if( oldContainer != null ) { oldContainer.RemoveContent(this); }
-
-                WaywardManager.instance.Update(); // XXX: This probably shouldnt be handled here
             }
         }
 
@@ -39,28 +37,17 @@ namespace AdventureDemo
         /// </summary>
         /// <param name="data">A String identifying the desired data.</param>
         /// <returns></returns>
-        public virtual GameObjectData GetData( string key ) // XXX: Internals of GetData should be divided to individually overridable functions
+        public virtual GameObjectData GetData( string key )
         {
             GameObjectData data = new GameObjectData();
 
             // XXX: The styling of the text should be done through a WaywardEngine parser
             switch( key.ToLower() ) {
                 case "name":
-                    data.text = name;
-
-                    data.span.Inlines.Add( new Run(data.text) );
-                    data.span.Style = GameManager.instance.GetResource<Style>("Link");
-                    data.span.MouseLeftButtonUp += DisplayDescriptivePage;
-
-                    Utilities.AddContextMenuItem( data.span, "View", DisplayDescriptivePage );
-
+                    GetName(data);
                     break;
                 case "description":
-                    data.text = $"This is a {name}";
-
-                    data.span.Inlines.Add( "This is a " );
-                    data.span.Inlines.Add( GetData("name").span );
-
+                    GetDescription(data);
                     break;
                 default:
                     // No relevant data
@@ -68,6 +55,23 @@ namespace AdventureDemo
             }
 
             return data;
+        }
+        protected virtual void GetName( GameObjectData data )
+        {
+            data.text = name;
+
+            data.span.Inlines.Add( new Run(data.text) );
+            data.span.Style = GameManager.instance.GetResource<Style>("Link");
+            data.span.MouseLeftButtonUp += DisplayDescriptivePage;
+
+            Utilities.AddContextMenuItem( data.span, "View", DisplayDescriptivePage );
+        }
+        protected virtual void GetDescription( GameObjectData data )
+        {
+            data.text = $"This is a {name}";
+
+            data.span.Inlines.Add( "This is a " );
+            data.span.Inlines.Add( GetData("name").span );
         }
 
         public virtual void DisplayDescriptivePage( object sender, RoutedEventArgs e )

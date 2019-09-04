@@ -13,11 +13,15 @@ namespace AdventureDemo
     class ContainerDescriptivePageSection : DescriptivePageSection
     {
         StackPanel contents;
+        TextBlock filledVolume;
+        TextBlock innerVolume;
 
         public ContainerDescriptivePageSection()
             : base("DescriptiveContainer")
         {
             contents = Utilities.FindNode<StackPanel>( element, "Contents" );
+            filledVolume = Utilities.FindNode<TextBlock>( element, "FilledVolume" );
+            innerVolume = Utilities.FindNode<TextBlock>( element, "InnerVolume" );
         }
 
         public override void Clear()
@@ -27,6 +31,9 @@ namespace AdventureDemo
 
         public override void DisplayContents()
         {
+            filledVolume.Text = page.target.GetData("filledvolume").text;
+            innerVolume.Text = page.target.GetData("innervolume").text;
+
             IContainer container = page.target as IContainer;
             if( container == null ) {
                 throw new System.NullReferenceException("DescriptivePage tried to display the contents of a GameObject that is not an IContainer.");

@@ -41,49 +41,24 @@ namespace AdventureDemo
         public void PickUp( GameObject obj )
         {
             AddContent(obj);
+
+            WaywardManager.instance.Update();
         }
         public void Drop( GameObject obj )
         {
             if( !DoesContain(obj) ) { return; }
 
             container.AddContent(obj);
+
+            WaywardManager.instance.Update();
         }
 
-        /// <summary>
-        /// Returns a String that best fufills the requested data.
-        /// Serves a bridge between UI and objects disconnecting the need for explicit calls.
-        /// </summary>
-        /// <param name="data">A String identifying the desired data.</param>
-        /// <returns></returns>
-        public override GameObjectData GetData( string key ) // XXX: ...for this reason (see GameObject)
+        protected override void GetDescription( GameObjectData data )
         {
-            GameObjectData data = new GameObjectData();
+            data.text = $"This is {name}";
 
-            // XXX: The styling of the text should be done through a WaywardEngine parser
-            switch( key.ToLower() ) {
-                case "name":
-                    data.text = name;
-
-                    data.span.Inlines.Add( new Run(data.text) );
-                    data.span.Style = GameManager.instance.GetResource<Style>("Link");
-                    data.span.MouseLeftButtonUp += DisplayDescriptivePage;
-
-                    Utilities.AddContextMenuItem( data.span, "View", DisplayDescriptivePage );
-
-                    break;
-                case "description":
-                    data.text = $"This is {name}";
-
-                    data.span.Inlines.Add( "This is " );
-                    data.span.Inlines.Add( GetData("name").span );
-
-                    break;
-                default:
-                    // No relevant data
-                    break;
-            }
-
-            return data;
+            data.span.Inlines.Add( "This is " );
+            data.span.Inlines.Add( GetData("name").span );
         }
 
         public bool CanObserve( GameObject obj )

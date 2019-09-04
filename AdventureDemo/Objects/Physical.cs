@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using WaywardEngine;
 
 namespace AdventureDemo
 {
     class Physical : GameObject, IPhysical
     {
-        double volume;
-        double weight;
+        protected double volume;
+        protected double weight;
 
         public Physical( string name )
             : base(name)
@@ -32,13 +34,60 @@ namespace AdventureDemo
             this.weight = weight;
         }
 
-        public double GetVolume()
+        public override GameObjectData GetData( string key )
         {
-            return volume;
+            GameObjectData data = new GameObjectData();
+
+            switch( key ) {
+                case "name":
+                    GetName(data);
+                    break;
+                case "description":
+                    GetDescription(data);
+                    break;
+                case "weight":
+                    GetDescriptiveWeight(data);
+                    break;
+                case "volume":
+                    GetDescriptiveVolume(data);
+                    break;
+                default:
+                    break;
+            }
+
+            return data;
         }
-        public double GetWeight()
+        protected virtual void GetDescriptiveWeight( GameObjectData data )
+        {
+            data.text = GetWeight().ToString();
+
+            data.span.Inlines.Add( data.text );
+        }
+        protected virtual void GetDescriptiveVolume( GameObjectData data )
+        {
+            data.text = GetVolume().ToString();
+
+            data.span.Inlines.Add( data.text );
+        }
+
+        public virtual double GetWeight()
         {
             return weight;
         }
+        public virtual double GetVolume()
+        {
+            return volume;
+        }
+
+        public override void DisplayDescriptivePage( object sender, RoutedEventArgs e )
+        {
+            Point mousePosition = WaywardManager.instance.GetMousePosition();
+
+            GameManager.instance.DisplayDescriptivePage( mousePosition, this, new DescriptivePageSection[] {
+                new GameObjectDescriptivePageSection(),
+                new PhysicalDescriptivePageSection()
+            } );
+        }
+
     }
 }

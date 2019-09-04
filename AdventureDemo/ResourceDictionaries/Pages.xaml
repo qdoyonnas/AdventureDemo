@@ -45,10 +45,32 @@
         </ScrollViewer>
     </Border>
 
+    <Border x:Key="DescriptivePhysical" x:Shared="false" Style="{StaticResource PageStyle}">
+        <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
+            <Grid Margin="{StaticResource Padding}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Column="0">Volume: <TextBlock Margin="0" Name="Volume"></TextBlock> L</TextBlock>
+                <TextBlock Grid.Column="1">Weight: <TextBlock Margin="0" Name="Weight"></TextBlock> stones</TextBlock>
+            </Grid>
+        </ScrollViewer>
+    </Border>
+
     <Border x:Key="DescriptiveContainer" x:Shared="false" Style="{StaticResource PageStyle}">
         <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <TextBlock Style="{DynamicResource Header}">Contents</TextBlock>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Style="{DynamicResource Header}">Contents</TextBlock>
+                    <TextBlock Grid.Column="1"><TextBlock Margin="0" Name="FilledVolume"></TextBlock> L / <TextBlock Margin="0" Name="InnerVolume"></TextBlock> L</TextBlock>
+                </Grid>
                 <StackPanel Name="Contents">
                 </StackPanel>
             </StackPanel>

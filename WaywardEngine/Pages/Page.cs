@@ -38,7 +38,6 @@ namespace WaywardEngine
 
         protected virtual void OnMouseDown( object sender, MouseButtonEventArgs e )
         {
-            Console.WriteLine("IN Page.OnMouseDown");
             // If no page is already grabbed
             if( WaywardManager.instance.grabbedPage != null ) { return; }
 
@@ -53,7 +52,6 @@ namespace WaywardEngine
         }
         protected virtual void OnMouseUp( object sender, MouseButtonEventArgs e )
         {
-            Console.WriteLine("IN Page.OnMouseUp");
             if( WaywardManager.instance.grabbedPage != this ) { return; }
 
             WaywardManager.instance.grabbedPage = null;
@@ -65,7 +63,6 @@ namespace WaywardEngine
 
         protected virtual void OnMouseMove( object sender, MouseEventArgs e )
         {
-            Console.WriteLine("IN Page.OnMouseMove");
             Point mousePosition = WaywardManager.instance.GetMousePosition();
             Point offsetPosition = mousePosition + grabOffset;
 

@@ -52,17 +52,17 @@ namespace AdventureDemo
         /// </summary>
         private void SetupGame()
         {
-            playerObject = new Character( "You", 1, 3 );
+            playerObject = new Character( "You", 2.5, 65, 11 );
 
-            Container room1 = new Container( "First Room", 100 );
+            Container room1 = new Container( "First Room", 1000 );
             AddRoot(room1);
             room1.AddContent(playerObject);
 
-            Container table = new Container("Table", 6, 12);
+            Container table = new Container("Table", 70, 120, 7);
             room1.AddContent(table);
-            Container box = new Container("Box", 0.5, 0.6);
+            Container box = new Container("Box", 2, 2.5, 1);
             table.AddContent(box);
-            box.AddContent( new Physical("Key", 0.5) );
+            box.AddContent( new Physical("Key", 0.1, 0.1) );
         }
 
         /// <summary>

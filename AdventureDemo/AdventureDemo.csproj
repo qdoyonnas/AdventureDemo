@@ -76,6 +76,7 @@
     <Compile Include="Pages\DescriptivePage.cs" />
     <Compile Include="Pages\DescriptivePageSection.cs" />
     <Compile Include="Pages\OverviewPage.cs" />
+    <Compile Include="Pages\PhysicalDescriptivePageSection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

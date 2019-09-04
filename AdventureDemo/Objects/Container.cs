@@ -8,45 +8,46 @@ using WaywardEngine;
 
 namespace AdventureDemo
 {
-    class Container : GameObject, IContainer, IPhysical
+    class Container : Physical, IContainer
     {
         List<IPhysical> contents;
-        double weight;
-        double volume;
         double innerVolume;
 
-        public double remainingVolume {
+        public double filledVolume {
             get {
                 double totalVolume = 0;
                 foreach( IPhysical physical in contents ) {
                     totalVolume += physical.GetVolume();
                 }
-                return innerVolume - totalVolume;
+
+                return totalVolume;
+            }
+        }
+        public double remainingVolume {
+            get {
+                return innerVolume - filledVolume;
             }
         }
 
         public Container( string name, double innerVolume ) 
             : base(name)
         {
-            Construct( innerVolume, 0, 0 );
+            Construct(innerVolume);
         }
         public Container( string name, double innerVolume, double totalVolume )
-            : base(name)
+            : base(name, totalVolume)
         {
-            Construct( innerVolume, totalVolume, 0 );
+            Construct(innerVolume);
         }
         public Container( string name, double innerVolume, double totalVolume, double weight )
-            : base(name)
+            : base(name, totalVolume, weight)
         {
-            Construct( innerVolume, totalVolume, weight );
+            Construct(innerVolume);
         }
-        private void Construct( double innerVolume, double totalVolume, double weight )
+        private void Construct( double volume )
         {
             contents = new List<IPhysical>();
-
-            this.innerVolume = innerVolume;
-            this.volume = totalVolume;
-            this.weight = weight;
+            innerVolume = volume;
         }
 
         public GameObject GetContent( int i )
@@ -100,19 +101,63 @@ namespace AdventureDemo
             if( obj.container == this ) { return; }
             contents.Remove(physical);
         }
-
-        public double GetVolume()
-        {
-            return volume;
-        }
-        public double GetWeight()
+        
+        public override double GetWeight()
         {
             double totalWeight = weight;
             foreach( IPhysical physical in contents ) {
-                weight += physical.GetWeight();
+                totalWeight += physical.GetWeight();
             }
 
             return totalWeight;
+        }
+
+        public override GameObjectData GetData( string key )
+        {
+            GameObjectData data = new GameObjectData();
+
+            switch( key ) {
+                case "name":
+                    GetName(data);
+                    break;
+                case "description":
+                    GetDescription(data);
+                    break;
+                case "weight":
+                    GetDescriptiveWeight(data);
+                    break;
+                case "volume":
+                    GetDescriptiveVolume(data);
+                    break;
+                case "innervolume":
+                    GetInnerVolume(data);
+                    break;
+                case "filledvolume":
+                    GetFilledVolume(data);
+                    break;
+                case "remainingvolume":
+                    GetRemainingVolume(data);
+                    break;
+                default:
+                    break;
+            }
+
+            return data;
+        }
+        protected virtual void GetInnerVolume( GameObjectData data )
+        {
+            data.text = innerVolume.ToString();
+            data.span.Inlines.Add( data.text );
+        }
+        protected virtual void GetFilledVolume( GameObjectData data )
+        {
+            data.text = filledVolume.ToString();
+            data.span.Inlines.Add( data.text );
+        }
+        protected virtual void GetRemainingVolume( GameObjectData data )
+        {
+            data.text = remainingVolume.ToString();
+            data.span.Inlines.Add( data. text );
         }
 
         public override void DisplayDescriptivePage( object sender, RoutedEventArgs e )
@@ -121,6 +166,7 @@ namespace AdventureDemo
 
             GameManager.instance.DisplayDescriptivePage( mousePosition, this, new DescriptivePageSection[] {
                 new GameObjectDescriptivePageSection(),
+                new PhysicalDescriptivePageSection(),
                 new ContainerDescriptivePageSection()
             } );
         }
