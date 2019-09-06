@@ -69,10 +69,13 @@ namespace AdventureDemo
             // Object can not be perceived by observer
             if( !observer.CanObserve(obj) ) { return; }
 
-            // Add separator from previous entry
+            // Entry styling
+            bool isMainObject = false;
             if( parent.Children.Count > 0 ) {
                 Separator separator = new Separator();
                 parent.Children.Add(separator);
+            } else if( overviewContentPanels.ContainsValue(parent) ) {
+                isMainObject = true;
             }
 
             FrameworkElement entry = GameManager.instance.GetResource<FrameworkElement>("OverviewEntry");
@@ -81,6 +84,9 @@ namespace AdventureDemo
             TextBlock text = Utilities.FindNode<TextBlock>( entry, "Data1");
             if( text != null ) {
                 text.Inlines.Add( observer.Observe(obj, "name").span );
+                if( isMainObject ) {
+                    text.Style = GameManager.instance.GetResource<Style>( "Header" );
+                }
             }
 
             FetchObjectContents(entry, observer, obj);

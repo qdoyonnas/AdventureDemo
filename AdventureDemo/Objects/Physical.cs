@@ -57,15 +57,15 @@ namespace AdventureDemo
 
             return data;
         }
-        protected virtual void GetDescriptiveWeight( GameObjectData data )
+        public virtual void GetDescriptiveWeight( GameObjectData data )
         {
-            data.text = GetWeight().ToString();
+            data.text = $"{GetWeight().ToString()} stones";
 
             data.span.Inlines.Add( data.text );
         }
-        protected virtual void GetDescriptiveVolume( GameObjectData data )
+        public virtual void GetDescriptiveVolume( GameObjectData data )
         {
-            data.text = GetVolume().ToString();
+            data.text = $"{GetVolume().ToString()} L";
 
             data.span.Inlines.Add( data.text );
         }

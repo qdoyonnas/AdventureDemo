@@ -10,6 +10,8 @@ namespace AdventureDemo
 {
     class Container : Physical, IContainer
     {
+        List<Connection> connections;
+
         List<IPhysical> contents;
         double innerVolume;
 
@@ -46,6 +48,7 @@ namespace AdventureDemo
         }
         private void Construct( double volume )
         {
+            connections = new List<Connection>();
             contents = new List<IPhysical>();
             innerVolume = volume;
         }
@@ -84,24 +87,38 @@ namespace AdventureDemo
 
             return contents.Contains(physical);
         }
-        public void AddContent( GameObject obj )
+        public bool AddContent( GameObject obj )
         {
-            if( !CanContain(obj) ) { return; }
+            if( !CanContain(obj) ) { return false; }
+
             IPhysical physical = obj as IPhysical;
+            if( physical == null ) { return false; }
 
             contents.Add(physical);
-            obj.container = this;
+            return true;
         }
-        public void RemoveContent( GameObject obj )
+        public bool RemoveContent( GameObject obj )
         {
             IPhysical physical = obj as IPhysical;
-            if( physical == null ) { return; }
+            if( physical == null ) { return false; }
 
-            // Security check to confirm this came from the relevant gameobject
-            if( obj.container == this ) { return; }
             contents.Remove(physical);
+            return true;
         }
         
+        public List<Connection> GetConnections()
+        {
+            return connections;
+        }
+        public void AddConnection( Connection connection )
+        {
+            connections.Add( connection );
+        }
+        public void RemoveConnection( Connection connection )
+        {
+            connections.Remove( connection );
+        }
+
         public override double GetWeight()
         {
             double totalWeight = weight;
@@ -144,19 +161,19 @@ namespace AdventureDemo
 
             return data;
         }
-        protected virtual void GetInnerVolume( GameObjectData data )
+        public virtual void GetInnerVolume( GameObjectData data )
         {
-            data.text = innerVolume.ToString();
+            data.text = $"{innerVolume.ToString()} L";
             data.span.Inlines.Add( data.text );
         }
-        protected virtual void GetFilledVolume( GameObjectData data )
+        public virtual void GetFilledVolume( GameObjectData data )
         {
-            data.text = filledVolume.ToString();
+            data.text = $"{filledVolume.ToString()} L";
             data.span.Inlines.Add( data.text );
         }
-        protected virtual void GetRemainingVolume( GameObjectData data )
+        public virtual void GetRemainingVolume( GameObjectData data )
         {
-            data.text = remainingVolume.ToString();
+            data.text = $"{remainingVolume.ToString()} L";
             data.span.Inlines.Add( data. text );
         }
 

@@ -66,17 +66,19 @@
     <Compile Include="GameManager.cs" />
     <Compile Include="Objects\Character.cs" />
     <Compile Include="Objects\Container.cs" />
+    <Compile Include="Objects\Connection.cs" />
     <Compile Include="Objects\GameObject.cs" />
-    <Compile Include="Pages\ContainerDescriptivePageSection.cs" />
-    <Compile Include="Pages\GameObjectDescriptivePageSection.cs" />
+    <Compile Include="Objects\PhysicalConnection.cs" />
+    <Compile Include="Pages\DescriptivePages\ContainerDescriptivePageSection.cs" />
+    <Compile Include="Pages\DescriptivePages\GameObjectDescriptivePageSection.cs" />
     <Compile Include="Objects\IContainer.cs" />
     <Compile Include="Objects\IObserver.cs" />
     <Compile Include="Objects\IPhysical.cs" />
     <Compile Include="Objects\Physical.cs" />
-    <Compile Include="Pages\DescriptivePage.cs" />
-    <Compile Include="Pages\DescriptivePageSection.cs" />
+    <Compile Include="Pages\DescriptivePages\DescriptivePage.cs" />
+    <Compile Include="Pages\DescriptivePages\DescriptivePageSection.cs" />
     <Compile Include="Pages\OverviewPage.cs" />
-    <Compile Include="Pages\PhysicalDescriptivePageSection.cs" />
+    <Compile Include="Pages\DescriptivePages\PhysicalDescriptivePageSection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -118,11 +120,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ResourceDictionaries\DescriptivePages.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ResourceDictionaries\MiscStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\Pages.xaml">
+    <Page Include="ResourceDictionaries\OverviewPages.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

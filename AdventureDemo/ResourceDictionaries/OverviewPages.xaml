@@ -1,0 +1,40 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:AdventureDemo">
+
+    <Grid x:Key="OverviewEntry" x:Shared="false">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Name="Data1"></TextBlock>
+            <TextBlock Grid.Column="1" Name="Data2"></TextBlock>
+            <TextBlock Grid.Column="2" Name="Data3"></TextBlock>
+        </Grid>
+        <Grid Grid.Row="1">
+            <StackPanel Name="SubData" Margin="20 0 20 0">
+            </StackPanel>
+        </Grid>
+    </Grid>
+
+    <Border x:Key="OverviewContents" x:Shared="false" Style="{StaticResource PageStyle}">
+        <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
+            <StackPanel Name="Contents">
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
+    <Border x:Key="OverviewEvents" x:Shared="false" Style="{StaticResource PageStyle}">
+        <ScrollViewer MinHeight="350" MaxHeight="350" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
+            <StackPanel Name="Events">
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
+</ResourceDictionary>

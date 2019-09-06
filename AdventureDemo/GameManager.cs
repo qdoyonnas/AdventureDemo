@@ -56,13 +56,18 @@ namespace AdventureDemo
 
             Container room1 = new Container( "First Room", 1000 );
             AddRoot(room1);
-            room1.AddContent(playerObject);
+            playerObject.SetContainer(room1);
 
             Container table = new Container("Table", 70, 120, 7);
-            room1.AddContent(table);
+            table.SetContainer(room1);
             Container box = new Container("Box", 2, 2.5, 1);
-            table.AddContent(box);
-            box.AddContent( new Physical("Key", 0.1, 0.1) );
+            box.SetContainer(table);
+            new Physical("Key", 0.1, 0.1).SetContainer(box);
+
+            Container room2 = new Container( "Second Room", 500 );
+            AddRoot(room2);
+
+            PhysicalConnection doorway = new PhysicalConnection( "Doorway", room1, room2, 70 );
         }
 
         /// <summary>
@@ -104,9 +109,10 @@ namespace AdventureDemo
         {
             OverviewPage page = DisplayOverviewPage( position );
             page.DisplayObject( playerObject );
-
-            page.AddEventPanel("main"); // XXX: This must be made dynamic
-            page.DisplayEvent("main", "You wake up.");
+        }
+        public void DisplayRoots( Point position )
+        {
+            throw new System.NotImplementedException("GameManager.DisplayRoots is not implemented. Observer needs refactor");
         }
 
         public OverviewPage DisplayOverviewPage( Point position )

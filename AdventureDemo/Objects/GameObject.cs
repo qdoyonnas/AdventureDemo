@@ -12,23 +12,34 @@ namespace AdventureDemo
     class GameObject
     {
         protected string name;
-        IContainer _container;
-        public IContainer container {
+        protected IContainer _container;
+        public virtual IContainer container {
             get {
                 return _container;
-            }
-            set {
-                // Security check
-                if( !value.DoesContain(this) ) { return; }
-                IContainer oldContainer = _container;
-                _container = value;
-                if( oldContainer != null ) { oldContainer.RemoveContent(this); }
             }
         }
 
         public GameObject( string name )
         {
             this.name = name;
+        }
+
+        public virtual bool SetContainer( IContainer newContainer )
+        {
+            if( newContainer == container ) { return true; }
+            if( !newContainer.CanContain(this) ) { return false; }
+
+            if( _container == null || _container.RemoveContent(this) ) {
+                if( newContainer.AddContent(this) ) {
+                    _container = newContainer;
+                } else {
+                    _container.AddContent(this);
+                    return false;
+                }
+            }
+
+            WaywardManager.instance.Update();
+            return true;
         }
 
         /// <summary>
@@ -56,7 +67,7 @@ namespace AdventureDemo
 
             return data;
         }
-        protected virtual void GetName( GameObjectData data )
+        public virtual void GetName( GameObjectData data )
         {
             data.text = name;
 
@@ -66,12 +77,14 @@ namespace AdventureDemo
 
             Utilities.AddContextMenuItem( data.span, "View", DisplayDescriptivePage );
         }
-        protected virtual void GetDescription( GameObjectData data )
+        public virtual void GetDescription( GameObjectData data )
         {
-            data.text = $"This is a {name}";
+            GameObjectData nameData = GetData("name");
+            data.text = $"This is a {nameData.text}";
 
             data.span.Inlines.Add( "This is a " );
-            data.span.Inlines.Add( GetData("name").span );
+            data.span.Inlines.Add( nameData.span );
+            data.span.Inlines.Add(".");
         }
 
         public virtual void DisplayDescriptivePage( object sender, RoutedEventArgs e )

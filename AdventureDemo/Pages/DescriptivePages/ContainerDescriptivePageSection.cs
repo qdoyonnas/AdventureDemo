@@ -47,7 +47,7 @@ namespace AdventureDemo
                 contents.Children.Add( new TextBlock(new Italic(new Run("empty"))) ); // XXX: Hate this - WaywardManager text parser needed
             }
         }
-
+        
         private void DisplayContent( GameObject child )
         {
             // Add separator from previous entry

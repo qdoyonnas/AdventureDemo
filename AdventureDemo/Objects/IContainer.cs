@@ -12,7 +12,11 @@ namespace AdventureDemo
         int ContentCount();
         bool CanContain( GameObject obj );
         bool DoesContain( GameObject obj );
-        void AddContent( GameObject obj );
-        void RemoveContent( GameObject obj );
+        bool AddContent( GameObject obj );
+        bool RemoveContent( GameObject obj );
+
+        List<Connection> GetConnections();
+        void AddConnection( Connection connection );
+        void RemoveConnection( Connection connection );
     }
 }

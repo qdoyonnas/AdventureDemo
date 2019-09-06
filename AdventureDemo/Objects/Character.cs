@@ -21,6 +21,19 @@ namespace AdventureDemo
             : base(name, innerVolume, totalVolume, weight)
         { }
 
+        public bool CanEnter( GameObject obj )
+        {
+            Connection connection = obj as Connection;
+            if( connection == null ) { return false; }
+
+            return connection.CanContain( this );
+        }
+        public void Enter( GameObject obj )
+        {
+            Connection connection = obj as Connection;
+
+            connection.Pass(this, this.container);
+        }
         public bool CanPickUp( GameObject obj )
         {
             if( obj == null || obj == this || obj.container == null ) { return false; }
@@ -40,25 +53,23 @@ namespace AdventureDemo
         }
         public void PickUp( GameObject obj )
         {
-            AddContent(obj);
-
-            WaywardManager.instance.Update();
+            obj.SetContainer(this);
         }
         public void Drop( GameObject obj )
         {
             if( !DoesContain(obj) ) { return; }
 
-            container.AddContent(obj);
-
-            WaywardManager.instance.Update();
+            obj.SetContainer(container);
         }
 
-        protected override void GetDescription( GameObjectData data )
+        public override void GetDescription( GameObjectData data )
         {
-            data.text = $"This is {name}";
+            GameObjectData nameData = GetData("name");
+            data.text = $"This is {nameData.text}";
 
             data.span.Inlines.Add( "This is " );
-            data.span.Inlines.Add( GetData("name").span );
+            data.span.Inlines.Add( nameData.span );
+            data.span.Inlines.Add(".");
         }
 
         public bool CanObserve( GameObject obj )
@@ -70,7 +81,9 @@ namespace AdventureDemo
             GameObjectData data = obj.GetData(key);
 
             if( this == GameManager.instance.playerObject ) { // XXX: playerObject might not always be the actively controlled object?
-                if( DoesContain(obj) ) {
+                if( CanEnter(obj) ) {
+                    Utilities.AddContextMenuItem( data.span, "Enter", delegate { Enter(obj); } );
+                } else if( DoesContain(obj) ) {
                     Utilities.AddContextMenuItem( data.span, "Drop", delegate { Drop(obj); } );
                 } else if( CanPickUp(obj) ) {
                     Utilities.AddContextMenuItem( data.span, "Pickup", delegate { PickUp(obj); } );

@@ -9,7 +9,8 @@
                 <ResourceDictionary Source="/ResourceDictionaries/Brushes.xaml" />
                 <ResourceDictionary Source="/ResourceDictionaries/MiscStyles.xaml" />
                 <ResourceDictionary Source="/ResourceDictionaries/ContextMenuStyle.xaml" />
-                <ResourceDictionary Source="/ResourceDictionaries/Pages.xaml" />
+                <ResourceDictionary Source="/ResourceDictionaries/OverviewPages.xaml" />
+                <ResourceDictionary Source="/ResourceDictionaries/DescriptivePages.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
         

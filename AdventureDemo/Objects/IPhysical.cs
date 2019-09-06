@@ -10,5 +10,8 @@ namespace AdventureDemo
     {
         double GetVolume();
         double GetWeight();
+
+        void GetDescriptiveWeight( GameObjectData data );
+        void GetDescriptiveVolume( GameObjectData data );
     }
 }
