@@ -88,6 +88,14 @@ namespace AdventureDemo
                     text.Style = GameManager.instance.GetResource<Style>( "Header" );
                 }
             }
+            text = Utilities.FindNode<TextBlock>( entry, "Data2" );
+            if( text != null ) {
+                text.Inlines.Add( observer.Observe(obj, "data 0").span );
+            }
+            text = Utilities.FindNode<TextBlock>( entry, "Data3" );
+            if( text != null ) {
+                text.Inlines.Add( observer.Observe(obj, "data 1").span );
+            }
 
             FetchObjectContents(entry, observer, obj);
         }

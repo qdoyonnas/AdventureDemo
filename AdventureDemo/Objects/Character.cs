@@ -62,14 +62,20 @@ namespace AdventureDemo
             obj.SetContainer(container);
         }
 
-        public override void GetDescription( GameObjectData data )
+        public override GameObjectData GetDescription( string[] parameters )
         {
+            GameObjectData data = new GameObjectData();
+
             GameObjectData nameData = GetData("name");
             data.text = $"This is {nameData.text}";
 
-            data.span.Inlines.Add( "This is " );
-            data.span.Inlines.Add( nameData.span );
-            data.span.Inlines.Add(".");
+            data.SetSpan(
+                new Run("This is "),
+                nameData.span,
+                new Run(".")
+            );
+
+            return data;
         }
 
         public bool CanObserve( GameObject obj )

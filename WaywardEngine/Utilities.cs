@@ -66,7 +66,7 @@ namespace WaywardEngine
             return node;
         }
 
-        #region Context Menu Helper Mehtods
+        #region Context Menu Helper Methods
         public static void AddContextMenuItem( FrameworkElement control, string label, RoutedEventHandler action )
         {
             if( !CheckContextMenu(control) ) { return; }
@@ -147,6 +147,84 @@ namespace WaywardEngine
         }
 
         private static bool CheckContextMenu( FrameworkElement control )
+        {
+            if( control == null ) { return false; }
+
+            if( control.ContextMenu == null ) {
+                control.ContextMenu = new ContextMenu();
+            }
+
+            return true;
+        }
+
+        public static void AddContextMenuItem( FrameworkContentElement control, string label, RoutedEventHandler action )
+        {
+            if( !CheckContextMenu(control) ) { return; }
+
+            AddMenuItem( control.ContextMenu, label, action );
+        }
+
+        public static void AddContextMenuItems( FrameworkContentElement control, Dictionary<string, RoutedEventHandler> items )
+        {
+            AddContextMenuItems( control, string.Empty, items );
+        }
+        public static void AddContextMenuItems( FrameworkContentElement control, string header, Dictionary<string, RoutedEventHandler> items )
+        {
+            if( !CheckContextMenu(control) ) { return; }
+
+            MenuItem headerItem = null;
+            if( !string.IsNullOrEmpty(header) ) {
+                foreach( MenuItem item in control.ContextMenu.Items ) {
+                    if( (string)item.Header == header ) {
+                        headerItem = item;
+                    }
+                }
+                if( headerItem == null ) {
+                    AddContextMenuHeader( control, header, items );
+                    return;
+                }
+            }
+
+            AddContextMenuItems( control, headerItem, items );
+        }
+        public static void AddContextMenuItems( FrameworkContentElement control, MenuItem headerItem, Dictionary<string, RoutedEventHandler> items )
+        {
+            if( !CheckContextMenu(control) ) { return; }
+            
+            string[] keys = items.Keys.ToArray();
+            for( int i = keys.Length-1; i >= 0; i-- ) {
+                if( headerItem == null ) {
+                    AddMenuItem( control.ContextMenu, keys[i], items[keys[i]] );
+                } else {
+                    AddMenuItem( headerItem, keys[i], items[keys[i]] );
+                }
+            }
+        }
+
+        public static MenuItem AddContextMenuHeader( FrameworkContentElement control, string header, Dictionary<string, RoutedEventHandler> items )
+        {
+            if( !CheckContextMenu(control) ) { return null; }
+
+            MenuItem newHeader = AddContextMenuHeader( control, header );
+            AddContextMenuItems( control, newHeader, items );
+
+            return newHeader;
+        }
+        public static MenuItem AddContextMenuHeader( FrameworkContentElement control, string header )
+        {
+            if( !CheckContextMenu(control) ) { return null; }
+
+            MenuItem newHeader = null;
+            if( !string.IsNullOrEmpty(header) ) {
+                newHeader = new MenuItem();
+                newHeader.Header = header;
+                control.ContextMenu.Items.Insert(0, newHeader);
+            }
+
+            return newHeader;
+        }
+
+        private static bool CheckContextMenu( FrameworkContentElement control )
         {
             if( control == null ) { return false; }
 

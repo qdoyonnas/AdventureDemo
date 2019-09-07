@@ -26,8 +26,8 @@ namespace AdventureDemo
         }
         public override void DisplayContents()
         {
-            weightText.Text = page.target.GetData("weight").text;
-            volumeText.Text = page.target.GetData("volume").text;
+            weightText.Inlines.Add( page.target.GetData("weight").span );
+            volumeText.Inlines.Add( page.target.GetData("volume").span );
         }
     }
 }

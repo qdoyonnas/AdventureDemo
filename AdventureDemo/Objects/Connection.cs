@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Documents;
 using System.Threading.Tasks;
 
 namespace AdventureDemo
@@ -23,6 +24,10 @@ namespace AdventureDemo
         {
             SetContainer(first);
             SetSecondContainer(second);
+
+            objectData["connection"] = GetDescriptiveConnection;
+
+            relevantData.Insert(0, GetDescriptiveConnection);
         }
 
         public virtual bool SetSecondContainer( IContainer newContainer )
@@ -96,55 +101,40 @@ namespace AdventureDemo
             throw new NotImplementedException();
         }
 
-        public override GameObjectData GetData( string key )
+        public override GameObjectData GetDescription( string[] parameters )
         {
             GameObjectData data = new GameObjectData();
 
-            switch( key ) {
-                case "name":
-                    GetName(data);
-                    break;
-                case "description":
-                    GetDescription(data);
-                    break;
-                case "connection":
-                case "connection1":
-                    GetDescriptiveConnection(data, 0);
-                    break;
-                case "connection2":
-                    GetDescriptiveConnection(data, 1);
-                    break;
-                default:
-                    break;
-            }
+            GameObjectData nameData = GetData("name");
+            GameObjectData connectionData1 = GetData("connection 0");
+            GameObjectData connectionData2 = GetData("connection 1");
+            data.text = $"This is a {nameData.text} connecting {connectionData1.text} and {connectionData2.text}";
+
+            data.SetSpan( new Run("This is a "),
+                nameData.span,
+                new Run(" connecting "),
+                connectionData1.span,
+                new Run(" and "),
+                connectionData2.span,
+                new Run(".")
+            );
 
             return data;
         }
-        public override void GetDescription( GameObjectData data )
+        public virtual GameObjectData GetDescriptiveConnection( string[] parameters )
         {
-            GameObjectData nameData = GetData("name");
-            GameObjectData connectionData1 = GetData("connection1");
-            GameObjectData connectionData2 = GetData("connection2");
-            data.text = $"This is a {nameData.text} connecting {connectionData1.text} and {connectionData2.text}";
+            GameObjectData data = new GameObjectData();
 
-            data.span.Inlines.Add( "This is a " );
-            data.span.Inlines.Add( nameData.span );
-            data.span.Inlines.Add( " connecting " );
-            data.span.Inlines.Add( connectionData1.span );
-            data.span.Inlines.Add( " and " );
-            data.span.Inlines.Add( connectionData2.span );
-            data.span.Inlines.Add(".");
-        }
-        public virtual void GetDescriptiveConnection( GameObjectData data, int i )
-        {
-            IContainer target = i == 0 ? container : containerB;
+            IContainer target = parameters.Length == 0 || parameters[0] == "0" ? container : containerB;
 
             GameObject obj = target as GameObject;
-            if( obj == null ) { return; }
+            if( obj == null ) { return data; }
 
             GameObjectData nameData = obj.GetData("name");
             data.text = nameData.text;
             data.span = nameData.span;
+
+            return data;
         }
     }
 }

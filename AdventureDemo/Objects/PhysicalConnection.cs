@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Documents;
 using System.Threading.Tasks;
 
 namespace AdventureDemo
@@ -14,6 +15,10 @@ namespace AdventureDemo
             : base( name, first, second )
         {
             this.volume = volume;
+
+            objectData["volume"] = GetDescriptiveVolume;
+
+            relevantData.Insert(1, GetDescriptiveVolume);
         }
 
         public override bool CanContain( GameObject obj )
@@ -29,57 +34,38 @@ namespace AdventureDemo
 
             return true;
         }
-
-        public override GameObjectData GetData( string key )
+        
+        public override GameObjectData GetDescription( string[] parameters )
         {
-            GameObjectData data = new GameObjectData();
-            switch( key ) {
-                case "name":
-                    GetName(data);
-                    break;
-                case "description":
-                    GetDescription(data);
-                    break;
-                case "weight":
-                    GetDescriptiveWeight(data);
-                    break;
-                case "volume":
-                    GetDescriptiveVolume(data);
-                    break;
-                case "connection":
-                case "connection1":
-                    GetDescriptiveConnection(data, 0);
-                    break;
-                case "connection2":
-                    GetDescriptiveConnection(data, 1);
-                    break;
-                default:
-                    break;
-            }
-
-            return data;
-        }
-        public override void GetDescription( GameObjectData data )
-        {
-            base.GetDescription(data);
+            GameObjectData data = base.GetDescription( parameters );
 
             GameObjectData volumeData = GetData("volume");
 
-            data.span.Inlines.Add( " It allows " );
-            data.span.Inlines.Add( volumeData.span );
-            data.span.Inlines.Add(" through.");
+            data.AddSpan(
+                new Run(" It allows "),
+                volumeData.span,
+                new Run(" through.")
+            );
+
+            return data;
         }
-        public void GetDescriptiveVolume( GameObjectData data )
+        public GameObjectData GetDescriptiveVolume( string[] parameters )
         {
+            GameObjectData data = new GameObjectData();
             data.text = $"{volume.ToString()} L";
 
-            data.span.Inlines.Add( data.text );
+            data.SetSpan( data.text );
+
+            return data;
         }
-        public void GetDescriptiveWeight( GameObjectData data )
+        public GameObjectData GetDescriptiveWeight( string[] parameters )
         {
+            GameObjectData data = new GameObjectData();
             data.text = "--";
 
-            data.span.Inlines.Add( data.text );
+            data.SetSpan( data.text );
+
+            return data;
         }
 
         public double GetVolume()

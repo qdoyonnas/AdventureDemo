@@ -30,44 +30,33 @@ namespace AdventureDemo
         }
         private void Construct( double volume, double weight )
         {
+            objectData["weight"] = GetDescriptiveWeight;
+            objectData["volume"] = GetDescriptiveVolume;
+
+            relevantData.Add(GetDescriptiveVolume);
+            relevantData.Add(GetDescriptiveWeight);
+
             this.volume = volume;
             this.weight = weight;
         }
 
-        public override GameObjectData GetData( string key )
+        public virtual GameObjectData GetDescriptiveWeight( string[] parameters )
         {
             GameObjectData data = new GameObjectData();
+            data.text = $"{GetWeight().ToString()} stones";
 
-            switch( key ) {
-                case "name":
-                    GetName(data);
-                    break;
-                case "description":
-                    GetDescription(data);
-                    break;
-                case "weight":
-                    GetDescriptiveWeight(data);
-                    break;
-                case "volume":
-                    GetDescriptiveVolume(data);
-                    break;
-                default:
-                    break;
-            }
+            data.SetSpan( data.text );
 
             return data;
         }
-        public virtual void GetDescriptiveWeight( GameObjectData data )
+        public virtual GameObjectData GetDescriptiveVolume( string[] parameters )
         {
-            data.text = $"{GetWeight().ToString()} stones";
+            GameObjectData data = new GameObjectData();
 
-            data.span.Inlines.Add( data.text );
-        }
-        public virtual void GetDescriptiveVolume( GameObjectData data )
-        {
             data.text = $"{GetVolume().ToString()} L";
+            data.SetSpan( data.text );
 
-            data.span.Inlines.Add( data.text );
+            return data;
         }
 
         public virtual double GetWeight()

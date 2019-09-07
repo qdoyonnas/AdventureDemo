@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using WaywardEngine;
 
 namespace AdventureDemo
@@ -51,6 +52,16 @@ namespace AdventureDemo
             connections = new List<Connection>();
             contents = new List<IPhysical>();
             innerVolume = volume;
+
+            objectData["innervolume"] = GetDescriptiveInnerVolume;
+            objectData["filledvolume"] = GetDescriptiveFilledVolume;
+            objectData["remainingvolume"] = GetDescriptiveRemainingVolume;
+            objectData["volumeratio"] = GetDescriptionVolumeRatio;
+
+            relevantData.Insert(0, GetDescriptionVolumeRatio );
+            relevantData.Add( GetDescriptiveRemainingVolume );
+            relevantData.Add( GetDescriptiveInnerVolume );
+            relevantData.Add( GetDescriptiveFilledVolume );
         }
 
         public GameObject GetContent( int i )
@@ -128,53 +139,49 @@ namespace AdventureDemo
 
             return totalWeight;
         }
-
-        public override GameObjectData GetData( string key )
+        
+        public virtual GameObjectData GetDescriptiveInnerVolume( string[] parameters )
         {
             GameObjectData data = new GameObjectData();
 
-            switch( key ) {
-                case "name":
-                    GetName(data);
-                    break;
-                case "description":
-                    GetDescription(data);
-                    break;
-                case "weight":
-                    GetDescriptiveWeight(data);
-                    break;
-                case "volume":
-                    GetDescriptiveVolume(data);
-                    break;
-                case "innervolume":
-                    GetInnerVolume(data);
-                    break;
-                case "filledvolume":
-                    GetFilledVolume(data);
-                    break;
-                case "remainingvolume":
-                    GetRemainingVolume(data);
-                    break;
-                default:
-                    break;
-            }
+            data.text = $"{innerVolume.ToString()} L";
+            data.SetSpan( data.text );
 
             return data;
         }
-        public virtual void GetInnerVolume( GameObjectData data )
+        public virtual GameObjectData GetDescriptiveFilledVolume( string[] parameters )
         {
-            data.text = $"{innerVolume.ToString()} L";
-            data.span.Inlines.Add( data.text );
-        }
-        public virtual void GetFilledVolume( GameObjectData data )
-        {
+            GameObjectData data = new GameObjectData();
+
             data.text = $"{filledVolume.ToString()} L";
-            data.span.Inlines.Add( data.text );
+            data.SetSpan( data.text );
+
+            return data;
         }
-        public virtual void GetRemainingVolume( GameObjectData data )
+        public virtual GameObjectData GetDescriptiveRemainingVolume( string[] parameters )
         {
+            GameObjectData data = new GameObjectData();
+
             data.text = $"{remainingVolume.ToString()} L";
-            data.span.Inlines.Add( data. text );
+            data.SetSpan( data. text );
+
+            return data;
+        }
+        public virtual GameObjectData GetDescriptionVolumeRatio( string[] parameeters )
+        {
+            GameObjectData data = new GameObjectData();
+
+            GameObjectData filledData = GetData("filledvolume");
+            GameObjectData innerData = GetData("innervolume");
+
+            data.text = $"{filledData.text} / {innerData.text}";
+            data.SetSpan(
+                filledData.span,
+                new Run(" / "),
+                innerData.span
+            );
+
+            return data;
         }
 
         public override void DisplayDescriptivePage( object sender, RoutedEventArgs e )

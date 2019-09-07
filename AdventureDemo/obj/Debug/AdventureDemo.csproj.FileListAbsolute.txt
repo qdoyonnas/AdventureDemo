@@ -37,7 +37,6 @@ C:\Users\ivor9\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo_MarkupC
 C:\Users\ivor9\repos\AdventureDemo\AdventureDemo\obj\Debug\ResourceDictionaries\Brushes.baml
 C:\Users\ivor9\repos\AdventureDemo\AdventureDemo\obj\Debug\ResourceDictionaries\ContextMenuStyle.baml
 C:\Users\ivor9\repos\AdventureDemo\AdventureDemo\obj\Debug\ResourceDictionaries\MiscStyles.baml
-C:\Users\ivor9\repos\AdventureDemo\AdventureDemo\obj\Debug\ResourceDictionaries\Pages.baml
 C:\Users\ivor9\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo.g.resources
 C:\Users\ivor9\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo.Properties.Resources.resources
 C:\Users\ivor9\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo.csproj.GenerateResource.cache
@@ -47,3 +46,5 @@ C:\Users\ivor9\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo.exe
 C:\Users\ivor9\repos\AdventureDemo\AdventureDemo\obj\Debug\AdventureDemo.pdb
 C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\ResourceDictionaries\DescriptivePages.baml
 C:\Users\Ivor Darsil\repos\AdventureDemo\AdventureDemo\obj\Debug\ResourceDictionaries\OverviewPages.baml
+C:\Users\ivor9\repos\AdventureDemo\AdventureDemo\obj\Debug\ResourceDictionaries\DescriptivePages.baml
+C:\Users\ivor9\repos\AdventureDemo\AdventureDemo\obj\Debug\ResourceDictionaries\OverviewPages.baml

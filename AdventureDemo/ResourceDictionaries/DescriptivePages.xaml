@@ -42,7 +42,7 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Column="0" Style="{DynamicResource Header}">Contents</TextBlock>
-                    <TextBlock Grid.Column="1"><TextBlock Margin="0" Name="FilledVolume"></TextBlock> / <TextBlock Margin="0" Name="InnerVolume"></TextBlock></TextBlock>
+                    <TextBlock Grid.Column="1" Name="VolumeRatio"></TextBlock>
                 </Grid>
                 <StackPanel Name="Contents">
                 </StackPanel>

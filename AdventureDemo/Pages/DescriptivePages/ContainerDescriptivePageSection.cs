@@ -13,15 +13,13 @@ namespace AdventureDemo
     class ContainerDescriptivePageSection : DescriptivePageSection
     {
         StackPanel contents;
-        TextBlock filledVolume;
-        TextBlock innerVolume;
+        TextBlock volumeRatio;
 
         public ContainerDescriptivePageSection()
             : base("DescriptiveContainer")
         {
             contents = Utilities.FindNode<StackPanel>( element, "Contents" );
-            filledVolume = Utilities.FindNode<TextBlock>( element, "FilledVolume" );
-            innerVolume = Utilities.FindNode<TextBlock>( element, "InnerVolume" );
+            volumeRatio = Utilities.FindNode<TextBlock>( element, "VolumeRatio" );
         }
 
         public override void Clear()
@@ -31,8 +29,7 @@ namespace AdventureDemo
 
         public override void DisplayContents()
         {
-            filledVolume.Text = page.target.GetData("filledvolume").text;
-            innerVolume.Text = page.target.GetData("innervolume").text;
+            volumeRatio.Inlines.Add( page.target.GetData("volumeratio").span );
 
             IContainer container = page.target as IContainer;
             if( container == null ) {

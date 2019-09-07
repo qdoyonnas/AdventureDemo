@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -19,9 +20,21 @@ namespace AdventureDemo
             }
         }
 
+        protected delegate GameObjectData DataDelegate( string[] parameters );
+        protected Dictionary<string, DataDelegate> objectData;
+
+        protected List<DataDelegate> relevantData;
+
         public GameObject( string name )
         {
             this.name = name;
+
+            objectData = new Dictionary<string, DataDelegate>();
+            objectData["name"] = GetName;
+            objectData["description"] = GetDescription;
+            objectData["data"] = GetRelevantData;
+
+            relevantData = new List<DataDelegate>();
         }
 
         public virtual bool SetContainer( IContainer newContainer )
@@ -50,41 +63,61 @@ namespace AdventureDemo
         /// <returns></returns>
         public virtual GameObjectData GetData( string key )
         {
+            key = key.ToLower();
+            string[] parameters = key.Split(' ');
+
+            key = parameters[0];
+            parameters = parameters.Skip(1).ToArray();
+            if( !objectData.ContainsKey(key) ) {
+                return new GameObjectData();
+            }
+            return objectData[key](parameters);
+        }
+        public virtual GameObjectData GetName( string[] parameters )
+        {
             GameObjectData data = new GameObjectData();
 
-            // XXX: The styling of the text should be done through a WaywardEngine parser
-            switch( key.ToLower() ) {
-                case "name":
-                    GetName(data);
-                    break;
-                case "description":
-                    GetDescription(data);
-                    break;
-                default:
-                    // No relevant data
-                    break;
-            }
-
-            return data;
-        }
-        public virtual void GetName( GameObjectData data )
-        {
             data.text = name;
 
-            data.span.Inlines.Add( new Run(data.text) );
+            data.SetSpan( data.text );
             data.span.Style = GameManager.instance.GetResource<Style>("Link");
             data.span.MouseLeftButtonUp += DisplayDescriptivePage;
 
             Utilities.AddContextMenuItem( data.span, "View", DisplayDescriptivePage );
+
+            return data;
         }
-        public virtual void GetDescription( GameObjectData data )
+        public virtual GameObjectData GetDescription( string[] parameters )
         {
+            GameObjectData data = new GameObjectData();
+
             GameObjectData nameData = GetData("name");
             data.text = $"This is a {nameData.text}";
 
-            data.span.Inlines.Add( "This is a " );
-            data.span.Inlines.Add( nameData.span );
-            data.span.Inlines.Add(".");
+            data.SetSpan( 
+                new Run("This is a "),
+                nameData.span,
+                new Run(".")
+            );
+
+            return data;
+        }
+        public virtual GameObjectData GetRelevantData( string[] parameters )
+        {
+            int index = 0;
+            try {
+                index = int.Parse(parameters[0]);
+            } catch {}
+
+            if( index < 0 ) {
+                index = relevantData.Count - index;
+            } else if( index >= relevantData.Count ) {
+                return new GameObjectData();
+            }
+
+            parameters = parameters.Skip(1).ToArray();
+            GameObjectData data = relevantData[index](parameters);
+            return data;
         }
 
         public virtual void DisplayDescriptivePage( object sender, RoutedEventArgs e )
@@ -100,12 +133,31 @@ namespace AdventureDemo
     public class GameObjectData
     {
         public string text;
-        public TextBlock span;
+        public Span span;
 
         public GameObjectData()
         {
-            text = string.Empty;
-            span = new TextBlock();
+            text = "--";
+            span = new Span( new Run( text ));
+        }
+
+        public void SetSpan( string text )
+        {
+            SetSpan( new Run( text ) );
+        }
+        public void SetSpan( params Inline[] range )
+        {
+            span.Inlines.Clear();
+            AddSpan( range );
+        }
+
+        public void AddSpan( string text )
+        {
+            AddSpan( new Run( text ) );
+        }
+        public void AddSpan( params Inline[] range )
+        {
+            span.Inlines.AddRange( range );
         }
     }
 }
