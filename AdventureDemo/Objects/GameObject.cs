@@ -13,10 +13,18 @@ namespace AdventureDemo
     class GameObject
     {
         protected string name;
+
         protected IContainer _container;
         public virtual IContainer container {
             get {
                 return _container;
+            }
+        }
+
+        protected Actor _actor;
+        public virtual Actor actor {
+            get {
+                return _actor;
             }
         }
 
@@ -83,7 +91,7 @@ namespace AdventureDemo
             data.span.Style = GameManager.instance.GetResource<Style>("Link");
             data.span.MouseLeftButtonUp += DisplayDescriptivePage;
 
-            Utilities.AddContextMenuItem( data.span, "View", DisplayDescriptivePage );
+            ContextMenuHelper.AddContextMenuItem( data.span, "View", DisplayDescriptivePage );
 
             return data;
         }

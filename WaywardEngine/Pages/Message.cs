@@ -16,6 +16,7 @@ namespace WaywardEngine
 
         bool doCloseAction = false;
 
+        // TODO: Message should also provide a way to insert Spans
         public Message( string message )
             : base("Message")
         {

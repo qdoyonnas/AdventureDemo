@@ -70,7 +70,7 @@ namespace AdventureDemo
         }
         private void SetupContextMenu()
         {
-            Utilities.AddContextMenuHeader(WaywardManager.instance.window, "Open", new Dictionary<string, RoutedEventHandler>() {
+            ContextMenuHelper.AddContextMenuHeader(WaywardManager.instance.window, "Open", new Dictionary<string, RoutedEventHandler>() {
                 { "OverviewPage", CreateOverviewPage }
             });
         }

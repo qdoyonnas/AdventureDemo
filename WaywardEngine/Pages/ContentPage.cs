@@ -20,7 +20,7 @@ namespace WaywardEngine
             title = Utilities.FindNode<Label>( element, "Title" );
             contents = Utilities.FindNode<StackPanel>( element, "Contents" );
 
-            Utilities.AddContextMenuItem( element, "Close", CloseAction );
+            ContextMenuHelper.AddContextMenuItem( element, "Close", CloseAction );
         }
 
         public void SetTitle( string sTitle )

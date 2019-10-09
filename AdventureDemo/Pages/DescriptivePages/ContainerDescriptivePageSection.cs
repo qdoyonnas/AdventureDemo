@@ -41,7 +41,7 @@ namespace AdventureDemo
                     DisplayContent( container.GetContent(i) );
                 }
             } else {
-                contents.Children.Add( new TextBlock(new Italic(new Run("empty"))) ); // XXX: Hate this - WaywardManager text parser needed
+                contents.Children.Add( WaywardTextParser.ParseAsBlock("<i>[0] empty [0]</i>");
             }
         }
         

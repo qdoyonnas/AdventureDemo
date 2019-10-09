@@ -130,9 +130,32 @@ namespace WaywardEngine
             WaywardManager.instance.pages.Add(page);
         }
 
+        public void DisplayMessage( string message )
+        {
+            DisplayMessage( message, "Click to close" );
+        }
+        public void DisplayMessage( string message, string subtext )
+        {
+            Point position = new Point( WaywardManager.instance.application.MainWindow.Width / 2,
+                                    WaywardManager.instance.application.MainWindow.Height / 4 );
+
+            DisplayMessage( message, subtext, position );
+        }
+        public void DisplayMessage( string message, Point position )
+        {
+            DisplayMessage( message, "Click to close", position );
+        }
+        public void DisplayMessage( string message, string subtext, Point position )
+        {
+            Message box = new Message( message, subtext );
+            position = new Point( position.X - ( box.GetElement().ActualWidth / 2 ),
+                            position.Y - ( box.GetElement().ActualHeight / 2 ) );
+            AddPage( box, position );
+        }
+
         public void StartTutorial()
         {
-            Utilities.DisplayMessage("Welcome to the Wayward Engine!");
+            DisplayMessage("Welcome to the Wayward Engine!");
         }
 
         public void Update()

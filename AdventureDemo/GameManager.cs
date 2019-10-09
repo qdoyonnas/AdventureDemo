@@ -28,7 +28,7 @@ namespace AdventureDemo
         // Prevents most functionality until after init
         public bool isInitialized = false;
 
-        public Character playerObject;
+        public Actor player;
         private List<GameObject> rootObjects;
 
         private GameManager()
@@ -52,11 +52,13 @@ namespace AdventureDemo
         /// </summary>
         private void SetupGame()
         {
-            playerObject = new Character( "You", 2.5, 65, 11 );
+            player = new Actor();
+            Character playerChar = new Character( "You", 2.5, 65, 11 );
+            player.Control(playerChar);
 
             Container room1 = new Container( "First Room", 1000 );
             AddRoot(room1);
-            playerObject.SetContainer(room1);
+            playerChar.SetContainer(room1);
 
             Container table = new Container("Table", 70, 120, 7);
             table.SetContainer(room1);
@@ -108,7 +110,7 @@ namespace AdventureDemo
         public void DisplayPerspectives( Point position )
         {
             OverviewPage page = DisplayOverviewPage( position );
-            page.DisplayObject( playerObject );
+            page.DisplayObject( player.GetControlled().container as Container ); // XXX: Find better system
         }
         public void DisplayRoots( Point position )
         {

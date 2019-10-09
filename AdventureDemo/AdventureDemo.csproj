@@ -69,10 +69,12 @@
     <Compile Include="Objects\Connection.cs" />
     <Compile Include="Objects\GameObject.cs" />
     <Compile Include="Objects\PhysicalConnection.cs" />
+    <Compile Include="Systems\EnterVerb.cs" />
+    <Compile Include="Systems\PickupVerb.cs" />
+    <Compile Include="Systems\Verb.cs" />
     <Compile Include="Pages\DescriptivePages\ContainerDescriptivePageSection.cs" />
     <Compile Include="Pages\DescriptivePages\GameObjectDescriptivePageSection.cs" />
     <Compile Include="Objects\IContainer.cs" />
-    <Compile Include="Objects\IObserver.cs" />
     <Compile Include="Objects\IPhysical.cs" />
     <Compile Include="Objects\Physical.cs" />
     <Compile Include="Pages\DescriptivePages\DescriptivePage.cs" />
@@ -133,5 +135,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Systems\Actor.cs" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

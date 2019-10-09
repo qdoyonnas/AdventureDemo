@@ -80,12 +80,12 @@ namespace AdventureDemo
         {
             IPhysical physical = obj as IPhysical;
             if( physical == null ) {
-                Utilities.DisplayMessage("Object can not be contained by this sort of container.");
+                WaywardManager.instance.DisplayMessage("Object can not be contained by this sort of container.");
                 return false;
             }
 
             if( physical.GetVolume() > remainingVolume ) {
-                Utilities.DisplayMessage("Not enough space.");
+                WaywardManager.instance.DisplayMessage("Not enough space.");
                 return false;
             }
 

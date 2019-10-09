@@ -56,10 +56,12 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContextMenuHelper.cs" />
     <Compile Include="Pages\ContentPage.cs" />
     <Compile Include="Pages\Message.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="WaywardManager.cs" />
+    <Compile Include="WaywardTextParser.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
