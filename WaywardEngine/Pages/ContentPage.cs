@@ -13,7 +13,6 @@ namespace WaywardEngine
         Label title;
         StackPanel contents;
 
-
         public ContentPage()
             : base("BlankPage")
         {

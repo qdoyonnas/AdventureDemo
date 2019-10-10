@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace AdventureDemo
 {
@@ -13,7 +14,9 @@ namespace AdventureDemo
     {
         public EnterVerb( GameObject self )
             : base(self)
-        { }
+        {
+            displayLabel = "Enter";
+        }
 
         public override bool Check( GameObject obj )
         {

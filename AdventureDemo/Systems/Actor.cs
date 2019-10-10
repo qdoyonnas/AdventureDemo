@@ -19,7 +19,18 @@ namespace AdventureDemo
 
 		public void Control( GameObject obj )
         {
+            if( controlledObject != null ) {
+                bool success = controlledObject.SetActor(null, PossessionType.EMBODIMENT);
+                if( !success ) { return; }
+            }
 			controlledObject = obj;
+            if( controlledObject != null ) {
+                bool success = controlledObject.SetActor(this, PossessionType.EMBODIMENT);
+                if( !success ) {
+                    controlledObject = null;
+                    return;
+                }
+            }
         }
 		public GameObject GetControlled()
         {
@@ -36,7 +47,17 @@ namespace AdventureDemo
         {
             // TODO: Implement senses
 
-            return true;
+            GameObject thisContainer = controlledObject.container as GameObject;
+            if( obj == thisContainer || obj.container == controlledObject.container ) {
+                return true;
+            } else {
+                GameObject objContainer = obj.container as GameObject;
+                if( objContainer != null ) {
+                    return CanObserve(objContainer);
+                }
+            }
+
+            return false;
         }
 
 		public GameObjectData Observe( GameObject obj )
@@ -52,12 +73,23 @@ namespace AdventureDemo
 			if( dataKey == "name" ) {
 				foreach( Verb verb in verbs) {
 					if( verb.Check(obj) ) {
-						WaywardEngine.ContextMenuHelper.AddContextMenuItem(data.span, 
+						verb.Display(data.span, obj);
                     }
 				}
             }
 
 			return data;
         }
+
+        public void AddVerb( Verb verb )
+        {
+            verbs.Add(verb);
+        }
+    }
+
+    public enum PossessionType {
+        EMBODIMENT,
+        INTERACTION,
+        CONTENT
     }
 }

@@ -17,21 +17,25 @@ namespace AdventureDemo
             get {
                 return _target;
             }
-            set {
-                _target = value;
-                Clear();
-                SetTitle( _target.GetData("name").text );
+        }
+
+        Actor _observer;
+        public Actor observer {
+            get {
+                return _observer;
             }
         }
 
         List<DescriptivePageSection> sections;
 
-        public DescriptivePage( GameObject target, DescriptivePageSection[] sections )
+        public DescriptivePage( Actor observer, GameObject target, DescriptivePageSection[] sections )
             : base()
         {
             this.sections = new List<DescriptivePageSection>();
 
-            this.target = target;
+            _observer = observer;
+            _target = target;
+            SetTitle( _target.GetData("name").text );
 
             foreach( DescriptivePageSection section in sections ) {
                 AddSection(section, false);

@@ -3,18 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
+using System.Windows;
 
 namespace AdventureDemo
 {
     abstract class Verb
     {
+        protected string displayLabel;
         protected GameObject self;
-        protected Actor actor;
 
         public Verb( GameObject self )
         {
             this.self = self;
-            this.actor = this.self.actor;
+        }
+
+        public void Display( FrameworkElement span, GameObject obj )
+        {
+            WaywardEngine.ContextMenuHelper.AddContextMenuItem(span, $"{self.GetData("name").text} - {displayLabel}", delegate { this.Action(obj); });
+        }
+        public void Display( FrameworkContentElement span, GameObject obj )
+        {
+            WaywardEngine.ContextMenuHelper.AddContextMenuItem(span, $"{self.GetData("name").text} - {displayLabel}", delegate { this.Action(obj); });
         }
 
         /// <summary>

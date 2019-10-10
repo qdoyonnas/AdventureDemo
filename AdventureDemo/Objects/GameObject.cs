@@ -28,12 +28,14 @@ namespace AdventureDemo
             }
         }
 
+        protected Dictionary<PossessionType, Verb[]> verbs;
+
         protected delegate GameObjectData DataDelegate( string[] parameters );
-        protected Dictionary<string, DataDelegate> objectData;
+        protected readonly Dictionary<string, DataDelegate> objectData;
 
-        protected List<DataDelegate> relevantData;
+        protected readonly List<DataDelegate> relevantData;
 
-        public GameObject( string name )
+        public GameObject( string name, IContainer container )
         {
             this.name = name;
 
@@ -43,6 +45,14 @@ namespace AdventureDemo
             objectData["data"] = GetRelevantData;
 
             relevantData = new List<DataDelegate>();
+
+            verbs = new Dictionary<PossessionType, Verb[]>();
+
+            if( container != null ) {
+                SetContainer(container);
+            } else {
+                GameManager.instance.AddRoot(this);
+            }
         }
 
         public virtual bool SetContainer( IContainer newContainer )
@@ -59,8 +69,31 @@ namespace AdventureDemo
                 }
             }
 
-            WaywardManager.instance.Update();
+            WaywardManager.instance.Update(); // XXX: Not where this should be // TODO: Game requires proper update sequence
             return true;
+        }
+        /// <summary>
+        /// Sets the Actor controlling this GameObject.
+        /// </summary>
+        /// <param name="actor">Controlling Actor.</param>
+        /// <param name="possession">Degree of possession affecting what verbs are collected.</param>
+        /// <returns></returns>
+        public virtual bool SetActor( Actor actor, PossessionType possession ) // XXX: Consider using type other than string
+        {
+            if( actor != null && this.actor != null ) { return false; }
+            _actor = actor;
+
+            CollectVerbs(actor, possession);
+
+            return true;
+        }
+        public virtual void CollectVerbs( Actor actor, PossessionType possession )
+        {
+            if( _actor != null ) {
+                foreach( Verb verb in verbs[possession] ) {
+                    actor.AddVerb(verb);
+                }
+            }
         }
 
         /// <summary>
@@ -89,9 +122,9 @@ namespace AdventureDemo
 
             data.SetSpan( data.text );
             data.span.Style = GameManager.instance.GetResource<Style>("Link");
-            data.span.MouseLeftButtonUp += DisplayDescriptivePage;
+            data.span.MouseLeftButtonUp += delegate { DisplayDescriptivePage(); };
 
-            ContextMenuHelper.AddContextMenuItem( data.span, "View", DisplayDescriptivePage );
+            ContextMenuHelper.AddContextMenuItem( data.span, "View", delegate { DisplayDescriptivePage(); } );
 
             return data;
         }
@@ -128,11 +161,11 @@ namespace AdventureDemo
             return data;
         }
 
-        public virtual void DisplayDescriptivePage( object sender, RoutedEventArgs e )
+        public virtual DescriptivePage DisplayDescriptivePage()
         {
             Point mousePosition = WaywardManager.instance.GetMousePosition();
 
-            GameManager.instance.DisplayDescriptivePage( mousePosition, this, new DescriptivePageSection[] {
+            return GameManager.instance.DisplayDescriptivePage( mousePosition, this, new DescriptivePageSection[] {
                 new GameObjectDescriptivePageSection()
             });
         }

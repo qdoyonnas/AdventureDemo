@@ -32,18 +32,18 @@ namespace AdventureDemo
             }
         }
 
-        public Container( string name, double innerVolume ) 
-            : base(name)
+        public Container( string name, IContainer container, double innerVolume ) 
+            : base(name, container)
         {
             Construct(innerVolume);
         }
-        public Container( string name, double innerVolume, double totalVolume )
-            : base(name, totalVolume)
+        public Container( string name, IContainer container, double innerVolume, double totalVolume )
+            : base(name, container, totalVolume)
         {
             Construct(innerVolume);
         }
-        public Container( string name, double innerVolume, double totalVolume, double weight )
-            : base(name, totalVolume, weight)
+        public Container( string name, IContainer container, double innerVolume, double totalVolume, double weight )
+            : base(name, container, totalVolume, weight)
         {
             Construct(innerVolume);
         }
@@ -121,6 +121,17 @@ namespace AdventureDemo
         {
             return connections;
         }
+        public void AddConnection( Connection connection, bool createMatchingConnection )
+        {
+            AddConnection( connection );
+
+            if( createMatchingConnection ) {
+                Container containerB = connection.containerB as Container;
+                if( containerB == null ) { return; }
+
+                containerB.AddConnection(connection.CreateMatching());
+            }
+        }
         public void AddConnection( Connection connection )
         {
             connections.Add( connection );
@@ -184,15 +195,28 @@ namespace AdventureDemo
             return data;
         }
 
-        public override void DisplayDescriptivePage( object sender, RoutedEventArgs e )
+        public override DescriptivePage DisplayDescriptivePage()
         {
-            Point mousePosition = WaywardManager.instance.GetMousePosition();
+            DescriptivePage page = base.DisplayDescriptivePage();
+            
+            page.AddSection(new ContainerDescriptivePageSection());
 
-            GameManager.instance.DisplayDescriptivePage( mousePosition, this, new DescriptivePageSection[] {
-                new GameObjectDescriptivePageSection(),
-                new PhysicalDescriptivePageSection(),
-                new ContainerDescriptivePageSection()
-            } );
+            return page;
+        }
+
+        public override bool SetActor( Actor actor, PossessionType possession )
+        {
+            bool success = base.SetActor(actor, possession);
+            if( !success ) { return false; }
+
+            foreach( IPhysical content in contents ) {
+                GameObject contentObj = content as GameObject;
+                if( contentObj != null ) {
+                    contentObj.CollectVerbs(actor, PossessionType.CONTENT);
+                }
+            }
+
+            return true;
         }
     }
 }

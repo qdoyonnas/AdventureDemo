@@ -158,8 +158,12 @@ namespace WaywardEngine
             DisplayMessage("Welcome to the Wayward Engine!");
         }
 
+        public delegate void UpdateDelegate();
+        public event UpdateDelegate OnUpdate;
         public void Update()
         {
+            OnUpdate();
+
             foreach( Page page in pages ) {
                 page.Update();
             }

@@ -11,15 +11,17 @@ namespace AdventureDemo
     {
         protected FrameworkElement element;
         protected DescriptivePage page;
+        protected Actor observer;
 
         public DescriptivePageSection( string key )
         {
             element = GameManager.instance.GetResource<FrameworkElement>(key);
         }
 
-        public void AssignPage( DescriptivePage page )
+        public virtual void AssignPage( DescriptivePage page )
         {
             this.page = page;
+            observer = this.page.observer;
 
             page.AddContent(element);
         }

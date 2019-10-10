@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AdventureDemo
 {
-    class PhysicalConnection : Connection, IPhysical
+    class PhysicalConnection : Connection
     {
         double volume;
 
@@ -19,6 +19,11 @@ namespace AdventureDemo
             objectData["volume"] = GetDescriptiveVolume;
 
             relevantData.Insert(1, GetDescriptiveVolume);
+        }
+
+        public override Connection CreateMatching()
+        {
+            return new PhysicalConnection(name, containerB, container, volume);
         }
 
         public override bool CanContain( GameObject obj )
@@ -66,15 +71,6 @@ namespace AdventureDemo
             data.SetSpan( data.text );
 
             return data;
-        }
-
-        public double GetVolume()
-        {
-            return 0;
-        }
-        public double GetWeight()
-        {
-            return 0;
         }
     }
 }

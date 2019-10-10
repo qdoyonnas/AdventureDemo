@@ -4,9 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Windows.Documents;
 using System.Threading.Tasks;
+using System.Windows;
+using WaywardEngine;
 
 namespace AdventureDemo
 {
+    /// <summary>
+    /// Connects IContainers allowing GameObjects to transfer from one to the other. 
+    /// 'Belongs' to one IContainer and connects to others. The connected IContainer can never be null.
+    /// Attempting to set the connected IContainer to null will cause it to point to the container of the parent IContainer.
+    /// </summary>
     class Connection : GameObject, IContainer
     {
         protected IContainer _containerB;
@@ -20,31 +27,36 @@ namespace AdventureDemo
         GameObject contained;
 
         public Connection( string name, IContainer first, IContainer second )
-            : base(name)
+            : base(name, first)
         {
-            SetContainer(first);
-            SetSecondContainer(second);
+            SetConnection(second);
 
             objectData["connection"] = GetDescriptiveConnection;
 
             relevantData.Insert(0, GetDescriptiveConnection);
         }
 
-        public virtual bool SetSecondContainer( IContainer newContainer )
+        public override bool SetContainer( IContainer newContainer )
         {
-            if( newContainer == _containerB ) { return true; }
-            if( !newContainer.CanContain(this) ) { return false; }
+            if( _container != null ) { return false; }
 
-            if( _containerB == null || _containerB.RemoveContent(this) ) {
-                if( newContainer.AddContent(this) ) {
-                    _containerB = newContainer;
-                } else {
-                    _containerB.AddContent(this);
-                    return false;
-                }
-            }
-
+            _container = newContainer;
             return true;
+        }
+        public virtual void SetConnection( IContainer newContainer )
+        {
+            if( newContainer == null ) {
+                GameObject containerObject = newContainer as GameObject;
+                if( containerObject != null ) {
+                    _containerB = containerObject.container;
+                }
+            } else {
+                _containerB = newContainer;
+            }
+        }
+        public virtual Connection CreateMatching()
+        {
+            return new Connection(name, containerB, container);
         }
 
         public virtual void Pass( GameObject obj, IContainer origin )
@@ -100,7 +112,7 @@ namespace AdventureDemo
         {
             throw new NotImplementedException();
         }
-
+        
         public override GameObjectData GetDescription( string[] parameters )
         {
             GameObjectData data = new GameObjectData();

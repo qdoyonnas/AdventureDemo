@@ -23,11 +23,15 @@ namespace AdventureDemo
 
         public override void Clear()
         {
+            weightText.Inlines.Clear();
+            volumeText.Inlines.Clear();
         }
         public override void DisplayContents()
         {
-            weightText.Inlines.Add( page.target.GetData("weight").span );
-            volumeText.Inlines.Add( page.target.GetData("volume").span );
+            bool canObserve = observer.CanObserve(page.target);
+
+            weightText.Inlines.Add( canObserve ? page.target.GetData("weight").span : WaywardTextParser.Parse("???") );
+            volumeText.Inlines.Add( canObserve ? page.target.GetData("volume").span : WaywardTextParser.Parse("???") );
         }
     }
 }

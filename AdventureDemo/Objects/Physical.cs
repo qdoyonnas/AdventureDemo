@@ -13,18 +13,18 @@ namespace AdventureDemo
         protected double volume;
         protected double weight;
 
-        public Physical( string name )
-            : base(name)
+        public Physical( string name, IContainer container )
+            : base(name, container)
         {
             Construct(0, 0);
         }
-        public Physical( string name, double volume )
-            : base(name)
+        public Physical( string name, IContainer container, double volume )
+            : base(name, container)
         {
             Construct(volume, 0);
         }
-        public Physical( string name, double volume, double weight )
-            : base(name)
+        public Physical( string name, IContainer container, double volume, double weight )
+            : base(name, container)
         {
             Construct(volume, weight);
         }
@@ -68,14 +68,13 @@ namespace AdventureDemo
             return volume;
         }
 
-        public override void DisplayDescriptivePage( object sender, RoutedEventArgs e )
+        public override DescriptivePage DisplayDescriptivePage()
         {
-            Point mousePosition = WaywardManager.instance.GetMousePosition();
+            DescriptivePage page = base.DisplayDescriptivePage();
+            
+            page.AddSection(new PhysicalDescriptivePageSection());
 
-            GameManager.instance.DisplayDescriptivePage( mousePosition, this, new DescriptivePageSection[] {
-                new GameObjectDescriptivePageSection(),
-                new PhysicalDescriptivePageSection()
-            } );
+            return page;
         }
 
     }

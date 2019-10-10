@@ -46,6 +46,9 @@
                 </Grid>
                 <StackPanel Name="Contents">
                 </StackPanel>
+                <TextBlock Grid.Column="0" Style="{DynamicResource Header}">Exits</TextBlock>
+                <StackPanel Name="Connections">
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
     </Border>

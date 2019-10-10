@@ -79,7 +79,7 @@
     <Compile Include="Objects\Physical.cs" />
     <Compile Include="Pages\DescriptivePages\DescriptivePage.cs" />
     <Compile Include="Pages\DescriptivePages\DescriptivePageSection.cs" />
-    <Compile Include="Pages\OverviewPage.cs" />
+    <Compile Include="Pages\OverviewPages\OverviewPage.cs" />
     <Compile Include="Pages\DescriptivePages\PhysicalDescriptivePageSection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

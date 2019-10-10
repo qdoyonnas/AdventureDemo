@@ -33,6 +33,8 @@ namespace AdventureDemo
 
         private GameManager()
         {
+            WaywardManager.instance.OnUpdate += Update;
+
             rootObjects = new List<GameObject>();
         }
 
@@ -53,23 +55,29 @@ namespace AdventureDemo
         private void SetupGame()
         {
             player = new Actor();
-            Character playerChar = new Character( "You", 2.5, 65, 11 );
+
+            Container space = new Container("Deep Space", null, double.PositiveInfinity);
+            Container ship = new Container("Spaceship", space, 10000, 15000, 50*10^8);
+
+            Container room1 = new Container( "Personal Quarters", ship, 1000 );
+            new Physical("Bunk", room1, 180, 250);
+            
+            Container hall1 = new Container( "Hallway", ship, 500 );
+            Container toolbox = new Container("Toolbox", hall1, 2, 3, 20);
+            new Physical("Spanner", toolbox, 0.5, 2);
+            hall1.AddConnection( new PhysicalConnection("Doorway", hall1, room1, 100), true );
+
+            Container room2 = new Container( "Cargo", ship, 4000 );
+            Container crate = new Container("Crate", room2, 120, 122, 100);
+            new Physical("Robot", crate, 80, 200);
+            room2.AddConnection( new PhysicalConnection("Doorway", room2, hall1, 100), true );
+
+            Container room3 = new Container( "Bridge", ship, 2000 );
+            new Physical("Console", room3, 200, 300);
+            room3.AddConnection( new PhysicalConnection("Doorway", room3, hall1, 100), true );
+
+            Character playerChar = new Character( "You", room1, 2.5, 65, 150 );
             player.Control(playerChar);
-
-            Container room1 = new Container( "First Room", 1000 );
-            AddRoot(room1);
-            playerChar.SetContainer(room1);
-
-            Container table = new Container("Table", 70, 120, 7);
-            table.SetContainer(room1);
-            Container box = new Container("Box", 2, 2.5, 1);
-            box.SetContainer(table);
-            new Physical("Key", 0.1, 0.1).SetContainer(box);
-
-            Container room2 = new Container( "Second Room", 500 );
-            AddRoot(room2);
-
-            PhysicalConnection doorway = new PhysicalConnection( "Doorway", room1, room2, 70 );
         }
 
         /// <summary>
@@ -88,6 +96,11 @@ namespace AdventureDemo
                 throw new System.NullReferenceException($"GameManager could not find '{key}' resource");
             }
             return resource;
+        }
+
+        public void Update()
+        {
+
         }
 
         public void AddRoot( GameObject obj )
@@ -110,7 +123,7 @@ namespace AdventureDemo
         public void DisplayPerspectives( Point position )
         {
             OverviewPage page = DisplayOverviewPage( position );
-            page.DisplayObject( player.GetControlled().container as Container ); // XXX: Find better system
+            page.DisplayObject( player.GetControlled() ); // XXX: Find better system
         }
         public void DisplayRoots( Point position )
         {
@@ -119,14 +132,14 @@ namespace AdventureDemo
 
         public OverviewPage DisplayOverviewPage( Point position )
         {
-            OverviewPage page = new OverviewPage();
+            OverviewPage page = new OverviewPage(player);
             WaywardManager.instance.AddPage( page, position );
 
             return page;
         }
         public DescriptivePage DisplayDescriptivePage( Point position, GameObject target, DescriptivePageSection[] sections )
         {
-            DescriptivePage page = new DescriptivePage( target, sections );
+            DescriptivePage page = new DescriptivePage( player, target, sections );
             WaywardManager.instance.AddPage(page, position);
 
             return page;
