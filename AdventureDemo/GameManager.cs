@@ -59,24 +59,18 @@ namespace AdventureDemo
             Container space = new Container("Deep Space", null, double.PositiveInfinity);
             Container ship = new Container("Spaceship", space, 10000, 15000, 50*10^8);
 
-            Container room1 = new Container( "Personal Quarters", ship, 1000 );
-            new Physical("Bunk", room1, 180, 250);
+            Container crewHallway = new Container( "Personal Quarters", ship, 1000 );
             
             Container hall1 = new Container( "Hallway", ship, 500 );
-            Container toolbox = new Container("Toolbox", hall1, 2, 3, 20);
-            new Physical("Spanner", toolbox, 0.5, 2);
-            hall1.AddConnection( new PhysicalConnection("Doorway", hall1, room1, 100), true );
+            hall1.AddConnection( new PhysicalConnection("Doorway", hall1, crewHallway, 100), true );
 
             Container room2 = new Container( "Cargo", ship, 4000 );
-            Container crate = new Container("Crate", room2, 120, 122, 100);
-            new Physical("Robot", crate, 80, 200);
             room2.AddConnection( new PhysicalConnection("Doorway", room2, hall1, 100), true );
 
             Container room3 = new Container( "Bridge", ship, 2000 );
-            new Physical("Console", room3, 200, 300);
             room3.AddConnection( new PhysicalConnection("Doorway", room3, hall1, 100), true );
 
-            Character playerChar = new Character( "You", room1, 2.5, 65, 150 );
+            Character playerChar = new Character( "You", crewHallway, 2.5, 65, 150 );
             player.Control(playerChar);
         }
 
