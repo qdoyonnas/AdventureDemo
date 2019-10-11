@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using WaywardEngine;
 
 namespace AdventureDemo
 {
-    class Actor
+    // TODO: Split Actor and PlayerActor code
+    abstract class Actor
     {
-		GameObject controlledObject;
+		protected GameObject controlledObject;
 
-		readonly List<Verb> verbs;
+		protected readonly List<Verb> verbs;
 
 		public Actor()
         {
 			verbs = new List<Verb>();
         }
 
-		public void Control( GameObject obj )
+		public virtual void Control( GameObject obj )
         {
             if( controlledObject != null ) {
                 bool success = controlledObject.SetActor(null, PossessionType.EMBODIMENT);
@@ -32,7 +35,7 @@ namespace AdventureDemo
                 }
             }
         }
-		public GameObject GetControlled()
+		public virtual GameObject GetControlled()
         {
 			return controlledObject;
         }
@@ -43,45 +46,12 @@ namespace AdventureDemo
         /// </summary>
         /// <param name="obj">Object to be observed.</param>
         /// <returns></returns>
-		public bool CanObserve( GameObject obj )
-        {
-            // TODO: Implement senses
+		public abstract bool CanObserve( GameObject obj );
 
-            GameObject thisContainer = controlledObject.container as GameObject;
-            if( obj == thisContainer || obj.container == controlledObject.container ) {
-                return true;
-            } else {
-                GameObject objContainer = obj.container as GameObject;
-                if( objContainer != null ) {
-                    return CanObserve(objContainer);
-                }
-            }
+		public abstract GameObjectData Observe( GameObject obj );
+		public abstract GameObjectData Observe( GameObject obj, string dataKey );
 
-            return false;
-        }
-
-		public GameObjectData Observe( GameObject obj )
-        {
-			return Observe(obj, "name");
-        }
-		public GameObjectData Observe( GameObject obj, string dataKey )
-        {
-			// TODO: Implement senses
-
-			GameObjectData data = obj.GetData(dataKey);
-
-			if( dataKey == "name" ) {
-				foreach( Verb verb in verbs) {
-					if( verb.Check(obj) ) {
-						verb.Display(data.span, obj);
-                    }
-				}
-            }
-
-			return data;
-        }
-
-        public void AddVerb( Verb verb )
+        public virtual void AddVerb( Verb verb )
         {
             verbs.Add(verb);
         }

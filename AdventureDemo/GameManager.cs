@@ -28,7 +28,7 @@ namespace AdventureDemo
         // Prevents most functionality until after init
         public bool isInitialized = false;
 
-        public Actor player;
+        public PlayerActor player;
         private List<GameObject> rootObjects;
 
         private GameManager()
@@ -54,7 +54,7 @@ namespace AdventureDemo
         /// </summary>
         private void SetupGame()
         {
-            player = new Actor();
+            player = new PlayerActor();
 
             Container space = new Container("Deep Space", null, double.PositiveInfinity);
             Container ship = new Container("Spaceship", space, 10000, 15000, 50*10^8);

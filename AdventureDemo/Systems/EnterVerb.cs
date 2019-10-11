@@ -15,22 +15,26 @@ namespace AdventureDemo
         public EnterVerb( GameObject self )
             : base(self)
         {
-            displayLabel = "Enter";
+            _displayLabel = "Enter";
         }
 
-        public override bool Check( GameObject obj )
+        public override CheckResult Check( GameObject obj )
         {
             // TODO: Same as in PickupVerb. EnterVerb should be greyed out if self cannot fit
 
             Connection connection = obj as Connection;
 
-            if( connection == null ) { return false; }
-            return connection.CanContain( self );
+            if( connection == null ) { return CheckResult.INVALID; }
+            if( connection.CanContain( self ) ) {
+                return CheckResult.VALID;
+            }
+
+            return CheckResult.RESTRICTED;
         }
 
         public override void Action( GameObject obj )
         {
-            if( !Check(obj) ) { return; }
+            if( Check(obj) != CheckResult.VALID ) { return; }
 
             Connection connection = obj as Connection;
 

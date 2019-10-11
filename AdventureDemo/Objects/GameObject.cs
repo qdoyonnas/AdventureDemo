@@ -122,9 +122,6 @@ namespace AdventureDemo
 
             data.SetSpan( data.text );
             data.span.Style = GameManager.instance.GetResource<Style>("Link");
-            data.span.MouseLeftButtonUp += delegate { DisplayDescriptivePage(); };
-
-            ContextMenuHelper.AddContextMenuItem( data.span, "View", delegate { DisplayDescriptivePage(); } );
 
             return data;
         }

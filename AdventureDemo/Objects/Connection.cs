@@ -14,7 +14,7 @@ namespace AdventureDemo
     /// 'Belongs' to one IContainer and connects to others. The connected IContainer can never be null.
     /// Attempting to set the connected IContainer to null will cause it to point to the container of the parent IContainer.
     /// </summary>
-    class Connection : GameObject, IContainer
+    class Connection : GameObject, IContainer, IVerbSuggest
     {
         protected IContainer _containerB;
         public IContainer containerB
@@ -147,6 +147,21 @@ namespace AdventureDemo
             data.span = nameData.span;
 
             return data;
+        }
+
+        public bool DisplayVerb( Verb verb, FrameworkContentElement span )
+        {
+            return false;
+        }
+        public bool SetDefaultVerb( Verb verb, FrameworkContentElement span )
+        {
+            switch( verb ) {
+                case EnterVerb enter:
+                    span.MouseLeftButtonUp += delegate { verb.Action(this); };
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 }

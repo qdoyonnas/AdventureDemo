@@ -17,7 +17,7 @@ namespace AdventureDemo
         public PickupVerb( Container self )
             : base(self)
         {
-            displayLabel = "Pick Up";
+            _displayLabel = "Pick Up";
             this.self = self;
         }
 
@@ -25,7 +25,7 @@ namespace AdventureDemo
         /// Determines if obj can be placed into self inventory.
         /// </summary>
         /// <param name="data">obj: GameObject</param>
-        public override bool Check( GameObject obj )
+        public override CheckResult Check( GameObject obj )
         {
             // TODO: Multiple levels of action validity:
             //          Not a valid object type - option does not appear in context menu
@@ -35,20 +35,20 @@ namespace AdventureDemo
             //  Example: PickupVerb should display a greyed out option if the container
             //      is presently too full for object
 
-            if( obj == null || obj == self || obj.container == null ) { return false; }
+            if( obj == null || obj == self || obj.container == null ) { return CheckResult.INVALID; }
 
             if( obj.container == self.container ) {
-                return true;
+                return CheckResult.VALID;
             } else {
                 GameObject container = obj.container as GameObject;
                 if( container != null ) {
-                    if( Check(container) ) {
-                        return true;
+                    if( Check(container) >= CheckResult.RESTRICTED ) {
+                        return CheckResult.VALID;
                     }
                 }
             }
 
-            return false;
+            return CheckResult.INVALID;
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace AdventureDemo
         /// <param name="data">obj: GameObject</param>
         public override void Action( GameObject obj )
         {
-            if( !Check(obj) ) { return; }
+            if( Check(obj) != CheckResult.VALID ) { return; }
 
             obj.SetContainer(self);
         }

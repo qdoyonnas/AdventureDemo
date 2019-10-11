@@ -10,21 +10,17 @@ namespace AdventureDemo
 {
     abstract class Verb
     {
-        protected string displayLabel;
-        protected GameObject self;
+        protected string _displayLabel;
+        public string displayLabel {
+            get {
+                return _displayLabel;
+            }
+        }
+        readonly public GameObject self;
 
         public Verb( GameObject self )
         {
             this.self = self;
-        }
-
-        public void Display( FrameworkElement span, GameObject obj )
-        {
-            WaywardEngine.ContextMenuHelper.AddContextMenuItem(span, $"{self.GetData("name").text} - {displayLabel}", delegate { this.Action(obj); });
-        }
-        public void Display( FrameworkContentElement span, GameObject obj )
-        {
-            WaywardEngine.ContextMenuHelper.AddContextMenuItem(span, $"{self.GetData("name").text} - {displayLabel}", delegate { this.Action(obj); });
         }
 
         /// <summary>
@@ -33,7 +29,13 @@ namespace AdventureDemo
         /// </summary>
         /// <param name="data">Arbitrary key-value dictionary to be used for parameter passing.</param>
         /// <returns></returns>
-        public abstract bool Check( GameObject target );
+        public abstract CheckResult Check( GameObject target );
         public abstract void Action( GameObject target );
+    }
+
+    public enum CheckResult {
+        INVALID,
+        RESTRICTED,
+        VALID
     }
 }
