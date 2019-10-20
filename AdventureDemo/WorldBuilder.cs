@@ -24,9 +24,20 @@ namespace AdventureDemo
             lastContainer = new Container("Spaceship", space, 100000, 150000, 50*10^8);
             lastContainer.description = "a craft for travelling between the stars with a gleaming metal hull that protects the fragile internals";
 
-            Container elevator = AddRoom("Main Elevator", lastContainer, 1500);
+            Container elevator = AddRoom("Main Elevator", lastContainer, 1500); // TODO: Separate elevator shaft and the elevator itself
 
-            Container hubRoom = AddConnectedRoom("Quarters Hallway", 1000, "Entrance", 100);
+            OperationsFloorSetup(elevator);
+            CrewFloorSetup(elevator);
+            EngineeringFloorSetup(elevator);
+            CargoFloorSetup(elevator);
+            
+            Character playerChar = new Character( "You", FindRoom(elevator, "Quarters Hallway/Quarters A3"), 2.5, 65, 150 );
+            playerChar.description = "a mysterious individual";
+            GameManager.instance.player.Control(playerChar);
+        }
+        void CrewFloorSetup(Container elevator)
+        {
+            Container hubRoom = AddConnectedRoom("Quarters Hallway", 1000, "Entrance", 100, elevator);
             hubRoom.description = "a sleek metal hallway connecting the crew's quarters together";
             
             AddConnectedRoom( "Quarters A1", 500, "Doorway", 100, hubRoom );
@@ -39,16 +50,49 @@ namespace AdventureDemo
             AddConnectedRoom( "Mess Hall", 1500, "Doorway", 100, hubRoom );
             AddConnectedRoom( "Kitchen", 800, "Doorway", 100 );
 
-            hubRoom = AddConnectedRoom("Cargo Hallway", 1000, "Entrance", 100, elevator);
+            hubRoom = AddConnectedRoom( "Crew Escape Pods Hallway", 800, "Doorway", 100, hubRoom );
+            AddConnectedRoom( "Crew Escape Pod 1", 400, "Hatch", 70, hubRoom ); // TODO: All pods should be connected using a docking port
+            AddConnectedRoom( "Crew Escape Pod 2", 400, "Hatch", 70, hubRoom );
+            AddConnectedRoom( "Crew Escape Pod 3", 400, "Hatch", 70, hubRoom );
+            AddConnectedRoom( "Crew Escape Pod 4", 400, "Hatch", 70, hubRoom );
+        }
+        void CargoFloorSetup(Container elevator)
+        {
+            Container hubRoom = AddConnectedRoom("Cargo Hallway", 1000, "Entrance", 100, elevator);
 
-            AddConnectedRoom("Cargo Bay 1", 2000, "Bay doors", 200, hubRoom);
-            AddConnectedRoom("Cargo Bay 2", 2000, "Bay doors", 200, hubRoom);
-            AddConnectedRoom("Cargo Bay 3", 2000, "Bay doors", 200, hubRoom);
-            AddConnectedRoom("Cargo Bay 4", 2000, "Bay doors", 200, hubRoom);
+            AddConnectedRoom( "Cargo Bay 1", 2000, "Bay doorway", 200, hubRoom );
+            AddConnectedRoom( "Cargo Bay 2", 2000, "Bay doorway", 200, hubRoom );
+            AddConnectedRoom( "Cargo Bay 3", 2000, "Bay doorway", 200, hubRoom );
+            AddConnectedRoom( "Cargo Bay 4", 2000, "Bay doorway", 200, hubRoom );
+            AddConnectedRoom( "Cargo Escape Pod", 400, "Hatch", 70, hubRoom );
+        }
+        void OperationsFloorSetup(Container elevator)
+        {
+            Container hubRoom = AddConnectedRoom("Operations Hallway", 1000, "Entrance", 100, elevator);
 
-            Character playerChar = new Character( "You", FindRoom(elevator, "Quarters Hallway/Quarteres A3"), 2.5, 65, 150 );
-            playerChar.description = "a mysterious individual";
-            GameManager.instance.player.Control(playerChar);
+            AddConnectedRoom( "Communications", 800, "Doorway", 100, hubRoom );
+            AddConnectedRoom( "Sensors", 800, "Doorway", 100, hubRoom );
+            AddConnectedRoom( "Armory", 600, "Doorway", 100, hubRoom );
+            AddConnectedRoom( "Operations Escape Pod", 400, "Hatch", 70, hubRoom );
+
+            AddConnectedRoom( "Bridge Elevator", 1000, "Entrance", 100, hubRoom );
+            AddConnectedRoom( "Bridge", 1000, "Entrance", 100 );
+            AddConnectedRoom( "Bridge Escape Pod", 400, "Hatch", 70 );
+        }
+        void EngineeringFloorSetup(Container elevator)
+        {
+            Container hubRoom = AddConnectedRoom("Engineering Hallway", 1000, "Entrance", 100, elevator);
+
+            AddConnectedRoom( "Life Support", 1000, "Doorway", 100, hubRoom );
+            AddConnectedRoom( "Fabricator", 800, "Doorway", 100, hubRoom );
+            AddConnectedRoom( "Hydroponics", 2000, "Doorway", 100, hubRoom );
+
+            AddConnectedRoom( "Engines Elevator", 1000, "Entrance", 100, hubRoom );
+            hubRoom = AddConnectedRoom( "Engines Hallway", 1000, "Entrance", 100 );
+            AddConnectedRoom( "Engine Block A1", 1200, "Bay doorway", 200, hubRoom );
+            AddConnectedRoom( "Engine Block A2", 1200, "Bay doorway", 200, hubRoom );
+            AddConnectedRoom( "Engine Block B1", 1200, "Bay doorway", 200, hubRoom );
+            AddConnectedRoom( "Engine Block B2", 1200, "Bay doorway", 200, hubRoom );
         }
 
         public Container AddRoom( string name, Container container, double volume )
@@ -66,7 +110,7 @@ namespace AdventureDemo
         public Container AddConnectedRoom(  string name, double volume, string connectionName, double connectionVolume, Container previousRoom )
         {
             Container room = AddRoom( name, lastContainer, volume );
-            room.AddConnection(new PhysicalConnection(connectionName, room, previousRoom, connectionVolume));
+            room.AddConnection(new PhysicalConnection(connectionName, room, previousRoom, connectionVolume), true);
 
             return room;
         }
@@ -83,19 +127,35 @@ namespace AdventureDemo
 
             return null;
         }
-        public Container FindRoom( Container from, string path )
+        public Container FindRoom( IContainer from, string path )
         {
-            if( from.GetData("name").text == path ) { return from; }
+            if( from.GetData("name").text == path ) {
+                Container fromContainer = from as Container;
+                if( fromContainer != null ) {
+                    return fromContainer;
+                }
+            }
 
             int indexOfStep = path.IndexOf('/');
-            string nextStep = path.Substring(0, indexOfStep);
-            Console.WriteLine("NextStep: " + nextStep);
-            string nextPath = path.Substring(indexOfStep+1, 0);
-            Console.WriteLine("NextPath: " + nextPath);
+            string nextStep = indexOfStep != -1 ? path.Substring(0, indexOfStep) : path;
+            string nextPath = path.Substring(indexOfStep+1);
 
             foreach( Connection connection in from.GetConnections() ) {
+                Console.WriteLine(connection.secondContainer.GetData("name").text);
                 if( connection.secondContainer.GetData("name").text == nextStep ) {
-
+                    Container found = FindRoom(connection.secondContainer, nextPath);
+                    if( found != null ) { return found; }
+                }
+            }
+            for( int i = 0; i < from.ContentCount(); i++ ) {
+                GameObject obj = from.GetContent(i);
+                Console.WriteLine(obj.GetData("name").text);
+                if( obj.GetData("name").text == nextStep ) {
+                    IContainer container = obj as IContainer;
+                    if( container != null ) {
+                        Container found = FindRoom(container, nextPath);
+                        if( found != null ) { return found; }
+                    }
                 }
             }
 

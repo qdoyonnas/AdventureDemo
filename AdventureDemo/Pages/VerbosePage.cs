@@ -52,6 +52,7 @@ namespace AdventureDemo
             bool secondPerson = subject.GetData("name").text.ToLower() == "you";
 
             Container container = subject.container as Container;
+            if( container == null ) { return; }
 
             descriptions.Children.Add(new TextBlock(WaywardTextParser.Parse(
                 $@"[0] {(secondPerson ? "are" : "is")} in [1], [2].",
