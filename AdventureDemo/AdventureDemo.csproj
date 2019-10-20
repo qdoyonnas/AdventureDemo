@@ -61,6 +61,8 @@
       <DependentUpon>AdventureApp.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Pages\VerbosePage.cs" />
+    <Compile Include="WorldBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameManager.cs" />

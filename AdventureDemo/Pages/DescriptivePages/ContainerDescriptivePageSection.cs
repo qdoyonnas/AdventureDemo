@@ -130,7 +130,7 @@ namespace AdventureDemo
             if( text != null ) {
                 GameObject connected;
                 if( connection.container == container ) {
-                    connected = connection.containerB as GameObject;
+                    connected = connection.secondContainer as GameObject;
                 } else {
                     connected = connection.container as GameObject;
                 }

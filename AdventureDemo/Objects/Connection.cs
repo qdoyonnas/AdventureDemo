@@ -16,11 +16,11 @@ namespace AdventureDemo
     /// </summary>
     class Connection : GameObject, IContainer, IVerbSuggest
     {
-        protected IContainer _containerB;
-        public IContainer containerB
+        protected IContainer _secondContainer;
+        public IContainer secondContainer
         {
             get {
-                return _containerB;
+                return _secondContainer;
             }
         }
 
@@ -29,6 +29,8 @@ namespace AdventureDemo
         public Connection( string name, IContainer first, IContainer second )
             : base(name, first)
         {
+            this.description = "an opening";
+
             SetConnection(second);
 
             objectData["connection"] = GetDescriptiveConnection;
@@ -48,22 +50,22 @@ namespace AdventureDemo
             if( newContainer == null ) {
                 GameObject containerObject = newContainer as GameObject;
                 if( containerObject != null ) {
-                    _containerB = containerObject.container;
+                    _secondContainer = containerObject.container;
                 }
             } else {
-                _containerB = newContainer;
+                _secondContainer = newContainer;
             }
         }
         public virtual Connection CreateMatching()
         {
-            return new Connection(name, containerB, container);
+            return new Connection(name, secondContainer, container);
         }
 
         public virtual void Pass( GameObject obj, IContainer origin )
         {
             if( !CanContain(obj) ) { return; }
 
-            IContainer target = origin == container ? containerB : container;
+            IContainer target = origin == container ? secondContainer : container;
 
             obj.SetContainer(target);
         }
@@ -137,7 +139,7 @@ namespace AdventureDemo
         {
             GameObjectData data = new GameObjectData();
 
-            IContainer target = parameters.Length == 0 || parameters[0] == "0" ? container : containerB;
+            IContainer target = parameters.Length == 0 || parameters[0] == "0" ? container : secondContainer;
 
             GameObject obj = target as GameObject;
             if( obj == null ) { return data; }

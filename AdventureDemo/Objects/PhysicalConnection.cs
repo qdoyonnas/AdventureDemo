@@ -23,7 +23,7 @@ namespace AdventureDemo
 
         public override Connection CreateMatching()
         {
-            return new PhysicalConnection(name, containerB, container, volume);
+            return new PhysicalConnection(name, secondContainer, container, volume);
         }
 
         public override bool CanContain( GameObject obj )

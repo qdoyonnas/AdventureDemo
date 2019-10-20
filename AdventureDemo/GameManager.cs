@@ -31,6 +31,8 @@ namespace AdventureDemo
         public PlayerActor player;
         private List<GameObject> rootObjects;
 
+        public WorldBuilder world;
+
         private GameManager()
         {
             WaywardManager.instance.OnUpdate += Update;
@@ -56,46 +58,8 @@ namespace AdventureDemo
         {
             player = new PlayerActor();
 
-            Container space = new Container("Deep Space", null, double.PositiveInfinity);
-            Container ship = new Container("Spaceship", space, 100000, 150000, 50*10^8);
-
-            Container mainElevator = new Container( "Elevator", ship, 1500, 1550 );
-
-            Container crewHallway = new Container( "Quarters Hallway", ship, 1000, 1050 );
-            crewHallway.AddConnection( new PhysicalConnection("Entrance", crewHallway, mainElevator, 100) );
-            
-            Container quartersA1 = new Container( "Quarters A1", ship, 500, 550 );
-            quartersA1.AddConnection( new PhysicalConnection("Doorway", quartersA1, crewHallway, 100), true );
-            Container quartersA2 = new Container( "Quarters A2", ship, 500, 550 );
-            quartersA2.AddConnection( new PhysicalConnection("Doorway", quartersA2, crewHallway, 100), true );
-            Container quartersA3 = new Container( "Quarters A3", ship, 500, 550 );
-            quartersA3.AddConnection( new PhysicalConnection("Doorway", quartersA3, crewHallway, 100), true );
-            Container quartersB1 = new Container( "Quarters B1", ship, 500, 550 );
-            quartersB1.AddConnection( new PhysicalConnection("Doorway", quartersB1, crewHallway, 100), true );
-            Container quartersB2 = new Container( "Quarters B2", ship, 500, 550 );
-            quartersB2.AddConnection( new PhysicalConnection("Doorway", quartersB2, crewHallway, 100), true );
-            Container quartersB3 = new Container( "Quarters B3", ship, 500, 550 );
-            quartersB3.AddConnection( new PhysicalConnection("Doorway", quartersB3, crewHallway, 100), true );
-
-            Container messhall = new Container( "Mess Hall", ship, 1200, 1250 );
-            messhall.AddConnection( new PhysicalConnection("Doorway", messhall, crewHallway, 100), true );
-            Container kitchen = new Container( "Kitchen", ship, 800, 850 );
-            kitchen.AddConnection( new PhysicalConnection("Doorway", kitchen, messhall, 100), true);
-
-            Container cargoHallway = new Container("Cargo Hallway", ship, 1000, 1050);
-            cargoHallway.AddConnection( new PhysicalConnection("Entrance", cargoHallway, mainElevator, 100) );
-
-            Container cargo1 = new Container("Cargo Bay 1", ship, 2000, 2050);
-            cargo1.AddConnection( new PhysicalConnection("Bay doors", cargo1, cargoHallway, 100) );
-            Container cargo2 = new Container("Cargo Bay 2", ship, 2000, 2050);
-            cargo1.AddConnection( new PhysicalConnection("Bay doors", cargo2, cargoHallway, 100) );
-            Container cargo3 = new Container("Cargo Bay 3", ship, 2000, 2050);
-            cargo1.AddConnection( new PhysicalConnection("Bay doors", cargo3, cargoHallway, 100) );
-            Container cargo4 = new Container("Cargo Bay 4", ship, 2000, 2050);
-            cargo1.AddConnection( new PhysicalConnection("Bay doors", cargo4, cargoHallway, 100) );
-
-            Character playerChar = new Character( "You", crewHallway, 2.5, 65, 150 );
-            player.Control(playerChar);
+            world = new WorldBuilder();
+            world.BuildWorld();
         }
 
         /// <summary>
@@ -138,11 +102,16 @@ namespace AdventureDemo
             return rootObjects[i];
         }
 
-        public void DisplayPerspectives( Point position )
+        public void DisplayPlayerOverview( Point position )
         {
             OverviewPage page = DisplayOverviewPage( position );
             page.DisplayObject( player.GetControlled() ); // XXX: Find better system
         }
+        public void DisplayPlayerVerbose( Point position )
+        {
+            VerbosePage page = DisplayVerbosePage( position, player.GetControlled() );
+        }
+
         public void DisplayRoots( Point position )
         {
             throw new System.NotImplementedException("GameManager.DisplayRoots is not implemented. Observer needs refactor");
@@ -152,6 +121,13 @@ namespace AdventureDemo
         {
             OverviewPage page = new OverviewPage(player);
             WaywardManager.instance.AddPage( page, position );
+
+            return page;
+        }
+        public VerbosePage DisplayVerbosePage( Point position, GameObject subject )
+        {
+            VerbosePage page = new VerbosePage( player, subject );
+            WaywardManager.instance.AddPage(page, position);
 
             return page;
         }

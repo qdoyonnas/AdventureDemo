@@ -26,6 +26,10 @@ namespace WaywardEngine
         {
             title.Content = sTitle;
         }
+        public void SetTitleVisibility( bool state )
+        {
+            title.Visibility = state ? Visibility.Visible : Visibility.Collapsed;
+        }
         /// <summary>
         /// Add FrameworkElement to Page StackPanel.
         /// </summary>

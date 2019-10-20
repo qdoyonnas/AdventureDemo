@@ -49,6 +49,8 @@ namespace AdventureDemo
         }
         private void Construct( double volume )
         {
+            this.description = DescriptionFromVolume(volume);
+
             connections = new List<Connection>();
             contents = new List<IPhysical>();
             innerVolume = volume;
@@ -62,6 +64,31 @@ namespace AdventureDemo
             relevantData.Add( GetDescriptiveRemainingVolume );
             relevantData.Add( GetDescriptiveInnerVolume );
             relevantData.Add( GetDescriptiveFilledVolume );
+        }
+        public string DescriptionFromVolume( double volume )
+        {
+            switch( volume ) {
+                case double.PositiveInfinity:
+                    return "a boundless space";
+                case double v when v >= 100000:
+                    return "a massive chamber";
+                case double v when v >= 50000:
+                    return "a large chamber";
+                case double v when v >= 10000:
+                    return "an enormous room";
+                case double v when v >= 5000:
+                    return "a massive room";
+                case double v when v >= 1500:
+                    return "a large room";
+                case double v when v >= 800:
+                    return "a room";
+                case double v when v >= 400:
+                    return "a small room";
+                case double v when v >= 200:
+                    return "a closet size space";
+                default:
+                    return "a container";
+            }
         }
 
         public GameObject GetContent( int i )
@@ -126,7 +153,7 @@ namespace AdventureDemo
             AddConnection( connection );
 
             if( createMatchingConnection ) {
-                Container containerB = connection.containerB as Container;
+                Container containerB = connection.secondContainer as Container;
                 if( containerB == null ) { return; }
 
                 containerB.AddConnection(connection.CreateMatching());

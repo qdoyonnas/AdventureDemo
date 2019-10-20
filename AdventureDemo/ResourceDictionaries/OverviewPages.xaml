@@ -37,4 +37,11 @@
         </ScrollViewer>
     </Border>
 
+    <Border x:Key="VerbosePage" x:Shared="false" Style="{StaticResource PageStyle}">
+        <ScrollViewer MinHeight="350" MaxHeight="350" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
+            <StackPanel Name="Descriptions">
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
 </ResourceDictionary>

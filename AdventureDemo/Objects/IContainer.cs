@@ -8,6 +8,9 @@ namespace AdventureDemo
 {
     interface IContainer
     {
+        // GameObject methods (satisfied by inheritance)
+        GameObjectData GetData(string key);
+
         GameObject GetContent( int i );
         int ContentCount();
         bool CanContain( GameObject obj );

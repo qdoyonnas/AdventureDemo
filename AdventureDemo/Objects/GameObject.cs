@@ -13,6 +13,7 @@ namespace AdventureDemo
     class GameObject
     {
         protected string name;
+        public string description;
 
         protected IContainer _container;
         public virtual IContainer container {
@@ -38,6 +39,7 @@ namespace AdventureDemo
         public GameObject( string name, IContainer container )
         {
             this.name = name;
+            this.description = "a strange object";
 
             objectData = new Dictionary<string, DataDelegate>();
             objectData["name"] = GetName;
@@ -129,14 +131,8 @@ namespace AdventureDemo
         {
             GameObjectData data = new GameObjectData();
 
-            GameObjectData nameData = GetData("name");
-            data.text = $"This is a {nameData.text}";
-
-            data.SetSpan( 
-                new Run("This is a "),
-                nameData.span,
-                new Run(".")
-            );
+            data.text = description;
+            data.SetSpan(WaywardTextParser.Parse(description));
 
             return data;
         }

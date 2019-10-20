@@ -20,14 +20,12 @@ namespace AdventureDemo
         }
 
         Dictionary<GameObject, StackPanel> overviewContentPanels;
-        Dictionary<string, StackPanel> overviewEventPanels;
 
         public OverviewPage(Actor observer) : base()
         {
             _observer = observer;
 
             overviewContentPanels = new Dictionary<GameObject, StackPanel>();
-            overviewEventPanels = new Dictionary<string, StackPanel>();
 
             SetTitle("Overview");
         }
@@ -41,14 +39,6 @@ namespace AdventureDemo
             overviewContentPanels.Add(key, contents);
 
             return contents;
-        }
-        public void AddEventPanel( string key )
-        {
-            FrameworkElement overviewEvents = GameManager.instance.GetResource<FrameworkElement>("OverviewEvents");
-            AddContent(overviewEvents);
-
-            StackPanel events = Utilities.FindNode<StackPanel>(overviewEvents, "Events");
-            overviewEventPanels.Add(key, events);
         }
         
         /// <summary>
@@ -149,7 +139,7 @@ namespace AdventureDemo
             if( text != null ) {
                 GameObject connected;
                 if( connection.container == container ) {
-                    connected = connection.containerB as GameObject;
+                    connected = connection.secondContainer as GameObject;
                 } else {
                     connected = connection.container as GameObject;
                 }
@@ -164,18 +154,6 @@ namespace AdventureDemo
                     text.Inlines.Add( observer.Observe(connection, "volume").span );
                 }
             }
-        }
-
-        public void DisplayEvent( string key, string e )
-        {
-            StackPanel panel = overviewEventPanels[key];
-            if( panel == null ) {
-                Console.WriteLine($"ERROR: OverviewPage does not contain events panel with key '{key}'");
-                return;
-            }
-            TextBlock text = new TextBlock();
-            text.Text = e;
-            panel.Children.Add( text );
         }
 
         public override void Clear()

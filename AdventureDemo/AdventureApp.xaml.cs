@@ -62,16 +62,18 @@ namespace AdventureDemo
             window.mainCanvas.Style = Resources["WindowBackground"] as Style;
             SetupContextMenu();
 
-            GameManager.instance.Init(this);
-
             window.Show();
 
-            WaywardManager.instance.StartTutorial();
+            //WaywardManager.instance.StartTutorial();
+            GameManager.instance.Init(this);
+            GameManager.instance.DisplayPlayerOverview( new Point(800, 150) );
+            GameManager.instance.DisplayPlayerVerbose( new Point(150, 150) );
         }
         private void SetupContextMenu()
         {
-            ContextMenuHelper.AddContextMenuHeader(WaywardManager.instance.window, "Open", new Dictionary<string, RoutedEventHandler>() {
-                { "OverviewPage", CreateOverviewPage }
+            ContextMenuHelper.AddContextMenuHeader(WaywardManager.instance.window, "Page", new Dictionary<string, RoutedEventHandler>() {
+                { "Overview", CreateOverviewPage },
+                { "Visual", CreateVerbosePage }
             });
         }
 
@@ -79,7 +81,13 @@ namespace AdventureDemo
         {
             Point mousePosition = WaywardManager.instance.GetMousePosition();
 
-            GameManager.instance.DisplayPerspectives( mousePosition );
+            GameManager.instance.DisplayPlayerOverview(mousePosition);
+        }
+        private void CreateVerbosePage( object sender, RoutedEventArgs e )
+        {
+            Point mousePosition = WaywardManager.instance.GetMousePosition();
+
+            GameManager.instance.DisplayPlayerVerbose(mousePosition);
         }
 
         private void Application_DispatcherUnhandledException( object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e )

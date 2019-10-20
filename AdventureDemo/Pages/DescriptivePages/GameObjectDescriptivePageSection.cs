@@ -25,7 +25,9 @@ namespace AdventureDemo
 
         public override void DisplayContents()
         {
-            descriptiveText.Inlines.Add(page.target.GetData("description").span);
+            string formatedDesc = page.target.description + ".";
+            formatedDesc = char.ToUpper(formatedDesc[0]) + formatedDesc.Substring(1);
+            descriptiveText.Inlines.Add(formatedDesc);
         }
     }
 }

@@ -30,6 +30,8 @@ namespace AdventureDemo
         }
         private void Construct( double volume, double weight )
         {
+            this.description = "a solid object";
+
             objectData["weight"] = GetDescriptiveWeight;
             objectData["volume"] = GetDescriptiveVolume;
 
