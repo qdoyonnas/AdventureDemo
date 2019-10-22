@@ -16,8 +16,17 @@ namespace AdventureDemo
             }
         }
 
+        public PhysicalConnection( Dictionary<string, object> data )
+            : base( data )
+        {
+            Construct( data.ContainsKey("volume") ? (double)data["volume"] : 0 );
+        }
         public PhysicalConnection( string name, IContainer first, IContainer second, double volume )
             : base( name, first, second )
+        {
+            Construct(volume);
+        }
+        void Construct( double volume )
         {
             this._volume = volume;
 

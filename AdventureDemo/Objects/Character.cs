@@ -11,6 +11,11 @@ namespace AdventureDemo
 {
     class Character : Container
     {
+        public Character( Dictionary<string, object> data )
+            : base(data)
+        {
+            Construct();
+        }
         public Character( string name, IContainer container, double innerVolume ) 
             : base(name, container, innerVolume)
         {

@@ -32,11 +32,24 @@ namespace AdventureDemo
         protected Dictionary<PossessionType, Verb[]> verbs;
 
         protected delegate GameObjectData DataDelegate( string[] parameters );
-        protected readonly Dictionary<string, DataDelegate> objectData;
+        protected Dictionary<string, DataDelegate> objectData;
 
-        protected readonly List<DataDelegate> relevantData;
+        protected List<DataDelegate> relevantData;
 
+        public GameObject( Dictionary<string, object> data )
+        {
+            Construct(
+                data.ContainsKey("name") ? (string)data["name"] : "Unknown Object",
+                data.ContainsKey("container") ? (IContainer)data["container"] : null 
+            );
+
+            description = data.ContainsKey("description") ? (string)data["discription"] : "a strange object";
+        }
         public GameObject( string name, IContainer container )
+        {
+            Construct(name, container);
+        }
+        void Construct( string name, IContainer container )
         {
             this.name = name;
             this.description = "a strange object";

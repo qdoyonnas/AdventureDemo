@@ -26,8 +26,19 @@ namespace AdventureDemo
 
         GameObject contained;
 
+        public Connection( Dictionary<string, object> data )
+            : base(data)
+        {
+            Construct(
+                data.ContainsKey("connection") ? (IContainer)data["connection"] : null
+            );
+        }
         public Connection( string name, IContainer first, IContainer second )
             : base(name, first)
+        {
+            Construct( second );
+        }
+        void Construct( IContainer second )
         {
             this.description = "an opening";
 

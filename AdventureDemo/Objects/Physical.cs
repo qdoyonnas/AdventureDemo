@@ -13,6 +13,14 @@ namespace AdventureDemo
         protected double volume;
         protected double weight;
 
+        public Physical( Dictionary<string, object> data )
+            : base(data)
+        {
+            Construct(
+                data.ContainsKey("volume") ? (double)data["volume"] : 0,
+                data.ContainsKey("weight") ? (double)data["weight"] : 0
+            );
+        }
         public Physical( string name, IContainer container )
             : base(name, container)
         {

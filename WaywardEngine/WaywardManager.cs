@@ -34,9 +34,13 @@ namespace WaywardEngine
         // Mouse grab target (to prevent grabbing more than one page at a time)
         public Page grabbedPage;
 
-        private WaywardManager()
+        public Random random;
+
+        private WaywardManager( int seed = -1 )
         {
             pages = new List<Page>();
+            
+            random = seed == -1 ? new Random() : new Random(seed);
         }
 
         /// <summary>

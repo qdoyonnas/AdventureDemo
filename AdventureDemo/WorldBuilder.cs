@@ -14,13 +14,45 @@ namespace AdventureDemo
 
         Dictionary<string, SpawnList> spawnLists;
 
+
         public WorldBuilder()
         {
             spawnLists = new Dictionary<string, SpawnList>();
 
-            spawnLists["crew_quarters"] = new SpawnList(
-                
-            );
+            // TODO: Spawn lists could theoretically be used to populate entire planets
+            //      , however, this would be overwhelming memory. It should be possible to set
+            //      spawn lists as 'delayed' and give them a trigger condition (ex: player is able to percieve
+            //      weight/volume or look inside). At which point the necessary spawn lists would populate the
+            //      relevant containers.
+            spawnLists["crew_quarters"] = new SpawnList( new SpawnEntry[] {
+                new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
+                    { "name", "Bed" }, { "volume", 100.0 }, { "weight", 200.0 } }, 
+                    1.0, 1 ),
+                new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
+                    { "name", "Desk" }, { "volume", 90.0 }, { "weight", 200.0 } },
+                    1.0, 1 ),
+                new SpawnEntry( typeof(Container), new Dictionary<string, object>() {
+                    { "name", "Shelf" }, { "innerVolume", 40.0 }, { "volume", 45.0 }, { "weight", 30.0 } },
+                    1.0, 1, true, (container, obj) => {
+                        Container shelf = obj as Container;
+                        shelf.AddConnection( new PhysicalConnection("Doorway", shelf, null, 40.0) );
+                        shelf.SpawnContents( spawnLists["crew_equipment"] );
+
+                        return 0;
+                    })
+            });
+
+            spawnLists["crew_equipment"] = new SpawnList( new SpawnEntry[] {
+                new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
+                    { "name", "Uniform" }, { "volume", 2.0 }, { "weight", 6.0 } },
+                    0.5, 2, false ),
+                new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
+                    { "name", "Headset" }, { "volume", 0.4 }, { "weight", 1.0 } },
+                    0.2, 1 ),
+                new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
+                    { "name", "Mints" }, { "volume", 0.01 }, { "weight", 0.01 } },
+                    0.2, 4 ),
+            });
         }
 
         public void BuildWorld()
@@ -47,12 +79,12 @@ namespace AdventureDemo
             Container hubRoom = AddConnectedRoom("Quarters Hallway", 1000, "Entrance", 100, elevator);
             hubRoom.description = "a sleek metal hallway connecting the crew's quarters together";
             
-            AddQuarters( "Quarters A1", hubRoom );
-            AddQuarters( "Quarters A2", hubRoom );
-            AddQuarters( "Quarters A3", hubRoom );
-            AddQuarters( "Quarters B1", hubRoom );
-            AddQuarters( "Quarters B2", hubRoom );
-            AddQuarters( "Quarters B3", hubRoom );
+            AddConnectedRoom( "Quarters A1", 500, "Doorway", 100, hubRoom ).SpawnContents( spawnLists["crew_quarters"] );
+            AddConnectedRoom( "Quarters A2", 500, "Doorway", 100, hubRoom ).SpawnContents( spawnLists["crew_quarters"] );
+            AddConnectedRoom( "Quarters A3", 500, "Doorway", 100, hubRoom ).SpawnContents( spawnLists["crew_quarters"] );
+            AddConnectedRoom( "Quarters B1", 500, "Doorway", 100, hubRoom ).SpawnContents( spawnLists["crew_quarters"] );
+            AddConnectedRoom( "Quarters B2", 500, "Doorway", 100, hubRoom ).SpawnContents( spawnLists["crew_quarters"] );
+            AddConnectedRoom( "Quarters B3", 500, "Doorway", 100, hubRoom ).SpawnContents( spawnLists["crew_quarters"] );
 
             AddConnectedRoom( "Mess Hall", 1500, "Doorway", 100, hubRoom );
             AddConnectedRoom( "Kitchen", 800, "Doorway", 100 );
@@ -63,16 +95,6 @@ namespace AdventureDemo
             AddConnectedRoom( "Crew Escape Pod 3", 400, "Hatch", 70, hubRoom );
             AddConnectedRoom( "Crew Escape Pod 4", 400, "Hatch", 70, hubRoom );
         }
-        void AddQuarters( string name, Container from )
-        {
-            Container room = AddConnectedRoom( name, 500, "Doorway", 100, from );
-            new Physical("Bed", room, 100, 200);
-            new Physical("Desk", room, 90, 200);
-            Container shelf = new Container("Shelf", room, 40, 45, 30);
-            shelf.AddConnection( new PhysicalConnection("Doorway", shelf, null, 40) );
-            new Physical("Uniform", shelf, 2, 6);
-        }
-
         void CargoFloorSetup(Container elevator)
         {
             Container hubRoom = AddConnectedRoom("Cargo Hallway", 1000, "Entrance", 100, elevator);
@@ -179,11 +201,90 @@ namespace AdventureDemo
         }
     }
 
-    public class SpawnList
+    delegate int SpawnDelegate( Container container );
+    class SpawnList
     {
-        public SpawnList()
+        List<SpawnEntry> spawns;
+        SpawnDelegate spawnAction;
+
+        public SpawnList( SpawnEntry[] entries, SpawnDelegate action = null )
         {
-            
+            spawns = new List<SpawnEntry>(entries);
+            spawnAction = action;
+        }
+
+        /// <summary>
+        /// Initiates the spawn list populating the container with its entries.
+        /// </summary>
+        /// <param name="container">Container to be populated.</param>
+        /// <param name="weight">Multiplier affecting the chances of spawns. Can be used to represent plentiful/scarce situations.</param>
+        /// <returns></returns>
+        public Dictionary<string, int> Spawn( Container container, double weight = 1 )
+        {
+            Dictionary<string, int> spawnAmounts = new Dictionary<string, int>();
+
+            foreach( SpawnEntry entry in spawns ) {
+                spawnAmounts[entry.type.Name] = entry.Spawn(container, weight);
+            }
+
+            if( spawnAction != null ) { spawnAmounts["action"] += spawnAction(container); }
+
+            return spawnAmounts;
+        }
+    }
+
+    delegate int SpawnEntryDelegate( Container container, GameObject obj );
+    class SpawnEntry
+    {
+        public Type type;
+        public Dictionary<string, object> data;
+        public double spawnChance;
+        public int spawnQuantity;
+        public bool independantSpawn;
+        public SpawnEntryDelegate spawnAction;
+
+        /// <summary>
+        /// An entry in a SpawnList. Used to randomize contents of the world.
+        /// </summary>
+        /// <param name="t">Type of object to spawn. Must be derived of GameObject./param>
+        /// <param name="d">Parameters to be passed to the constructor.</param>
+        /// <param name="chance">Chance of spawn (0 - 1).</param>
+        /// <param name="quantity">Amount of objects to try to spawn.</param>
+        /// <param name="independant">If True all objects will roll separately for spawn chance. If False, any failure stops spawning (Default: True).</param>
+        public SpawnEntry( Type t, Dictionary<string, object> d, double chance, int quantity, bool independant = true, SpawnEntryDelegate action = null )
+        {
+            if( !t.IsSubclassOf(typeof(GameObject)) ) {
+                throw new System.InvalidCastException("Attempted to instantiate SpawnEntry with a type not derived from GameObject");
+            }
+
+            type = t;
+            data = d;
+            spawnChance = chance;
+            spawnQuantity = quantity;
+            independantSpawn = independant;
+            spawnAction = action;
+        }
+
+        public int Spawn( Container container, double weight = 1 )
+        {
+            data["container"] = container;
+
+            int amountSpawned = 0;
+
+            for( int i = 0; i < spawnQuantity; i++ ) {
+                double roll = WaywardManager.instance.random.NextDouble() * weight;
+                if( roll <= spawnChance ) {
+                    GameObject obj = Activator.CreateInstance(type, data) as GameObject;
+                    amountSpawned++;
+
+                    if( spawnAction != null ) { amountSpawned += spawnAction(container, obj); }
+
+                } else if( !independantSpawn ){
+                    break;
+                }
+            }
+
+            return amountSpawned;
         }
     }
 }
