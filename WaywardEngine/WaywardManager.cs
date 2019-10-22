@@ -164,8 +164,8 @@ namespace WaywardEngine
         {
             OnUpdate();
 
-            foreach( Page page in pages ) {
-                page.Update();
+            for( int i = pages.Count-1; i >= 0; i-- ) {
+                pages[i].Update();
             }
         }
     }

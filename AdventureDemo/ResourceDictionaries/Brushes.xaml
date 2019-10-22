@@ -39,8 +39,8 @@
         <GradientStop Offset="1" Color="White" />
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="DisabledForegroundBrush">
-        <GradientStop Offset="0" Color="#666666" />
-        <GradientStop Offset="1" Color="#666666" />
+        <GradientStop Offset="0" Color="#222222" />
+        <GradientStop Offset="1" Color="#222222" />
     </LinearGradientBrush>
 
 </ResourceDictionary>

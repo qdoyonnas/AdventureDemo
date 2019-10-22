@@ -54,14 +54,14 @@ namespace AdventureDemo
             Container container = subject.container as Container;
             if( container == null ) { return; }
 
-            descriptions.Children.Add(new TextBlock(WaywardTextParser.Parse(
+            descriptions.Children.Add(WaywardTextParser.ParseAsBlock(
                 $@"[0] {(secondPerson ? "are" : "is")} in [1], [2].",
                 new WaywardTextParser.ParseDelegate[] {
                     () => { return observer.Observe(subject).span; },
                     () => { return observer.Observe(container).span; },
                     () => { return observer.Observe(container, "description").span; }
                 }
-            )));
+            ));
         }
 
         public override void Clear()

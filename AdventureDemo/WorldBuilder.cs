@@ -12,9 +12,15 @@ namespace AdventureDemo
         Container lastRoom;
         Container lastContainer;
 
+        Dictionary<string, SpawnList> spawnLists;
+
         public WorldBuilder()
         {
+            spawnLists = new Dictionary<string, SpawnList>();
 
+            spawnLists["crew_quarters"] = new SpawnList(
+                
+            );
         }
 
         public void BuildWorld()
@@ -31,21 +37,22 @@ namespace AdventureDemo
             EngineeringFloorSetup(elevator);
             CargoFloorSetup(elevator);
             
-            Character playerChar = new Character( "You", FindRoom(elevator, "Quarters Hallway/Quarters A3"), 2.5, 65, 150 );
+            Character playerChar = new Character( "You", FindRoom(elevator, "Quarters Hallway/Quarters A3"), 5, 65, 150 );
             playerChar.description = "a mysterious individual";
             GameManager.instance.player.Control(playerChar);
         }
+
         void CrewFloorSetup(Container elevator)
         {
             Container hubRoom = AddConnectedRoom("Quarters Hallway", 1000, "Entrance", 100, elevator);
             hubRoom.description = "a sleek metal hallway connecting the crew's quarters together";
             
-            AddConnectedRoom( "Quarters A1", 500, "Doorway", 100, hubRoom );
-            AddConnectedRoom( "Quarters A2", 500, "Doorway", 100, hubRoom );
-            AddConnectedRoom( "Quarters A3", 500, "Doorway", 100, hubRoom );
-            AddConnectedRoom( "Quarters B1", 500, "Doorway", 100, hubRoom );
-            AddConnectedRoom( "Quarters B2", 500, "Doorway", 100, hubRoom );
-            AddConnectedRoom( "Quarters B3", 500, "Doorway", 100, hubRoom );
+            AddQuarters( "Quarters A1", hubRoom );
+            AddQuarters( "Quarters A2", hubRoom );
+            AddQuarters( "Quarters A3", hubRoom );
+            AddQuarters( "Quarters B1", hubRoom );
+            AddQuarters( "Quarters B2", hubRoom );
+            AddQuarters( "Quarters B3", hubRoom );
 
             AddConnectedRoom( "Mess Hall", 1500, "Doorway", 100, hubRoom );
             AddConnectedRoom( "Kitchen", 800, "Doorway", 100 );
@@ -56,6 +63,16 @@ namespace AdventureDemo
             AddConnectedRoom( "Crew Escape Pod 3", 400, "Hatch", 70, hubRoom );
             AddConnectedRoom( "Crew Escape Pod 4", 400, "Hatch", 70, hubRoom );
         }
+        void AddQuarters( string name, Container from )
+        {
+            Container room = AddConnectedRoom( name, 500, "Doorway", 100, from );
+            new Physical("Bed", room, 100, 200);
+            new Physical("Desk", room, 90, 200);
+            Container shelf = new Container("Shelf", room, 40, 45, 30);
+            shelf.AddConnection( new PhysicalConnection("Doorway", shelf, null, 40) );
+            new Physical("Uniform", shelf, 2, 6);
+        }
+
         void CargoFloorSetup(Container elevator)
         {
             Container hubRoom = AddConnectedRoom("Cargo Hallway", 1000, "Entrance", 100, elevator);
@@ -64,7 +81,6 @@ namespace AdventureDemo
             AddConnectedRoom( "Cargo Bay 2", 2000, "Bay doorway", 200, hubRoom );
             AddConnectedRoom( "Cargo Bay 3", 2000, "Bay doorway", 200, hubRoom );
             AddConnectedRoom( "Cargo Bay 4", 2000, "Bay doorway", 200, hubRoom );
-            AddConnectedRoom( "Cargo Escape Pod", 400, "Hatch", 70, hubRoom );
         }
         void OperationsFloorSetup(Container elevator)
         {
@@ -160,6 +176,14 @@ namespace AdventureDemo
             }
 
             return null;
+        }
+    }
+
+    public class SpawnList
+    {
+        public SpawnList()
+        {
+            
         }
     }
 }

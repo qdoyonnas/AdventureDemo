@@ -193,5 +193,10 @@ namespace AdventureDemo
         {
             span.Inlines.AddRange( range );
         }
+
+        public override string ToString()
+        {
+            return text;
+        }
     }
 }

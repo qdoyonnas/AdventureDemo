@@ -16,7 +16,7 @@ namespace WaywardEngine
         public delegate Span ParseDelegate();
         /// <summary>
         /// Parse a marked-up string into stylized text. Returned as a TextBlock.
-        /// Format: <i>...</i> for italics <red></c> for color and [0] to insert passed in spans.
+        /// Format: <i>...</i> for italics <red></red> for color and [0] to insert passed in spans.
         /// NOTE: 'Consumes' the Spans, multiple distinct instances of a Span must be provided if located in multiple
         /// positions. 
         /// </summary>
@@ -29,7 +29,7 @@ namespace WaywardEngine
         }
         /// <summary>
         /// Parse a marked-up string into stylized text.
-        /// Format: <i>...</i> for italics <red></c> for color and [0] to insert passed in spans.
+        /// Format: <i>...</i> for italics <red></red> for color and [0] to insert passed in spans.
         /// NOTE: 'Consumes' the Spans, multiple distinct instances of a Span must be provided if located in multiple
         /// positions. 
         /// </summary>
@@ -78,32 +78,32 @@ namespace WaywardEngine
         {
             Span span = new Span();
 
-            switch( id ) {
+            switch( id.ToLower() ) {
                 case "red":
                     span.Foreground = Brushes.Red;
                     break;
                 case "green":
                     span.Foreground = Brushes.Green;
                     break;
-                case "Blue":
+                case "blue":
                     span.Foreground = Brushes.Blue;
                     break;
-                case "Yellow":
+                case "yellow":
                     span.Foreground = Brushes.Yellow;
                     break;
-                case "Purple":
+                case "purple":
                     span.Foreground = Brushes.Purple;
                     break;
-                case "Brown":
+                case "brown":
                     span.Foreground = Brushes.Brown;
                     break;
-                case "Black":
+                case "black":
                     span.Foreground = Brushes.Black;
                     break;
-                case "Gray":
+                case "gray":
                     span.Foreground = Brushes.Gray;
                     break;
-                case "White":
+                case "white":
                     span.Foreground = Brushes.White;
                     break;
             }

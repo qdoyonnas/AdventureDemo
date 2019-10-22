@@ -48,7 +48,7 @@ namespace AdventureDemo
         public virtual void SetConnection( IContainer newContainer )
         {
             if( newContainer == null ) {
-                GameObject containerObject = newContainer as GameObject;
+                GameObject containerObject = container as GameObject;
                 if( containerObject != null ) {
                     _secondContainer = containerObject.container;
                 }

@@ -9,12 +9,17 @@ namespace AdventureDemo
 {
     class PhysicalConnection : Connection
     {
-        double volume;
+        double _volume;
+        public double volume {
+            get {
+                return _volume;
+            }
+        }
 
         public PhysicalConnection( string name, IContainer first, IContainer second, double volume )
             : base( name, first, second )
         {
-            this.volume = volume;
+            this._volume = volume;
 
             objectData["volume"] = GetDescriptiveVolume;
 
@@ -23,7 +28,7 @@ namespace AdventureDemo
 
         public override Connection CreateMatching()
         {
-            return new PhysicalConnection(name, secondContainer, container, volume);
+            return new PhysicalConnection(name, secondContainer, container, _volume);
         }
 
         public override bool CanContain( GameObject obj )
@@ -31,11 +36,7 @@ namespace AdventureDemo
             if( !base.CanContain(obj) ) { return false; }
 
             IPhysical physical = obj as IPhysical;
-            if( physical == null ) { return false; }
-
-            if( physical.GetVolume() > volume ) {
-                return false;
-            }
+            if( physical == null || physical.GetVolume() > _volume ) { return false; }
 
             return true;
         }
@@ -57,7 +58,7 @@ namespace AdventureDemo
         public GameObjectData GetDescriptiveVolume( string[] parameters )
         {
             GameObjectData data = new GameObjectData();
-            data.text = $"{volume.ToString()} L";
+            data.text = $"{_volume.ToString()} L";
 
             data.SetSpan( data.text );
 

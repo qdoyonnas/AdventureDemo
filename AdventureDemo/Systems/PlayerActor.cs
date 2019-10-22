@@ -58,16 +58,18 @@ namespace AdventureDemo
 
 			return data;
         }
+
         private void DisplayVerb(GameObject obj, Verb verb, FrameworkContentElement span)
         {
             CheckResult check = verb.Check(obj);
 			if( check >= CheckResult.RESTRICTED ) {
-                if( verb.self == controlledObject ) {
-                    // TODO: Make the option display as greyed out when check == restricted (ContextMenuHelper must accept spans)
-                    ContextMenuHelper.AddContextMenuItem(span, $"{verb.displayLabel}", delegate { verb.Action(obj); });
+                string text = verb.self == controlledObject ? $"{verb.displayLabel}" 
+                    : $"{verb.self.GetData("name").text} - {verb.displayLabel}";
+
+                if( check == CheckResult.RESTRICTED ) {
+                    ContextMenuHelper.AddContextMenuItem(span, WaywardTextParser.ParseAsBlock($@"<gray>{text}</gray>") , null, false);
                 } else {
-					ContextMenuHelper.AddContextMenuItem(span, $"{verb.self.GetData("name").text} - {verb.displayLabel}", 
-                        delegate { verb.Action(obj); });
+                    ContextMenuHelper.AddContextMenuItem(span, WaywardTextParser.ParseAsBlock(text) , delegate { verb.Action(obj); }, true);
                 }
             }
         }

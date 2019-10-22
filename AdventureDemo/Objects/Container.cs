@@ -14,7 +14,12 @@ namespace AdventureDemo
         List<Connection> connections;
 
         List<IPhysical> contents;
-        double innerVolume;
+        double _innerVolume;
+        public double innerVolume {
+            get {
+                return _innerVolume;
+            }
+        }
 
         public double filledVolume {
             get {
@@ -28,7 +33,7 @@ namespace AdventureDemo
         }
         public double remainingVolume {
             get {
-                return innerVolume - filledVolume;
+                return _innerVolume - filledVolume;
             }
         }
 
@@ -53,7 +58,7 @@ namespace AdventureDemo
 
             connections = new List<Connection>();
             contents = new List<IPhysical>();
-            innerVolume = volume;
+            _innerVolume = volume;
 
             objectData["innervolume"] = GetDescriptiveInnerVolume;
             objectData["filledvolume"] = GetDescriptiveFilledVolume;
@@ -106,13 +111,7 @@ namespace AdventureDemo
         public bool CanContain( GameObject obj )
         {
             IPhysical physical = obj as IPhysical;
-            if( physical == null ) {
-                WaywardManager.instance.DisplayMessage("Object can not be contained by this sort of container.");
-                return false;
-            }
-
-            if( physical.GetVolume() > remainingVolume ) {
-                WaywardManager.instance.DisplayMessage("Not enough space.");
+            if( physical == null || physical.GetVolume() > remainingVolume ) {
                 return false;
             }
 
@@ -182,7 +181,7 @@ namespace AdventureDemo
         {
             GameObjectData data = new GameObjectData();
 
-            data.text = $"{innerVolume.ToString()} L";
+            data.text = $"{_innerVolume.ToString()} L";
             data.SetSpan( data.text );
 
             return data;

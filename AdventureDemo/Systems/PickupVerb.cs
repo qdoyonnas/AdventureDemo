@@ -36,16 +36,30 @@ namespace AdventureDemo
             //      is presently too full for object
 
             if( obj == null || obj == self || obj.container == null ) { return CheckResult.INVALID; }
+            Physical physicalObj = obj as Physical;
+            if( physicalObj == null || physicalObj.GetVolume() > self.innerVolume ) { return CheckResult.INVALID; }
 
+            bool valid = false;
             if( obj.container == self.container ) {
-                return CheckResult.VALID;
+                valid = true;
             } else {
-                GameObject container = obj.container as GameObject;
-                if( container != null ) {
-                    if( Check(container) >= CheckResult.RESTRICTED ) {
-                        return CheckResult.VALID;
+                Container container = obj.container as Container;
+                if( container != null && container.container == self.container ) {
+                    foreach( Connection connection in container.GetConnections() ) {
+                        PhysicalConnection physicalConnection = connection as PhysicalConnection;
+                        if( physicalConnection != null 
+                            && physicalConnection.secondContainer == self.container
+                            && physicalConnection.volume >= physicalObj.GetVolume() )
+                        {
+                            valid = true;
+                            break;
+                        }
                     }
                 }
+            }
+
+            if( valid ) {
+                return self.CanContain(obj) ? CheckResult.VALID : CheckResult.RESTRICTED;
             }
 
             return CheckResult.INVALID;
