@@ -62,6 +62,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Pages\VerbosePage.cs" />
+    <Compile Include="Systems\AttachmentPoint.cs" />
     <Compile Include="WorldBuilder.cs" />
   </ItemGroup>
   <ItemGroup>

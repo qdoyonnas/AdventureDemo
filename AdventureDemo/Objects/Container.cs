@@ -47,7 +47,7 @@ namespace AdventureDemo
             Construct( data.ContainsKey("innerVolume") ? (double)data["innerVolume"] : 0 );
 
             if( data.ContainsKey("spawnLists") ) {
-                spawnLists = (List<SpawnList>)data["spawnLists"];
+                spawnLists = new List<SpawnList>( (SpawnList[])data["spawnLists"] );
                 if( data.ContainsKey("spawnNow") && (bool)data["spawnNow"] ) {
                     SpawnContents();
                 }

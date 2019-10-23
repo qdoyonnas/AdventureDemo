@@ -53,7 +53,7 @@ namespace AdventureDemo
         public virtual GameObjectData GetDescriptiveWeight( string[] parameters )
         {
             GameObjectData data = new GameObjectData();
-            data.text = $"{GetWeight().ToString()} stones";
+            data.text = $"{GetWeight().ToString()} pounds";
 
             data.SetSpan( data.text );
 
@@ -86,6 +86,22 @@ namespace AdventureDemo
 
             return page;
         }
-
+        
+        public AttachmentPoint[] GetAttachmentPoints()
+        {
+            throw new NotImplementedException();
+        }
+        public int GetAttachmentCount()
+        {
+            throw new NotImplementedException();
+        }
+        public void AddAttachmentPoint( AttachmentPoint point )
+        {
+            throw new NotImplementedException();
+        }
+        public void RemoveAttachmentPoint( AttachmentPoint point )
+        {
+            throw new NotImplementedException();
+        }
     }
 }

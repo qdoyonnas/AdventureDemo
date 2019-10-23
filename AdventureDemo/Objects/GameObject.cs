@@ -132,8 +132,9 @@ namespace AdventureDemo
         public virtual GameObjectData GetName( string[] parameters )
         {
             GameObjectData data = new GameObjectData();
+            bool upper = parameters.Length > 0 && parameters[0] == "upper";
 
-            data.text = name;
+            data.text = upper ? char.ToUpper(name[0]) + name.Substring(1) : name;
 
             data.SetSpan( data.text );
             data.span.Style = GameManager.instance.GetResource<Style>("Link");

@@ -35,7 +35,7 @@ namespace AdventureDemo
 
             _observer = observer;
             _target = target;
-            SetTitle( _target.GetData("name").text );
+            SetTitle( observer.Observe(_target, "name upper").text );
 
             foreach( DescriptivePageSection section in sections ) {
                 AddSection(section, false);

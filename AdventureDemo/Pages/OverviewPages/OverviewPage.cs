@@ -88,7 +88,7 @@ namespace AdventureDemo
             
             TextBlock text = Utilities.FindNode<TextBlock>( entry, "Data1");
             if( text != null ) {
-                text.Inlines.Add( observer.Observe(obj, "name").span );
+                text.Inlines.Add( observer.Observe(obj, "name upper").span );
                 if( isMainObject ) {
                     text.Style = GameManager.instance.GetResource<Style>( "Header" );
                 }

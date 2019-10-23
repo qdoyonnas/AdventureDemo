@@ -14,7 +14,6 @@ namespace AdventureDemo
 
         Dictionary<string, SpawnList> spawnLists;
 
-
         public WorldBuilder()
         {
             spawnLists = new Dictionary<string, SpawnList>();
@@ -24,15 +23,26 @@ namespace AdventureDemo
             //      spawn lists as 'delayed' and give them a trigger condition (ex: player is able to percieve
             //      weight/volume or look inside). At which point the necessary spawn lists would populate the
             //      relevant containers.
+            spawnLists["crew_equipment"] = new SpawnList( new SpawnEntry[] {
+                new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
+                    { "name", "uniform" }, { "volume", 2.0 }, { "weight", 6.0 } },
+                    0.5, 2, false ),
+                new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
+                    { "name", "headset" }, { "volume", 0.4 }, { "weight", 1.0 } },
+                    0.2, 1 ),
+                new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
+                    { "name", "mints" }, { "volume", 0.01 }, { "weight", 0.01 } },
+                    0.2, 4 ),
+            });
             spawnLists["crew_quarters"] = new SpawnList( new SpawnEntry[] {
                 new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
-                    { "name", "Bed" }, { "volume", 100.0 }, { "weight", 200.0 } }, 
+                    { "name", "bed" }, { "volume", 100.0 }, { "weight", 200.0 } }, 
                     1.0, 1 ),
                 new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
-                    { "name", "Desk" }, { "volume", 90.0 }, { "weight", 200.0 } },
+                    { "name", "desk" }, { "volume", 90.0 }, { "weight", 200.0 } },
                     1.0, 1 ),
                 new SpawnEntry( typeof(Container), new Dictionary<string, object>() {
-                    { "name", "Shelf" }, { "innerVolume", 40.0 }, { "volume", 45.0 }, { "weight", 30.0 } },
+                    { "name", "shelf" }, { "innerVolume", 40.0 }, { "volume", 45.0 }, { "weight", 30.0 } },
                     1.0, 1, true, (container, obj) => {
                         Container shelf = obj as Container;
                         shelf.AddConnection( new PhysicalConnection("Doorway", shelf, null, 40.0) );
@@ -41,30 +51,32 @@ namespace AdventureDemo
                         return 0;
                     })
             });
-            spawnLists["crew_equipment"] = new SpawnList( new SpawnEntry[] {
-                new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
-                    { "name", "Uniform" }, { "volume", 2.0 }, { "weight", 6.0 } },
-                    0.5, 2, false ),
-                new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
-                    { "name", "Headset" }, { "volume", 0.4 }, { "weight", 1.0 } },
-                    0.2, 1 ),
-                new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
-                    { "name", "Mints" }, { "volume", 0.01 }, { "weight", 0.01 } },
-                    0.2, 4 ),
-            });
 
+            spawnLists["engi_equip"] = new SpawnList( new SpawnEntry[] {
+                new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
+                    { "name", "crowbar" }, { "volume", 1.0 }, { "weight", 5.0 } },
+                    0.8, 1 ),
+                new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
+                    { "name", "wrench" }, { "volume", 0.5 }, { "weight", 2.5 } },
+                    0.8, 1 ),
+                new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
+                    { "name", "screwdriver" }, { "volume", 0.2 }, { "weight", 1.0 } },
+                    0.8, 1 ),
+            });
+            spawnLists["cargo"] = new SpawnList( new SpawnEntry[] {
+                new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
+                    { "name", "steel" }, { "volume", 15.0 }, { "weight", 50.0 } },
+                0.8, 10 )
+            });
             spawnLists["cargo_bay"] = new SpawnList( new SpawnEntry[] {
                 new SpawnEntry( typeof(Container), new Dictionary<string, object>() {
-                    { "name", "Crate" }, { "innerVolume", 200.0 }, { "volume", 205.0 }, { "weight", 300 },
-                    { "spawnLists", new SpawnList[] { spawnLists["cargo"] } } },
-                    0.5, 6 )
+                    { "name", "crate" }, { "innerVolume", 200.0 }, { "volume", 205.0 }, { "weight", 300.0 },
+                    { "spawnLists", new SpawnList[] { spawnLists["cargo"] } }, { "spawnNow", true } },
+                    0.5, 6 ),
                 new SpawnEntry( typeof(Container), new Dictionary<string, object>() {
-                    { "name", "ToolBox" }, { "innerVolume", 5 }, { "volume", 5.2 }, { "weight", 3 } },
+                    { "name", "toolBox" }, { "innerVolume", 5.0 }, { "volume", 5.2 }, { "weight", 3.0 },
+                    { "spawnLists", new SpawnList[] { spawnLists["engi_equip"] } }, { "spawnNow", true } },
                     0.25, 3 )
-            });
-
-            spawnLists["cargo"] = new SpawnList( new SpawnEntry[] {
-                
             });
         }
 
@@ -72,7 +84,7 @@ namespace AdventureDemo
         {
             Container space = new Container("Deep Space", null, double.PositiveInfinity);
             space.description = "darkness broken up by the dots of lights of distant stars";
-            lastContainer = new Container("Spaceship", space, 100000, 150000, 50*10^8);
+            lastContainer = new Container("spaceship", space, 100000, 150000, 50*10^8);
             lastContainer.description = "a craft for travelling between the stars with a gleaming metal hull that protects the fragile internals";
 
             Container elevator = AddRoom("Main Elevator", lastContainer, 1500); // TODO: Separate elevator shaft and the elevator itself
@@ -90,7 +102,7 @@ namespace AdventureDemo
         void CrewFloorSetup(Container elevator)
         {
             Container hubRoom = AddConnectedRoom("Quarters Hallway", 1000, "Entrance", 100, elevator);
-            hubRoom.description = "a sleek metal hallway connecting the crew's quarters together";
+            hubRoom.description = "a sleek metal hallway connecting the crews' quarters together";
             
             AddConnectedRoom( "Quarters A1", 500, "Doorway", 100, hubRoom, spawnLists["crew_quarters"] );
             AddConnectedRoom( "Quarters A2", 500, "Doorway", 100, hubRoom, spawnLists["crew_quarters"] );
@@ -112,10 +124,10 @@ namespace AdventureDemo
         {
             Container hubRoom = AddConnectedRoom("Cargo Hallway", 1000, "Entrance", 100, elevator);
 
-            AddConnectedRoom( "Cargo Bay 1", 2000, "Bay doorway", 200, hubRoom );
-            AddConnectedRoom( "Cargo Bay 2", 2000, "Bay doorway", 200, hubRoom );
-            AddConnectedRoom( "Cargo Bay 3", 2000, "Bay doorway", 200, hubRoom );
-            AddConnectedRoom( "Cargo Bay 4", 2000, "Bay doorway", 200, hubRoom );
+            AddConnectedRoom( "Cargo Bay 1", 2000, "Bay doorway", 200, hubRoom, spawnLists["cargo_bay"] );
+            AddConnectedRoom( "Cargo Bay 2", 2000, "Bay doorway", 200, hubRoom, spawnLists["cargo_bay"] );
+            AddConnectedRoom( "Cargo Bay 3", 2000, "Bay doorway", 200, hubRoom, spawnLists["cargo_bay"] );
+            AddConnectedRoom( "Cargo Bay 4", 2000, "Bay doorway", 200, hubRoom, spawnLists["cargo_bay"] );
         }
         void OperationsFloorSetup(Container elevator)
         {
@@ -219,6 +231,7 @@ namespace AdventureDemo
         }
     }
 
+    // TODO: Improve constructor formats to make spawnlist instantiation less wordy
     delegate int SpawnDelegate( Container container );
     class SpawnList
     {
