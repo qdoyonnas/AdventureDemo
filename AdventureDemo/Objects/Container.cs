@@ -38,12 +38,20 @@ namespace AdventureDemo
         }
 
         // TODO: This might be a good place to implement staggered spawn lists (see WorldBuilder.cs)
+        // TODO: This should be a dictionary of spawnlists, weights pairs
         public List<SpawnList> spawnLists;
 
         public Container( Dictionary<string, object> data )
             : base(data)
         {
             Construct( data.ContainsKey("innerVolume") ? (double)data["innerVolume"] : 0 );
+
+            if( data.ContainsKey("spawnLists") ) {
+                spawnLists = (List<SpawnList>)data["spawnLists"];
+                if( data.ContainsKey("spawnNow") && (bool)data["spawnNow"] ) {
+                    SpawnContents();
+                }
+            }
         }
         public Container( string name, IContainer container, double innerVolume ) 
             : base(name, container)
@@ -254,17 +262,29 @@ namespace AdventureDemo
             return true;
         }
 
-        public Container SpawnContents()
+        public Container SpawnContents(double weight = 1)
         {
             foreach( SpawnList list in spawnLists ) {
-                list.Spawn(this);
+                list.Spawn(this, weight);
             }
 
             return this;
         }
-        public Container SpawnContents( SpawnList list, double weight = 1 )
+        public Container SpawnContents( SpawnList list, double weight = 1, bool spawnNow = true )
         {
-            list.Spawn(this, weight);
+            spawnLists.Add(list);
+
+            if( spawnNow ) {
+                list.Spawn(this, weight);
+            }
+
+            return this;
+        }
+        public Container SpawnContents( SpawnList[] lists, double weight = 1, bool spawnNow = true )
+        {
+            foreach( SpawnList list in lists ) {
+                SpawnContents(list, weight, spawnNow);
+            }
 
             return this;
         }

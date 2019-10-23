@@ -41,7 +41,6 @@ namespace AdventureDemo
                         return 0;
                     })
             });
-
             spawnLists["crew_equipment"] = new SpawnList( new SpawnEntry[] {
                 new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
                     { "name", "Uniform" }, { "volume", 2.0 }, { "weight", 6.0 } },
@@ -52,6 +51,20 @@ namespace AdventureDemo
                 new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
                     { "name", "Mints" }, { "volume", 0.01 }, { "weight", 0.01 } },
                     0.2, 4 ),
+            });
+
+            spawnLists["cargo_bay"] = new SpawnList( new SpawnEntry[] {
+                new SpawnEntry( typeof(Container), new Dictionary<string, object>() {
+                    { "name", "Crate" }, { "innerVolume", 200.0 }, { "volume", 205.0 }, { "weight", 300 },
+                    { "spawnLists", new SpawnList[] { spawnLists["cargo"] } } },
+                    0.5, 6 )
+                new SpawnEntry( typeof(Container), new Dictionary<string, object>() {
+                    { "name", "ToolBox" }, { "innerVolume", 5 }, { "volume", 5.2 }, { "weight", 3 } },
+                    0.25, 3 )
+            });
+
+            spawnLists["cargo"] = new SpawnList( new SpawnEntry[] {
+                
             });
         }
 
@@ -79,21 +92,21 @@ namespace AdventureDemo
             Container hubRoom = AddConnectedRoom("Quarters Hallway", 1000, "Entrance", 100, elevator);
             hubRoom.description = "a sleek metal hallway connecting the crew's quarters together";
             
-            AddConnectedRoom( "Quarters A1", 500, "Doorway", 100, hubRoom ).SpawnContents( spawnLists["crew_quarters"] );
-            AddConnectedRoom( "Quarters A2", 500, "Doorway", 100, hubRoom ).SpawnContents( spawnLists["crew_quarters"] );
-            AddConnectedRoom( "Quarters A3", 500, "Doorway", 100, hubRoom ).SpawnContents( spawnLists["crew_quarters"] );
-            AddConnectedRoom( "Quarters B1", 500, "Doorway", 100, hubRoom ).SpawnContents( spawnLists["crew_quarters"] );
-            AddConnectedRoom( "Quarters B2", 500, "Doorway", 100, hubRoom ).SpawnContents( spawnLists["crew_quarters"] );
-            AddConnectedRoom( "Quarters B3", 500, "Doorway", 100, hubRoom ).SpawnContents( spawnLists["crew_quarters"] );
+            AddConnectedRoom( "Quarters A1", 500, "Doorway", 100, hubRoom, spawnLists["crew_quarters"] );
+            AddConnectedRoom( "Quarters A2", 500, "Doorway", 100, hubRoom, spawnLists["crew_quarters"] );
+            AddConnectedRoom( "Quarters A3", 500, "Doorway", 100, hubRoom, spawnLists["crew_quarters"] );
+            AddConnectedRoom( "Quarters B1", 500, "Doorway", 100, hubRoom, spawnLists["crew_quarters"] );
+            AddConnectedRoom( "Quarters B2", 500, "Doorway", 100, hubRoom, spawnLists["crew_quarters"] );
+            AddConnectedRoom( "Quarters B3", 500, "Doorway", 100, hubRoom, spawnLists["crew_quarters"] );
 
             AddConnectedRoom( "Mess Hall", 1500, "Doorway", 100, hubRoom );
             AddConnectedRoom( "Kitchen", 800, "Doorway", 100 );
 
             hubRoom = AddConnectedRoom( "Crew Escape Pods Hallway", 800, "Doorway", 100, hubRoom );
-            AddConnectedRoom( "Crew Escape Pod 1", 400, "Hatch", 70, hubRoom ); // TODO: All pods should be connected using a docking port
-            AddConnectedRoom( "Crew Escape Pod 2", 400, "Hatch", 70, hubRoom );
-            AddConnectedRoom( "Crew Escape Pod 3", 400, "Hatch", 70, hubRoom );
-            AddConnectedRoom( "Crew Escape Pod 4", 400, "Hatch", 70, hubRoom );
+            AddConnectedRoom( "Crew Escape Pod 1", 400, "Hatch", 70, hubRoom, spawnLists["cargo_bay"] ); // TODO: All pods should be connected using a docking port
+            AddConnectedRoom( "Crew Escape Pod 2", 400, "Hatch", 70, hubRoom, spawnLists["cargo_bay"] );
+            AddConnectedRoom( "Crew Escape Pod 3", 400, "Hatch", 70, hubRoom, spawnLists["cargo_bay"] );
+            AddConnectedRoom( "Crew Escape Pod 4", 400, "Hatch", 70, hubRoom, spawnLists["cargo_bay"] );
         }
         void CargoFloorSetup(Container elevator)
         {
@@ -133,21 +146,26 @@ namespace AdventureDemo
             AddConnectedRoom( "Engine Block B2", 1200, "Bay doorway", 200, hubRoom );
         }
 
-        public Container AddRoom( string name, Container container, double volume )
+        public Container AddRoom( string name, Container container, double volume, params SpawnList[] spawns)
         {
-            return lastRoom = new Container( name, container, volume, volume + 50 );
+            lastRoom = new Container( name, container, volume, volume + 50 );
+            if( spawns != null ) {
+                lastRoom.SpawnContents(spawns, 1, true);
+            }
+
+            return lastRoom;
         }
-        public Container AddConnectedRoom( string name, double volume )
+        public Container AddConnectedRoom( string name, double volume, SpawnList[] spawns = null )
         {
-            return AddConnectedRoom( name, volume, "Opening", 100 );
+            return AddConnectedRoom( name, volume, "Opening", 100, spawns );
         }
-        public Container AddConnectedRoom(  string name, double volume, string connectionName, double connectionVolume )
+        public Container AddConnectedRoom( string name, double volume, string connectionName, double connectionVolume, params SpawnList[] spawns )
         {
-            return AddConnectedRoom( name, volume, connectionName, connectionVolume, lastRoom );
+            return AddConnectedRoom( name, volume, connectionName, connectionVolume, lastRoom, spawns );
         }
-        public Container AddConnectedRoom(  string name, double volume, string connectionName, double connectionVolume, Container previousRoom )
+        public Container AddConnectedRoom( string name, double volume, string connectionName, double connectionVolume, Container previousRoom, params SpawnList[] spawns )
         {
-            Container room = AddRoom( name, lastContainer, volume );
+            Container room = AddRoom( name, lastContainer, volume, spawns );
             room.AddConnection(new PhysicalConnection(connectionName, room, previousRoom, connectionVolume), true);
 
             return room;
