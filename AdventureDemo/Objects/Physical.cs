@@ -13,6 +13,8 @@ namespace AdventureDemo
         protected double volume;
         protected double weight;
 
+        protected List<AttachmentPoint> attachmentPoints;
+
         public Physical( Dictionary<string, object> data )
             : base(data)
         {
@@ -89,19 +91,19 @@ namespace AdventureDemo
         
         public AttachmentPoint[] GetAttachmentPoints()
         {
-            throw new NotImplementedException();
+            return attachmentPoints.ToArray();
         }
         public int GetAttachmentCount()
         {
-            throw new NotImplementedException();
+            return attachmentPoints.Count;
         }
         public void AddAttachmentPoint( AttachmentPoint point )
         {
-            throw new NotImplementedException();
+            attachmentPoints.Add(point);
         }
         public void RemoveAttachmentPoint( AttachmentPoint point )
         {
-            throw new NotImplementedException();
+            attachmentPoints.Remove(point);
         }
     }
 }
