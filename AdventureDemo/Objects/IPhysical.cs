@@ -13,10 +13,5 @@ namespace AdventureDemo
 
         GameObjectData GetDescriptiveWeight( string[] parameters );
         GameObjectData GetDescriptiveVolume( string[] parameters );
-
-        AttachmentPoint[] GetAttachmentPoints();
-        int GetAttachmentCount();
-        void AddAttachmentPoint( AttachmentPoint point );
-        void RemoveAttachmentPoint( AttachmentPoint point );
     }
 }

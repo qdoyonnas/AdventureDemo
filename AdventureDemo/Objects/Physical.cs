@@ -13,8 +13,6 @@ namespace AdventureDemo
         protected double volume;
         protected double weight;
 
-        protected List<AttachmentPoint> attachmentPoints;
-
         public Physical( Dictionary<string, object> data )
             : base(data)
         {
@@ -87,23 +85,6 @@ namespace AdventureDemo
             page.AddSection(new PhysicalDescriptivePageSection());
 
             return page;
-        }
-        
-        public AttachmentPoint[] GetAttachmentPoints()
-        {
-            return attachmentPoints.ToArray();
-        }
-        public int GetAttachmentCount()
-        {
-            return attachmentPoints.Count;
-        }
-        public void AddAttachmentPoint( AttachmentPoint point )
-        {
-            attachmentPoints.Add(point);
-        }
-        public void RemoveAttachmentPoint( AttachmentPoint point )
-        {
-            attachmentPoints.Remove(point);
         }
     }
 }
