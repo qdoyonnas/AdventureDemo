@@ -34,3 +34,5 @@ C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\obj\Debug\WaywardEngine.csproj.
 C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\obj\Debug\WaywardEngine.csproj.CopyComplete
 C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\obj\Debug\WaywardEngine.dll
 C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\obj\Debug\WaywardEngine.pdb
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\bin\Debug\WaywardEngine.dll.CodeAnalysisLog.xml
+C:\Users\ivor9\repos\AdventureDemo\WaywardEngine\bin\Debug\WaywardEngine.dll.lastcodeanalysissucceeded

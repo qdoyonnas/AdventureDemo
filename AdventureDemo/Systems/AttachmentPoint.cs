@@ -30,7 +30,7 @@ namespace AdventureDemo
         }
         public virtual bool Attach( IPhysical obj )
         {
-            if( !CanAttach( obj ) { return false; }
+            if( !CanAttach(obj) ) { return false; }
 
             attachedObjects.Add(obj);
 

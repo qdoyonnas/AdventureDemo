@@ -8,13 +8,13 @@ C:\Users\ivor9\repos\AdventureDemo\AdventureDemo\obj\Debug\
 AdventureDemo
 none
 false
-DEBUG;TRACE
+CODE_ANALYSIS;DEBUG;TRACE
 C:\Users\ivor9\repos\AdventureDemo\AdventureDemo\AdventureApp.xaml
 5-1181860239
 
-27756912008
+28-1065505469
 15-191666440
 ResourceDictionaries\Brushes.xaml;ResourceDictionaries\ContextMenuStyle.xaml;ResourceDictionaries\DescriptivePages.xaml;ResourceDictionaries\MiscStyles.xaml;ResourceDictionaries\OverviewPages.xaml;
 
-False
+True
 
