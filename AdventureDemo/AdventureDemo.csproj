@@ -62,24 +62,20 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Pages\VerbosePage.cs" />
-    <Compile Include="Systems\AttachmentPoint.cs" />
+    <Compile Include="Systems\Attachments\AttachmentPoint.cs" />
+    <Compile Include="Systems\Attachments\PhysicalAttachmentPoint.cs" />
     <Compile Include="WorldBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameManager.cs" />
     <Compile Include="Objects\Character.cs" />
     <Compile Include="Objects\Container.cs" />
-    <Compile Include="Objects\Connection.cs" />
     <Compile Include="Objects\GameObject.cs" />
-    <Compile Include="Objects\PhysicalConnection.cs" />
-    <Compile Include="Systems\EnterVerb.cs" />
-    <Compile Include="Systems\IVerbSuggest.cs" />
-    <Compile Include="Systems\PickupVerb.cs" />
-    <Compile Include="Systems\PlayerActor.cs" />
-    <Compile Include="Systems\Verb.cs" />
+    <Compile Include="Systems\Verbs\IVerbSuggest.cs" />
+    <Compile Include="Systems\Actors\PlayerActor.cs" />
+    <Compile Include="Systems\Verbs\Verb.cs" />
     <Compile Include="Pages\DescriptivePages\ContainerDescriptivePageSection.cs" />
     <Compile Include="Pages\DescriptivePages\GameObjectDescriptivePageSection.cs" />
-    <Compile Include="Objects\IContainer.cs" />
     <Compile Include="Objects\IPhysical.cs" />
     <Compile Include="Objects\Physical.cs" />
     <Compile Include="Pages\DescriptivePages\DescriptivePage.cs" />
@@ -141,7 +137,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Systems\Actor.cs" />
+    <Compile Include="Systems\Actors\Actor.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

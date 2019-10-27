@@ -15,8 +15,8 @@ namespace AdventureDemo
         protected string name;
         public string description;
 
-        protected IContainer _container;
-        public virtual IContainer container {
+        protected AttachmentPoint _container;
+        public virtual AttachmentPoint container {
             get {
                 return _container;
             }
@@ -40,16 +40,16 @@ namespace AdventureDemo
         {
             Construct(
                 data.ContainsKey("name") ? (string)data["name"] : "Unknown Object",
-                data.ContainsKey("container") ? (IContainer)data["container"] : null 
+                data.ContainsKey("container") ? (AttachmentPoint)data["container"] : null 
             );
 
             description = data.ContainsKey("description") ? (string)data["discription"] : "a strange object";
         }
-        public GameObject( string name, IContainer container )
+        public GameObject( string name, AttachmentPoint container )
         {
             Construct(name, container);
         }
-        void Construct( string name, IContainer container )
+        void Construct( string name, AttachmentPoint container )
         {
             this.name = name;
             this.description = "a strange object";
@@ -70,16 +70,16 @@ namespace AdventureDemo
             }
         }
 
-        public virtual bool SetContainer( IContainer newContainer )
+        public virtual bool SetContainer( AttachmentPoint newContainer )
         {
             if( newContainer == container ) { return true; }
-            if( !newContainer.CanContain(this) ) { return false; }
+            if( !newContainer.CanAttach(this) ) { return false; }
 
-            if( _container == null || _container.RemoveContent(this) ) {
-                if( newContainer.AddContent(this) ) {
+            if( _container == null || _container.Remove(this) ) {
+                if( newContainer.Attach(this) ) {
                     _container = newContainer;
                 } else {
-                    _container.AddContent(this);
+                    _container.Attach(this);
                     return false;
                 }
             }

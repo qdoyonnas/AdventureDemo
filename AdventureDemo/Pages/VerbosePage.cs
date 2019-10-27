@@ -51,7 +51,7 @@ namespace AdventureDemo
             if( subject == null ) { return; }
             bool secondPerson = subject.GetData("name").text.ToLower() == "you";
 
-            Container container = subject.container as Container;
+            GameObject container = subject.container.GetParent();
             if( container == null ) { return; }
 
             descriptions.Children.Add(WaywardTextParser.ParseAsBlock(

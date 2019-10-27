@@ -16,7 +16,7 @@ namespace AdventureDemo
         TextBlock volumeRatio;
         StackPanel connections;
 
-        IContainer container;
+        Container container;
 
         public ContainerDescriptivePageSection()
             : base("DescriptiveContainer")
@@ -26,7 +26,7 @@ namespace AdventureDemo
             connections = Utilities.FindNode<StackPanel>( element, "Connections" );
 
             if( page != null ) {
-                container = page.target as IContainer;
+                container = page.target as Container;
             }
         }
 
@@ -34,7 +34,7 @@ namespace AdventureDemo
         {
             base.AssignPage(page);
             if( page != null ) {
-                container = page.target as IContainer;
+                container = page.target as Container;
             }
         }
 
@@ -45,7 +45,7 @@ namespace AdventureDemo
             connections.Children.Clear();
 
             if( page != null ) {
-                container = page.target as IContainer;
+                container = page.target as Container;
             }
         }
 
@@ -59,24 +59,7 @@ namespace AdventureDemo
                 throw new System.NullReferenceException("DescriptivePage tried to display the contents of a GameObject that is not an IContainer.");
             }
 
-            if( container.ContentCount() > 0 ) {
-                for( int i = 0; i < container.ContentCount(); i++ ) {
-                    DisplayContent( container.GetContent(i) );
-                }
-            }
-
-            if( contents.Children.Count == 0 ) {
-                contents.Children.Add( WaywardTextParser.ParseAsBlock("<i>empty</i>") );
-            }
-
-            List<Connection> containerConnections = container.GetConnections();
-            foreach( Connection connection in containerConnections ) {
-                DisplayConnection( connection );
-            }
-
-            if( connections.Children.Count == 0 ) {
-                connections.Children.Add( WaywardTextParser.ParseAsBlock("<i>none</i>") );
-            }
+            
         }
         
         private void DisplayContent( GameObject obj )
@@ -105,46 +88,6 @@ namespace AdventureDemo
             text = Utilities.FindNode<TextBlock>( entry, "Data3" );
             if( text != null ) {
                 text.Inlines.Add( observer.Observe(obj, "data 1").span );
-            }
-        }
-        private void DisplayConnection( Connection connection )
-        {
-            if( !observer.CanObserve(connection) ) { return; }
-
-            // Add separator from previous entry
-            if( connections.Children.Count > 0 ) {
-                Separator separator = new Separator();
-                connections.Children.Add(separator);
-            }
-
-            FrameworkElement entry = GameManager.instance.GetResource<FrameworkElement>("OverviewEntry");
-            if( entry == null ) { return; }
-            connections.Children.Add(entry);
-
-            TextBlock text = Utilities.FindNode<TextBlock>(entry, "Data1");
-            if( text != null ) {
-                text.Inlines.Add( observer.Observe(connection).span );
-            }
-            
-            text = Utilities.FindNode<TextBlock>( entry, "Data2" );
-            if( text != null ) {
-                GameObject connected;
-                if( connection.container == container ) {
-                    connected = connection.secondContainer as GameObject;
-                } else {
-                    connected = connection.container as GameObject;
-                }
-                if( connected == null ) { return; }
-
-                text.Inlines.Add( observer.Observe(connected).span );
-            }
-
-            PhysicalConnection physicalConnection = connection as PhysicalConnection;
-            if( physicalConnection != null ) {
-                text = Utilities.FindNode<TextBlock>( entry, "Data3" );
-                if( text != null ) {
-                    text.Inlines.Add( observer.Observe(connection, "volume").span );
-                }
             }
         }
     }

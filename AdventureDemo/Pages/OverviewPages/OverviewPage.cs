@@ -47,7 +47,7 @@ namespace AdventureDemo
         /// <param name="obj">Object to be displayed.</param>
         public void DisplayObject( GameObject obj )
         {
-            GameObject objContainer = obj.container as GameObject;
+            GameObject objContainer = obj.container.GetParent();
             if( objContainer == null ) { return; }
 
             StackPanel parent;
@@ -101,60 +101,8 @@ namespace AdventureDemo
             if( text != null ) {
                 text.Inlines.Add( observer.Observe(obj, "data 1").span );
             }
-
-            FetchObjectContents(entry, obj);
         }
-        private void FetchObjectContents( FrameworkElement entry, GameObject obj )
-        {
-            IContainer container = obj as IContainer;
-            if( container == null ) { return; }
 
-            StackPanel objectContents = Utilities.FindNode<StackPanel>( entry, "SubData" );
-            if( objectContents != null ) {
-                List<Connection> connections = container.GetConnections();
-                if( container.ContentCount() > 0 ) {
-                    for( int i = 0; i < container.ContentCount(); i++ ) {
-                        DisplayObject( objectContents, container.GetContent(i) );
-                    }
-                }
-                foreach( Connection connection in connections ) {
-                    DisplayConnection(objectContents, container, connection);
-                }
-
-                if( objectContents.Children.Count == 0 ) {
-                    objectContents.Visibility = Visibility.Hidden;
-                }
-            }
-        }
-        private void DisplayConnection( StackPanel objectContents, IContainer container, Connection connection )
-        {
-            FrameworkElement newEntry = GameManager.instance.GetResource<FrameworkElement>("OverviewEntry");
-            objectContents.Children.Add(newEntry);
-            TextBlock text = Utilities.FindNode<TextBlock>( newEntry, "Data1");
-            if( text != null ) {
-                text.Inlines.Add( observer.Observe(connection, "name").span );
-            }
-
-            text = Utilities.FindNode<TextBlock>( newEntry, "Data2" );
-            if( text != null ) {
-                GameObject connected;
-                if( connection.container == container ) {
-                    connected = connection.secondContainer as GameObject;
-                } else {
-                    connected = connection.container as GameObject;
-                }
-                if( connected == null ) { return; }
-                text.Inlines.Add( observer.Observe(connected).span );
-            }
-
-            PhysicalConnection physicalConnection = connection as PhysicalConnection;
-            if( physicalConnection != null ) {
-                text = Utilities.FindNode<TextBlock>( newEntry, "Data3" );
-                if( text != null ) {
-                    text.Inlines.Add( observer.Observe(connection, "volume").span );
-                }
-            }
-        }
 
         public override void Clear()
         {

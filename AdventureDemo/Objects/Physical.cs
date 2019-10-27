@@ -23,17 +23,17 @@ namespace AdventureDemo
                 data.ContainsKey("weight") ? (double)data["weight"] : 0
             );
         }
-        public Physical( string name, IContainer container )
+        public Physical( string name, AttachmentPoint container )
             : base(name, container)
         {
             Construct(0, 0);
         }
-        public Physical( string name, IContainer container, double volume )
+        public Physical( string name, AttachmentPoint container, double volume )
             : base(name, container)
         {
             Construct(volume, 0);
         }
-        public Physical( string name, IContainer container, double volume, double weight )
+        public Physical( string name, AttachmentPoint container, double volume, double weight )
             : base(name, container)
         {
             Construct(volume, weight);

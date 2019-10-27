@@ -16,17 +16,17 @@ namespace AdventureDemo
         {
             Construct();
         }
-        public Character( string name, IContainer container, double innerVolume ) 
+        public Character( string name, AttachmentPoint container, double innerVolume ) 
             : base(name, container, innerVolume)
         {
             Construct();
         }
-        public Character( string name, IContainer container, double innerVolume, double totalVolume )
+        public Character( string name, AttachmentPoint container, double innerVolume, double totalVolume )
             : base(name, container, innerVolume, totalVolume)
         {
             Construct();
         }
-        public Character( string name, IContainer container, double innerVolume, double totalVolume, double weight )
+        public Character( string name, AttachmentPoint container, double innerVolume, double totalVolume, double weight )
             : base(name, container, innerVolume, totalVolume, weight)
         {
             Construct();

@@ -45,7 +45,6 @@ namespace AdventureDemo
                     { "name", "shelf" }, { "innerVolume", 40.0 }, { "volume", 45.0 }, { "weight", 30.0 } },
                     1.0, 1, true, (container, obj) => {
                         Container shelf = obj as Container;
-                        shelf.AddConnection( new PhysicalConnection("Doorway", shelf, null, 40.0) );
                         shelf.SpawnContents( spawnLists["crew_equipment"] );
 
                         return 0;
@@ -84,7 +83,7 @@ namespace AdventureDemo
         {
             Container space = new Container("Deep Space", null, double.PositiveInfinity);
             space.description = "darkness broken up by the dots of lights of distant stars";
-            lastContainer = new Container("spaceship", space, 100000, 150000, 50*10^8);
+            lastContainer = new Container("spaceship", space.GetContents(), 100000, 150000, 50*10^8);
             lastContainer.description = "a craft for travelling between the stars with a gleaming metal hull that protects the fragile internals";
 
             Container elevator = AddRoom("Main Elevator", lastContainer, 1500); // TODO: Separate elevator shaft and the elevator itself
@@ -94,7 +93,7 @@ namespace AdventureDemo
             EngineeringFloorSetup(elevator);
             CargoFloorSetup(elevator);
             
-            Character playerChar = new Character( "You", FindRoom(elevator, "Quarters Hallway/Quarters A3"), 5, 65, 150 );
+            Character playerChar = new Character( "You", elevator.GetContents(), 5, 65, 150 );
             playerChar.description = "a mysterious individual";
             GameManager.instance.player.Control(playerChar);
         }
@@ -160,7 +159,7 @@ namespace AdventureDemo
 
         public Container AddRoom( string name, Container container, double volume, params SpawnList[] spawns)
         {
-            lastRoom = new Container( name, container, volume, volume + 50 );
+            lastRoom = new Container( name, container.GetContents(), volume, volume + 50 );
             if( spawns != null ) {
                 lastRoom.SpawnContents(spawns, 1, true);
             }
@@ -178,56 +177,8 @@ namespace AdventureDemo
         public Container AddConnectedRoom( string name, double volume, string connectionName, double connectionVolume, Container previousRoom, params SpawnList[] spawns )
         {
             Container room = AddRoom( name, lastContainer, volume, spawns );
-            room.AddConnection(new PhysicalConnection(connectionName, room, previousRoom, connectionVolume), true);
 
             return room;
-        }
-
-        public Container FindRoom( string path )
-        {
-            for( int i = 0; i < GameManager.instance.RootCount(); i++ ) {
-                Container root = GameManager.instance.GetRoot(i) as Container;
-                if( root == null ) { continue; }
-
-                Container found = FindRoom( root, path );
-                if( found != null ) { return found; }
-            }
-
-            return null;
-        }
-        public Container FindRoom( IContainer from, string path )
-        {
-            if( from.GetData("name").text == path ) {
-                Container fromContainer = from as Container;
-                if( fromContainer != null ) {
-                    return fromContainer;
-                }
-            }
-
-            int indexOfStep = path.IndexOf('/');
-            string nextStep = indexOfStep != -1 ? path.Substring(0, indexOfStep) : path;
-            string nextPath = path.Substring(indexOfStep+1);
-
-            foreach( Connection connection in from.GetConnections() ) {
-                Console.WriteLine(connection.secondContainer.GetData("name").text);
-                if( connection.secondContainer.GetData("name").text == nextStep ) {
-                    Container found = FindRoom(connection.secondContainer, nextPath);
-                    if( found != null ) { return found; }
-                }
-            }
-            for( int i = 0; i < from.ContentCount(); i++ ) {
-                GameObject obj = from.GetContent(i);
-                Console.WriteLine(obj.GetData("name").text);
-                if( obj.GetData("name").text == nextStep ) {
-                    IContainer container = obj as IContainer;
-                    if( container != null ) {
-                        Container found = FindRoom(container, nextPath);
-                        if( found != null ) { return found; }
-                    }
-                }
-            }
-
-            return null;
         }
     }
 

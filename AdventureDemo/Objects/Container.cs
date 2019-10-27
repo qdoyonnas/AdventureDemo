@@ -9,11 +9,8 @@ using WaywardEngine;
 
 namespace AdventureDemo
 {
-    class Container : Physical, IContainer
+    class Container : Physical
     {
-        List<Connection> connections;
-
-        List<IPhysical> contents;
         double _innerVolume;
         public double innerVolume {
             get {
@@ -37,6 +34,8 @@ namespace AdventureDemo
             }
         }
 
+        protected AttachmentPoint contents;
+
         // TODO: This might be a good place to implement staggered spawn lists (see WorldBuilder.cs)
         // TODO: This should be a dictionary of spawnlists, weights pairs
         public List<SpawnList> spawnLists;
@@ -53,17 +52,17 @@ namespace AdventureDemo
                 }
             }
         }
-        public Container( string name, IContainer container, double innerVolume ) 
+        public Container( string name, AttachmentPoint container, double innerVolume ) 
             : base(name, container)
         {
             Construct(innerVolume);
         }
-        public Container( string name, IContainer container, double innerVolume, double totalVolume )
+        public Container( string name, AttachmentPoint container, double innerVolume, double totalVolume )
             : base(name, container, totalVolume)
         {
             Construct(innerVolume);
         }
-        public Container( string name, IContainer container, double innerVolume, double totalVolume, double weight )
+        public Container( string name, AttachmentPoint container, double innerVolume, double totalVolume, double weight )
             : base(name, container, totalVolume, weight)
         {
             Construct(innerVolume);
@@ -72,7 +71,6 @@ namespace AdventureDemo
         {
             this.description = DescriptionFromVolume(volume);
 
-            connections = new List<Connection>();
             contents = new List<IPhysical>();
             spawnLists = new List<SpawnList>();
             _innerVolume = volume;
@@ -113,75 +111,9 @@ namespace AdventureDemo
             }
         }
 
-        public GameObject GetContent( int i )
+        public AttachmentPoint GetContents()
         {
-            IPhysical physical = contents[i];
-            GameObject obj = physical as GameObject;
-            if( obj == null ) { return null; }
-
-            return obj;
-        }
-        public int ContentCount()
-        {
-            return contents.Count;
-        }
-        public bool CanContain( GameObject obj )
-        {
-            IPhysical physical = obj as IPhysical;
-            if( physical == null || physical.GetVolume() > remainingVolume ) {
-                return false;
-            }
-
-            return true;
-        }
-        public bool DoesContain( GameObject obj )
-        {
-            IPhysical physical = obj as IPhysical;
-            if( physical == null ) { return false; }
-
-            return contents.Contains(physical);
-        }
-        public bool AddContent( GameObject obj )
-        {
-            if( !CanContain(obj) ) { return false; }
-
-            IPhysical physical = obj as IPhysical;
-            if( physical == null ) { return false; }
-
-            contents.Add(physical);
-            return true;
-        }
-        public bool RemoveContent( GameObject obj )
-        {
-            IPhysical physical = obj as IPhysical;
-            if( physical == null ) { return false; }
-
-            contents.Remove(physical);
-            return true;
-        }
-        
-        public List<Connection> GetConnections()
-        {
-            return connections;
-        }
-        public void AddConnection( Connection connection, bool createMatchingConnection )
-        {
-            AddConnection( connection );
-
-            if( createMatchingConnection ) {
-                Container containerB = connection.secondContainer as Container;
-                if( containerB == null ) { return; }
-
-                containerB.AddConnection(connection.CreateMatching());
-            }
-        }
-        public void AddConnection( Connection connection )
-        {
-            connections.Add( connection );
-        }
-        public void RemoveConnection( Connection connection )
-        {
-            connections.Remove( connection );
+            return contents;
         }
 
         public override double GetWeight()

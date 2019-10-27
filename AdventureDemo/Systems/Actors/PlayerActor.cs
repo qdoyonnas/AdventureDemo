@@ -14,11 +14,11 @@ namespace AdventureDemo
         {
             // TODO: Implement senses
 
-            GameObject thisContainer = controlledObject.container as GameObject;
+            GameObject thisContainer = controlledObject.container.GetParent();
             if( obj == thisContainer || obj.container == controlledObject.container ) {
                 return true;
             } else {
-                GameObject objContainer = obj.container as GameObject;
+                GameObject objContainer = obj.container.GetParent();
                 if( objContainer != null ) {
                     return CanObserve(objContainer);
                 }
