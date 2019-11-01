@@ -34,11 +34,6 @@ namespace AdventureDemo
         private void Construct()
         {
             this.description = "an entity";
-
-            verbs.Add(PossessionType.EMBODIMENT, new Verb[] {
-                new PickupVerb(this),
-                new EnterVerb(this)
-            });
         }
 
         public override GameObjectData GetDescription( string[] parameters )

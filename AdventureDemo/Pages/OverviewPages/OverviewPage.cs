@@ -57,7 +57,6 @@ namespace AdventureDemo
                 parent = AddContentPanel(obj);
             }
 
-
             DisplayObject( parent, objContainer );
         }
         /// <summary>
@@ -102,7 +101,6 @@ namespace AdventureDemo
                 text.Inlines.Add( observer.Observe(obj, "data 1").span );
             }
         }
-
 
         public override void Clear()
         {

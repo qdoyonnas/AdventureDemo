@@ -8,15 +8,27 @@ namespace AdventureDemo
 {
     class AttachmentPoint
     {
-        protected AttachmentType[] attachmentTypes;
+        protected AttachmentType[] attachmentTypes; // Allowed AttachmentTypes
 
         protected GameObject parentObject;
         protected List<GameObject> attachedObjects;
 
-        protected bool divisable = true;
-        protected bool loose = true;
+        protected int maxQuantity = 1; // -1 for infinite
 
+        public AttachmentPoint( Dictionary<string, object> data )
+        {
+            if( !data.ContainsKey("parent") ) { throw new System.ArgumentException("AttachmentPoint requires a parent GameObject"); }
+
+            maxQuantity = data.ContainsKey("quantity") ? (int)data["quantity"] : 1;
+            AttachmentType[] types = data.ContainsKey("types") ? data["types"] as AttachmentType[] : new AttachmentType[] { AttachmentType.ALL };
+
+            Construct( data["parent"] as GameObject, types );
+        }
         public AttachmentPoint( GameObject parent, params AttachmentType[] types )
+        {
+            Construct( parent, types );
+        }
+        protected virtual void Construct( GameObject parent, AttachmentType[] types)
         {
             parentObject = parent;
             attachmentTypes = types;
@@ -31,10 +43,23 @@ namespace AdventureDemo
 
         public virtual bool CanAttach( GameObject obj )
         {
-            if( !divisable && attachedObjects.Count > 0 ) { return false; }
+            if( maxQuantity >= 0 && attachedObjects.Count >= maxQuantity ) { return false; }
 
-            return true;
+            return CompareAttachmentTypes(obj);
         }
+        public virtual bool CompareAttachmentTypes( GameObject obj )
+        {
+            if( attachmentTypes.Contains(AttachmentType.ALL) ) { return true; }
+            AttachmentType[] objectAttachmentTypes = obj.attachmentTypes.ToArray();
+            foreach( AttachmentType type in attachmentTypes ) {
+                foreach( AttachmentType objectType in objectAttachmentTypes ) {
+                    if( type == objectType ) { return true; }
+                }
+            }
+
+            return false;
+        }
+
         public virtual bool Attach( GameObject obj )
         {
             if( !CanAttach(obj) ) { return false; }
@@ -56,7 +81,7 @@ namespace AdventureDemo
     }
 
     public enum AttachmentType {
-        SURFACE,
+        ALL,
         HANG,
         WRAP
     }

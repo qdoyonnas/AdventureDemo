@@ -11,30 +11,24 @@ namespace AdventureDemo
 {
     class Container : Physical
     {
-        double _innerVolume;
         public double innerVolume {
             get {
-                return _innerVolume;
+                return contents.capacity;
             }
         }
 
         public double filledVolume {
             get {
-                double totalVolume = 0;
-                foreach( IPhysical physical in contents ) {
-                    totalVolume += physical.GetVolume();
-                }
-
-                return totalVolume;
+                return contents.filledCapacity;
             }
         }
         public double remainingVolume {
             get {
-                return _innerVolume - filledVolume;
+                return contents.remainingCapacity;
             }
         }
 
-        protected AttachmentPoint contents;
+        protected ContainerAttachmentPoint contents;
 
         // TODO: This might be a good place to implement staggered spawn lists (see WorldBuilder.cs)
         // TODO: This should be a dictionary of spawnlists, weights pairs
@@ -71,9 +65,8 @@ namespace AdventureDemo
         {
             this.description = DescriptionFromVolume(volume);
 
-            contents = new List<IPhysical>();
+            contents = new ContainerAttachmentPoint(this, volume);
             spawnLists = new List<SpawnList>();
-            _innerVolume = volume;
 
             objectData["innervolume"] = GetDescriptiveInnerVolume;
             objectData["filledvolume"] = GetDescriptiveFilledVolume;
@@ -119,7 +112,7 @@ namespace AdventureDemo
         public override double GetWeight()
         {
             double totalWeight = weight;
-            foreach( IPhysical physical in contents ) {
+            foreach( Physical physical in contents.GetAttachedPhysicals() ) {
                 totalWeight += physical.GetWeight();
             }
 
@@ -130,7 +123,7 @@ namespace AdventureDemo
         {
             GameObjectData data = new GameObjectData();
 
-            data.text = $"{_innerVolume.ToString()} L";
+            data.text = $"{innerVolume.ToString()} L";
             data.SetSpan( data.text );
 
             return data;
@@ -184,11 +177,8 @@ namespace AdventureDemo
             bool success = base.SetActor(actor, possession);
             if( !success ) { return false; }
 
-            foreach( IPhysical content in contents ) {
-                GameObject contentObj = content as GameObject;
-                if( contentObj != null ) {
-                    contentObj.CollectVerbs(actor, PossessionType.CONTENT);
-                }
+            foreach( GameObject obj in contents.GetAttached() ) {
+                obj.CollectVerbs(actor, PossessionType.CONTENT);
             }
 
             return true;

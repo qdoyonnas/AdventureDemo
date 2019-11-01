@@ -15,13 +15,6 @@ namespace AdventureDemo
         protected string name;
         public string description;
 
-        protected AttachmentPoint _container;
-        public virtual AttachmentPoint container {
-            get {
-                return _container;
-            }
-        }
-
         protected Actor _actor;
         public virtual Actor actor {
             get {
@@ -29,25 +22,52 @@ namespace AdventureDemo
             }
         }
 
+        // Attachments
+        protected AttachmentPoint _container;
+        public virtual AttachmentPoint container {
+            get {
+                return _container;
+            }
+        }
+        
+        protected List<AttachmentType> _attachmentTypes;
+        public virtual List<AttachmentType> attachmentTypes {
+            get {
+                return _attachmentTypes;
+            }
+        }
+
         protected Dictionary<PossessionType, Verb[]> verbs;
 
+        // Object data
         protected delegate GameObjectData DataDelegate( string[] parameters );
         protected Dictionary<string, DataDelegate> objectData;
 
         protected List<DataDelegate> relevantData;
 
+        // Constructors
         public GameObject( Dictionary<string, object> data )
         {
-            Construct(
-                data.ContainsKey("name") ? (string)data["name"] : "Unknown Object",
-                data.ContainsKey("container") ? (AttachmentPoint)data["container"] : null 
-            );
+            AttachmentPoint attachment = null;
+            if( data.ContainsKey("container") ) {
+                attachment = data["container"] as AttachmentPoint;
+                if( attachment == null ) {
+                    Container container = data["container"] as Container;
+                    attachment = container.GetContents();
+                }
+            }
+
+            Construct(data.ContainsKey("name") ? (string)data["name"] : "Unknown Object", attachment);
 
             description = data.ContainsKey("description") ? (string)data["discription"] : "a strange object";
         }
         public GameObject( string name, AttachmentPoint container )
         {
             Construct(name, container);
+        }
+        public GameObject( string name, Container container )
+        {
+            Construct(name, container.GetContents());
         }
         void Construct( string name, AttachmentPoint container )
         {
@@ -68,6 +88,8 @@ namespace AdventureDemo
             } else {
                 GameManager.instance.AddRoot(this);
             }
+
+            _attachmentTypes = new List<AttachmentType>();
         }
 
         public virtual bool SetContainer( AttachmentPoint newContainer )
@@ -105,12 +127,14 @@ namespace AdventureDemo
         public virtual void CollectVerbs( Actor actor, PossessionType possession )
         {
             if( _actor != null ) {
+                if( !verbs.ContainsKey(possession) ) { return; }
                 foreach( Verb verb in verbs[possession] ) {
                     actor.AddVerb(verb);
                 }
             }
         }
 
+        // Data Methods
         /// <summary>
         /// Returns a String that best fufills the requested data.
         /// Serves a bridge between UI and objects disconnecting the need for explicit calls.

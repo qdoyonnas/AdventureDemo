@@ -63,6 +63,7 @@
     </Compile>
     <Compile Include="Pages\VerbosePage.cs" />
     <Compile Include="Systems\Attachments\AttachmentPoint.cs" />
+    <Compile Include="Systems\Attachments\ContainerAttachmentPoint.cs" />
     <Compile Include="Systems\Attachments\PhysicalAttachmentPoint.cs" />
     <Compile Include="WorldBuilder.cs" />
   </ItemGroup>
@@ -76,7 +77,6 @@
     <Compile Include="Systems\Verbs\Verb.cs" />
     <Compile Include="Pages\DescriptivePages\ContainerDescriptivePageSection.cs" />
     <Compile Include="Pages\DescriptivePages\GameObjectDescriptivePageSection.cs" />
-    <Compile Include="Objects\IPhysical.cs" />
     <Compile Include="Objects\Physical.cs" />
     <Compile Include="Pages\DescriptivePages\DescriptivePage.cs" />
     <Compile Include="Pages\DescriptivePages\DescriptivePageSection.cs" />

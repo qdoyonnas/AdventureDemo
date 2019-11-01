@@ -8,7 +8,7 @@ using WaywardEngine;
 
 namespace AdventureDemo
 {
-    class Physical : GameObject, IPhysical
+    class Physical : GameObject
     {
         protected double volume;
         protected double weight;
@@ -41,6 +41,8 @@ namespace AdventureDemo
         private void Construct( double volume, double weight )
         {
             this.description = "a solid object";
+
+            attachmentPoints = new List<AttachmentPoint>();
 
             objectData["weight"] = GetDescriptiveWeight;
             objectData["volume"] = GetDescriptiveVolume;
