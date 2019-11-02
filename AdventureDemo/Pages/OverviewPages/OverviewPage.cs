@@ -100,6 +100,35 @@ namespace AdventureDemo
             if( text != null ) {
                 text.Inlines.Add( observer.Observe(obj, "data 1").span );
             }
+
+            FetchContents(entry, obj);
+        }
+        protected virtual void FetchContents( FrameworkElement entry, GameObject obj )
+        {
+            Physical physicalObj = obj as Physical;
+            if( physicalObj == null ) { return; }
+
+            StackPanel subData = Utilities.FindNode<StackPanel>( entry, "SubData" );
+            if( subData == null ) { return; }
+
+            foreach( AttachmentPoint point in physicalObj.GetAttachmentPoints() ) {
+                if( point.GetAttached().Length == 0 ) { continue; }
+
+                FrameworkElement pointEntry = GameManager.instance.GetResource<FrameworkElement>("OverviewEntry");
+                subData.Children.Add( pointEntry );
+                TextBlock text = Utilities.FindNode<TextBlock>( pointEntry, "Data1");
+                if( text != null ) {
+                    text.Inlines.Add( char.ToUpper(point.name[0]) + point.name.Substring(1) );
+                }
+                StackPanel pointContents = Utilities.FindNode<StackPanel>( pointEntry, "SubData" );
+                foreach( GameObject child in point.GetAttached() ) {
+                    DisplayObject( pointContents, child );
+                }
+            }
+
+            if( subData.Children.Count == 0 ) {
+                subData.Visibility = Visibility.Hidden;
+            }
         }
 
         public override void Clear()

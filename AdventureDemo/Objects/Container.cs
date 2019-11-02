@@ -65,7 +65,10 @@ namespace AdventureDemo
         {
             this.description = DescriptionFromVolume(volume);
 
-            contents = new ContainerAttachmentPoint(this, volume);
+            contents = new ContainerAttachmentPoint(new Dictionary<string, object>() {
+                { "parent", this }, { "capacity", volume }, { "name", "contents" }
+            });
+            AddAttachmentPoint(contents);
             spawnLists = new List<SpawnList>();
 
             objectData["innervolume"] = GetDescriptiveInnerVolume;

@@ -32,7 +32,7 @@
         </ScrollViewer>
     </Border>
 
-    <Border x:Key="DescriptiveContainer" x:Shared="false" Style="{StaticResource PageStyle}">
+    <Border x:Key="DescriptivePhysicalAttachment" x:Shared="false" Style="{StaticResource PageStyle}">
         <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <Grid>
@@ -46,6 +46,13 @@
                 </Grid>
                 <StackPanel Name="Contents">
                 </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
+    <Border x:Key="DescriptiveContainer" x:Shared="false" Style="{StaticResource PageStyle}">
+        <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
                 <TextBlock Grid.Column="0" Style="{DynamicResource Header}">Exits</TextBlock>
                 <StackPanel Name="Connections">
                 </StackPanel>

@@ -8,6 +8,8 @@ namespace AdventureDemo
 {
     class AttachmentPoint
     {
+        public string name = "slot";
+
         protected AttachmentType[] attachmentTypes; // Allowed AttachmentTypes
 
         protected GameObject parentObject;
@@ -19,6 +21,7 @@ namespace AdventureDemo
         {
             if( !data.ContainsKey("parent") ) { throw new System.ArgumentException("AttachmentPoint requires a parent GameObject"); }
 
+            name = data.ContainsKey("name") ? (string)data["name"] : "slot";
             maxQuantity = data.ContainsKey("quantity") ? (int)data["quantity"] : 1;
             AttachmentType[] types = data.ContainsKey("types") ? data["types"] as AttachmentType[] : new AttachmentType[] { AttachmentType.ALL };
 
