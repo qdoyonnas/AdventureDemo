@@ -15,14 +15,19 @@ namespace AdventureDemo
         protected GameObject parentObject;
         protected List<GameObject> attachedObjects;
 
-        protected int maxQuantity = 1; // -1 for infinite
+        protected int _maxQuantity = 1; // -1 for infinite
+        public int maxQuantity {
+            get {
+                return _maxQuantity;
+            }
+        }
 
         public AttachmentPoint( Dictionary<string, object> data )
         {
             if( !data.ContainsKey("parent") ) { throw new System.ArgumentException("AttachmentPoint requires a parent GameObject"); }
 
             name = data.ContainsKey("name") ? (string)data["name"] : "slot";
-            maxQuantity = data.ContainsKey("quantity") ? (int)data["quantity"] : 1;
+            _maxQuantity = data.ContainsKey("quantity") ? (int)data["quantity"] : 1;
             AttachmentType[] types = data.ContainsKey("types") ? data["types"] as AttachmentType[] : new AttachmentType[] { AttachmentType.ALL };
 
             Construct( data["parent"] as GameObject, types );
@@ -31,7 +36,7 @@ namespace AdventureDemo
         {
             Construct( parent, types );
         }
-        protected virtual void Construct( GameObject parent, AttachmentType[] types)
+        private void Construct( GameObject parent, AttachmentType[] types)
         {
             parentObject = parent;
             attachmentTypes = types;

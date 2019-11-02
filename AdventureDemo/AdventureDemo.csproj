@@ -61,6 +61,7 @@
       <DependentUpon>AdventureApp.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Pages\DescriptivePages\PhysicalAttachmentDescriptivePageSection.cs" />
     <Compile Include="Pages\VerbosePage.cs" />
     <Compile Include="Systems\Attachments\AttachmentPoint.cs" />
     <Compile Include="Systems\Attachments\ContainerAttachmentPoint.cs" />

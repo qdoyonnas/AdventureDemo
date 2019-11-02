@@ -87,6 +87,7 @@ namespace AdventureDemo
             DescriptivePage page = base.DisplayDescriptivePage();
             
             page.AddSection(new PhysicalDescriptivePageSection());
+            page.AddSection(new PhysicalAttachmentDescriptivePageSection());
 
             return page;
         }

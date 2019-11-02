@@ -32,23 +32,52 @@
         </ScrollViewer>
     </Border>
 
-    <Border x:Key="DescriptivePhysicalAttachment" x:Shared="false" Style="{StaticResource PageStyle}">
+    <Border x:Key="DescriptivePhysicalAttachments" x:Shared="false" Style="{StaticResource PageStyle}">
         <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Grid.Column="0" Style="{DynamicResource Header}">Contents</TextBlock>
-                    <TextBlock Grid.Column="1" Name="VolumeRatio"></TextBlock>
-                </Grid>
-                <StackPanel Name="Contents">
+                <TextBlock Grid.Column="0" Style="{DynamicResource Header}">Attachment Points</TextBlock>
+                <StackPanel Name="Attachments">
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
     </Border>
+
+    <StackPanel x:Key="DescriptiveAttachmentEntry" x:Shared="false">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Name="AttachmentName" Grid.Column="0" Style="{DynamicResource Header}">Name</TextBlock>
+            <TextBlock Grid.Column="1" Name="Quantity"></TextBlock>
+            <TextBlock Grid.Column="2" Name="VolumeRatio"></TextBlock>
+        </Grid>
+        <StackPanel Name="Contents">
+        </StackPanel>
+    </StackPanel>
+
+    <Grid x:Key="AttachmentObjectEntry" x:Shared="false">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Name="Data1"></TextBlock>
+            <TextBlock Grid.Column="1" Name="Data2"></TextBlock>
+            <TextBlock Grid.Column="2" Name="Data3"></TextBlock>
+        </Grid>
+        <Grid Grid.Row="1">
+            <StackPanel Name="SubData" Margin="20 0 0 0">
+            </StackPanel>
+        </Grid>
+    </Grid>
 
     <Border x:Key="DescriptiveContainer" x:Shared="false" Style="{StaticResource PageStyle}">
         <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">

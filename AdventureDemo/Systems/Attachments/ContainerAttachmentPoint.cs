@@ -13,12 +13,17 @@ namespace AdventureDemo
         public ContainerAttachmentPoint( Dictionary<string, object> data )
             : base( data )
         {
-
+            Construct();
         }
         public ContainerAttachmentPoint( GameObject parent, double capacity )
             : base( parent, capacity, AttachmentType.ALL )
         {
-            maxQuantity = -1;
+            Construct();
+        }
+        private void Construct()
+        {
+            _maxQuantity = -1;
+            connections = new List<AttachmentPoint>();
         }
 
         public virtual Physical[] GetAttachedPhysicals()
