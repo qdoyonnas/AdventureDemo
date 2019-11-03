@@ -32,7 +32,10 @@ namespace AdventureDemo
         public override CheckResult Check( GameObject target )
         {
             CheckResult check = CheckResult.VALID;
-            if( target.container != null && target.container != self.container ) {
+            if( self.container.GetParent() == target
+                && target.container != null 
+                && target.container != self.container )
+            {
                 check = target.container.CanAttach(self);
                 if( check == CheckResult.VALID ) {
                     return check;
@@ -42,6 +45,8 @@ namespace AdventureDemo
             Physical physical = target as Physical;
             if( physical != null ) {
                 foreach( AttachmentPoint point in physical.GetAttachmentPoints() ) {
+                    if( point == self.container ) { continue; }
+
                     CheckResult pointCheck = point.CanAttach(self);
                     check = pointCheck > check ? pointCheck : check;
                     if( check == CheckResult.VALID ) {
@@ -59,7 +64,7 @@ namespace AdventureDemo
 
             string actionLabel = displayLabel;
 
-            if( target.container != null && target.container != self.container ) {
+            if( self.container.GetParent() == target && target.container != null ) {
                 actionLabel = displayLabel + " out";
                 DisplayForPoint(actionLabel, target.container, span);
             }
@@ -74,6 +79,8 @@ namespace AdventureDemo
         }
         private void DisplayForPoint( string actionLabel, AttachmentPoint point, FrameworkContentElement span )
         {
+            if( point == self.container ) { return; }
+
             CheckResult result = point.CanAttach(self);
             if( result >= CheckResult.RESTRICTED ) {
                 Dictionary<TextBlock, RoutedEventHandler> items = new Dictionary<TextBlock, RoutedEventHandler>();

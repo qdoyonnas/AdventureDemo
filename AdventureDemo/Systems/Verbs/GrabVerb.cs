@@ -7,11 +7,11 @@ using System.Windows;
 
 namespace AdventureDemo
 {
-    class PickupVerb : Verb
+    class GrabVerb : Verb
     {
         AttachmentPoint inventory;
 
-        public PickupVerb( GameObject self, AttachmentPoint inventory )
+        public GrabVerb( GameObject self, AttachmentPoint inventory )
             : base(self)
         {
             this.inventory = inventory;

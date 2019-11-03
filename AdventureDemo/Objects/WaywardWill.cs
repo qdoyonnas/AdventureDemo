@@ -34,7 +34,7 @@ namespace AdventureDemo
 
             verbs.Add( PossessionType.EMBODIMENT, new Verb[] {
                 new PhaseVerb(this),
-                new PickupVerb(this, contents)
+                new GrabVerb(this, contents)
             } );
         }
     }
