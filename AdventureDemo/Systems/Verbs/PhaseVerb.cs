@@ -26,22 +26,40 @@ namespace AdventureDemo
         }
         public void Action( AttachmentPoint target )
         {
-
+            self.SetContainer(target);
         }
 
         public override CheckResult Check( GameObject target )
         {
+            CheckResult check = CheckResult.VALID;
+            if( target.container != null && target.container != self.container ) {
+                check = target.container.CanAttach(self);
+                if( check == CheckResult.VALID ) {
+                    return check;
+                }
+            }
+
             Physical physical = target as Physical;
+            if( physical != null ) {
+                foreach( AttachmentPoint point in physical.GetAttachmentPoints() ) {
+                    CheckResult pointCheck = point.CanAttach(self);
+                    check = pointCheck > check ? pointCheck : check;
+                    if( check == CheckResult.VALID ) {
+                        return check;
+                    }
+                }
+            }
 
-
-            return CheckResult.VALID;
+            return check;
         }
 
         public override void Display( Actor actor, GameObject target, FrameworkContentElement span )
         {
+            if( target == self ) { return; }
+
             string actionLabel = displayLabel;
 
-            if( target.container != null ) {
+            if( target.container != null && target.container != self.container ) {
                 actionLabel = displayLabel + " out";
                 DisplayForPoint(actionLabel, target.container, span);
             }

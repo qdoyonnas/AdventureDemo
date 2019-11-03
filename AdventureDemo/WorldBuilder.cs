@@ -167,7 +167,7 @@ namespace AdventureDemo
 
             return lastRoom;
         }
-        public Container AddConnectedRoom( string name, double volume, SpawnList[] spawns = null )
+        public Container AddConnectedRoom( string name, double volume, params SpawnList[] spawns )
         {
             return AddConnectedRoom( name, volume, "Opening", 100, spawns );
         }

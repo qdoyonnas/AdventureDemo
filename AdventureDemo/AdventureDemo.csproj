@@ -69,6 +69,7 @@
     <Compile Include="Systems\Attachments\ContainerAttachmentPoint.cs" />
     <Compile Include="Systems\Attachments\PhysicalAttachmentPoint.cs" />
     <Compile Include="Systems\Verbs\PhaseVerb.cs" />
+    <Compile Include="Systems\Verbs\PickupVerb.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="WorldBuilder.cs" />
   </ItemGroup>

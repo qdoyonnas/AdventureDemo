@@ -8,6 +8,8 @@ namespace AdventureDemo
 {
     class WaywardWill : Physical
     {
+        AttachmentPoint contents;
+
         public WaywardWill( Container container )
             : base( "Wayward Will", container )
         {
@@ -24,8 +26,15 @@ namespace AdventureDemo
 
             attachmentTypes.Add( AttachmentType.ALL );
 
+            contents = new AttachmentPoint( new Dictionary<string, object>() {
+                { "parent", this }, { "name", "Grasp" }, { "quantity", -1 },
+                { "types", new AttachmentType[] { AttachmentType.ALL } }
+            });
+            AddAttachmentPoint(contents);
+
             verbs.Add( PossessionType.EMBODIMENT, new Verb[] {
-                new PhaseVerb(this)
+                new PhaseVerb(this),
+                new PickupVerb(this, contents)
             } );
         }
     }
