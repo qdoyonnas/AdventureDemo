@@ -9,31 +9,44 @@ using WaywardEngine;
 
 namespace AdventureDemo
 {
-    class Character : Container
+    class Character : Physical
     {
         public Character( Dictionary<string, object> data )
             : base(data)
         {
             Construct();
         }
-        public Character( string name, AttachmentPoint container, double innerVolume ) 
-            : base(name, container, innerVolume)
+        public Character( string name, AttachmentPoint container ) 
+            : base(name, container)
         {
             Construct();
         }
-        public Character( string name, AttachmentPoint container, double innerVolume, double totalVolume )
-            : base(name, container, innerVolume, totalVolume)
+        public Character( string name, AttachmentPoint container, double totalVolume )
+            : base(name, container, totalVolume)
         {
             Construct();
         }
-        public Character( string name, AttachmentPoint container, double innerVolume, double totalVolume, double weight )
-            : base(name, container, innerVolume, totalVolume, weight)
+        public Character( string name, AttachmentPoint container, double totalVolume, double weight )
+            : base(name, container, totalVolume, weight)
         {
             Construct();
         }
         private void Construct()
         {
             this.description = "an entity";
+
+            Dictionary<string, object> attachmentData = new Dictionary<string, object>() {
+                { "name", "Pocket" }, { "capacity", 0.5 }, { "quantity", -1 },
+                { "types", new AttachmentType[] { AttachmentType.ALL } }
+            };
+            this.AddAttachmentPoint( attachmentData );
+            this.AddAttachmentPoint( attachmentData );
+            
+            attachmentData["name"] = "Shoulder";
+            attachmentData["quantity"] = 1;
+            attachmentData["capacity"] = -1.0;
+            attachmentData["types"] = new AttachmentType[] { AttachmentType.HANG };
+            this.AddAttachmentPoint( attachmentData );
         }
 
         public override GameObjectData GetDescription( string[] parameters )

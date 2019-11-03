@@ -23,6 +23,11 @@ namespace AdventureDemo
                 data.ContainsKey("weight") ? (double)data["weight"] : 0
             );
         }
+        public Physical( string name, Container container )
+            : base( name, container )
+        {
+            Construct(0, 0);
+        }
         public Physical( string name, AttachmentPoint container )
             : base(name, container)
         {
@@ -86,7 +91,7 @@ namespace AdventureDemo
         {
             DescriptivePage page = base.DisplayDescriptivePage();
             
-            page.AddSection(new PhysicalDescriptivePageSection());
+            page.AddSection(new PhysicalDescriptivePageSection(), false);
             page.AddSection(new PhysicalAttachmentDescriptivePageSection());
 
             return page;
@@ -99,6 +104,14 @@ namespace AdventureDemo
         public int GetAttachmentCount()
         {
             return attachmentPoints.Count;
+        }
+        public void AddAttachmentPoint( Dictionary<string, object> data )
+        {
+            if( !data.ContainsKey("parent") ) {
+                data.Add("parent", this);
+            }
+
+            attachmentPoints.Add(new PhysicalAttachmentPoint(data) );
         }
         public void AddAttachmentPoint( AttachmentPoint point )
         {

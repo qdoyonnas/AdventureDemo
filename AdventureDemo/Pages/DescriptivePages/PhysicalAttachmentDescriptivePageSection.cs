@@ -51,7 +51,11 @@ namespace AdventureDemo
                     text = Utilities.FindNode<TextBlock>( entry, "VolumeRatio" );
                     if( text != null ) {
                         if( observer.CanObserve(physicalTarget) ) {
-                            text.Text = $"{physicalPoint.filledCapacity.ToString()} L/{physicalPoint.capacity.ToString()} L";
+                            if( physicalPoint.capacity >= 0 ) {
+                                text.Text = $"{physicalPoint.filledCapacity.ToString()} L/{physicalPoint.capacity.ToString()} L";
+                            } else {
+                                text.Text = $"{physicalPoint.filledCapacity.ToString()} L";
+                            }
                         } else {
                             text.Text = "???";
                         }
@@ -59,6 +63,10 @@ namespace AdventureDemo
                 }
 
                 DisplayAttachmentContents(entry, point);
+            }
+
+            if( attachmentsPanel.Children.Count == 0 ) {
+                element.Visibility = System.Windows.Visibility.Collapsed;
             }
         }
         private void DisplayAttachmentContents( StackPanel entry, AttachmentPoint point )

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Windows;
+using System.Windows.Controls;
+using WaywardEngine;
 
 namespace AdventureDemo
 {
@@ -31,11 +33,19 @@ namespace AdventureDemo
         /// <returns></returns>
         public abstract CheckResult Check( GameObject target );
         public abstract void Action( GameObject target );
-    }
 
-    public enum CheckResult {
-        INVALID,
-        RESTRICTED,
-        VALID
+        public virtual void Display( Actor actor, GameObject target, FrameworkContentElement span )
+        {
+            CheckResult check = Check(target);
+			if( check >= CheckResult.RESTRICTED ) {
+                Dictionary<TextBlock, RoutedEventHandler> items = new Dictionary<TextBlock, RoutedEventHandler>();
+                if( check == CheckResult.RESTRICTED ) {
+                    items.Add( WaywardTextParser.ParseAsBlock($@"<gray>{displayLabel}</gray>") , null );
+                } else {
+                    items.Add( WaywardTextParser.ParseAsBlock(displayLabel) , delegate { Action(target); } );
+                }
+                ContextMenuHelper.AddContextMenuHeader(span, new TextBlock(self.GetData("name upper").span), items, check != CheckResult.RESTRICTED);
+            }
+        }
     }
 }

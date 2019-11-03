@@ -18,6 +18,24 @@
         </ScrollViewer>
     </Border>
 
+    <Border x:Key="DescriptiveGameObjectVerbs" x:Shared="false" Style="{StaticResource PageStyle}">
+        <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Style="{DynamicResource Header}">Verbs</TextBlock>
+                <Grid Name="Verbs">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
     <Border x:Key="DescriptivePhysical" x:Shared="false" Style="{StaticResource PageStyle}">
         <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
             <Grid Margin="{StaticResource Padding}">

@@ -93,9 +93,10 @@ namespace AdventureDemo
             EngineeringFloorSetup(elevator);
             CargoFloorSetup(elevator);
             
-            Character playerChar = new Character( "You", elevator.GetContents(), 5, 65, 150 );
+            Character playerChar = new Character( "Dirk Casirov", elevator.GetContents(), 65, 150 );
             playerChar.description = "a mysterious individual";
-            GameManager.instance.player.Control(playerChar);
+
+            GameManager.instance.player.Control(new WaywardWill(space));
         }
 
         void CrewFloorSetup(Container elevator)
@@ -114,10 +115,10 @@ namespace AdventureDemo
             AddConnectedRoom( "Kitchen", 800, "Doorway", 100 );
 
             hubRoom = AddConnectedRoom( "Crew Escape Pods Hallway", 800, "Doorway", 100, hubRoom );
-            AddConnectedRoom( "Crew Escape Pod 1", 400, "Hatch", 70, hubRoom, spawnLists["cargo_bay"] ); // TODO: All pods should be connected using a docking port
-            AddConnectedRoom( "Crew Escape Pod 2", 400, "Hatch", 70, hubRoom, spawnLists["cargo_bay"] );
-            AddConnectedRoom( "Crew Escape Pod 3", 400, "Hatch", 70, hubRoom, spawnLists["cargo_bay"] );
-            AddConnectedRoom( "Crew Escape Pod 4", 400, "Hatch", 70, hubRoom, spawnLists["cargo_bay"] );
+            AddConnectedRoom( "Crew Escape Pod 1", 400, "Hatch", 70, hubRoom ); // TODO: All pods should be connected using a docking port
+            AddConnectedRoom( "Crew Escape Pod 2", 400, "Hatch", 70, hubRoom );
+            AddConnectedRoom( "Crew Escape Pod 3", 400, "Hatch", 70, hubRoom );
+            AddConnectedRoom( "Crew Escape Pod 4", 400, "Hatch", 70, hubRoom );
         }
         void CargoFloorSetup(Container elevator)
         {

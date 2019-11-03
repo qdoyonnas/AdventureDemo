@@ -25,19 +25,5 @@ namespace AdventureDemo
             _maxQuantity = -1;
             connections = new List<AttachmentPoint>();
         }
-
-        public virtual Physical[] GetAttachedPhysicals()
-        {
-             Physical[] physicals = new Physical[attachedObjects.Count];
-
-            for( int i = 0; i < attachedObjects.Count; i++ ) {
-                Physical physical = attachedObjects[i] as Physical;
-                if( physical == null ) { throw new System.InvalidCastException("ContainerAttachmentPoint contains non-physical object"); }
-
-                physicals[i] = physical;
-            }
-
-            return physicals;
-        }
     }
 }

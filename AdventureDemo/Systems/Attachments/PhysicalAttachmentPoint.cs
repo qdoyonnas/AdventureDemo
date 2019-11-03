@@ -49,14 +49,32 @@ namespace AdventureDemo
             _capacity = capacity;
         }
 
-        public override bool CanAttach( GameObject obj )
+        public override CheckResult CanAttach( GameObject obj )
         {
             Physical physical = obj as Physical;
-            if( physical == null ) { return false; }
+            if( physical == null ) { return CheckResult.INVALID; }
 
-            if( physical.GetVolume() > remainingCapacity ) { return false; }
+            CheckResult result = base.CanAttach(obj);
+            if( result != CheckResult.VALID ) { return result; }
 
-            return base.CanAttach(obj);
+            if( capacity >= 0  && physical.GetVolume() > remainingCapacity ) { return CheckResult.RESTRICTED; }
+
+            return CheckResult.VALID;
         }
+
+        public virtual Physical[] GetAttachedPhysicals()
+        {
+             Physical[] physicals = new Physical[attachedObjects.Count];
+
+            for( int i = 0; i < attachedObjects.Count; i++ ) {
+                Physical physical = attachedObjects[i] as Physical;
+                if( physical == null ) { throw new System.InvalidCastException("ContainerAttachmentPoint contains non-physical object"); }
+
+                physicals[i] = physical;
+            }
+
+            return physicals;
+        }
+
     }
 }

@@ -121,6 +121,13 @@ namespace WaywardEngine
         {
             if( !CheckContextMenu(control) ) { return null; }
 
+            foreach( MenuItem item in control.ContextMenu.Items ) {
+                string itemHeader = item.Header as string;
+                if( itemHeader == header.Text ) {
+                    return item;
+                }
+            }
+
             MenuItem newHeader = null;
             if( header != null ) {
                 newHeader = new MenuItem();
@@ -245,6 +252,13 @@ namespace WaywardEngine
         public static MenuItem AddContextMenuHeader( FrameworkContentElement control, TextBlock header )
         {
             if( !CheckContextMenu(control) ) { return null; }
+
+            foreach( MenuItem item in control.ContextMenu.Items ) {
+                TextBlock itemHeader = item.Header as TextBlock;
+                if( itemHeader.Text == header.Text ) {
+                    return item;
+                }
+            }
 
             MenuItem newHeader = null;
             if( header != null ) {

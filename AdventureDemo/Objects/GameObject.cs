@@ -12,7 +12,7 @@ namespace AdventureDemo
 {
     class GameObject
     {
-        protected string name;
+        public string name;
         public string description;
 
         protected Actor _actor;
@@ -95,13 +95,13 @@ namespace AdventureDemo
         public virtual bool SetContainer( AttachmentPoint newContainer )
         {
             if( newContainer == container ) { return true; }
-            if( !newContainer.CanAttach(this) ) { return false; }
+            if( newContainer.CanAttach(this) != CheckResult.VALID ) { return false; }
 
             if( _container == null || _container.Remove(this) ) {
                 if( newContainer.Attach(this) ) {
                     _container = newContainer;
                 } else {
-                    _container.Attach(this);
+                    if( _container != null ) { _container.Attach(this); }
                     return false;
                 }
             }
@@ -132,6 +132,15 @@ namespace AdventureDemo
                     actor.AddVerb(verb);
                 }
             }
+        }
+        public virtual List<Verb> CollectVerbs()
+        {
+            List<Verb> collectedVerbs = new List<Verb>();
+            foreach( Verb[] verbCollection in verbs.Values ) {
+                collectedVerbs.AddRange( verbCollection );
+            }
+
+            return collectedVerbs;
         }
 
         // Data Methods
@@ -197,7 +206,8 @@ namespace AdventureDemo
             Point mousePosition = WaywardManager.instance.GetMousePosition();
 
             return GameManager.instance.DisplayDescriptivePage( mousePosition, this, new DescriptivePageSection[] {
-                new GameObjectDescriptivePageSection()
+                new GameObjectDescriptivePageSection(),
+                new GameObjectVerbsDescriptivePageSection()
             });
         }
     }

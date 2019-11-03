@@ -49,15 +49,18 @@ namespace AdventureDemo
             return parentObject;
         }
 
-        public virtual bool CanAttach( GameObject obj )
+        public virtual CheckResult CanAttach( GameObject obj )
         {
-            if( maxQuantity >= 0 && attachedObjects.Count >= maxQuantity ) { return false; }
+            if( !CompareAttachmentTypes(obj) ) { return CheckResult.INVALID; }
 
-            return CompareAttachmentTypes(obj);
+            if( maxQuantity >= 0 && attachedObjects.Count >= maxQuantity ) { return CheckResult.RESTRICTED; }
+
+            return CheckResult.VALID;
         }
         public virtual bool CompareAttachmentTypes( GameObject obj )
         {
-            if( attachmentTypes.Contains(AttachmentType.ALL) ) { return true; }
+            if( attachmentTypes.Contains(AttachmentType.ALL)
+                || obj.attachmentTypes.Contains(AttachmentType.ALL) ) { return true; }
             AttachmentType[] objectAttachmentTypes = obj.attachmentTypes.ToArray();
             foreach( AttachmentType type in attachmentTypes ) {
                 foreach( AttachmentType objectType in objectAttachmentTypes ) {
@@ -70,7 +73,7 @@ namespace AdventureDemo
 
         public virtual bool Attach( GameObject obj )
         {
-            if( !CanAttach(obj) ) { return false; }
+            if( CanAttach(obj) != CheckResult.VALID ) { return false; }
 
             attachedObjects.Add(obj);
 
@@ -86,10 +89,14 @@ namespace AdventureDemo
         {
             return attachedObjects.ToArray();
         }
+        public int GetAttachedCount()
+        {
+            return attachedObjects.Count;
+        }
     }
 
     public enum AttachmentType {
-        ALL,
+        ALL, // AttachmentPoints use this to accept anything. Of GameObjects Only the Wayward Will should have this
         HANG,
         WRAP
     }
