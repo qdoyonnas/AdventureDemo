@@ -64,10 +64,10 @@ namespace AdventureDemo
 				}
             }
 
-            ContextMenuHelper.AddContextMenuItem( data.span, "View", delegate { obj.DisplayDescriptivePage(); } );
+            ContextMenuHelper.AddContextMenuItem( data.span, "View", delegate { GameManager.instance.DisplayDescriptivePage(obj); } );
 
             if( !isDefaultSet ) {
-                data.span.MouseLeftButtonUp += delegate { obj.DisplayDescriptivePage(); };
+                data.span.MouseLeftButtonUp += delegate { GameManager.instance.DisplayDescriptivePage(obj); };
             }
 
 			return data;

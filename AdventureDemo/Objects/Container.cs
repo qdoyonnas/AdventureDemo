@@ -166,13 +166,13 @@ namespace AdventureDemo
             return data;
         }
 
-        public override DescriptivePage DisplayDescriptivePage()
+        public override List<DescriptivePageSection> DisplayDescriptivePage()
         {
-            DescriptivePage page = base.DisplayDescriptivePage();
+            List<DescriptivePageSection> sections = base.DisplayDescriptivePage();
             
-            page.AddSection(new ContainerDescriptivePageSection());
+            sections.Add(new ContainerDescriptivePageSection());
 
-            return page;
+            return sections;
         }
 
         public override bool SetActor( Actor actor, PossessionType possession )

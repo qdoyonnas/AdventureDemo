@@ -201,14 +201,12 @@ namespace AdventureDemo
             return data;
         }
 
-        public virtual DescriptivePage DisplayDescriptivePage()
+        public virtual List<DescriptivePageSection> DisplayDescriptivePage()
         {
-            Point mousePosition = WaywardManager.instance.GetMousePosition();
-
-            return GameManager.instance.DisplayDescriptivePage( mousePosition, this, new DescriptivePageSection[] {
+            return new List<DescriptivePageSection> {
                 new GameObjectDescriptivePageSection(),
                 new GameObjectVerbsDescriptivePageSection()
-            });
+            };
         }
     }
 

@@ -87,14 +87,14 @@ namespace AdventureDemo
             return volume;
         }
 
-        public override DescriptivePage DisplayDescriptivePage()
+        public override List<DescriptivePageSection> DisplayDescriptivePage()
         {
-            DescriptivePage page = base.DisplayDescriptivePage();
-            
-            page.AddSection(new PhysicalDescriptivePageSection(), false);
-            page.AddSection(new PhysicalAttachmentDescriptivePageSection());
+            List<DescriptivePageSection> sections = base.DisplayDescriptivePage();
 
-            return page;
+            sections.Add( new PhysicalDescriptivePageSection() );
+            sections.Add( new PhysicalAttachmentDescriptivePageSection() );
+
+            return sections;
         }
         
         public AttachmentPoint[] GetAttachmentPoints()
