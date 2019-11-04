@@ -213,5 +213,32 @@ namespace AdventureDemo
 
             return this;
         }
+
+        public Connection[] GetConnections()
+        {
+            return contents.GetConnections();
+        }
+        public int GetConnectionsCount()
+        {
+            return contents.GetConnectionsCount();
+        }
+
+        public void AddConnection( Connection connection )
+        {
+            contents.AddConnection( connection );
+        }
+        public void AddConnection( Dictionary<string, object> data, bool isTwoWay = true )
+        {
+            contents.AddConnection(data);
+        }
+        public void AddConnection( ContainerAttachmentPoint second, double throughput = 0, bool isTwoWay = true )
+        {
+            contents.AddConnection( second, throughput, isTwoWay );
+        }
+
+        public void RemoveConnection( Connection connection )
+        {
+            contents.RemoveConnection( connection );
+        }
     }
 }

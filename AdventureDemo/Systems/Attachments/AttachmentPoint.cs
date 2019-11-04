@@ -32,6 +32,11 @@ namespace AdventureDemo
 
             Construct( data["parent"] as GameObject, types );
         }
+        public AttachmentPoint( GameObject parent, int quantity, params AttachmentType[] types )
+        {
+            Construct(parent, types);
+            _maxQuantity = quantity;
+        }
         public AttachmentPoint( GameObject parent, params AttachmentType[] types )
         {
             Construct( parent, types );
@@ -96,8 +101,9 @@ namespace AdventureDemo
     }
 
     public enum AttachmentType {
-        ALL, // AttachmentPoints use this to accept anything. Of GameObjects Only the Wayward Will should have this
+        ALL, // AttachmentPoints use this to accept anything. Of GameObjects, only the Wayward Will should have this
         HANG,
-        WRAP
+        WRAP,
+        BODY // XXX: Might be better as derived class
     }
 }

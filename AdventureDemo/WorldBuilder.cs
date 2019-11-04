@@ -83,7 +83,30 @@ namespace AdventureDemo
         {
             Container space = new Container("Deep Space", null, double.PositiveInfinity);
             space.description = "darkness broken up by the dots of lights of distant stars";
-            lastContainer = new Container("spaceship", space.GetContents(), 100000, 150000, 50*10^8);
+            
+            SmallSpaceship(space);
+            
+            //Character playerChar = new Character( "Dirk Casirov", elevator.GetContents(), 65, 150 );
+            //playerChar.description = "a mysterious individual";
+
+            GameManager.instance.player.Control(new WaywardWill(space));
+        }
+
+        // TODO: Separate this to separate files / load from external file
+        void SmallSpaceship(Container container )
+        {
+            lastContainer = new Container("spaceship", container.GetContents(), 10000, 15000, 50*10^6);
+
+            Container hallway = AddRoom( "Hallway", lastContainer, 500 );
+            AddConnectedRoom( "Bridge", 300, "doorway", 100, hallway );
+            AddConnectedRoom( "Cabin", 200, "doorway", 100, hallway );
+            AddConnectedRoom( "Engineering", 400, "doorway", 100, hallway );
+            AddConnectedRoom( "Cargo", 600, "doorway", 100, hallway );
+        }
+
+        void LargeSpaceship(Container container)
+        {
+            lastContainer = new Container("spaceship", container.GetContents(), 100000, 150000, 50*10^8);
             lastContainer.description = "a craft for travelling between the stars with a gleaming metal hull that protects the fragile internals";
 
             Container elevator = AddRoom("Main Elevator", lastContainer, 1500); // TODO: Separate elevator shaft and the elevator itself
@@ -92,11 +115,6 @@ namespace AdventureDemo
             CrewFloorSetup(elevator);
             EngineeringFloorSetup(elevator);
             CargoFloorSetup(elevator);
-            
-            Character playerChar = new Character( "Dirk Casirov", elevator.GetContents(), 65, 150 );
-            playerChar.description = "a mysterious individual";
-
-            GameManager.instance.player.Control(new WaywardWill(space));
         }
 
         void CrewFloorSetup(Container elevator)
@@ -178,6 +196,10 @@ namespace AdventureDemo
         public Container AddConnectedRoom( string name, double volume, string connectionName, double connectionVolume, Container previousRoom, params SpawnList[] spawns )
         {
             Container room = AddRoom( name, lastContainer, volume, spawns );
+            room.AddConnection( new Dictionary<string, object> {
+                { "second", previousRoom.GetContents() }, { "name", connectionName },
+                { "throughput", connectionVolume }
+            });
 
             return room;
         }

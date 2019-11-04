@@ -36,6 +36,23 @@ namespace AdventureDemo
 
         public override void DisplayContents()
         {
+            foreach( Connection connection in container.GetConnections() ) {
+                Grid objEntry = GameManager.instance.GetResource<Grid>("AttachmentObjectEntry");
+
+                connections.Children.Add( objEntry );
+
+                TextBlock text = Utilities.FindNode<TextBlock>( objEntry, "Data1" );
+                if( text != null ) {
+                    text.Inlines.Add( observer.Observe(connection, "name upper").span );
+                }
+
+                text = Utilities.FindNode<TextBlock>( objEntry, "Data2" );
+                if( text != null ) {
+                    GameObject connected = connection.secondContainer.GetParent();
+                    text.Inlines.Add( observer.Observe( connected, "name upper").span );
+                }
+            }
+
             if( connections.Children.Count == 0 ) {
                 connections.Children.Add( WaywardTextParser.ParseAsBlock("<i>none</i>") );
             }

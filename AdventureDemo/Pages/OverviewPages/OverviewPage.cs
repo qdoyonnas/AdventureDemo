@@ -126,8 +126,36 @@ namespace AdventureDemo
                 }
             }
 
+            FetchConnections(subData, physicalObj);
+
             if( subData.Children.Count == 0 ) {
                 subData.Visibility = Visibility.Hidden;
+            }
+        }
+        protected virtual void FetchConnections( StackPanel subData, Physical physicalObj )
+        {
+            Container container = physicalObj as Container;
+            if( container == null ) { return; }
+
+            foreach( Connection connection in container.GetConnections() ) {
+                FrameworkElement entry = GameManager.instance.GetResource<FrameworkElement>("OverviewEntry");
+                subData.Children.Add( entry );
+
+                TextBlock text = Utilities.FindNode<TextBlock>( entry, "Data1");
+                if( text != null ) {
+                    text.Inlines.Add( observer.Observe(connection, "name upper").span );
+                }
+
+                text = Utilities.FindNode<TextBlock>( entry, "Data2");
+                if( text != null ) {
+                    GameObject connected = connection.secondContainer.GetParent();
+                    text.Inlines.Add( observer.Observe( connected, "name upper").span );
+                }
+
+                text = Utilities.FindNode<TextBlock>( entry, "Data3");
+                if( text != null ) {
+                    text.Inlines.Add( connection.throughput.ToString() + " L" );
+                }
             }
         }
 
