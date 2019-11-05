@@ -16,7 +16,7 @@ namespace AdventureDemo
         public string color;
 
         public Material( string name, double weight, string color = "#ffffff" )
-            : base( name, null )
+            : base( name )
         {
             weightPerLiter = weight;
             this.color = color;

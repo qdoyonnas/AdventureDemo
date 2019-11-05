@@ -46,19 +46,19 @@ namespace AdventureDemo
             }
         }
         public Connection( ContainerAttachmentPoint parent )
-            : base( "opening", null )
+            : base( "opening" )
         {
             Construct( parent, null, 0 );
             description = "an opening";
         }
         public Connection( ContainerAttachmentPoint parent, ContainerAttachmentPoint second )
-            : base( "opening", null )
+            : base( "opening" )
         {
             Construct( parent, second, 0 );
             description = "an opening";
         }
         public Connection( ContainerAttachmentPoint parent, ContainerAttachmentPoint second, double throughput )
-            : base( "opening", null )
+            : base( "opening" )
         {
             Construct( parent, second, throughput );
             description = "an opening";

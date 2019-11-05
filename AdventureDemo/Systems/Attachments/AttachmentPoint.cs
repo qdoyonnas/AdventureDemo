@@ -78,9 +78,14 @@ namespace AdventureDemo
 
         public virtual bool Attach( GameObject obj )
         {
+            if( obj == null ) { return false; }
+            if( attachedObjects.Contains(obj) ) { return true; }
+
             if( CanAttach(obj) != CheckResult.VALID ) { return false; }
 
+            if( obj.container != null && !obj.container.Remove(obj) ) { return false; }
             attachedObjects.Add(obj);
+            obj.SetContainer(this);
 
             return true;
         }
@@ -97,6 +102,10 @@ namespace AdventureDemo
         public virtual GameObject GetAttached( int i )
         {
             return attachedObjects[i];
+        }
+        public virtual bool Contains( GameObject obj )
+        {
+            return attachedObjects.Contains(obj);
         }
         public int GetAttachedCount()
         {

@@ -33,6 +33,7 @@ namespace AdventureDemo
         {
             bool canObserve = observer.CanObserve(page.target);
 
+            // TODO: Route this through observer knowledge instead
             weightText.Inlines.Add( canObserve ? page.target.GetData("weight").span : WaywardTextParser.Parse("???") );
             volumeText.Inlines.Add( canObserve ? page.target.GetData("volume").span : WaywardTextParser.Parse("???") );
 

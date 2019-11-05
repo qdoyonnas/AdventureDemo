@@ -9,14 +9,9 @@ namespace AdventureDemo
     class WaywardWill : Physical
     {
         AttachmentPoint contents;
-
-        public WaywardWill( Container container )
-            : base( "Wayward Will", container )
-        {
-            Construct();
-        }
-        public WaywardWill( AttachmentPoint container )
-            : base( "Wayward Will", container )
+        
+        public WaywardWill()
+            : base( "Wayward Will" )
         {
             Construct();
         }

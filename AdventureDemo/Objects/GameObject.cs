@@ -48,24 +48,16 @@ namespace AdventureDemo
         // Constructors
         public GameObject( Dictionary<string, object> data )
         {
-            AttachmentPoint attachment = null;
-            if( data.ContainsKey("container") ) {
-                attachment = data["container"] as AttachmentPoint;
-                if( attachment == null ) {
-                    Container container = data["container"] as Container;
-                    attachment = container.GetContents();
-                }
-            }
 
-            Construct(data.ContainsKey("name") ? (string)data["name"] : "Unknown Object", attachment);
+            Construct(data.ContainsKey("name") ? (string)data["name"] : "Unknown Object");
 
             description = data.ContainsKey("description") ? (string)data["discription"] : "a strange object";
         }
-        public GameObject( string name, AttachmentPoint container )
+        public GameObject( string name )
         {
-            Construct(name, container);
+            Construct(name);
         }
-        void Construct( string name, AttachmentPoint container )
+        void Construct( string name )
         {
             this.name = name;
             this.description = "a strange object";
@@ -80,35 +72,13 @@ namespace AdventureDemo
             verbs = new Dictionary<PossessionType, Verb[]>();
 
             _attachmentTypes = new List<AttachmentType>();
-
-            if( !SetContainer(container) ) {
-                throw new System.ArgumentException($"GameObject could not be attached to container '{container.name}'");
-            }
         }
 
         public virtual bool SetContainer( AttachmentPoint newContainer )
         {
-            if( newContainer == container ) { return true; }
+            if( !newContainer.Contains(this) ) { return false; }
 
-            if( newContainer == null ) {
-                if( _container.Remove(this) ) {
-                    _container = null;
-                }
-                return true;
-            }
-
-            if( newContainer.CanAttach(this) != CheckResult.VALID ) { return false; }
-
-            if( _container == null || _container.Remove(this) ) {
-                if( newContainer.Attach(this) ) {
-                    _container = newContainer;
-                } else {
-                    if( _container != null ) { _container.Attach(this); }
-                    return false;
-                }
-            }
-
-            WaywardManager.instance.Update(); // XXX: Not where this should be // TODO: Game requires proper update sequence
+            _container = newContainer;
             return true;
         }
         /// <summary>

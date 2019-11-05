@@ -9,7 +9,7 @@ namespace AdventureDemo
     class BodyAttachmentPoint : PhysicalAttachmentPoint
     {
         public BodyAttachmentPoint( GameObject parent )
-            : base( parent, 1, AttachmentType.BODY )
+            : base( parent, -1, 1, AttachmentType.BODY )
         {
         }
     }

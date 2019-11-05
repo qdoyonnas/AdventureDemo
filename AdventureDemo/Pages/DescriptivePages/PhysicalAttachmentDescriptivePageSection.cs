@@ -29,6 +29,7 @@ namespace AdventureDemo
 
         public override void DisplayContents()
         {
+            // XXX: This bypasses the observer rule
             foreach( AttachmentPoint point in physicalTarget.GetAttachmentPoints() ) {
                 StackPanel entry = GameManager.instance.GetResource<StackPanel>("DescriptiveAttachmentEntry");
                 attachmentsPanel.Children.Add( entry );

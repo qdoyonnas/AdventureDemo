@@ -36,18 +36,13 @@ namespace AdventureDemo
                 data.ContainsKey("materials") ? data["materials"] as KeyValuePair<Material, double>[] : new KeyValuePair<Material, double>[0]
             );
         }
-        public Physical( string name, Container container )
-            : base( name, container.GetContents() )
+        public Physical( string name )
+            : base(name)
         {
             Construct(0, new KeyValuePair<Material, double>[0]);
         }
-        public Physical( string name, AttachmentPoint container )
-            : base(name, container)
-        {
-            Construct(0, new KeyValuePair<Material, double>[0]);
-        }
-        public Physical( string name, AttachmentPoint container, double volume, params KeyValuePair<Material, double>[] mats )
-            : base(name, container)
+        public Physical( string name, double volume, params KeyValuePair<Material, double>[] mats )
+            : base(name)
         {
             Construct(volume, mats);
         }

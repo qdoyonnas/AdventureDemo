@@ -57,13 +57,13 @@ namespace AdventureDemo
                 }
             }
         }
-        public Container( string name, AttachmentPoint container, double innerVolume ) 
-            : base(name, container)
+        public Container( string name, double innerVolume ) 
+            : base(name)
         {
             Construct(innerVolume);
         }
-        public Container( string name, AttachmentPoint container, double innerVolume, double totalVolume, params KeyValuePair<Material, double>[] mats )
-            : base(name, container, totalVolume, mats)
+        public Container( string name, double innerVolume, double totalVolume, params KeyValuePair<Material, double>[] mats )
+            : base(name, totalVolume, mats)
         {
             Construct(innerVolume);
         }

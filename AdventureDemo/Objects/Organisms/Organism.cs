@@ -20,13 +20,13 @@ namespace AdventureDemo
         {
             Construct();
         }
-        public Organism( string name, AttachmentPoint container )
-            : base( name, container )
+        public Organism( string name )
+            : base( name )
         {
             Construct();
         }
-        public Organism( string name, AttachmentPoint container, params KeyValuePair<Material, double>[] mats )
-            : base( name, container, 0, mats )
+        public Organism( string name, params KeyValuePair<Material, double>[] mats )
+            : base( name, 0, mats )
         {
             Construct();
         }
@@ -70,9 +70,16 @@ namespace AdventureDemo
         {
             return _body.GetAttached(0) as BodyPart;
         }
+        public BodyPart GetBody(string path)
+        {
+            if( _body == null ) { return null; }
+            if( string.IsNullOrEmpty(path) ) { return GetBody(); }
+
+            return null;
+        }
         public BodyPart AddBodyPart( BodyPart parent, BodyPart part )
         {
-            if( _body != null ) { return null; }
+            if( _body == null ) { return null; }
 
             if( parent == null ) {
                 _body.Attach( part );
@@ -81,6 +88,23 @@ namespace AdventureDemo
             }
 
             return part;
+        }
+        public BodyPart AddBodyPart( string path, BodyPart part )
+        {
+            BodyPart parent = GetBody(path);
+            if( parent == null ) { return null; }
+
+            return AddBodyPart(parent, part);
+        }
+
+
+        public override List<DescriptivePageSection> DisplayDescriptivePage()
+        {
+            List<DescriptivePageSection> sections = base.DisplayDescriptivePage();
+
+            sections.Add( new OrganismDescriptivePageSection() );
+
+            return sections;
         }
     }
 }

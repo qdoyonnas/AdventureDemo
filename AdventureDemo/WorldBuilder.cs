@@ -99,25 +99,29 @@ namespace AdventureDemo
 
         public void BuildWorld()
         {
-            Container space = new Container("Deep Space", null, double.PositiveInfinity);
+            Container space = new Container("Deep Space", double.PositiveInfinity);
             space.description = "darkness broken up by the dots of lights of distant stars";
             GameManager.instance.AddRoot(space);
             
             SmallSpaceship(space);
             
-            Human playerChar = new Human( "Dirk Casirov", FindRoom("spaceship/hallway/cabin") );
+            Human playerChar = new Human( "Dirk Casirov" );
             playerChar.description = "a mysterious individual";
+            FindRoom("spaceship/hallway/cabin").GetContents().Attach(playerChar);
 
-            GameManager.instance.player.Control(new WaywardWill(space));
+            WaywardWill will = new WaywardWill();
+            space.GetContents().Attach(will);
+            GameManager.instance.player.Control(will);
         }
 
         // TODO: Separate this to separate files / load from external file
         void SmallSpaceship(Container container )
         {
-            lastContainer = new Container("spaceship", container.GetContents(), 10000, 15000, 
+            lastContainer = new Container("spaceship", 10000, 15000, 
                 Utilities.Pair<Material, double>(materials["steel"], 3),
                 Utilities.Pair<Material, double>(materials["glass"], 1)
             );
+            container.GetContents().Attach(lastContainer);
 
             Container hallway = AddRoom( "hallway", lastContainer, 500 );
             AddConnectedRoom( "bridge", 300, "doorway", 100, hallway );
@@ -128,7 +132,7 @@ namespace AdventureDemo
 
         void LargeSpaceship(Container container)
         {
-            lastContainer = new Container("spaceship", container.GetContents(), 100000, 150000, new KeyValuePair<Material, double>(materials["steel"], 1));
+            lastContainer = new Container("spaceship", 100000, 150000, new KeyValuePair<Material, double>(materials["steel"], 1));
             lastContainer.description = "a craft for travelling between the stars with a gleaming metal hull that protects the fragile internals";
 
             Container elevator = AddRoom("Main Elevator", lastContainer, 1500); // TODO: Separate elevator shaft and the elevator itself
@@ -216,7 +220,8 @@ namespace AdventureDemo
 
         public Container AddRoom( string name, Container container, double volume, params SpawnList[] spawns)
         {
-            lastRoom = new Container( name, container.GetContents(), volume, volume + 100, Utilities.Pair<Material, double>(materials["steel"], 1) );
+            lastRoom = new Container( name, volume, volume + 100, Utilities.Pair<Material, double>(materials["steel"], 1) );
+            container.GetContents().Attach( lastRoom );
             if( spawns != null ) {
                 lastRoom.SpawnContents(spawns, 1, true);
             }

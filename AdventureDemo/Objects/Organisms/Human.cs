@@ -14,16 +14,21 @@ namespace AdventureDemo
         {
             Construct();
         }
-        public Human( string name, Container container )
-            : base(name, container.GetContents())
+        public Human( string name )
+            : base(name)
         {
             Construct();
         }
 
         void Construct()
         {
-            Material flesh = GameManager.instance.world.GetMaterial("Flesh");
-            AddBodyPart(null, new BodyPart(this, "Torso", 40, Utilities.Pair<Material, double>(flesh, 1)) );
+            Material flesh = GameManager.instance.world.GetMaterial("flesh");
+            if( flesh == null ) { return; }
+
+            AddBodyPart(null, new BodyPart(this, "head", 2, Utilities.Pair<Material, double>(flesh, 1)) )
+                .AddBodyAttachmentPoint();
+                
+            AddBodyPart("head", new BodyPart(this, "torso", 40, Utilities.Pair<Material, double>(flesh, 1)) );
         }
     }
 }

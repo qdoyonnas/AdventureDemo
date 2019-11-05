@@ -67,6 +67,7 @@
     <Compile Include="Objects\Organisms\Organism.cs" />
     <Compile Include="Objects\WaywardWill.cs" />
     <Compile Include="Pages\DescriptivePages\GameObjectVerbsDescriptivePageSection.cs" />
+    <Compile Include="Pages\DescriptivePages\OrganismDescriptivePageSection.cs" />
     <Compile Include="Pages\DescriptivePages\PhysicalAttachmentDescriptivePageSection.cs" />
     <Compile Include="Pages\VerbosePage.cs" />
     <Compile Include="Systems\Attachments\AttachmentPoint.cs" />
@@ -81,7 +82,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameManager.cs" />
-    <Compile Include="Objects\Character.cs" />
     <Compile Include="Objects\Container.cs" />
     <Compile Include="Objects\GameObject.cs" />
     <Compile Include="Systems\Verbs\IVerbSuggest.cs" />

@@ -8,8 +8,8 @@ namespace AdventureDemo
 {
     class BodyPart : Physical
     {
-        AttachmentPoint _bodyParts;
-        public AttachmentPoint bodyParts {
+        List<BodyAttachmentPoint> _bodyParts;
+        public List<BodyAttachmentPoint> bodyParts {
             get {
                 return _bodyParts;
             }
@@ -21,7 +21,7 @@ namespace AdventureDemo
             Construct();
         }
         public BodyPart( Organism organism, string name, double volume, params KeyValuePair<Material, double>[] mats )
-            : base( name, organism.bodyAttachmentPoint, volume, mats )
+            : base( name, volume, mats )
         {
             Construct();
         }
@@ -29,15 +29,17 @@ namespace AdventureDemo
         {
             attachmentTypes.Add(AttachmentType.BODY);
 
-            _bodyParts = new AttachmentPoint(this, -1, AttachmentType.BODY);
+            _bodyParts = new List<BodyAttachmentPoint>();
         }
 
         public override List<Verb> CollectVerbs()
         {
             List<Verb> collectedVerbs = base.CollectVerbs();
 
-            foreach( GameObject obj in _bodyParts.GetAttached() ) {
-                collectedVerbs.AddRange( obj.CollectVerbs() );
+            foreach( BodyAttachmentPoint point in _bodyParts ) {
+                foreach( GameObject obj in point.GetAttached() ) {
+                    collectedVerbs.AddRange( obj.CollectVerbs() );
+                }
             }
 
             return collectedVerbs;
@@ -46,14 +48,27 @@ namespace AdventureDemo
         {
             base.CollectVerbs(actor, possession);
 
-            foreach( GameObject obj in _bodyParts.GetAttached() ) {
-                obj.CollectVerbs();
+            foreach( BodyAttachmentPoint point in _bodyParts ) {
+                foreach( GameObject obj in point.GetAttached() ) {
+                    obj.CollectVerbs(actor, possession);
+                }
             }
         }
 
+        public BodyAttachmentPoint AddBodyAttachmentPoint()
+        {
+            BodyAttachmentPoint point = new BodyAttachmentPoint(this);
+            _bodyParts.Add( point );
+
+            return point;
+        }
         public void AddBodyPart( BodyPart part )
         {
-            _bodyParts.Attach(part);
+            foreach( BodyAttachmentPoint point in _bodyParts ) {
+                if( point.CanAttach(part) == CheckResult.VALID ) {
+                    point.Attach(part);
+                }
+            }
         }
     }
 }
