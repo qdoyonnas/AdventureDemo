@@ -62,12 +62,12 @@ namespace AdventureDemo
                     }
                     verb.Display(this, obj, data.span);
 				}
-            }
 
-            ContextMenuHelper.AddContextMenuItem( data.span, "View", delegate { GameManager.instance.DisplayDescriptivePage(obj); } );
+                ContextMenuHelper.AddContextMenuItem( data.span, "View", delegate { GameManager.instance.DisplayDescriptivePage(obj); } );
 
-            if( !isDefaultSet ) {
-                data.span.MouseLeftButtonUp += delegate { GameManager.instance.DisplayDescriptivePage(obj); };
+                if( !isDefaultSet ) {
+                    data.span.MouseLeftButtonUp += delegate { GameManager.instance.DisplayDescriptivePage(obj); };
+                }
             }
 
 			return data;

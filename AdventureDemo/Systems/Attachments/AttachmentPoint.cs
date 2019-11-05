@@ -90,9 +90,13 @@ namespace AdventureDemo
             return true;
         }
 
-        public GameObject[] GetAttached()
+        public virtual GameObject[] GetAttached()
         {
             return attachedObjects.ToArray();
+        }
+        public virtual GameObject GetAttached( int i )
+        {
+            return attachedObjects[i];
         }
         public int GetAttachedCount()
         {

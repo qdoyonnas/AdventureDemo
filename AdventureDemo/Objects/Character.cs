@@ -21,13 +21,8 @@ namespace AdventureDemo
         {
             Construct();
         }
-        public Character( string name, AttachmentPoint container, double totalVolume )
-            : base(name, container, totalVolume)
-        {
-            Construct();
-        }
-        public Character( string name, AttachmentPoint container, double totalVolume, double weight )
-            : base(name, container, totalVolume, weight)
+        public Character( string name, AttachmentPoint container, double totalVolume, params KeyValuePair<Material, double>[] mats )
+            : base(name, container, totalVolume, mats)
         {
             Construct();
         }

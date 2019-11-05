@@ -43,9 +43,15 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
                 <TextBlock Grid.Column="0">Volume: <TextBlock Margin="0" Name="Volume"></TextBlock></TextBlock>
                 <TextBlock Grid.Column="1">Weight: <TextBlock Margin="0" Name="Weight"></TextBlock></TextBlock>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Name="Materials"></TextBlock>
             </Grid>
         </ScrollViewer>
     </Border>

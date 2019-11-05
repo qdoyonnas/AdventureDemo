@@ -28,6 +28,17 @@ namespace AdventureDemo
             }
         }
 
+        public new double weight {
+            get {
+                double totalWeight = 0;
+                foreach( KeyValuePair<Material, double> material in materials ) {
+                    totalWeight += material.Key.GetWeight( (volume - innerVolume) * material.Value );
+                }
+
+                return totalWeight;
+            }
+        }
+
         protected ContainerAttachmentPoint contents;
 
         // TODO: This might be a good place to implement staggered spawn lists (see WorldBuilder.cs)
@@ -51,13 +62,8 @@ namespace AdventureDemo
         {
             Construct(innerVolume);
         }
-        public Container( string name, AttachmentPoint container, double innerVolume, double totalVolume )
-            : base(name, container, totalVolume)
-        {
-            Construct(innerVolume);
-        }
-        public Container( string name, AttachmentPoint container, double innerVolume, double totalVolume, double weight )
-            : base(name, container, totalVolume, weight)
+        public Container( string name, AttachmentPoint container, double innerVolume, double totalVolume, params KeyValuePair<Material, double>[] mats )
+            : base(name, container, totalVolume, mats)
         {
             Construct(innerVolume);
         }
@@ -107,9 +113,17 @@ namespace AdventureDemo
             }
         }
 
-        public AttachmentPoint GetContents()
+        public ContainerAttachmentPoint GetContents()
         {
             return contents;
+        }
+        public int GetContentCount()
+        {
+            return contents.GetAttachedCount();
+        }
+        public Physical GetContent(int i)
+        {
+            return contents.GetAttachedAsPhysical(i);
         }
 
         public override double GetWeight()

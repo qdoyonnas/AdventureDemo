@@ -65,10 +65,6 @@ namespace AdventureDemo
         {
             Construct(name, container);
         }
-        public GameObject( string name, Container container )
-        {
-            Construct(name, container.GetContents());
-        }
         void Construct( string name, AttachmentPoint container )
         {
             this.name = name;
@@ -83,18 +79,24 @@ namespace AdventureDemo
 
             verbs = new Dictionary<PossessionType, Verb[]>();
 
-            if( container != null ) {
-                SetContainer(container);
-            } else {
-                GameManager.instance.AddRoot(this);
-            }
-
             _attachmentTypes = new List<AttachmentType>();
+
+            if( !SetContainer(container) ) {
+                throw new System.ArgumentException($"GameObject could not be attached to container '{container.name}'");
+            }
         }
 
         public virtual bool SetContainer( AttachmentPoint newContainer )
         {
             if( newContainer == container ) { return true; }
+
+            if( newContainer == null ) {
+                if( _container.Remove(this) ) {
+                    _container = null;
+                }
+                return true;
+            }
+
             if( newContainer.CanAttach(this) != CheckResult.VALID ) { return false; }
 
             if( _container == null || _container.Remove(this) ) {
@@ -217,8 +219,8 @@ namespace AdventureDemo
 
         public GameObjectData()
         {
-            text = "--";
-            span = new Span( new Run( text ));
+            text = "";
+            span = new Span();
         }
 
         public void SetSpan( string text )

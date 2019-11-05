@@ -61,13 +61,16 @@
       <DependentUpon>AdventureApp.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Objects\Material.cs" />
     <Compile Include="Objects\Organisms\BodyPart.cs" />
+    <Compile Include="Objects\Organisms\Human.cs" />
     <Compile Include="Objects\Organisms\Organism.cs" />
     <Compile Include="Objects\WaywardWill.cs" />
     <Compile Include="Pages\DescriptivePages\GameObjectVerbsDescriptivePageSection.cs" />
     <Compile Include="Pages\DescriptivePages\PhysicalAttachmentDescriptivePageSection.cs" />
     <Compile Include="Pages\VerbosePage.cs" />
     <Compile Include="Systems\Attachments\AttachmentPoint.cs" />
+    <Compile Include="Systems\Attachments\BodyAttachmentPointcs.cs" />
     <Compile Include="Systems\Attachments\ContainerAttachmentPoint.cs" />
     <Compile Include="Systems\Attachments\PhysicalAttachmentPoint.cs" />
     <Compile Include="Objects\Connection.cs" />

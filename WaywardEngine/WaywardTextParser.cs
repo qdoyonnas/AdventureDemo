@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace WaywardEngine
@@ -78,37 +79,56 @@ namespace WaywardEngine
         {
             Span span = new Span();
 
-            switch( id.ToLower() ) {
-                case "red":
-                    span.Foreground = Brushes.Red;
-                    break;
-                case "green":
-                    span.Foreground = Brushes.Green;
-                    break;
-                case "blue":
-                    span.Foreground = Brushes.Blue;
-                    break;
-                case "yellow":
-                    span.Foreground = Brushes.Yellow;
-                    break;
-                case "purple":
-                    span.Foreground = Brushes.Purple;
-                    break;
-                case "brown":
-                    span.Foreground = Brushes.Brown;
-                    break;
-                case "black":
-                    span.Foreground = Brushes.Black;
-                    break;
-                case "gray":
-                    span.Foreground = Brushes.Gray;
-                    break;
-                case "white":
-                    span.Foreground = Brushes.White;
-                    break;
+            if( id[0] == '#' ) {
+                span.Foreground = ColorFromString(id);
+            } else {
+                switch( id.ToLower() ) {
+                    case "red":
+                        span.Foreground = Brushes.Red;
+                        break;
+                    case "green":
+                        span.Foreground = Brushes.Green;
+                        break;
+                    case "blue":
+                        span.Foreground = Brushes.Blue;
+                        break;
+                    case "yellow":
+                        span.Foreground = Brushes.Yellow;
+                        break;
+                    case "purple":
+                        span.Foreground = Brushes.Purple;
+                        break;
+                    case "brown":
+                        span.Foreground = Brushes.Brown;
+                        break;
+                    case "black":
+                        span.Foreground = Brushes.Black;
+                        break;
+                    case "gray":
+                        span.Foreground = Brushes.Gray;
+                        break;
+                    case "white":
+                        span.Foreground = Brushes.White;
+                        break;
+                }
             }
 
             return span;
+        }
+        /// <summary>
+        /// Creates a SolidColorBrush from a hex string with format "#ffffff".
+        /// </summary>
+        /// <param name="hex">Color in hex format "#ffffff".</param>
+        /// <returns></returns>
+        public static SolidColorBrush ColorFromString( string hex )
+        {
+            if( hex.Length != 7 ) { return Brushes.White; }
+
+            byte r = byte.Parse( hex.Substring(1, 2), NumberStyles.HexNumber );
+            byte g = byte.Parse( hex.Substring(3, 2), NumberStyles.HexNumber );
+            byte b = byte.Parse( hex.Substring(5, 2), NumberStyles.HexNumber );
+
+            return new SolidColorBrush( Color.FromRgb(r, g, b) );
         }
 
         /// <summary>

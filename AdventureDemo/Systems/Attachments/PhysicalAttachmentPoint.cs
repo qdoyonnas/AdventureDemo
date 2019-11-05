@@ -48,6 +48,18 @@ namespace AdventureDemo
         {
             _capacity = capacity;
         }
+        public PhysicalAttachmentPoint( GameObject parent, double capacity, int quantity, params AttachmentType[] types )
+            : base(parent, quantity, types)
+        {
+            _capacity = capacity;
+        }
+
+        public Physical GetAttachedAsPhysical( int i )
+        {
+            if( i < 0 || i >= attachedObjects.Count ) { return null; }
+
+            return attachedObjects[i] as Physical;
+        }
 
         public override CheckResult CanAttach( GameObject obj )
         {

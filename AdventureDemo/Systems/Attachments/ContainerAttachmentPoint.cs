@@ -41,16 +41,16 @@ namespace AdventureDemo
         }
         public void AddConnection( Dictionary<string, object> data, bool isTwoWay = true )
         {
-            if( !data.ContainsKey("container") ) {
-                data.Add("container", this);
+            if( !data.ContainsKey("parent") ) {
+                data.Add("parent", this);
             } else {
-                data["container"] = this;
+                data["parent"] = this;
             }
             connections.Add( new Connection(data) );
 
             if( isTwoWay && data.ContainsKey("second") ) {
                 ContainerAttachmentPoint second = data["second"] as ContainerAttachmentPoint;
-                data["container"] = second;
+                data["parent"] = second;
                 data["second"] = this;
 
                 second.AddConnection( new Connection(data) );

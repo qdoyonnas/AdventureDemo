@@ -8,10 +8,10 @@ namespace AdventureDemo
 {
     class Organism : Physical
     {
-        AttachmentPoint _body;
-        public AttachmentPoint body {
-            get {
-                return body;
+        BodyAttachmentPoint _body;
+        public BodyAttachmentPoint bodyAttachmentPoint {
+             get {
+                return _body;
             }
         }
 
@@ -25,24 +25,56 @@ namespace AdventureDemo
         {
             Construct();
         }
-        public Organism( string name, AttachmentPoint container, double volume )
-            : base( name, container, volume )
-        {
-            Construct();
-        }
-        public Organism( string name, AttachmentPoint container, double volume, double weight )
-            : base( name, container, volume, weight )
+        public Organism( string name, AttachmentPoint container, params KeyValuePair<Material, double>[] mats )
+            : base( name, container, 0, mats )
         {
             Construct();
         }
         void Construct()
         {
-            _body = new AttachmentPoint(this, 1, AttachmentType.BODY);
+            _body = new BodyAttachmentPoint(this);
         }
 
+        public override double GetVolume()
+        {
+            if( _body == null ) { return 0; }
+            Physical body = _body.GetAttachedAsPhysical(0);
+
+            if( body != null ) {
+                return body.GetVolume();
+            }
+
+            return 0;
+        }
+
+        public override List<Verb> CollectVerbs()
+        {
+            List<Verb> collectedVerbs = base.CollectVerbs();
+
+            foreach( GameObject part in _body.GetAttached() ) {
+                collectedVerbs.AddRange( part.CollectVerbs() );
+            }
+
+            return collectedVerbs;
+        }
+        public override void CollectVerbs( Actor actor, PossessionType possession )
+        {
+            base.CollectVerbs(actor, possession);
+
+            foreach( GameObject part in _body.GetAttached() ) {
+                part.CollectVerbs( actor, possession );
+            }
+        }
+
+        public BodyPart GetBody()
+        {
+            return _body.GetAttached(0) as BodyPart;
+        }
         public BodyPart AddBodyPart( BodyPart parent, BodyPart part )
         {
-            if( parent == null && _body == null ) {
+            if( _body != null ) { return null; }
+
+            if( parent == null ) {
                 _body.Attach( part );
             } else {
                 parent.AddBodyPart( part );

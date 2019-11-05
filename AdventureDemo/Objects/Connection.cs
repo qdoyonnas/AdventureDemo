@@ -33,36 +33,37 @@ namespace AdventureDemo
         public Connection( Dictionary<string, object> data )
             : base(data)
         {
-            if( !data.ContainsKey("container") ) { throw new System.ArgumentException("Connection requires a parent container"); }
+            if( !data.ContainsKey("parent") ) { throw new System.ArgumentException("Connection requires a parent container"); }
+            ContainerAttachmentPoint parent = data["parent"] as ContainerAttachmentPoint;
 
             ContainerAttachmentPoint second = data.ContainsKey("second") ? data["second"] as ContainerAttachmentPoint : null;
             double volume = data.ContainsKey("throughput") ? (double)data["throughput"] : 0;
 
-            Construct( second, volume );
+            Construct( parent, second, volume );
 
             if( !data.ContainsKey("description") ) {
                 description = "an opening";
             }
         }
         public Connection( ContainerAttachmentPoint parent )
-            : base( "opening", parent )
+            : base( "opening", null )
         {
-            Construct( null, 0 );
+            Construct( parent, null, 0 );
             description = "an opening";
         }
         public Connection( ContainerAttachmentPoint parent, ContainerAttachmentPoint second )
-            : base( "opening", parent )
+            : base( "opening", null )
         {
-            Construct( second, 0 );
+            Construct( parent, second, 0 );
             description = "an opening";
         }
         public Connection( ContainerAttachmentPoint parent, ContainerAttachmentPoint second, double throughput )
-            : base( "opening", parent )
+            : base( "opening", null )
         {
-            Construct( second, throughput );
+            Construct( parent, second, throughput );
             description = "an opening";
         }
-        void Construct( ContainerAttachmentPoint second, double throughput )
+        void Construct( ContainerAttachmentPoint parent, ContainerAttachmentPoint second, double throughput )
         {
             this._throughput = throughput;
 
