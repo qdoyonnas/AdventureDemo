@@ -126,15 +126,18 @@ namespace AdventureDemo
             return contents.GetAttachedAsPhysical(i);
         }
 
-        public override double GetWeight()
+        /*public override double GetWeight(bool total = true)
         {
-            double totalWeight = weight;
-            foreach( Physical physical in contents.GetAttachedPhysicals() ) {
-                totalWeight += physical.GetWeight();
+            double totalWeight = base.GetWeight(total);
+
+            if( total ) {
+                foreach( Physical physical in contents.GetAttachedPhysicals() ) {
+                    totalWeight += physical.GetWeight();
+                }
             }
 
             return totalWeight;
-        }
+        }*/
         
         public virtual GameObjectData GetDescriptiveInnerVolume( string[] parameters )
         {

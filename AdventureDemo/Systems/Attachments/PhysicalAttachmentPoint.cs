@@ -34,12 +34,17 @@ namespace AdventureDemo
             }
         }
         
-        protected bool isLoose = false; // used to calculate certain physics rules (objects falling off tables when moved etc)
+        protected bool _isExternal = false;
+        public bool isExternal {
+            get {
+                return _isExternal;
+            }
+        }
 
         public PhysicalAttachmentPoint( Dictionary<string, object> data )
             : base( data )
         {
-            isLoose = data.ContainsKey("loose") ? (bool)data["loose"] : false;
+            _isExternal = data.ContainsKey("external") ? (bool)data["external"] : false;
 
             _capacity = data.ContainsKey("capacity") ? (double)data["capacity"] : 0;
         }
@@ -59,6 +64,15 @@ namespace AdventureDemo
             if( i < 0 || i >= attachedObjects.Count ) { return null; }
 
             return attachedObjects[i] as Physical;
+        }
+        public Physical[] GetAttachedAsPhysical()
+        {
+            Physical[] physicals = new Physical[attachedObjects.Count];
+            for( int i = 0; i < attachedObjects.Count; i++ ) {
+                physicals[i] = attachedObjects[i] as Physical;
+            }
+
+            return physicals;
         }
 
         public override CheckResult CanAttach( GameObject obj )

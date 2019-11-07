@@ -23,7 +23,7 @@ namespace AdventureDemo
             }
         }
 
-        protected List<AttachmentPoint> attachmentPoints;
+        protected List<PhysicalAttachmentPoint> attachmentPoints;
 
         public Dictionary<Material, double> materials;
         protected double totalParts = 0;
@@ -50,7 +50,7 @@ namespace AdventureDemo
         {
             this.description = "a solid object";
 
-            attachmentPoints = new List<AttachmentPoint>();
+            attachmentPoints = new List<PhysicalAttachmentPoint>();
 
             objectData["weight"] = GetDescriptiveWeight;
             objectData["volume"] = GetDescriptiveVolume;
@@ -73,7 +73,7 @@ namespace AdventureDemo
 
             foreach( AttachmentPoint point in attachmentPoints ) {
                 foreach( GameObject obj in point.GetAttached() ) {
-                    collectedVerbs.AddRange( obj.CollectVerbs() );
+                    collectedVerbs.AddRange( obj.CollectVerbs(PossessionType.CONTENT) );
                 }
             }
 
@@ -92,8 +92,10 @@ namespace AdventureDemo
 
         public virtual GameObjectData GetDescriptiveWeight( string[] parameters )
         {
+            bool getTotal = !(parameters.Length > 0 && parameters[0] == "partial");
+
             GameObjectData data = new GameObjectData();
-            data.text = $"{GetWeight().ToString()} pounds";
+            data.text = $"{GetWeight(getTotal).ToString()} lbs";
 
             data.SetSpan( data.text );
 
@@ -101,9 +103,11 @@ namespace AdventureDemo
         }
         public virtual GameObjectData GetDescriptiveVolume( string[] parameters )
         {
+            bool getTotal = !(parameters.Length > 0 && parameters[0] == "partial");
+
             GameObjectData data = new GameObjectData();
 
-            data.text = $"{GetVolume().ToString()} L";
+            data.text = $"{GetVolume(getTotal).ToString()} L";
             data.SetSpan( data.text );
 
             return data;
@@ -144,13 +148,35 @@ namespace AdventureDemo
             ) );
         }
 
-        public virtual double GetWeight()
+        public virtual double GetWeight( bool total = true )
         {
-            return weight;
+            double totalWeight = weight;
+
+            if( total ) {
+                foreach( PhysicalAttachmentPoint point in attachmentPoints ) {
+                    foreach( Physical obj in point.GetAttachedAsPhysical() ) {
+                        totalWeight += obj.GetWeight();
+                    }
+                }
+            }
+
+            return totalWeight;
         }
-        public virtual double GetVolume()
+        public virtual double GetVolume( bool total = true )
         {
-            return volume;
+            double totalVolume = volume;
+
+            if( total ) {
+                foreach( PhysicalAttachmentPoint point in attachmentPoints ) {
+                    if( point.isExternal ) {
+                        foreach( Physical obj in point.GetAttachedAsPhysical() ) {
+                            totalVolume += obj.GetVolume();
+                        }
+                    }
+                }
+            }
+
+            return totalVolume;
         }
 
         public override List<DescriptivePageSection> DisplayDescriptivePage()
@@ -163,7 +189,7 @@ namespace AdventureDemo
             return sections;
         }
         
-        public virtual AttachmentPoint[] GetAttachmentPoints()
+        public virtual PhysicalAttachmentPoint[] GetAttachmentPoints()
         {
             return attachmentPoints.ToArray();
         }
@@ -179,11 +205,11 @@ namespace AdventureDemo
 
             attachmentPoints.Add(new PhysicalAttachmentPoint(data) );
         }
-        public virtual void AddAttachmentPoint( AttachmentPoint point )
+        public virtual void AddAttachmentPoint( PhysicalAttachmentPoint point )
         {
             attachmentPoints.Add(point);
         }
-        public virtual void RemoveAttachmentPoint( AttachmentPoint point )
+        public virtual void RemoveAttachmentPoint( PhysicalAttachmentPoint point )
         {
             attachmentPoints.Remove(point);
         }

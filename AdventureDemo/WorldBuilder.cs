@@ -94,12 +94,12 @@ namespace AdventureDemo
             AddMaterial( "silicon", 4, "#84B2DF" );
             AddMaterial( "copper", 15, "#D88C17" );
             AddMaterial( "gold", 16, "#F2DB1D" );
-            AddMaterial( "flesh", 4, "#D82C7D" );
+            AddMaterial( "flesh", 2.5, "#D82C7D" );
         }
 
         public void BuildWorld()
         {
-            Container space = new Container("Deep Space", double.PositiveInfinity);
+            Container space = new Container("Deep Space", -1);
             space.description = "darkness broken up by the dots of lights of distant stars";
             GameManager.instance.AddRoot(space);
             
@@ -264,9 +264,7 @@ namespace AdventureDemo
             if( from == null ) { return null; }
 
             if( from.GetData("name").text == path ) {
-                if( from != null ) {
-                    return from;
-                }
+                return from;
             }
 
             int indexOfStep = path.IndexOf('/');

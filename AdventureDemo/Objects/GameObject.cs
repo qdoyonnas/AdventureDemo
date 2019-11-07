@@ -37,7 +37,7 @@ namespace AdventureDemo
             }
         }
 
-        protected Dictionary<PossessionType, Verb[]> verbs;
+        protected Dictionary<PossessionType, List<Verb>> verbs;
 
         // Object data
         protected delegate GameObjectData DataDelegate( string[] parameters );
@@ -69,7 +69,7 @@ namespace AdventureDemo
 
             relevantData = new List<DataDelegate>();
 
-            verbs = new Dictionary<PossessionType, Verb[]>();
+            verbs = new Dictionary<PossessionType, List<Verb>>();
 
             _attachmentTypes = new List<AttachmentType>();
         }
@@ -96,6 +96,7 @@ namespace AdventureDemo
 
             return true;
         }
+
         public virtual void CollectVerbs( Actor actor, PossessionType possession )
         {
             if( _actor != null ) {
@@ -108,11 +109,31 @@ namespace AdventureDemo
         public virtual List<Verb> CollectVerbs()
         {
             List<Verb> collectedVerbs = new List<Verb>();
-            foreach( Verb[] verbCollection in verbs.Values ) {
+            foreach( List<Verb> verbCollection in verbs.Values ) {
                 collectedVerbs.AddRange( verbCollection );
             }
 
             return collectedVerbs;
+        }
+        public virtual List<Verb> CollectVerbs( PossessionType possession )
+        {
+            List<Verb> collectedVerbs = new List<Verb>();
+
+            if( verbs.ContainsKey(possession) ) {
+                foreach( Verb verb in verbs[possession] ) {
+                    collectedVerbs.Add(verb);
+                }
+            }
+
+            return collectedVerbs;
+        }
+        public virtual void AddVerb( PossessionType possession, Verb verb )
+        {
+            if( verbs.ContainsKey(possession) ) {
+                verbs[possession].Add(verb);
+            } else {
+                verbs.Add( possession, new List<Verb>() { verb } );
+            }
         }
 
         // Data Methods

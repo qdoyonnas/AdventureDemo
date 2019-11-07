@@ -35,16 +35,30 @@ namespace AdventureDemo
             _body = new BodyAttachmentPoint(this);
         }
 
-        public override double GetVolume()
+        public override double GetVolume(bool total = true)
         {
-            if( _body == null ) { return 0; }
-            Physical body = _body.GetAttachedAsPhysical(0);
+            double totalVolume = base.GetVolume(total);
 
-            if( body != null ) {
-                return body.GetVolume();
+            if( total && _body != null ) {
+                Physical body = _body.GetAttachedAsPhysical(0);
+                if( body != null ) {
+                    totalVolume += body.GetVolume();
+                }
             }
 
-            return 0;
+            return totalVolume;
+        }
+        public override double GetWeight(bool total = true)
+        {
+            double totalWeight = base.GetWeight(total);
+
+            if( total ) {
+                if( _body != null && _body.GetAttachedCount() != 0 ) {
+                    totalWeight += GetBody().GetWeight();
+                }
+            }
+
+            return totalWeight;
         }
 
         public override List<Verb> CollectVerbs()
@@ -68,6 +82,7 @@ namespace AdventureDemo
 
         public BodyPart GetBody()
         {
+            if( _body == null || _body.GetAttachedCount() == 0 ) { return null; }
             return _body.GetAttached(0) as BodyPart;
         }
         public BodyPart GetBody(string path)
@@ -75,7 +90,7 @@ namespace AdventureDemo
             if( _body == null ) { return null; }
             if( string.IsNullOrEmpty(path) ) { return GetBody(); }
 
-            return null;
+            return GetBody().GetBodyPart(path);
         }
         public BodyPart AddBodyPart( BodyPart parent, BodyPart part )
         {
@@ -92,11 +107,12 @@ namespace AdventureDemo
         public BodyPart AddBodyPart( string path, BodyPart part )
         {
             BodyPart parent = GetBody(path);
-            if( parent == null ) { return null; }
+            if( parent == null ) {
+                _body.Attach( part );
+            }
 
             return AddBodyPart(parent, part);
         }
-
 
         public override List<DescriptivePageSection> DisplayDescriptivePage()
         {

@@ -25,10 +25,29 @@ namespace AdventureDemo
             Material flesh = GameManager.instance.world.GetMaterial("flesh");
             if( flesh == null ) { return; }
 
-            AddBodyPart(null, new BodyPart(this, "head", 2, Utilities.Pair<Material, double>(flesh, 1)) )
+            AddBodyPart( string.Empty, new BodyPart(this, "head", 2, Utilities.Pair<Material, double>(flesh, 1)) )
                 .AddBodyAttachmentPoint();
                 
-            AddBodyPart("head", new BodyPart(this, "torso", 40, Utilities.Pair<Material, double>(flesh, 1)) );
+            AddBodyPart( "head", new BodyPart(this, "torso", 40, Utilities.Pair<Material, double>(flesh, 1)) )
+                .AddBodyAttachmentPoint()
+                .AddBodyAttachmentPoint()
+                .AddBodyAttachmentPoint()
+                .AddBodyAttachmentPoint();
+
+            AddBodyPart( "torso", new BodyPart(this, "left arm", 4, Utilities.Pair<Material, double>(flesh, 1)) )
+                .AddBodyAttachmentPoint();
+            AddBodyPart( "torso", new BodyPart(this, "right arm", 4, Utilities.Pair<Material, double>(flesh, 1)) )
+                .AddBodyAttachmentPoint();
+            AddBodyPart( "torso", new BodyPart(this, "left leg", 6, Utilities.Pair<Material, double>(flesh, 1)) )
+                .AddBodyAttachmentPoint();
+            AddBodyPart( "torso", new BodyPart(this, "right leg", 6, Utilities.Pair<Material, double>(flesh, 1)) )
+                .AddBodyAttachmentPoint();
+
+            AddBodyPart("torso/left arm", new ManipulatorBodyPart(this, "left hand", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
+            AddBodyPart("torso/right arm", new ManipulatorBodyPart(this, "right hand", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
+
+            AddBodyPart("torso/left leg", new BodyPart(this, "left foot", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
+            AddBodyPart("torso/right leg", new BodyPart(this, "right foot", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
         }
     }
 }

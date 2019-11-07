@@ -60,12 +60,12 @@ namespace AdventureDemo
 
             text = Utilities.FindNode<TextBlock>(entry, "Data2");
             if( text != null ) {
-                text.Inlines.Add( observer.Observe(obj, "data 0").span );
+                text.Inlines.Add( observer.Observe(obj, "weight partial").span );
             }
 
             text = Utilities.FindNode<TextBlock>(entry, "Data3");
             if( text != null ) {
-                text.Inlines.Add( observer.Observe(obj, "data 1").span );
+                text.Inlines.Add( observer.Observe(obj, "volume partial").span );
             }
 
             StackPanel subData = Utilities.FindNode<StackPanel>(entry, "SubData");

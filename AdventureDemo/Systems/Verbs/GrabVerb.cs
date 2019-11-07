@@ -15,7 +15,7 @@ namespace AdventureDemo
             : base(self)
         {
             this.inventory = inventory;
-            _displayLabel = "Pickup";
+            _displayLabel = "Grab";
         }
 
         public override void Action( GameObject target )
