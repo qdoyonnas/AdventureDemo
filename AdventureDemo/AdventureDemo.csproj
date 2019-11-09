@@ -64,6 +64,7 @@
     <Compile Include="Objects\Material.cs" />
     <Compile Include="Objects\Organisms\BodyPart.cs" />
     <Compile Include="Objects\Organisms\Human.cs" />
+    <Compile Include="Objects\Organisms\LocomotionBodyPart.cs" />
     <Compile Include="Objects\Organisms\ManipulatorBodyPart.cs" />
     <Compile Include="Objects\Organisms\Organism.cs" />
     <Compile Include="Objects\WaywardWill.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Objects\Connection.cs" />
     <Compile Include="Systems\Verbs\PhaseVerb.cs" />
     <Compile Include="Systems\Verbs\GrabVerb.cs" />
+    <Compile Include="Systems\Verbs\TraversalVerb.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="WorldBuilder.cs" />
   </ItemGroup>
