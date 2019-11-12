@@ -26,6 +26,7 @@ namespace AdventureDemo
             _observer = observer;
 
             overviewContentPanels = new Dictionary<GameObject, StackPanel>();
+            observer.DisplayToOverview(this);
 
             SetTitle("Overview");
         }
@@ -161,20 +162,13 @@ namespace AdventureDemo
 
         public override void Clear()
         {
-            foreach( StackPanel panel in overviewContentPanels.Values ) {
-                panel.Children.Clear();
-            }
-            /*foreach( StackPanel panel in overviewEventPanels.Values ) {
-                panel.Children.Clear();
-            }*/
+            base.Clear();
+            overviewContentPanels.Clear();
         }
 
         public override void Update()
         {
-            Clear();
-            foreach( GameObject obj in overviewContentPanels.Keys ) {
-                DisplayObject(obj);
-            }
+            observer.DisplayToOverview(this);
         }
     }
 }

@@ -169,6 +169,7 @@ namespace WaywardEngine
             OnUpdate();
 
             for( int i = pages.Count-1; i >= 0; i-- ) {
+                pages[i].Clear();
                 pages[i].Update();
             }
         }

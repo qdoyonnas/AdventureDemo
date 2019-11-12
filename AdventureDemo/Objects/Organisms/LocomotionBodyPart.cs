@@ -11,7 +11,7 @@ namespace AdventureDemo
         public LocomotionBodyPart( Organism organism, string name, double volume, params KeyValuePair<Material, double>[] mats )
             : base( organism, name, volume, mats )
         {
-            AddVerb(PossessionType.EMBODIMENT, );
+            AddVerb( PossessionType.EMBODIMENT, new TraversalVerb(this) );
         }
     }
 }

@@ -102,7 +102,7 @@ namespace AdventureDemo
             if( _actor != null ) {
                 if( !verbs.ContainsKey(possession) ) { return; }
                 foreach( Verb verb in verbs[possession] ) {
-                    actor.AddVerb(verb);
+                    verb.AddVerb( actor );
                 }
             }
         }

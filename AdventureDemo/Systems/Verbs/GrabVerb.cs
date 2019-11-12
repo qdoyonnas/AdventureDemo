@@ -18,15 +18,17 @@ namespace AdventureDemo
             _displayLabel = "Grab";
         }
 
-        public override void Action( GameObject target )
+        public override bool Action( GameObject target )
         {
-            if( Check(target) != CheckResult.VALID ) { return; }
+            if( Check(target) != CheckResult.VALID ) { return false; }
 
             if( target.container.GetParent() == self ) {
-                target.SetContainer(self.container);
+                self.container.Attach(target);
             } else {
-                target.SetContainer(inventory);
+                inventory.Attach(target);
             }
+
+            return true;
         }
 
         public override CheckResult Check( GameObject target )

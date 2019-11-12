@@ -61,9 +61,11 @@ namespace AdventureDemo
                 section.DisplayContents();
             }
         }
-        
+
+        public override void Clear() {}
         public override void Update()
         {
+            SetTitle( observer.Observe(_target, "name upper").text );
             DisplayTarget();
         }
     }

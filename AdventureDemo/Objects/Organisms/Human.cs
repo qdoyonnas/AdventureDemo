@@ -46,8 +46,8 @@ namespace AdventureDemo
             AddBodyPart("torso/left arm", new ManipulatorBodyPart(this, "left hand", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
             AddBodyPart("torso/right arm", new ManipulatorBodyPart(this, "right hand", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
 
-            AddBodyPart("torso/left leg", new BodyPart(this, "left foot", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
-            AddBodyPart("torso/right leg", new BodyPart(this, "right foot", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
+            AddBodyPart("torso/left leg", new LocomotionBodyPart(this, "left foot", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
+            AddBodyPart("torso/right leg", new LocomotionBodyPart(this, "right foot", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
         }
     }
 }

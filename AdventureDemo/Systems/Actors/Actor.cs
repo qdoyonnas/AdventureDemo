@@ -40,6 +40,12 @@ namespace AdventureDemo
 			return controlledObject;
         }
 
+        public void DisplayToOverview( OverviewPage page )
+        {
+            // TODO: Senses here?
+            page.DisplayObject(controlledObject);
+        }
+
 		/// <summary>
         /// Returns a bool indicating whether obj can be perceived at all. For example, if it should
         /// appear in an Overview page.
@@ -51,6 +57,30 @@ namespace AdventureDemo
 		public abstract GameObjectData Observe( GameObject obj );
 		public abstract GameObjectData Observe( GameObject obj, string dataKey );
 
+        public virtual bool HasVerb( Type type )
+        {
+            foreach( Verb verb in verbs ) {
+                if( verb.GetType() == type ) { return true; }
+            }
+
+            return false;
+        }
+        public virtual List<Verb> GetVerbs()
+        {
+            return verbs;
+        }
+        public virtual List<Verb> GetVerbs( Type type )
+        {
+            List<Verb> filteredVerbs = new List<Verb>();
+
+            foreach( Verb verb in verbs ) {
+                if( verb.GetType() == type ) {
+                    filteredVerbs.Add(verb);
+                }
+            }
+
+            return filteredVerbs;
+        }
         public virtual void AddVerb( Verb verb )
         {
             verbs.Add(verb);

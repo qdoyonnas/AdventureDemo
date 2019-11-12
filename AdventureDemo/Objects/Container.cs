@@ -231,6 +231,18 @@ namespace AdventureDemo
             return this;
         }
 
+        public CheckResult CanContain( Physical obj )
+        {
+            if( obj == null ) { return CheckResult.INVALID; }
+
+            double objVolume = obj.GetVolume();
+            if( objVolume > innerVolume ) { return CheckResult.INVALID; }
+
+            if( objVolume > remainingVolume ) { return CheckResult.RESTRICTED; }
+
+            return CheckResult.VALID;
+        }
+
         public Connection[] GetConnections()
         {
             return contents.GetConnections();

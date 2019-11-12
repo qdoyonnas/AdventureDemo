@@ -31,7 +31,7 @@ namespace AdventureDemo
             GameObject thisContainer = controlledObject.container.GetParent();
             if( obj == thisContainer || obj.container == controlledObject.container ) {
                 return true;
-            } else {
+            } else if( obj.container != null ) {
                 GameObject objContainer = obj.container.GetParent();
                 if( objContainer != null ) {
                     return CanObserve(objContainer);
@@ -63,7 +63,7 @@ namespace AdventureDemo
                     verb.Display(this, obj, data.span);
 				}
 
-                ContextMenuHelper.AddContextMenuItem( data.span, "View", delegate { GameManager.instance.DisplayDescriptivePage(obj); } );
+                ContextMenuHelper.AddContextMenuItem( data.span, "View", delegate { GameManager.instance.DisplayDescriptivePage(obj); return false; } );
 
                 if( !isDefaultSet ) {
                     data.span.MouseLeftButtonUp += delegate { GameManager.instance.DisplayDescriptivePage(obj); };

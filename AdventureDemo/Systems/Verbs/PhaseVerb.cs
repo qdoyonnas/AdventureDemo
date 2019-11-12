@@ -17,16 +17,19 @@ namespace AdventureDemo
             _displayLabel = "Phase";
         }
 
-        public override void Action( GameObject target )
+        public override bool Action( GameObject target )
         {
             Physical physical = target as Physical;
             if( physical != null ) {
-                Action(physical.GetAttachmentPoints()[0]);
+                return Action(physical.GetAttachmentPoints()[0]);
             }
+
+            return false;
         }
-        public void Action( AttachmentPoint target )
+        public bool Action( AttachmentPoint target )
         {
-            self.SetContainer(target);
+            target.Attach(self);
+            return true;
         }
 
         public override CheckResult Check( GameObject target )
@@ -83,11 +86,11 @@ namespace AdventureDemo
 
             CheckResult result = point.CanAttach(self);
             if( result >= CheckResult.RESTRICTED ) {
-                Dictionary<TextBlock, RoutedEventHandler> items = new Dictionary<TextBlock, RoutedEventHandler>();
+                Dictionary<TextBlock, ContextMenuAction> items = new Dictionary<TextBlock, ContextMenuAction>();
                 if( result == CheckResult.RESTRICTED ) {
                     items.Add( WaywardTextParser.ParseAsBlock($@"<gray>{actionLabel}</gray>") , null );
                 } else {
-                    items.Add( WaywardTextParser.ParseAsBlock(actionLabel) , delegate { Action(point); } );
+                    items.Add( WaywardTextParser.ParseAsBlock(actionLabel) , delegate { return Action(point); } );
                 }
                 ContextMenuHelper.AddContextMenuHeader(span, new TextBlock(self.GetData("name upper").span), items, result != CheckResult.RESTRICTED);
             }

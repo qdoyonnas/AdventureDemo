@@ -71,7 +71,6 @@ namespace AdventureDemo
 
         public override void Update()
         {
-            Clear();
             DisplayObject();
         }
     }

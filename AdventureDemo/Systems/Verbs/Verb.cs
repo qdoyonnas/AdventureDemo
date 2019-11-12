@@ -32,20 +32,26 @@ namespace AdventureDemo
         /// <param name="data">Arbitrary key-value dictionary to be used for parameter passing.</param>
         /// <returns></returns>
         public abstract CheckResult Check( GameObject target );
-        public abstract void Action( GameObject target );
+        public abstract bool Action( GameObject target );
 
         public virtual void Display( Actor actor, GameObject target, FrameworkContentElement span )
         {
             CheckResult check = Check(target);
 			if( check >= CheckResult.RESTRICTED ) {
-                Dictionary<TextBlock, RoutedEventHandler> items = new Dictionary<TextBlock, RoutedEventHandler>();
+                Dictionary<TextBlock, ContextMenuAction> items = new Dictionary<TextBlock, ContextMenuAction>();
                 if( check == CheckResult.RESTRICTED ) {
                     items.Add( WaywardTextParser.ParseAsBlock($@"<gray>{displayLabel}</gray>") , null );
                 } else {
-                    items.Add( WaywardTextParser.ParseAsBlock(displayLabel) , delegate { Action(target); } );
+                    items.Add( WaywardTextParser.ParseAsBlock(displayLabel) , delegate { return Action(target); } );
                 }
                 ContextMenuHelper.AddContextMenuHeader(span, new TextBlock(self.GetData("name upper").span), items, check != CheckResult.RESTRICTED);
             }
+        }
+
+        public virtual void AddVerb( Actor actor )
+        {
+            if( actor.HasVerb(this.GetType()) ) { return; }
+            actor.AddVerb(this);
         }
     }
 }
