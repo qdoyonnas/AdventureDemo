@@ -188,8 +188,6 @@ namespace AdventureDemo
 
             return sections;
         }
-<<<<<<< HEAD
-=======
         
         public virtual PhysicalAttachmentPoint[] GetAttachmentPoints()
         {
@@ -246,6 +244,5 @@ namespace AdventureDemo
 
             return ratio;
         }
->>>>>>> attachments_root_1
     }
 }
