@@ -12,15 +12,8 @@ namespace AdventureDemo
 {
     class GameObject
     {
-        protected string name;
+        public string name;
         public string description;
-
-        protected IContainer _container;
-        public virtual IContainer container {
-            get {
-                return _container;
-            }
-        }
 
         protected Actor _actor;
         public virtual Actor actor {
@@ -29,27 +22,42 @@ namespace AdventureDemo
             }
         }
 
-        protected Dictionary<PossessionType, Verb[]> verbs;
+        // Attachments
+        protected AttachmentPoint _container;
+        public virtual AttachmentPoint container {
+            get {
+                return _container;
+            }
+        }
+        
+        protected List<AttachmentType> _attachmentTypes;
+        public virtual List<AttachmentType> attachmentTypes {
+            get {
+                return _attachmentTypes;
+            }
+        }
 
+        protected Dictionary<PossessionType, List<Verb>> verbs;
+
+        // Object data
         protected delegate GameObjectData DataDelegate( string[] parameters );
         protected Dictionary<string, DataDelegate> objectData;
 
         protected List<DataDelegate> relevantData;
 
+        // Constructors
         public GameObject( Dictionary<string, object> data )
         {
-            Construct(
-                data.ContainsKey("name") ? (string)data["name"] : "Unknown Object",
-                data.ContainsKey("container") ? (IContainer)data["container"] : null 
-            );
+
+            Construct(data.ContainsKey("name") ? (string)data["name"] : "Unknown Object");
 
             description = data.ContainsKey("description") ? (string)data["discription"] : "a strange object";
         }
-        public GameObject( string name, IContainer container )
+        public GameObject( string name )
         {
-            Construct(name, container);
+            Construct(name);
         }
-        void Construct( string name, IContainer container )
+        void Construct( string name )
         {
             this.name = name;
             this.description = "a strange object";
@@ -61,30 +69,16 @@ namespace AdventureDemo
 
             relevantData = new List<DataDelegate>();
 
-            verbs = new Dictionary<PossessionType, Verb[]>();
+            verbs = new Dictionary<PossessionType, List<Verb>>();
 
-            if( container != null ) {
-                SetContainer(container);
-            } else {
-                GameManager.instance.AddRoot(this);
-            }
+            _attachmentTypes = new List<AttachmentType>();
         }
 
-        public virtual bool SetContainer( IContainer newContainer )
+        public virtual bool SetContainer( AttachmentPoint newContainer )
         {
-            if( newContainer == container ) { return true; }
-            if( !newContainer.CanContain(this) ) { return false; }
+            if( !newContainer.Contains(this) ) { return false; }
 
-            if( _container == null || _container.RemoveContent(this) ) {
-                if( newContainer.AddContent(this) ) {
-                    _container = newContainer;
-                } else {
-                    _container.AddContent(this);
-                    return false;
-                }
-            }
-
-            WaywardManager.instance.Update(); // XXX: Not where this should be // TODO: Game requires proper update sequence
+            _container = newContainer;
             return true;
         }
         /// <summary>
@@ -102,15 +96,47 @@ namespace AdventureDemo
 
             return true;
         }
+
         public virtual void CollectVerbs( Actor actor, PossessionType possession )
         {
             if( _actor != null ) {
+                if( !verbs.ContainsKey(possession) ) { return; }
                 foreach( Verb verb in verbs[possession] ) {
-                    actor.AddVerb(verb);
+                    verb.AddVerb( actor );
                 }
             }
         }
+        public virtual List<Verb> CollectVerbs()
+        {
+            List<Verb> collectedVerbs = new List<Verb>();
+            foreach( List<Verb> verbCollection in verbs.Values ) {
+                collectedVerbs.AddRange( verbCollection );
+            }
 
+            return collectedVerbs;
+        }
+        public virtual List<Verb> CollectVerbs( PossessionType possession )
+        {
+            List<Verb> collectedVerbs = new List<Verb>();
+
+            if( verbs.ContainsKey(possession) ) {
+                foreach( Verb verb in verbs[possession] ) {
+                    collectedVerbs.Add(verb);
+                }
+            }
+
+            return collectedVerbs;
+        }
+        public virtual void AddVerb( PossessionType possession, Verb verb )
+        {
+            if( verbs.ContainsKey(possession) ) {
+                verbs[possession].Add(verb);
+            } else {
+                verbs.Add( possession, new List<Verb>() { verb } );
+            }
+        }
+
+        // Data Methods
         /// <summary>
         /// Returns a String that best fufills the requested data.
         /// Serves a bridge between UI and objects disconnecting the need for explicit calls.
@@ -168,13 +194,12 @@ namespace AdventureDemo
             return data;
         }
 
-        public virtual DescriptivePage DisplayDescriptivePage()
+        public virtual List<DescriptivePageSection> DisplayDescriptivePage()
         {
-            Point mousePosition = WaywardManager.instance.GetMousePosition();
-
-            return GameManager.instance.DisplayDescriptivePage( mousePosition, this, new DescriptivePageSection[] {
-                new GameObjectDescriptivePageSection()
-            });
+            return new List<DescriptivePageSection> {
+                new GameObjectDescriptivePageSection(),
+                new GameObjectVerbsDescriptivePageSection()
+            };
         }
     }
 
@@ -185,8 +210,8 @@ namespace AdventureDemo
 
         public GameObjectData()
         {
-            text = "--";
-            span = new Span( new Run( text ));
+            text = "";
+            span = new Span();
         }
 
         public void SetSpan( string text )

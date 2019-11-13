@@ -9,33 +9,37 @@ using WaywardEngine;
 
 namespace AdventureDemo
 {
-    class Container : Physical, IContainer
+    class Container : Physical
     {
-        List<Connection> connections;
-
-        List<IPhysical> contents;
-        double _innerVolume;
         public double innerVolume {
             get {
-                return _innerVolume;
+                return contents.capacity;
             }
         }
 
         public double filledVolume {
             get {
-                double totalVolume = 0;
-                foreach( IPhysical physical in contents ) {
-                    totalVolume += physical.GetVolume();
-                }
-
-                return totalVolume;
+                return contents.filledCapacity;
             }
         }
         public double remainingVolume {
             get {
-                return _innerVolume - filledVolume;
+                return contents.remainingCapacity;
             }
         }
+
+        public new double weight {
+            get {
+                double totalWeight = 0;
+                foreach( KeyValuePair<Material, double> material in materials ) {
+                    totalWeight += material.Key.GetWeight( (volume - innerVolume) * material.Value );
+                }
+
+                return totalWeight;
+            }
+        }
+
+        protected ContainerAttachmentPoint contents;
 
         // TODO: This might be a good place to implement staggered spawn lists (see WorldBuilder.cs)
         // TODO: This should be a dictionary of spawnlists, weights pairs
@@ -53,18 +57,13 @@ namespace AdventureDemo
                 }
             }
         }
-        public Container( string name, IContainer container, double innerVolume ) 
-            : base(name, container)
+        public Container( string name, double innerVolume ) 
+            : base(name)
         {
             Construct(innerVolume);
         }
-        public Container( string name, IContainer container, double innerVolume, double totalVolume )
-            : base(name, container, totalVolume)
-        {
-            Construct(innerVolume);
-        }
-        public Container( string name, IContainer container, double innerVolume, double totalVolume, double weight )
-            : base(name, container, totalVolume, weight)
+        public Container( string name, double innerVolume, double totalVolume, params KeyValuePair<Material, double>[] mats )
+            : base(name, totalVolume, mats)
         {
             Construct(innerVolume);
         }
@@ -72,10 +71,11 @@ namespace AdventureDemo
         {
             this.description = DescriptionFromVolume(volume);
 
-            connections = new List<Connection>();
-            contents = new List<IPhysical>();
+            contents = new ContainerAttachmentPoint(new Dictionary<string, object>() {
+                { "parent", this }, { "capacity", volume }, { "name", "contents" }
+            });
+            AddAttachmentPoint(contents);
             spawnLists = new List<SpawnList>();
-            _innerVolume = volume;
 
             objectData["innervolume"] = GetDescriptiveInnerVolume;
             objectData["filledvolume"] = GetDescriptiveFilledVolume;
@@ -113,92 +113,37 @@ namespace AdventureDemo
             }
         }
 
-        public GameObject GetContent( int i )
+        public ContainerAttachmentPoint GetContents()
         {
-            IPhysical physical = contents[i];
-            GameObject obj = physical as GameObject;
-            if( obj == null ) { return null; }
-
-            return obj;
+            return contents;
         }
-        public int ContentCount()
+        public int GetContentCount()
         {
-            return contents.Count;
+            return contents.GetAttachedCount();
         }
-        public bool CanContain( GameObject obj )
+        public Physical GetContent(int i)
         {
-            IPhysical physical = obj as IPhysical;
-            if( physical == null || physical.GetVolume() > remainingVolume ) {
-                return false;
-            }
-
-            return true;
-        }
-        public bool DoesContain( GameObject obj )
-        {
-            IPhysical physical = obj as IPhysical;
-            if( physical == null ) { return false; }
-
-            return contents.Contains(physical);
-        }
-        public bool AddContent( GameObject obj )
-        {
-            if( !CanContain(obj) ) { return false; }
-
-            IPhysical physical = obj as IPhysical;
-            if( physical == null ) { return false; }
-
-            contents.Add(physical);
-            return true;
-        }
-        public bool RemoveContent( GameObject obj )
-        {
-            IPhysical physical = obj as IPhysical;
-            if( physical == null ) { return false; }
-
-            contents.Remove(physical);
-            return true;
-        }
-        
-        public List<Connection> GetConnections()
-        {
-            return connections;
-        }
-        public void AddConnection( Connection connection, bool createMatchingConnection )
-        {
-            AddConnection( connection );
-
-            if( createMatchingConnection ) {
-                Container containerB = connection.secondContainer as Container;
-                if( containerB == null ) { return; }
-
-                containerB.AddConnection(connection.CreateMatching());
-            }
-        }
-        public void AddConnection( Connection connection )
-        {
-            connections.Add( connection );
-        }
-        public void RemoveConnection( Connection connection )
-        {
-            connections.Remove( connection );
+            return contents.GetAttachedAsPhysical(i);
         }
 
-        public override double GetWeight()
+        /*public override double GetWeight(bool total = true)
         {
-            double totalWeight = weight;
-            foreach( IPhysical physical in contents ) {
-                totalWeight += physical.GetWeight();
+            double totalWeight = base.GetWeight(total);
+
+            if( total ) {
+                foreach( Physical physical in contents.GetAttachedPhysicals() ) {
+                    totalWeight += physical.GetWeight();
+                }
             }
 
             return totalWeight;
-        }
+        }*/
         
         public virtual GameObjectData GetDescriptiveInnerVolume( string[] parameters )
         {
             GameObjectData data = new GameObjectData();
 
-            data.text = $"{_innerVolume.ToString()} L";
+            data.text = $"{innerVolume.ToString()} L";
             data.SetSpan( data.text );
 
             return data;
@@ -238,13 +183,13 @@ namespace AdventureDemo
             return data;
         }
 
-        public override DescriptivePage DisplayDescriptivePage()
+        public override List<DescriptivePageSection> DisplayDescriptivePage()
         {
-            DescriptivePage page = base.DisplayDescriptivePage();
+            List<DescriptivePageSection> sections = base.DisplayDescriptivePage();
             
-            page.AddSection(new ContainerDescriptivePageSection());
+            sections.Add(new ContainerDescriptivePageSection());
 
-            return page;
+            return sections;
         }
 
         public override bool SetActor( Actor actor, PossessionType possession )
@@ -252,11 +197,8 @@ namespace AdventureDemo
             bool success = base.SetActor(actor, possession);
             if( !success ) { return false; }
 
-            foreach( IPhysical content in contents ) {
-                GameObject contentObj = content as GameObject;
-                if( contentObj != null ) {
-                    contentObj.CollectVerbs(actor, PossessionType.CONTENT);
-                }
+            foreach( GameObject obj in contents.GetAttached() ) {
+                obj.CollectVerbs(actor, PossessionType.CONTENT);
             }
 
             return true;
@@ -287,6 +229,45 @@ namespace AdventureDemo
             }
 
             return this;
+        }
+
+        public CheckResult CanContain( Physical obj )
+        {
+            if( obj == null ) { return CheckResult.INVALID; }
+
+            double objVolume = obj.GetVolume();
+            if( objVolume > innerVolume ) { return CheckResult.INVALID; }
+
+            if( objVolume > remainingVolume ) { return CheckResult.RESTRICTED; }
+
+            return CheckResult.VALID;
+        }
+
+        public Connection[] GetConnections()
+        {
+            return contents.GetConnections();
+        }
+        public int GetConnectionsCount()
+        {
+            return contents.GetConnectionsCount();
+        }
+
+        public void AddConnection( Connection connection )
+        {
+            contents.AddConnection( connection );
+        }
+        public void AddConnection( Dictionary<string, object> data, bool isTwoWay = true )
+        {
+            contents.AddConnection(data);
+        }
+        public void AddConnection( ContainerAttachmentPoint second, double throughput = 0, bool isTwoWay = true )
+        {
+            contents.AddConnection( second, throughput, isTwoWay );
+        }
+
+        public void RemoveConnection( Connection connection )
+        {
+            contents.RemoveConnection( connection );
         }
     }
 }

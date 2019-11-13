@@ -10,15 +10,29 @@ namespace AdventureDemo
 {
     class PlayerActor : Actor
     {
+        private string controlledName; // Temporary until objects can be renamed in game
+
+        public override void Control( GameObject obj )
+        {
+            if( controlledObject != null && !string.IsNullOrEmpty(controlledName) ) {
+                controlledObject.name = controlledName;
+            }
+
+            base.Control(obj);
+
+            controlledName = obj.name;
+            obj.name = "You";
+        }
+
         public override bool CanObserve( GameObject obj )
         {
             // TODO: Implement senses
 
-            GameObject thisContainer = controlledObject.container as GameObject;
+            GameObject thisContainer = controlledObject.container.GetParent();
             if( obj == thisContainer || obj.container == controlledObject.container ) {
                 return true;
-            } else {
-                GameObject objContainer = obj.container as GameObject;
+            } else if( obj.container != null ) {
+                GameObject objContainer = obj.container.GetParent();
                 if( objContainer != null ) {
                     return CanObserve(objContainer);
                 }
@@ -40,38 +54,23 @@ namespace AdventureDemo
             IVerbSuggest objSuggest = obj as IVerbSuggest;
 
             bool isDefaultSet = false;
-			if( dataKey == "name" ) {
+			if( dataKey.Contains("name") ) {
 				foreach( Verb verb in verbs) {
                     if( objSuggest != null ) {
                         objSuggest.DisplayVerb(verb, data.span);
                         isDefaultSet = isDefaultSet | objSuggest.SetDefaultVerb(verb, data.span);
                     }
-                    DisplayVerb(obj, verb, data.span);
+                    verb.Display(this, obj, data.span);
 				}
-            }
 
-            ContextMenuHelper.AddContextMenuItem( data.span, "View", delegate { obj.DisplayDescriptivePage(); } );
+                ContextMenuHelper.AddContextMenuItem( data.span, "View", delegate { GameManager.instance.DisplayDescriptivePage(obj); return false; } );
 
-            if( !isDefaultSet ) {
-                data.span.MouseLeftButtonUp += delegate { obj.DisplayDescriptivePage(); };
+                if( !isDefaultSet ) {
+                    data.span.MouseLeftButtonUp += delegate { GameManager.instance.DisplayDescriptivePage(obj); };
+                }
             }
 
 			return data;
-        }
-
-        private void DisplayVerb(GameObject obj, Verb verb, FrameworkContentElement span)
-        {
-            CheckResult check = verb.Check(obj);
-			if( check >= CheckResult.RESTRICTED ) {
-                string text = verb.self == controlledObject ? $"{verb.displayLabel}" 
-                    : $"{verb.self.GetData("name").text} - {verb.displayLabel}";
-
-                if( check == CheckResult.RESTRICTED ) {
-                    ContextMenuHelper.AddContextMenuItem(span, WaywardTextParser.ParseAsBlock($@"<gray>{text}</gray>") , null, false);
-                } else {
-                    ContextMenuHelper.AddContextMenuItem(span, WaywardTextParser.ParseAsBlock(text) , delegate { verb.Action(obj); }, true);
-                }
-            }
         }
     }
 }

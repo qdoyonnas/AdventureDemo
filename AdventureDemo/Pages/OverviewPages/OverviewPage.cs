@@ -26,6 +26,7 @@ namespace AdventureDemo
             _observer = observer;
 
             overviewContentPanels = new Dictionary<GameObject, StackPanel>();
+            observer.DisplayToOverview(this);
 
             SetTitle("Overview");
         }
@@ -47,7 +48,7 @@ namespace AdventureDemo
         /// <param name="obj">Object to be displayed.</param>
         public void DisplayObject( GameObject obj )
         {
-            GameObject objContainer = obj.container as GameObject;
+            GameObject objContainer = obj.container.GetParent();
             if( objContainer == null ) { return; }
 
             StackPanel parent;
@@ -56,7 +57,6 @@ namespace AdventureDemo
             } else {
                 parent = AddContentPanel(obj);
             }
-
 
             DisplayObject( parent, objContainer );
         }
@@ -102,76 +102,73 @@ namespace AdventureDemo
                 text.Inlines.Add( observer.Observe(obj, "data 1").span );
             }
 
-            FetchObjectContents(entry, obj);
+            FetchContents(entry, obj);
         }
-        private void FetchObjectContents( FrameworkElement entry, GameObject obj )
+        protected virtual void FetchContents( FrameworkElement entry, GameObject obj )
         {
-            IContainer container = obj as IContainer;
+            Physical physicalObj = obj as Physical;
+            if( physicalObj == null ) { return; }
+
+            StackPanel subData = Utilities.FindNode<StackPanel>( entry, "SubData" );
+            if( subData == null ) { return; }
+
+            foreach( AttachmentPoint point in physicalObj.GetAttachmentPoints() ) {
+                if( point.GetAttached().Length == 0 ) { continue; }
+
+                FrameworkElement pointEntry = GameManager.instance.GetResource<FrameworkElement>("OverviewEntry");
+                subData.Children.Add( pointEntry );
+                TextBlock text = Utilities.FindNode<TextBlock>( pointEntry, "Data1");
+                if( text != null ) {
+                    text.Inlines.Add( char.ToUpper(point.name[0]) + point.name.Substring(1) );
+                }
+                StackPanel pointContents = Utilities.FindNode<StackPanel>( pointEntry, "SubData" );
+                foreach( GameObject child in point.GetAttached() ) {
+                    DisplayObject( pointContents, child );
+                }
+            }
+
+            FetchConnections(subData, physicalObj);
+
+            if( subData.Children.Count == 0 ) {
+                subData.Visibility = Visibility.Hidden;
+            }
+        }
+        protected virtual void FetchConnections( StackPanel subData, Physical physicalObj )
+        {
+            Container container = physicalObj as Container;
             if( container == null ) { return; }
 
-            StackPanel objectContents = Utilities.FindNode<StackPanel>( entry, "SubData" );
-            if( objectContents != null ) {
-                List<Connection> connections = container.GetConnections();
-                if( container.ContentCount() > 0 ) {
-                    for( int i = 0; i < container.ContentCount(); i++ ) {
-                        DisplayObject( objectContents, container.GetContent(i) );
-                    }
-                }
-                foreach( Connection connection in connections ) {
-                    DisplayConnection(objectContents, container, connection);
-                }
+            foreach( Connection connection in container.GetConnections() ) {
+                FrameworkElement entry = GameManager.instance.GetResource<FrameworkElement>("OverviewEntry");
+                subData.Children.Add( entry );
 
-                if( objectContents.Children.Count == 0 ) {
-                    objectContents.Visibility = Visibility.Hidden;
-                }
-            }
-        }
-        private void DisplayConnection( StackPanel objectContents, IContainer container, Connection connection )
-        {
-            FrameworkElement newEntry = GameManager.instance.GetResource<FrameworkElement>("OverviewEntry");
-            objectContents.Children.Add(newEntry);
-            TextBlock text = Utilities.FindNode<TextBlock>( newEntry, "Data1");
-            if( text != null ) {
-                text.Inlines.Add( observer.Observe(connection, "name").span );
-            }
-
-            text = Utilities.FindNode<TextBlock>( newEntry, "Data2" );
-            if( text != null ) {
-                GameObject connected;
-                if( connection.container == container ) {
-                    connected = connection.secondContainer as GameObject;
-                } else {
-                    connected = connection.container as GameObject;
-                }
-                if( connected == null ) { return; }
-                text.Inlines.Add( observer.Observe(connected).span );
-            }
-
-            PhysicalConnection physicalConnection = connection as PhysicalConnection;
-            if( physicalConnection != null ) {
-                text = Utilities.FindNode<TextBlock>( newEntry, "Data3" );
+                TextBlock text = Utilities.FindNode<TextBlock>( entry, "Data1");
                 if( text != null ) {
-                    text.Inlines.Add( observer.Observe(connection, "volume").span );
+                    text.Inlines.Add( observer.Observe(connection, "name upper").span );
+                }
+
+                text = Utilities.FindNode<TextBlock>( entry, "Data2");
+                if( text != null ) {
+                    GameObject connected = connection.secondContainer.GetParent();
+                    text.Inlines.Add( observer.Observe( connected, "name upper").span );
+                }
+
+                text = Utilities.FindNode<TextBlock>( entry, "Data3");
+                if( text != null ) {
+                    text.Inlines.Add( connection.throughput.ToString() + " L" );
                 }
             }
         }
 
         public override void Clear()
         {
-            foreach( StackPanel panel in overviewContentPanels.Values ) {
-                panel.Children.Clear();
-            }
-            /*foreach( StackPanel panel in overviewEventPanels.Values ) {
-                panel.Children.Clear();
-            }*/
+            base.Clear();
+            overviewContentPanels.Clear();
         }
 
         public override void Update()
         {
-            Clear();
-            foreach( GameObject obj in overviewContentPanels.Keys ) {
-                DisplayObject(obj);
-            }
+            observer.DisplayToOverview(this);
         }
     }
 }

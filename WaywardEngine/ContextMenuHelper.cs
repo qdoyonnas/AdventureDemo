@@ -11,20 +11,7 @@ namespace WaywardEngine
 {
     public static class ContextMenuHelper
     {
-        #region FrameworkElement - TextBlock Methods
-        /// <summary>
-        /// Add a context menu option to the control.
-        /// </summary>
-        /// <param name="control">FrameworkElement to add option to.</param>
-        /// <param name="label">Span of the added option.</param>
-        /// <param name="action">Action to be performed by option.</param>
-        public static void AddContextMenuItem( FrameworkElement control, TextBlock label, RoutedEventHandler action, bool enabled = true )
-        {
-            if( !CheckContextMenu(control) ) { return; }
-
-            AddMenuItem( control.ContextMenu, label, action, enabled );
-        }
-        private static void AddMenuItem( ItemsControl menu, TextBlock label, RoutedEventHandler action, bool enabled )
+        private static void AddMenuItem( ItemsControl menu, TextBlock label, ContextMenuAction action, bool enabled )
         {
             if( menu == null ) { return; }
 
@@ -32,10 +19,28 @@ namespace WaywardEngine
             newItem.IsEnabled = enabled;
             newItem.Header = label;
             if( action != null ) {
-                newItem.Click += action;
+                newItem.Click += delegate {
+                    if( action() ) {
+                        WaywardManager.instance.Update();
+                    }
+                };
             }
 
             menu.Items.Insert(0, newItem);
+        }
+
+        #region FrameworkElement - TextBlock Methods
+        /// <summary>
+        /// Add a context menu option to the control.
+        /// </summary>
+        /// <param name="control">FrameworkElement to add option to.</param>
+        /// <param name="label">Span of the added option.</param>
+        /// <param name="action">Action to be performed by option.</param>
+        public static void AddContextMenuItem( FrameworkElement control, TextBlock label, ContextMenuAction action, bool enabled = true )
+        {
+            if( !CheckContextMenu(control) ) { return; }
+
+            AddMenuItem( control.ContextMenu, label, action, enabled );
         }
 
         /// <summary>
@@ -43,7 +48,7 @@ namespace WaywardEngine
         /// </summary>
         /// <param name="control">FrameworkElement to add options to.</param>
         /// <param name="items">Dictionary of Label, Action value pairs.</param>
-        public static void AddContextMenuItems( FrameworkElement control, Dictionary<TextBlock, RoutedEventHandler> items, bool enabled = true )
+        public static void AddContextMenuItems( FrameworkElement control, Dictionary<TextBlock, ContextMenuAction> items, bool enabled = true )
         {
             AddContextMenuItems( control, new TextBlock(), items, enabled );
         }
@@ -54,7 +59,7 @@ namespace WaywardEngine
         /// <param name="control">FrameworkElement to add options to.</param>
         /// <param name="header">Submenu header name.</param>
         /// <param name="items">Dictionary of Label, Action value pairs</param>
-        public static void AddContextMenuItems( FrameworkElement control, TextBlock header, Dictionary<TextBlock, RoutedEventHandler> items, bool enabled = true )
+        public static void AddContextMenuItems( FrameworkElement control, TextBlock header, Dictionary<TextBlock, ContextMenuAction> items, bool enabled = true )
         {
             if( !CheckContextMenu(control) ) { return; }
 
@@ -81,7 +86,7 @@ namespace WaywardEngine
         /// <param name="control">FrameworkElement to add options to.</param>
         /// <param name="headerItem">Label of submenu header.</param>
         /// <param name="items">Dictionary of Label, Action value pairs.</param>
-        public static void AddContextMenuItems( FrameworkElement control, MenuItem headerItem, Dictionary<TextBlock, RoutedEventHandler> items, bool enabled = true )
+        public static void AddContextMenuItems( FrameworkElement control, MenuItem headerItem, Dictionary<TextBlock, ContextMenuAction> items, bool enabled = true )
         {
             if( !CheckContextMenu(control) ) { return; }
             
@@ -102,7 +107,7 @@ namespace WaywardEngine
         /// <param name="header">Label of submenu header.</param>
         /// <param name="items">Dictionary of Label, Action value pairs.</param>
         /// <returns></returns>
-        public static MenuItem AddContextMenuHeader( FrameworkElement control, TextBlock header, Dictionary<TextBlock, RoutedEventHandler> items, bool enabled = true )
+        public static MenuItem AddContextMenuHeader( FrameworkElement control, TextBlock header, Dictionary<TextBlock, ContextMenuAction> items, bool enabled = true )
         {
             if( !CheckContextMenu(control) ) { return null; }
 
@@ -120,6 +125,13 @@ namespace WaywardEngine
         public static MenuItem AddContextMenuHeader( FrameworkElement control, TextBlock header )
         {
             if( !CheckContextMenu(control) ) { return null; }
+
+            foreach( MenuItem item in control.ContextMenu.Items ) {
+                string itemHeader = item.Header as string;
+                if( itemHeader == header.Text ) {
+                    return item;
+                }
+            }
 
             MenuItem newHeader = null;
             if( header != null ) {
@@ -156,7 +168,7 @@ namespace WaywardEngine
         /// <param name="control">FrameworkContentElement to add option to.</param>
         /// <param name="label">Span of the added option.</param>
         /// <param name="action">Action to be performed by option.</param>
-        public static void AddContextMenuItem( FrameworkContentElement control, TextBlock label, RoutedEventHandler action, bool enabled = true )
+        public static void AddContextMenuItem( FrameworkContentElement control, TextBlock label, ContextMenuAction action, bool enabled = true )
         {
             if( !CheckContextMenu(control) ) { return; }
 
@@ -168,7 +180,7 @@ namespace WaywardEngine
         /// </summary>
         /// <param name="control">FrameworkContentElement to add options to.</param>
         /// <param name="items">Dictionary of Label, Action value pairs.</param>
-        public static void AddContextMenuItems( FrameworkContentElement control, Dictionary<TextBlock, RoutedEventHandler> items, bool enabled = true )
+        public static void AddContextMenuItems( FrameworkContentElement control, Dictionary<TextBlock, ContextMenuAction> items, bool enabled = true )
         {
             AddContextMenuItems( control, new TextBlock(), items, enabled );
         }
@@ -179,7 +191,7 @@ namespace WaywardEngine
         /// <param name="control">FrameworkContentElement to add options to.</param>
         /// <param name="header">Submenu header name.</param>
         /// <param name="items">Dictionary of Label, Action value pairs</param>
-        public static void AddContextMenuItems( FrameworkContentElement control, TextBlock header, Dictionary<TextBlock, RoutedEventHandler> items, bool enabled = true )
+        public static void AddContextMenuItems( FrameworkContentElement control, TextBlock header, Dictionary<TextBlock, ContextMenuAction> items, bool enabled = true )
         {
             if( !CheckContextMenu(control) ) { return; }
 
@@ -206,7 +218,7 @@ namespace WaywardEngine
         /// <param name="control">FrameworkContentElement to add options to.</param>
         /// <param name="headerItem">Label of submenu header.</param>
         /// <param name="items">Dictionary of Label, Action value pairs.</param>
-        public static void AddContextMenuItems( FrameworkContentElement control, MenuItem headerItem, Dictionary<TextBlock, RoutedEventHandler> items, bool enabled = true )
+        public static void AddContextMenuItems( FrameworkContentElement control, MenuItem headerItem, Dictionary<TextBlock, ContextMenuAction> items, bool enabled = true )
         {
             if( !CheckContextMenu(control) ) { return; }
             
@@ -227,7 +239,7 @@ namespace WaywardEngine
         /// <param name="header">Label of submenu header.</param>
         /// <param name="items">Dictionary of Label, Action value pairs.</param>
         /// <returns></returns>
-        public static MenuItem AddContextMenuHeader( FrameworkContentElement control, TextBlock header, Dictionary<TextBlock, RoutedEventHandler> items, bool enabled = true )
+        public static MenuItem AddContextMenuHeader( FrameworkContentElement control, TextBlock header, Dictionary<TextBlock, ContextMenuAction> items, bool enabled = true )
         {
             if( !CheckContextMenu(control) ) { return null; }
 
@@ -245,6 +257,13 @@ namespace WaywardEngine
         public static MenuItem AddContextMenuHeader( FrameworkContentElement control, TextBlock header )
         {
             if( !CheckContextMenu(control) ) { return null; }
+
+            foreach( MenuItem item in control.ContextMenu.Items ) {
+                TextBlock itemHeader = item.Header as TextBlock;
+                if( itemHeader.Text == header.Text ) {
+                    return item;
+                }
+            }
 
             MenuItem newHeader = null;
             if( header != null ) {
@@ -281,7 +300,7 @@ namespace WaywardEngine
         /// <param name="control">FrameworkElement to add option to.</param>
         /// <param name="label">Text of the added option.</param>
         /// <param name="action">Action to be performed by option.</param>
-        public static void AddContextMenuItem( FrameworkElement control, string label, RoutedEventHandler action, bool enabled = true )
+        public static void AddContextMenuItem( FrameworkElement control, string label, ContextMenuAction action, bool enabled = true )
         {
             if( string.IsNullOrEmpty(label) ) { return; }
 
@@ -293,7 +312,7 @@ namespace WaywardEngine
         /// </summary>
         /// <param name="control">FrameworkElement to add options to.</param>
         /// <param name="items">Dictionary of Label, Action value pairs.</param>
-        public static void AddContextMenuItems( FrameworkElement control, Dictionary<string, RoutedEventHandler> items, bool enabled = true )
+        public static void AddContextMenuItems( FrameworkElement control, Dictionary<string, ContextMenuAction> items, bool enabled = true )
         {
             AddContextMenuItems( control, string.Empty, items, enabled );
         }
@@ -304,10 +323,10 @@ namespace WaywardEngine
         /// <param name="control">FrameworkElement to add options to.</param>
         /// <param name="header">Submenu header name.</param>
         /// <param name="items">Dictionary of Label, Action value pairs</param>
-        public static void AddContextMenuItems( FrameworkElement control, string header, Dictionary<string, RoutedEventHandler> items, bool enabled = true )
+        public static void AddContextMenuItems( FrameworkElement control, string header, Dictionary<string, ContextMenuAction> items, bool enabled = true )
         {
             TextBlock headerBlock = string.IsNullOrEmpty(header) ? null : new TextBlock( new Run(header) );
-            Dictionary<TextBlock, RoutedEventHandler> itemBlocks = MapDicStringToBlock(items);
+            Dictionary<TextBlock, ContextMenuAction> itemBlocks = MapDicStringToBlock(items);
 
             AddContextMenuItems( control, headerBlock, itemBlocks, enabled );
         }
@@ -318,9 +337,9 @@ namespace WaywardEngine
         /// <param name="control">FrameworkElement to add options to.</param>
         /// <param name="headerItem">Label of submenu header.</param>
         /// <param name="items">Dictionary of Label, Action value pairs.</param>
-        public static void AddContextMenuItems( FrameworkElement control, MenuItem headerItem, Dictionary<string, RoutedEventHandler> items, bool enabled = true )
+        public static void AddContextMenuItems( FrameworkElement control, MenuItem headerItem, Dictionary<string, ContextMenuAction> items, bool enabled = true )
         {
-            Dictionary<TextBlock, RoutedEventHandler> itemBlocks = MapDicStringToBlock(items);
+            Dictionary<TextBlock, ContextMenuAction> itemBlocks = MapDicStringToBlock(items);
 
             AddContextMenuItems( control, headerItem, itemBlocks, enabled );
         }
@@ -332,10 +351,10 @@ namespace WaywardEngine
         /// <param name="header">Label of submenu header.</param>
         /// <param name="items">Dictionary of Label, Action value pairs.</param>
         /// <returns></returns>
-        public static MenuItem AddContextMenuHeader( FrameworkElement control, string header, Dictionary<string, RoutedEventHandler> items, bool enabled = true )
+        public static MenuItem AddContextMenuHeader( FrameworkElement control, string header, Dictionary<string, ContextMenuAction> items, bool enabled = true )
         {
             TextBlock headerBlock = string.IsNullOrEmpty(header) ? null : new TextBlock( new Run(header) );
-            Dictionary<TextBlock, RoutedEventHandler> itemBlocks = MapDicStringToBlock(items);
+            Dictionary<TextBlock, ContextMenuAction> itemBlocks = MapDicStringToBlock(items);
 
             return AddContextMenuHeader( control, headerBlock, itemBlocks, enabled );
         }
@@ -359,7 +378,7 @@ namespace WaywardEngine
         /// <param name="control">FrameworkContentElement to add option to.</param>
         /// <param name="label">Text of the added option.</param>
         /// <param name="action">Action to be performed by option.</param>
-        public static void AddContextMenuItem( FrameworkContentElement control, string label, RoutedEventHandler action, bool enabled = true )
+        public static void AddContextMenuItem( FrameworkContentElement control, string label, ContextMenuAction action, bool enabled = true )
         {
             if( string.IsNullOrEmpty(label) ) { return; }
 
@@ -371,7 +390,7 @@ namespace WaywardEngine
         /// </summary>
         /// <param name="control">FrameworkContentElement to add options to.</param>
         /// <param name="items">Dictionary of Label, Action value pairs.</param>
-        public static void AddContextMenuItems( FrameworkContentElement control, Dictionary<string, RoutedEventHandler> items, bool enabled = true  )
+        public static void AddContextMenuItems( FrameworkContentElement control, Dictionary<string, ContextMenuAction> items, bool enabled = true  )
         {
             AddContextMenuItems( control, string.Empty, items, enabled );
         }
@@ -382,10 +401,10 @@ namespace WaywardEngine
         /// <param name="control">FrameworkContentElement to add options to.</param>
         /// <param name="header">Submenu header name.</param>
         /// <param name="items">Dictionary of Label, Action value pairs</param>
-        public static void AddContextMenuItems( FrameworkContentElement control, string header, Dictionary<string, RoutedEventHandler> items, bool enabled = true  )
+        public static void AddContextMenuItems( FrameworkContentElement control, string header, Dictionary<string, ContextMenuAction> items, bool enabled = true  )
         {
             TextBlock headerBlock = string.IsNullOrEmpty(header) ? null : new TextBlock( new Run(header) );
-            Dictionary<TextBlock, RoutedEventHandler> itemBlocks = MapDicStringToBlock(items);
+            Dictionary<TextBlock, ContextMenuAction> itemBlocks = MapDicStringToBlock(items);
 
             AddContextMenuItems( control, headerBlock, itemBlocks, enabled );
         }
@@ -396,9 +415,9 @@ namespace WaywardEngine
         /// <param name="control">FrameworkContentElement to add options to.</param>
         /// <param name="headerItem">Label of submenu header.</param>
         /// <param name="items">Dictionary of Label, Action value pairs.</param>
-        public static void AddContextMenuItems( FrameworkContentElement control, MenuItem headerItem, Dictionary<string, RoutedEventHandler> items, bool enabled = true  )
+        public static void AddContextMenuItems( FrameworkContentElement control, MenuItem headerItem, Dictionary<string, ContextMenuAction> items, bool enabled = true  )
         {
-            Dictionary<TextBlock, RoutedEventHandler> itemBlocks = MapDicStringToBlock(items);
+            Dictionary<TextBlock, ContextMenuAction> itemBlocks = MapDicStringToBlock(items);
 
             AddContextMenuItems( control, headerItem, itemBlocks, enabled );
         }
@@ -410,10 +429,10 @@ namespace WaywardEngine
         /// <param name="header">Label of submenu header.</param>
         /// <param name="items">Dictionary of Label, Action value pairs.</param>
         /// <returns></returns>
-        public static MenuItem AddContextMenuHeader( FrameworkContentElement control, string header, Dictionary<string, RoutedEventHandler> items, bool enabled = true  )
+        public static MenuItem AddContextMenuHeader( FrameworkContentElement control, string header, Dictionary<string, ContextMenuAction> items, bool enabled = true  )
         {
             TextBlock headerBlock = string.IsNullOrEmpty(header) ? null : new TextBlock( new Run(header) );
-            Dictionary<TextBlock, RoutedEventHandler> itemBlocks = MapDicStringToBlock(items);
+            Dictionary<TextBlock, ContextMenuAction> itemBlocks = MapDicStringToBlock(items);
 
             return AddContextMenuHeader( control, headerBlock, itemBlocks, enabled );
         }
@@ -430,10 +449,10 @@ namespace WaywardEngine
         }
         #endregion
 
-        private static Dictionary<TextBlock, RoutedEventHandler> MapDicStringToBlock( Dictionary<string, RoutedEventHandler> items )
+        private static Dictionary<TextBlock, ContextMenuAction> MapDicStringToBlock( Dictionary<string, ContextMenuAction> items )
         {
-            Dictionary<TextBlock, RoutedEventHandler> itemBlocks = new Dictionary<TextBlock, RoutedEventHandler>();
-            foreach( KeyValuePair<string, RoutedEventHandler> pair in items ) {
+            Dictionary<TextBlock, ContextMenuAction> itemBlocks = new Dictionary<TextBlock, ContextMenuAction>();
+            foreach( KeyValuePair<string, ContextMenuAction> pair in items ) {
                 if( !string.IsNullOrEmpty(pair.Key) ) {
                     itemBlocks[new TextBlock( new Run(pair.Key) )] = pair.Value;
                 }
@@ -442,4 +461,6 @@ namespace WaywardEngine
             return itemBlocks;
         }
     }
+
+    public delegate bool ContextMenuAction();
 }

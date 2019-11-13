@@ -66,28 +66,32 @@ namespace AdventureDemo
 
             //WaywardManager.instance.StartTutorial();
             GameManager.instance.Init(this);
-            GameManager.instance.DisplayPlayerOverview( new Point(800, 150) );
+            GameManager.instance.DisplayOverviewPage( new Point(800, 150), GameManager.instance.player );
             GameManager.instance.DisplayPlayerVerbose( new Point(150, 150) );
         }
         private void SetupContextMenu()
         {
-            ContextMenuHelper.AddContextMenuHeader(WaywardManager.instance.window, "Page", new Dictionary<string, RoutedEventHandler>() {
+            ContextMenuHelper.AddContextMenuHeader(WaywardManager.instance.window, "Page", new Dictionary<string, ContextMenuAction>() {
                 { "Overview", CreateOverviewPage },
                 { "Visual", CreateVerbosePage }
             });
         }
 
-        private void CreateOverviewPage( object sender, RoutedEventArgs e )
+        private bool CreateOverviewPage()
         {
             Point mousePosition = WaywardManager.instance.GetMousePosition();
 
-            GameManager.instance.DisplayPlayerOverview(mousePosition);
+            GameManager.instance.DisplayOverviewPage(mousePosition, GameManager.instance.player);
+
+            return false;
         }
-        private void CreateVerbosePage( object sender, RoutedEventArgs e )
+        private bool CreateVerbosePage()
         {
             Point mousePosition = WaywardManager.instance.GetMousePosition();
 
             GameManager.instance.DisplayPlayerVerbose(mousePosition);
+
+            return false;
         }
 
         private void Application_DispatcherUnhandledException( object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e )

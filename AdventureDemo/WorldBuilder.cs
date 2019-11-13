@@ -12,9 +12,16 @@ namespace AdventureDemo
         Container lastRoom;
         Container lastContainer;
 
-        Dictionary<string, SpawnList> spawnLists;
+        public Dictionary<string, SpawnList> spawnLists;
+
+        Dictionary<string, Material> materials;
 
         public WorldBuilder()
+        {
+            SetupSpawnLists();
+            SetupMaterials();
+        }
+        void SetupSpawnLists()
         {
             spawnLists = new Dictionary<string, SpawnList>();
 
@@ -45,7 +52,6 @@ namespace AdventureDemo
                     { "name", "shelf" }, { "innerVolume", 40.0 }, { "volume", 45.0 }, { "weight", 30.0 } },
                     1.0, 1, true, (container, obj) => {
                         Container shelf = obj as Container;
-                        shelf.AddConnection( new PhysicalConnection("Doorway", shelf, null, 40.0) );
                         shelf.SpawnContents( spawnLists["crew_equipment"] );
 
                         return 0;
@@ -79,12 +85,54 @@ namespace AdventureDemo
                     0.25, 3 )
             });
         }
+        void SetupMaterials()
+        {
+            materials = new Dictionary<string, Material>();
+
+            AddMaterial( "steel", 17, "#6F9BAB" );
+            AddMaterial( "glass", 8, "#B5F2FF" );
+            AddMaterial( "silicon", 4, "#84B2DF" );
+            AddMaterial( "copper", 15, "#D88C17" );
+            AddMaterial( "gold", 16, "#F2DB1D" );
+            AddMaterial( "flesh", 2.5, "#D82C7D" );
+        }
 
         public void BuildWorld()
         {
-            Container space = new Container("Deep Space", null, double.PositiveInfinity);
+            Container space = new Container("Deep Space", -1);
             space.description = "darkness broken up by the dots of lights of distant stars";
-            lastContainer = new Container("spaceship", space, 100000, 150000, 50*10^8);
+            GameManager.instance.AddRoot(space);
+            
+            SmallSpaceship(space);
+            
+            Human playerChar = new Human( "Dirk Casirov" );
+            playerChar.description = "a mysterious individual";
+            FindRoom("spaceship/hallway/cabin").GetContents().Attach(playerChar);
+
+            WaywardWill will = new WaywardWill();
+            space.GetContents().Attach(will);
+            GameManager.instance.player.Control(will);
+        }
+
+        // TODO: Separate this to separate files / load from external file
+        void SmallSpaceship(Container container )
+        {
+            lastContainer = new Container("spaceship", 10000, 15000, 
+                Utilities.Pair<Material, double>(materials["steel"], 3),
+                Utilities.Pair<Material, double>(materials["glass"], 1)
+            );
+            container.GetContents().Attach(lastContainer);
+
+            Container hallway = AddRoom( "hallway", lastContainer, 500 );
+            AddConnectedRoom( "bridge", 300, "doorway", 100, hallway );
+            AddConnectedRoom( "cabin", 200, "doorway", 100, hallway );
+            AddConnectedRoom( "engineering", 400, "doorway", 100, hallway );
+            AddConnectedRoom( "cargo", 600, "doorway", 100, hallway );
+        }
+
+        void LargeSpaceship(Container container)
+        {
+            lastContainer = new Container("spaceship", 100000, 150000, new KeyValuePair<Material, double>(materials["steel"], 1));
             lastContainer.description = "a craft for travelling between the stars with a gleaming metal hull that protects the fragile internals";
 
             Container elevator = AddRoom("Main Elevator", lastContainer, 1500); // TODO: Separate elevator shaft and the elevator itself
@@ -93,10 +141,6 @@ namespace AdventureDemo
             CrewFloorSetup(elevator);
             EngineeringFloorSetup(elevator);
             CargoFloorSetup(elevator);
-            
-            Character playerChar = new Character( "You", FindRoom(elevator, "Quarters Hallway/Quarters A3"), 5, 65, 150 );
-            playerChar.description = "a mysterious individual";
-            GameManager.instance.player.Control(playerChar);
         }
 
         void CrewFloorSetup(Container elevator)
@@ -115,10 +159,10 @@ namespace AdventureDemo
             AddConnectedRoom( "Kitchen", 800, "Doorway", 100 );
 
             hubRoom = AddConnectedRoom( "Crew Escape Pods Hallway", 800, "Doorway", 100, hubRoom );
-            AddConnectedRoom( "Crew Escape Pod 1", 400, "Hatch", 70, hubRoom, spawnLists["cargo_bay"] ); // TODO: All pods should be connected using a docking port
-            AddConnectedRoom( "Crew Escape Pod 2", 400, "Hatch", 70, hubRoom, spawnLists["cargo_bay"] );
-            AddConnectedRoom( "Crew Escape Pod 3", 400, "Hatch", 70, hubRoom, spawnLists["cargo_bay"] );
-            AddConnectedRoom( "Crew Escape Pod 4", 400, "Hatch", 70, hubRoom, spawnLists["cargo_bay"] );
+            AddConnectedRoom( "Crew Escape Pod 1", 400, "Hatch", 70, hubRoom ); // TODO: All pods should be connected using a docking port
+            AddConnectedRoom( "Crew Escape Pod 2", 400, "Hatch", 70, hubRoom );
+            AddConnectedRoom( "Crew Escape Pod 3", 400, "Hatch", 70, hubRoom );
+            AddConnectedRoom( "Crew Escape Pod 4", 400, "Hatch", 70, hubRoom );
         }
         void CargoFloorSetup(Container elevator)
         {
@@ -158,16 +202,33 @@ namespace AdventureDemo
             AddConnectedRoom( "Engine Block B2", 1200, "Bay doorway", 200, hubRoom );
         }
 
+        public Dictionary<string, Material> GetMaterials()
+        {
+            return new Dictionary<string, Material>(materials);
+        }
+        public Material GetMaterial(string key)
+        {
+            if( !materials.ContainsKey(key) ) { return null; }
+
+            return materials[key];
+        }
+        public void AddMaterial( string name, double weight, string color = "#ffffff" )
+        {
+            if( materials.ContainsKey(name) ) { return; }
+            materials.Add( name, new Material( name, weight, color ) );
+        }
+
         public Container AddRoom( string name, Container container, double volume, params SpawnList[] spawns)
         {
-            lastRoom = new Container( name, container, volume, volume + 50 );
+            lastRoom = new Container( name, volume, volume + 100, Utilities.Pair<Material, double>(materials["steel"], 1) );
+            container.GetContents().Attach( lastRoom );
             if( spawns != null ) {
                 lastRoom.SpawnContents(spawns, 1, true);
             }
 
             return lastRoom;
         }
-        public Container AddConnectedRoom( string name, double volume, SpawnList[] spawns = null )
+        public Container AddConnectedRoom( string name, double volume, params SpawnList[] spawns )
         {
             return AddConnectedRoom( name, volume, "Opening", 100, spawns );
         }
@@ -178,7 +239,10 @@ namespace AdventureDemo
         public Container AddConnectedRoom( string name, double volume, string connectionName, double connectionVolume, Container previousRoom, params SpawnList[] spawns )
         {
             Container room = AddRoom( name, lastContainer, volume, spawns );
-            room.AddConnection(new PhysicalConnection(connectionName, room, previousRoom, connectionVolume), true);
+            room.AddConnection( new Dictionary<string, object> {
+                { "second", previousRoom.GetContents() }, { "name", connectionName },
+                { "throughput", connectionVolume }
+            });
 
             return room;
         }
@@ -195,13 +259,12 @@ namespace AdventureDemo
 
             return null;
         }
-        public Container FindRoom( IContainer from, string path )
+        public Container FindRoom( Container from, string path )
         {
+            if( from == null ) { return null; }
+
             if( from.GetData("name").text == path ) {
-                Container fromContainer = from as Container;
-                if( fromContainer != null ) {
-                    return fromContainer;
-                }
+                return from;
             }
 
             int indexOfStep = path.IndexOf('/');
@@ -209,17 +272,16 @@ namespace AdventureDemo
             string nextPath = path.Substring(indexOfStep+1);
 
             foreach( Connection connection in from.GetConnections() ) {
-                Console.WriteLine(connection.secondContainer.GetData("name").text);
-                if( connection.secondContainer.GetData("name").text == nextStep ) {
-                    Container found = FindRoom(connection.secondContainer, nextPath);
+                string roomName = connection.secondContainer.GetParent().GetData("name").text;
+                if( roomName == nextStep ) {
+                    Container found = FindRoom(connection.secondContainer.GetParent() as Container, nextPath);
                     if( found != null ) { return found; }
                 }
             }
-            for( int i = 0; i < from.ContentCount(); i++ ) {
+            for( int i = 0; i < from.GetContentCount(); i++ ) {
                 GameObject obj = from.GetContent(i);
-                Console.WriteLine(obj.GetData("name").text);
                 if( obj.GetData("name").text == nextStep ) {
-                    IContainer container = obj as IContainer;
+                    Container container = obj as Container;
                     if( container != null ) {
                         Container found = FindRoom(container, nextPath);
                         if( found != null ) { return found; }

@@ -4,56 +4,98 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using WaywardEngine;
 
 namespace AdventureDemo
 {
-    class Physical : GameObject, IPhysical
+    class Physical : GameObject
     {
         protected double volume;
-        protected double weight;
+        protected double weight {
+            get {
+                double totalWeight = 0;
+                foreach( KeyValuePair<Material, double> material in materials ) {
+                    totalWeight += material.Key.GetWeight( volume * GetMaterialRatio(material.Key) );
+                }
+
+                return totalWeight;
+            }
+        }
+
+        protected List<PhysicalAttachmentPoint> attachmentPoints;
+
+        public Dictionary<Material, double> materials;
+        protected double totalParts = 0;
 
         public Physical( Dictionary<string, object> data )
             : base(data)
         {
             Construct(
                 data.ContainsKey("volume") ? (double)data["volume"] : 0,
-                data.ContainsKey("weight") ? (double)data["weight"] : 0
+                data.ContainsKey("materials") ? data["materials"] as KeyValuePair<Material, double>[] : new KeyValuePair<Material, double>[0]
             );
         }
-        public Physical( string name, IContainer container )
-            : base(name, container)
+        public Physical( string name )
+            : base(name)
         {
-            Construct(0, 0);
+            Construct(0, new KeyValuePair<Material, double>[0]);
         }
-        public Physical( string name, IContainer container, double volume )
-            : base(name, container)
+        public Physical( string name, double volume, params KeyValuePair<Material, double>[] mats )
+            : base(name)
         {
-            Construct(volume, 0);
+            Construct(volume, mats);
         }
-        public Physical( string name, IContainer container, double volume, double weight )
-            : base(name, container)
-        {
-            Construct(volume, weight);
-        }
-        private void Construct( double volume, double weight )
+        private void Construct( double volume, KeyValuePair<Material, double>[] mats )
         {
             this.description = "a solid object";
 
+            attachmentPoints = new List<PhysicalAttachmentPoint>();
+
             objectData["weight"] = GetDescriptiveWeight;
             objectData["volume"] = GetDescriptiveVolume;
+            objectData["materials"] = GetDescriptiveMaterials;
 
             relevantData.Add(GetDescriptiveVolume);
             relevantData.Add(GetDescriptiveWeight);
+            relevantData.Add(GetDescriptiveMaterials);
 
             this.volume = volume;
-            this.weight = weight;
+            materials = new Dictionary<Material, double>();
+            foreach( KeyValuePair<Material, double> mat in mats ) {
+                AddMaterial( mat.Key, mat.Value );
+            }
+        }
+
+        public override List<Verb> CollectVerbs()
+        {
+            List<Verb> collectedVerbs = base.CollectVerbs();
+
+            foreach( AttachmentPoint point in attachmentPoints ) {
+                foreach( GameObject obj in point.GetAttached() ) {
+                    collectedVerbs.AddRange( obj.CollectVerbs(PossessionType.CONTENT) );
+                }
+            }
+
+            return collectedVerbs;
+        }
+        public override void CollectVerbs( Actor actor, PossessionType possession )
+        {
+            base.CollectVerbs(actor, possession);
+
+            foreach( AttachmentPoint point in attachmentPoints ) {
+                foreach( GameObject obj in point.GetAttached() ) {
+                    obj.CollectVerbs( actor, possession );
+                }
+            }
         }
 
         public virtual GameObjectData GetDescriptiveWeight( string[] parameters )
         {
+            bool getTotal = !(parameters.Length > 0 && parameters[0] == "partial");
+
             GameObjectData data = new GameObjectData();
-            data.text = $"{GetWeight().ToString()} pounds";
+            data.text = $"{GetWeight(getTotal).ToString()} lbs";
 
             data.SetSpan( data.text );
 
@@ -61,30 +103,149 @@ namespace AdventureDemo
         }
         public virtual GameObjectData GetDescriptiveVolume( string[] parameters )
         {
+            bool getTotal = !(parameters.Length > 0 && parameters[0] == "partial");
+
             GameObjectData data = new GameObjectData();
 
-            data.text = $"{GetVolume().ToString()} L";
+            data.text = $"{GetVolume(getTotal).ToString()} L";
             data.SetSpan( data.text );
 
             return data;
         }
-
-        public virtual double GetWeight()
+        public virtual GameObjectData GetDescriptiveMaterials( string[] parameters )
         {
-            return weight;
+            GameObjectData data = new GameObjectData();
+
+            int index = -1;
+            if( parameters.Length > 0 ) {
+                if( !int.TryParse(parameters[0], out index)
+                    || index < 0
+                    || index >= materials.Count ) 
+                {
+                    index = -1;
+                }
+            }
+
+            KeyValuePair<Material, double>[] mats = materials.ToArray();
+            if( index != -1 ) {
+                GetMat( data, mats[index] );
+            } else {
+                for(int i = 0; i < mats.Length; i++ ) {
+                    GetMat( data, mats[i] );
+                }
+            }
+
+            return data;
         }
-        public virtual double GetVolume()
+        protected virtual void GetMat( GameObjectData data, KeyValuePair<Material, double> mat )
         {
-            return volume;
+            GameObjectData matData = mat.Key.GetData("name upper");
+            data.text = $"{matData.text} : {GetMaterialRatio(mat.Key, true)}%";
+
+            data.AddSpan( WaywardTextParser.Parse(@"[0] : [1]    ", 
+                () => { return matData.span; },
+                () => { return WaywardTextParser.Parse($@"{GetMaterialRatio(mat.Key, true)}%"); }
+            ) );
         }
 
-        public override DescriptivePage DisplayDescriptivePage()
+        public virtual double GetWeight( bool total = true )
         {
-            DescriptivePage page = base.DisplayDescriptivePage();
-            
-            page.AddSection(new PhysicalDescriptivePageSection());
+            double totalWeight = weight;
 
-            return page;
+            if( total ) {
+                foreach( PhysicalAttachmentPoint point in attachmentPoints ) {
+                    foreach( Physical obj in point.GetAttachedAsPhysical() ) {
+                        totalWeight += obj.GetWeight();
+                    }
+                }
+            }
+
+            return totalWeight;
         }
+        public virtual double GetVolume( bool total = true )
+        {
+            double totalVolume = volume;
+
+            if( total ) {
+                foreach( PhysicalAttachmentPoint point in attachmentPoints ) {
+                    if( point.isExternal ) {
+                        foreach( Physical obj in point.GetAttachedAsPhysical() ) {
+                            totalVolume += obj.GetVolume();
+                        }
+                    }
+                }
+            }
+
+            return totalVolume;
+        }
+
+        public override List<DescriptivePageSection> DisplayDescriptivePage()
+        {
+            List<DescriptivePageSection> sections = base.DisplayDescriptivePage();
+
+            sections.Add( new PhysicalDescriptivePageSection() );
+            sections.Add( new PhysicalAttachmentDescriptivePageSection() );
+
+            return sections;
+        }
+<<<<<<< HEAD
+=======
+        
+        public virtual PhysicalAttachmentPoint[] GetAttachmentPoints()
+        {
+            return attachmentPoints.ToArray();
+        }
+        public virtual int GetAttachmentCount()
+        {
+            return attachmentPoints.Count;
+        }
+        public virtual void AddAttachmentPoint( Dictionary<string, object> data )
+        {
+            if( !data.ContainsKey("parent") ) {
+                data.Add("parent", this);
+            }
+
+            attachmentPoints.Add(new PhysicalAttachmentPoint(data) );
+        }
+        public virtual void AddAttachmentPoint( PhysicalAttachmentPoint point )
+        {
+            attachmentPoints.Add(point);
+        }
+        public virtual void RemoveAttachmentPoint( PhysicalAttachmentPoint point )
+        {
+            attachmentPoints.Remove(point);
+        }
+
+        public virtual void AddMaterial( Material material, double parts )
+        {
+            if( !materials.ContainsKey(material) ) {
+                materials.Add( material, parts );
+            } else {
+                totalParts -= materials[material];
+                materials[material] = parts;
+            }
+
+            totalParts += parts;
+        }
+        public virtual void RemoveMaterial( Material material )
+        {
+            if( !materials.ContainsKey(material) ) { return; }
+
+            totalParts -= materials[material];
+            materials.Remove(material);
+        }
+        public virtual double GetMaterialRatio( Material material, bool asPercent = false )
+        {
+            if( !materials.ContainsKey(material) ) { return 0; }
+
+            double ratio = materials[material] / totalParts;
+
+            if( asPercent ) {
+                ratio = Math.Round(ratio * 100, 1);
+            }
+
+            return ratio;
+        }
+>>>>>>> attachments_root_1
     }
 }

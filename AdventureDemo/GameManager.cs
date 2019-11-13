@@ -101,12 +101,7 @@ namespace AdventureDemo
         {
             return rootObjects[i];
         }
-
-        public void DisplayPlayerOverview( Point position )
-        {
-            OverviewPage page = DisplayOverviewPage( position );
-            page.DisplayObject( player.GetControlled() ); // XXX: Find better system
-        }
+        
         public void DisplayPlayerVerbose( Point position )
         {
             VerbosePage page = DisplayVerbosePage( position, player.GetControlled() );
@@ -117,9 +112,9 @@ namespace AdventureDemo
             throw new System.NotImplementedException("GameManager.DisplayRoots is not implemented. Observer needs refactor");
         }
 
-        public OverviewPage DisplayOverviewPage( Point position )
+        public OverviewPage DisplayOverviewPage( Point position, Actor actor )
         {
-            OverviewPage page = new OverviewPage(player);
+            OverviewPage page = new OverviewPage(actor);
             WaywardManager.instance.AddPage( page, position );
 
             return page;
@@ -131,10 +126,13 @@ namespace AdventureDemo
 
             return page;
         }
-        public DescriptivePage DisplayDescriptivePage( Point position, GameObject target, DescriptivePageSection[] sections )
+        public DescriptivePage DisplayDescriptivePage( GameObject target )
         {
+            DescriptivePageSection[] sections = target.DisplayDescriptivePage().ToArray();
+            Point mousePosition = WaywardManager.instance.GetMousePosition();
+
             DescriptivePage page = new DescriptivePage( player, target, sections );
-            WaywardManager.instance.AddPage(page, position);
+            WaywardManager.instance.AddPage(page, mousePosition);
 
             return page;
         }

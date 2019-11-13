@@ -2,179 +2,72 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Documents;
 using System.Threading.Tasks;
-using System.Windows;
-using WaywardEngine;
 
 namespace AdventureDemo
 {
-    /// <summary>
-    /// Connects IContainers allowing GameObjects to transfer from one to the other. 
-    /// 'Belongs' to one IContainer and connects to others. The connected IContainer can never be null.
-    /// Attempting to set the connected IContainer to null will cause it to point to the container of the parent IContainer.
-    /// </summary>
-    class Connection : GameObject, IContainer, IVerbSuggest
+    class Connection : GameObject
     {
-        protected IContainer _secondContainer;
-        public IContainer secondContainer
-        {
+        ContainerAttachmentPoint _secondContainer;
+        public ContainerAttachmentPoint secondContainer {
             get {
                 return _secondContainer;
             }
+            set {
+                if( value != null ) {
+                    _secondContainer = value;
+                } else {
+                    ContainerAttachmentPoint parentContainer = container.GetParent().container as ContainerAttachmentPoint;
+                    _secondContainer = parentContainer;
+                }
+            }
         }
 
-        GameObject contained;
+        double _throughput;
+        public double throughput {
+             get {
+                return _throughput;
+            }
+        }
 
         public Connection( Dictionary<string, object> data )
             : base(data)
         {
-            Construct(
-                data.ContainsKey("connection") ? (IContainer)data["connection"] : null
-            );
-        }
-        public Connection( string name, IContainer first, IContainer second )
-            : base(name, first)
-        {
-            Construct( second );
-        }
-        void Construct( IContainer second )
-        {
-            this.description = "an opening";
+            if( !data.ContainsKey("parent") ) { throw new System.ArgumentException("Connection requires a parent container"); }
+            ContainerAttachmentPoint parent = data["parent"] as ContainerAttachmentPoint;
 
-            SetConnection(second);
+            ContainerAttachmentPoint second = data.ContainsKey("second") ? data["second"] as ContainerAttachmentPoint : null;
+            double volume = data.ContainsKey("throughput") ? (double)data["throughput"] : 0;
 
-            objectData["connection"] = GetDescriptiveConnection;
+            Construct( parent, second, volume );
 
-            relevantData.Insert(0, GetDescriptiveConnection);
-        }
-
-        public override bool SetContainer( IContainer newContainer )
-        {
-            if( _container != null ) { return false; }
-
-            _container = newContainer;
-            return true;
-        }
-        public virtual void SetConnection( IContainer newContainer )
-        {
-            if( newContainer == null ) {
-                GameObject containerObject = container as GameObject;
-                if( containerObject != null ) {
-                    _secondContainer = containerObject.container;
-                }
-            } else {
-                _secondContainer = newContainer;
+            if( !data.ContainsKey("description") ) {
+                description = "an opening";
             }
         }
-        public virtual Connection CreateMatching()
+        public Connection( ContainerAttachmentPoint parent )
+            : base( "opening" )
         {
-            return new Connection(name, secondContainer, container);
+            Construct( parent, null, 0 );
+            description = "an opening";
         }
-
-        public virtual void Pass( GameObject obj, IContainer origin )
+        public Connection( ContainerAttachmentPoint parent, ContainerAttachmentPoint second )
+            : base( "opening" )
         {
-            if( !CanContain(obj) ) { return; }
-
-            IContainer target = origin == container ? secondContainer : container;
-
-            obj.SetContainer(target);
+            Construct( parent, second, 0 );
+            description = "an opening";
         }
-
-        public virtual GameObject GetContent( int i )
+        public Connection( ContainerAttachmentPoint parent, ContainerAttachmentPoint second, double throughput )
+            : base( "opening" )
         {
-            return contained;
+            Construct( parent, second, throughput );
+            description = "an opening";
         }
-        public virtual int ContentCount()
+        void Construct( ContainerAttachmentPoint parent, ContainerAttachmentPoint second, double throughput )
         {
-            return 1;
-        }
-        public virtual bool CanContain( GameObject obj )
-        {
-            if( contained != null ) { return false; }
+            this._throughput = throughput;
 
-            return true;
-        }
-        public virtual bool DoesContain( GameObject obj )
-        {
-            return obj == contained;
-        }
-        public virtual bool AddContent( GameObject obj )
-        {
-            if( !CanContain(obj) ) { return false; }
-            
-            obj.SetContainer(this);
-
-            return true;
-        }
-        public virtual bool RemoveContent( GameObject obj )
-        {
-            contained = null;
-            return true;
-        }
-
-        public virtual List<Connection> GetConnections()
-        {
-            throw new NotImplementedException();
-        }
-        public virtual void AddConnection( Connection connection )
-        {
-            throw new NotImplementedException();
-        }
-        public virtual void RemoveConnection( Connection connection )
-        {
-            throw new NotImplementedException();
-        }
-        
-        public override GameObjectData GetDescription( string[] parameters )
-        {
-            GameObjectData data = new GameObjectData();
-
-            GameObjectData nameData = GetData("name");
-            GameObjectData connectionData1 = GetData("connection 0");
-            GameObjectData connectionData2 = GetData("connection 1");
-            data.text = $"This is a {nameData.text} connecting {connectionData1.text} and {connectionData2.text}";
-
-            data.SetSpan( new Run("This is a "),
-                nameData.span,
-                new Run(" connecting "),
-                connectionData1.span,
-                new Run(" and "),
-                connectionData2.span,
-                new Run(".")
-            );
-
-            return data;
-        }
-        public virtual GameObjectData GetDescriptiveConnection( string[] parameters )
-        {
-            GameObjectData data = new GameObjectData();
-
-            IContainer target = parameters.Length == 0 || parameters[0] == "0" ? container : secondContainer;
-
-            GameObject obj = target as GameObject;
-            if( obj == null ) { return data; }
-
-            GameObjectData nameData = obj.GetData("name");
-            data.text = nameData.text;
-            data.span = nameData.span;
-
-            return data;
-        }
-
-        public bool DisplayVerb( Verb verb, FrameworkContentElement span )
-        {
-            return false;
-        }
-        public bool SetDefaultVerb( Verb verb, FrameworkContentElement span )
-        {
-            switch( verb ) {
-                case EnterVerb enter:
-                    span.MouseLeftButtonUp += delegate { verb.Action(this); };
-                    return true;
-                default:
-                    return false;
-            }
+            this.secondContainer = second;
         }
     }
 }

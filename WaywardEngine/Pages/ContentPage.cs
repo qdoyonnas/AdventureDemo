@@ -47,7 +47,7 @@ namespace WaywardEngine
             contents.Children.Remove(content);
         }
 
-        public virtual void Clear()
+        public override void Clear()
         {
             contents.Children.Clear();
         }

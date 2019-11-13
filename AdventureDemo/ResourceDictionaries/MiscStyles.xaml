@@ -24,7 +24,7 @@
         <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
     </Style>
 
-    <Style x:Key="Link" TargetType="Span">
+    <Style x:Key="Link" x:Shared="false" TargetType="Span">
         <Setter Property="Foreground" Value="{StaticResource WaywardAuburnBrush}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">

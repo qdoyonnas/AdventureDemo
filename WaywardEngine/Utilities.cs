@@ -74,5 +74,10 @@ namespace WaywardEngine
 
             return distance;
         }
+
+        public static KeyValuePair<T, K> Pair<T, K>( T a, K b )
+        {
+            return new KeyValuePair<T, K>(a, b);
+        }
     }
 }

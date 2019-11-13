@@ -70,12 +70,18 @@ namespace WaywardEngine
             Canvas.SetTop( element, offsetPosition.Y );
         }
         
-        public void CloseAction( object sender, RoutedEventArgs e )
+        public bool CloseAction()
         {
             WaywardManager.instance.window.mainCanvas.Children.Remove(element);
             WaywardManager.instance.pages.Remove(this);
+
+            return false;
         }
 
+        public virtual void Clear()
+        {
+            // Add Clear behaviour here
+        }
         public virtual void Update()
         {
             // Add your update behaviour here

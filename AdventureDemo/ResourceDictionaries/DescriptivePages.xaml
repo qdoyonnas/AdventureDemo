@@ -18,6 +18,24 @@
         </ScrollViewer>
     </Border>
 
+    <Border x:Key="DescriptiveGameObjectVerbs" x:Shared="false" Style="{StaticResource PageStyle}">
+        <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Style="{DynamicResource Header}">Verbs</TextBlock>
+                <Grid Name="Verbs">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
     <Border x:Key="DescriptivePhysical" x:Shared="false" Style="{StaticResource PageStyle}">
         <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
             <Grid Margin="{StaticResource Padding}">
@@ -25,29 +43,81 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
                 <TextBlock Grid.Column="0">Volume: <TextBlock Margin="0" Name="Volume"></TextBlock></TextBlock>
                 <TextBlock Grid.Column="1">Weight: <TextBlock Margin="0" Name="Weight"></TextBlock></TextBlock>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Name="Materials"></TextBlock>
             </Grid>
         </ScrollViewer>
     </Border>
 
+    <Border x:Key="DescriptivePhysicalAttachments" x:Shared="false" Style="{StaticResource PageStyle}">
+        <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Grid.Column="0" Style="{DynamicResource Header}">Attachment Points</TextBlock>
+                <StackPanel Name="Attachments">
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
+    <StackPanel x:Key="DescriptiveAttachmentEntry" x:Shared="false">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Name="AttachmentName" Grid.Column="0" Style="{DynamicResource Header}">Name</TextBlock>
+            <TextBlock Grid.Column="1" Name="Quantity"></TextBlock>
+            <TextBlock Grid.Column="2" Name="VolumeRatio"></TextBlock>
+        </Grid>
+        <StackPanel Name="Contents">
+        </StackPanel>
+    </StackPanel>
+
+    <Grid x:Key="AttachmentObjectEntry" x:Shared="false">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Name="Data1"></TextBlock>
+            <TextBlock Grid.Column="1" Name="Data2"></TextBlock>
+            <TextBlock Grid.Column="2" Name="Data3"></TextBlock>
+        </Grid>
+        <Grid Grid.Row="1">
+            <StackPanel Name="SubData" Margin="20 0 0 0">
+            </StackPanel>
+        </Grid>
+    </Grid>
+
     <Border x:Key="DescriptiveContainer" x:Shared="false" Style="{StaticResource PageStyle}">
         <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Grid.Column="0" Style="{DynamicResource Header}">Contents</TextBlock>
-                    <TextBlock Grid.Column="1" Name="VolumeRatio"></TextBlock>
-                </Grid>
-                <StackPanel Name="Contents">
-                </StackPanel>
                 <TextBlock Grid.Column="0" Style="{DynamicResource Header}">Exits</TextBlock>
                 <StackPanel Name="Connections">
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
+    <Border x:Key="DescriptiveOrganism" x:Shared="false" Style="{StaticResource PageStyle}">
+        <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Grid.Column="0" Style="{DynamicResource Header}">Body</TextBlock>
+                <StackPanel Name="BodyParts">
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

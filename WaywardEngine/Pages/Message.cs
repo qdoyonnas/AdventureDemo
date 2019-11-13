@@ -54,7 +54,7 @@ namespace WaywardEngine
             Point newPosition = new Point( Canvas.GetLeft(element), Canvas.GetTop(element) );
             //if( Utilities.Distance(newPosition, initialPosition) < 1 ) {
             if( doCloseAction ) {
-                CloseAction(sender, e);
+                CloseAction();
             }
         }
     }

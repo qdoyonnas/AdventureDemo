@@ -13,25 +13,62 @@ namespace AdventureDemo
     {
         TextBlock weightText;
         TextBlock volumeText;
+        TextBlock materials;
 
         public PhysicalDescriptivePageSection()
             : base("DescriptivePhysical")
         {
             weightText = Utilities.FindNode<TextBlock>( element, "Weight" );
             volumeText = Utilities.FindNode<TextBlock>( element, "Volume" );
+            materials = Utilities.FindNode<TextBlock>( element, "Materials" );
         }
 
         public override void Clear()
         {
             weightText.Inlines.Clear();
             volumeText.Inlines.Clear();
+            materials.Inlines.Clear();
         }
         public override void DisplayContents()
         {
             bool canObserve = observer.CanObserve(page.target);
 
-            weightText.Inlines.Add( canObserve ? page.target.GetData("weight").span : WaywardTextParser.Parse("???") );
-            volumeText.Inlines.Add( canObserve ? page.target.GetData("volume").span : WaywardTextParser.Parse("???") );
+            // TODO: Route this through observer knowledge instead
+            if( !canObserve ) {
+                weightText.Inlines.Add( WaywardTextParser.Parse("???") );
+                volumeText.Inlines.Add( WaywardTextParser.Parse("???") );
+            } else {
+                GameObjectData weightData = page.target.GetData("weight");
+                GameObjectData partialWeightData = page.target.GetData("weight partial");
+                GameObjectData volumeData = page.target.GetData("volume");
+                GameObjectData partialVolumeData = page.target.GetData("volume partial");
+
+                if( weightData.text != partialWeightData.text ) {
+                    weightText.Inlines.Add( WaywardTextParser.Parse("[0] ([1])",
+                        () => { return weightData.span; },
+                        () => { return partialWeightData.span; }) );
+                } else {
+                    weightText.Inlines.Add( weightData.span );
+                }
+                if( volumeData.text != partialVolumeData.text ) {
+                    volumeText.Inlines.Add( WaywardTextParser.Parse("[0] ([1])",
+                        () => { return volumeData.span; },
+                        () => { return partialVolumeData.span; }) );
+                } else {
+                    volumeText.Inlines.Add( volumeData.span );
+                }
+            }
+
+            FetchMaterials();
+        }
+        void FetchMaterials()
+        {
+            GameObjectData data = observer.Observe(page.target, "materials");
+            if( data.span.Inlines.Count > 0 ) {
+                materials.Inlines.Add( data.span );
+            } else {
+                materials.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }
