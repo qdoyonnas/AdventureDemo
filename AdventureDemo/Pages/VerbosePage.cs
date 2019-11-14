@@ -36,7 +36,6 @@ namespace AdventureDemo
             _observer = observer;
             _subject = subject;
 
-            //SetTitleVisibility(false);
             SetTitle(". . .");
             FrameworkElement panel = GameManager.instance.GetResource<FrameworkElement>("VerbosePage");
             AddContent(panel);

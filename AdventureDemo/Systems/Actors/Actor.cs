@@ -22,6 +22,8 @@ namespace AdventureDemo
 
 		public virtual void Control( GameObject obj )
         {
+            verbs.Clear();
+
             if( controlledObject != null ) {
                 bool success = controlledObject.SetActor(null, PossessionType.EMBODIMENT);
                 if( !success ) { return; }
@@ -34,16 +36,23 @@ namespace AdventureDemo
                     return;
                 }
             }
+
+            controlledObject.CollectVerbs(this, PossessionType.EMBODIMENT);
         }
 		public virtual GameObject GetControlled()
         {
 			return controlledObject;
         }
 
-        public void DisplayToOverview( OverviewPage page )
+        public List<GameObject> GetSubjectObjects()
         {
             // TODO: Senses here?
-            page.DisplayObject(controlledObject);
+
+            List<GameObject> subjects = new List<GameObject>();
+
+            subjects.Add(controlledObject);
+
+            return subjects;
         }
 
 		/// <summary>

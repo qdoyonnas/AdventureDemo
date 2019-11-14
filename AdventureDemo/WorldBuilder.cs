@@ -109,9 +109,9 @@ namespace AdventureDemo
             playerChar.description = "a mysterious individual";
             FindRoom("spaceship/hallway/cabin").GetContents().Attach(playerChar);
 
-            WaywardWill will = new WaywardWill();
-            space.GetContents().Attach(will);
-            GameManager.instance.player.Control(will);
+            //WaywardWill will = new WaywardWill();
+            //space.GetContents().Attach(will);
+            GameManager.instance.player.Control(playerChar);
         }
 
         // TODO: Separate this to separate files / load from external file

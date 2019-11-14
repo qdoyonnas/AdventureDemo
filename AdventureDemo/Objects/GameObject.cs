@@ -92,8 +92,6 @@ namespace AdventureDemo
             if( actor != null && this.actor != null ) { return false; }
             _actor = actor;
 
-            CollectVerbs(actor, possession);
-
             return true;
         }
 

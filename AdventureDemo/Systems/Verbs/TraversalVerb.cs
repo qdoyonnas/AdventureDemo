@@ -29,7 +29,8 @@ namespace AdventureDemo
             if( container == null ) { 
                 Connection connection = target as Connection;
                 if( connection == null ) { return CheckResult.INVALID; }
-
+                
+                Console.WriteLine("is a connection");
                 return CheckConnection(connection);
             }
 
