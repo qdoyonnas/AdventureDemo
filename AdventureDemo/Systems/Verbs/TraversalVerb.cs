@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using WaywardEngine;
 
 namespace AdventureDemo
 {
@@ -30,7 +33,6 @@ namespace AdventureDemo
                 Connection connection = target as Connection;
                 if( connection == null ) { return CheckResult.INVALID; }
                 
-                Console.WriteLine("is a connection");
                 return CheckConnection(connection);
             }
 
@@ -44,7 +46,21 @@ namespace AdventureDemo
         }
         CheckResult CheckContainer( Container container )
         {
+            if( physicalSelf.container == container.GetContents() ) { return CheckResult.INVALID; }
             return container.CanContain(physicalSelf);
+        }
+
+        public override void Display( Actor actor, GameObject target, FrameworkContentElement span )
+        {
+            CheckResult check = Check(target);
+            if( check >= CheckResult.RESTRICTED ) {
+                Dictionary<TextBlock, ContextMenuAction> items = new Dictionary<TextBlock, ContextMenuAction>();
+                if( check == CheckResult.RESTRICTED ) {
+                    ContextMenuHelper.AddContextMenuItem( span, WaywardTextParser.ParseAsBlock($@"<gray>{displayLabel}</gray>") , null, false );
+                } else {
+                    ContextMenuHelper.AddContextMenuItem( span, WaywardTextParser.ParseAsBlock(displayLabel) , delegate { return Action(target); } );
+                }
+            }
         }
     }
 }

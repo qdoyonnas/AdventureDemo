@@ -11,6 +11,7 @@ namespace AdventureDemo
         public BodyAttachmentPoint( GameObject parent )
             : base( parent, -1, 1, AttachmentType.BODY )
         {
+            _isExternal = true;
         }
     }
 }

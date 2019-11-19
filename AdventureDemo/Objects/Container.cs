@@ -113,6 +113,27 @@ namespace AdventureDemo
             }
         }
 
+        public override bool SetContainer( AttachmentPoint newContainer )
+        {
+            bool result = base.SetContainer(newContainer);
+            if( !result ) { return false; }
+
+            if( contents.isExternal ) {
+                foreach( Physical obj in contents.GetAttachedAsPhysical() ) {
+                    obj.SetContainer(newContainer);
+                }
+            }
+
+            return true;
+        }
+
+        public override bool Contains( Physical obj )
+        {
+            bool result = base.Contains(obj);
+            if( result ) { return true; }
+
+            return contents.Contains(obj);
+        }
         public ContainerAttachmentPoint GetContents()
         {
             return contents;
@@ -192,16 +213,13 @@ namespace AdventureDemo
             return sections;
         }
 
-        public override bool SetActor( Actor actor, PossessionType possession )
+        public override void CollectVerbs( Actor actor, PossessionType possession )
         {
-            bool success = base.SetActor(actor, possession);
-            if( !success ) { return false; }
+            base.CollectVerbs(actor, possession);
 
-            foreach( GameObject obj in contents.GetAttached() ) {
-                obj.CollectVerbs(actor, PossessionType.CONTENT);
+            foreach( GameObject content in contents.GetAttached() ) {
+                content.CollectVerbs( actor, PossessionType.CONTENT );
             }
-
-            return true;
         }
 
         public Container SpawnContents(double weight = 1)

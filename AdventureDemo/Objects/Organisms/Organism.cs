@@ -35,6 +35,20 @@ namespace AdventureDemo
             _body = new BodyAttachmentPoint(this);
         }
 
+        public override bool SetContainer( AttachmentPoint newContainer )
+        {
+            bool result = base.SetContainer(newContainer);
+            if( !result ) { return false; }
+
+            if( bodyAttachmentPoint.isExternal ) {
+                foreach( Physical obj in bodyAttachmentPoint.GetAttachedAsPhysical() ) {
+                    obj.SetContainer(newContainer);
+                }
+            }
+
+            return true;
+        }
+
         public override double GetVolume(bool total = true)
         {
             double totalVolume = base.GetVolume(total);
@@ -107,11 +121,31 @@ namespace AdventureDemo
         public BodyPart AddBodyPart( string path, BodyPart part )
         {
             BodyPart parent = GetBody(path);
-            if( parent == null ) {
-                _body.Attach( part );
-            }
 
             return AddBodyPart(parent, part);
+        }
+
+        public override bool Contains( Physical obj )
+        {
+            bool result = base.Contains(obj);
+            if( result ) { return true; }
+
+            if( _body != null && _body.Contains(obj) ) {
+                return true;
+            }
+
+            return false;
+        }
+        public override bool Externalize( Physical obj )
+        {
+            bool result = base.Externalize(obj);
+            if( result ) { return true; }
+
+            if( _body != null && _body.Contains(obj) ) {
+                return true;
+            }
+
+            return false;
         }
 
         public override List<DescriptivePageSection> DisplayDescriptivePage()

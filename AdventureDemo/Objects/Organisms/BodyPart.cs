@@ -32,6 +32,22 @@ namespace AdventureDemo
             _bodyParts = new List<BodyAttachmentPoint>();
         }
 
+        public override bool SetContainer( AttachmentPoint newContainer )
+        {
+            bool result = base.SetContainer(newContainer);
+            if( !result ) { return false; }
+
+            foreach( BodyAttachmentPoint point in bodyParts ) {
+                if( point.isExternal ) {
+                    foreach( Physical obj in point.GetAttachedAsPhysical() ) {
+                        obj.SetContainer(newContainer);
+                    }
+                }
+            }
+
+            return true;
+        }
+
         public override double GetVolume(bool total = true)
         {
             double totalVolume = base.GetVolume(total);
@@ -96,6 +112,7 @@ namespace AdventureDemo
             foreach( BodyAttachmentPoint point in _bodyParts ) {
                 if( point.CanAttach(part) == CheckResult.VALID ) {
                     point.Attach(part);
+                    return;
                 }
             }
         }
@@ -123,6 +140,32 @@ namespace AdventureDemo
             }
 
             return null;
+        }
+        public override bool Contains( Physical obj )
+        {
+            bool result = base.Contains(obj);
+            if( result ) { return true; }
+
+            foreach( BodyAttachmentPoint point in bodyParts ) {
+                if( point.Contains(obj) ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        public override bool Externalize( Physical obj )
+        {
+            bool result = base.Externalize(obj);
+            if( result ) { return true; }
+
+            foreach( BodyAttachmentPoint point in bodyParts ) {
+                if( point.Contains(obj) ) {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

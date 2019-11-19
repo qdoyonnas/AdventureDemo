@@ -11,6 +11,8 @@ namespace AdventureDemo
 {
     class Physical : GameObject
     {
+        #region Fields
+
         protected double volume;
         protected double weight {
             get {
@@ -24,9 +26,19 @@ namespace AdventureDemo
         }
 
         protected List<PhysicalAttachmentPoint> attachmentPoints;
+        protected Physical _attachedTo;
+        public Physical attachedTo {
+            get {
+                return _attachedTo;
+            }
+        }
 
         public Dictionary<Material, double> materials;
         protected double totalParts = 0;
+
+        #endregion
+
+        #region Constructors
 
         public Physical( Dictionary<string, object> data )
             : base(data)
@@ -67,6 +79,31 @@ namespace AdventureDemo
             }
         }
 
+        public override bool SetContainer( AttachmentPoint newContainer )
+        {
+            bool result = base.SetContainer(newContainer);
+            if( !result ) { return false; }
+
+            foreach( PhysicalAttachmentPoint point in attachmentPoints ) {
+                if( point.isExternal ) {
+                    foreach( Physical obj in point.GetAttachedAsPhysical() ) {
+                        obj.SetContainer(newContainer);
+                    }
+                }
+            }
+
+            return true;
+        }
+        public virtual bool SetAttachedTo( Physical obj )
+        {
+            _attachedTo = obj;
+            return true;
+        }
+
+        #endregion
+
+        #region Verb Methods
+
         public override List<Verb> CollectVerbs()
         {
             List<Verb> collectedVerbs = base.CollectVerbs();
@@ -85,11 +122,145 @@ namespace AdventureDemo
 
             foreach( AttachmentPoint point in attachmentPoints ) {
                 foreach( GameObject obj in point.GetAttached() ) {
-                    obj.CollectVerbs( actor, possession );
+                    obj.CollectVerbs( actor, PossessionType.CONTENT );
                 }
             }
         }
 
+        #endregion
+
+        #region Physical Methods
+
+        public virtual double GetWeight( bool total = true )
+        {
+            double totalWeight = weight;
+
+            if( total ) {
+                foreach( PhysicalAttachmentPoint point in attachmentPoints ) {
+                    foreach( Physical obj in point.GetAttachedAsPhysical() ) {
+                        totalWeight += obj.GetWeight();
+                    }
+                }
+            }
+
+            return totalWeight;
+        }
+        public virtual double GetVolume( bool total = true )
+        {
+            double totalVolume = volume;
+
+            if( total ) {
+                foreach( PhysicalAttachmentPoint point in attachmentPoints ) {
+                    if( point.isExternal ) {
+                        foreach( Physical obj in point.GetAttachedAsPhysical() ) {
+                            totalVolume += obj.GetVolume();
+                        }
+                    }
+                }
+            }
+
+            return totalVolume;
+        }
+
+        #endregion
+
+        #region Attachment Point Methods
+
+        public virtual PhysicalAttachmentPoint[] GetAttachmentPoints()
+        {
+            return attachmentPoints.ToArray();
+        }
+        public virtual int GetAttachmentCount()
+        {
+            return attachmentPoints.Count;
+        }
+        public virtual void AddAttachmentPoint( Dictionary<string, object> data )
+        {
+            if( !data.ContainsKey("parent") ) {
+                data.Add("parent", this);
+            }
+
+            attachmentPoints.Add(new PhysicalAttachmentPoint(data) );
+        }
+        public virtual void AddAttachmentPoint( PhysicalAttachmentPoint point )
+        {
+            attachmentPoints.Add(point);
+        }
+        public virtual void RemoveAttachmentPoint( PhysicalAttachmentPoint point )
+        {
+            attachmentPoints.Remove(point);
+        }
+        public virtual bool Contains( Physical obj )
+        {
+            if( this == obj ) { return true; }
+
+            foreach( PhysicalAttachmentPoint point in attachmentPoints ) {
+                if( point.Contains(obj) ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        public virtual bool Externalize( Physical obj )
+        {
+            foreach( PhysicalAttachmentPoint point in attachmentPoints ) {
+                if( point.isExternal && point.Contains(obj) ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        #endregion
+
+        #region Material Methods 
+
+        public virtual void AddMaterial( Material material, double parts )
+        {
+            if( !materials.ContainsKey(material) ) {
+                materials.Add( material, parts );
+            } else {
+                totalParts -= materials[material];
+                materials[material] = parts;
+            }
+
+            totalParts += parts;
+        }
+        public virtual void RemoveMaterial( Material material )
+        {
+            if( !materials.ContainsKey(material) ) { return; }
+
+            totalParts -= materials[material];
+            materials.Remove(material);
+        }
+        public virtual double GetMaterialRatio( Material material, bool asPercent = false )
+        {
+            if( !materials.ContainsKey(material) ) { return 0; }
+
+            double ratio = materials[material] / totalParts;
+
+            if( asPercent ) {
+                ratio = Math.Round(ratio * 100, 1);
+            }
+
+            return ratio;
+        }
+
+        #endregion
+
+        #region Descriptive Methods
+
+        public override List<DescriptivePageSection> DisplayDescriptivePage()
+        {
+            List<DescriptivePageSection> sections = base.DisplayDescriptivePage();
+
+            sections.Add( new PhysicalDescriptivePageSection() );
+            sections.Add( new PhysicalAttachmentDescriptivePageSection() );
+
+            return sections;
+        }
         public virtual GameObjectData GetDescriptiveWeight( string[] parameters )
         {
             bool getTotal = !(parameters.Length > 0 && parameters[0] == "partial");
@@ -148,101 +319,6 @@ namespace AdventureDemo
             ) );
         }
 
-        public virtual double GetWeight( bool total = true )
-        {
-            double totalWeight = weight;
-
-            if( total ) {
-                foreach( PhysicalAttachmentPoint point in attachmentPoints ) {
-                    foreach( Physical obj in point.GetAttachedAsPhysical() ) {
-                        totalWeight += obj.GetWeight();
-                    }
-                }
-            }
-
-            return totalWeight;
-        }
-        public virtual double GetVolume( bool total = true )
-        {
-            double totalVolume = volume;
-
-            if( total ) {
-                foreach( PhysicalAttachmentPoint point in attachmentPoints ) {
-                    if( point.isExternal ) {
-                        foreach( Physical obj in point.GetAttachedAsPhysical() ) {
-                            totalVolume += obj.GetVolume();
-                        }
-                    }
-                }
-            }
-
-            return totalVolume;
-        }
-
-        public override List<DescriptivePageSection> DisplayDescriptivePage()
-        {
-            List<DescriptivePageSection> sections = base.DisplayDescriptivePage();
-
-            sections.Add( new PhysicalDescriptivePageSection() );
-            sections.Add( new PhysicalAttachmentDescriptivePageSection() );
-
-            return sections;
-        }
-        
-        public virtual PhysicalAttachmentPoint[] GetAttachmentPoints()
-        {
-            return attachmentPoints.ToArray();
-        }
-        public virtual int GetAttachmentCount()
-        {
-            return attachmentPoints.Count;
-        }
-        public virtual void AddAttachmentPoint( Dictionary<string, object> data )
-        {
-            if( !data.ContainsKey("parent") ) {
-                data.Add("parent", this);
-            }
-
-            attachmentPoints.Add(new PhysicalAttachmentPoint(data) );
-        }
-        public virtual void AddAttachmentPoint( PhysicalAttachmentPoint point )
-        {
-            attachmentPoints.Add(point);
-        }
-        public virtual void RemoveAttachmentPoint( PhysicalAttachmentPoint point )
-        {
-            attachmentPoints.Remove(point);
-        }
-
-        public virtual void AddMaterial( Material material, double parts )
-        {
-            if( !materials.ContainsKey(material) ) {
-                materials.Add( material, parts );
-            } else {
-                totalParts -= materials[material];
-                materials[material] = parts;
-            }
-
-            totalParts += parts;
-        }
-        public virtual void RemoveMaterial( Material material )
-        {
-            if( !materials.ContainsKey(material) ) { return; }
-
-            totalParts -= materials[material];
-            materials.Remove(material);
-        }
-        public virtual double GetMaterialRatio( Material material, bool asPercent = false )
-        {
-            if( !materials.ContainsKey(material) ) { return 0; }
-
-            double ratio = materials[material] / totalParts;
-
-            if( asPercent ) {
-                ratio = Math.Round(ratio * 100, 1);
-            }
-
-            return ratio;
-        }
+        #endregion
     }
 }

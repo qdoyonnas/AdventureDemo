@@ -75,8 +75,24 @@ namespace AdventureDemo
             return physicals;
         }
 
+        public override bool Contains( GameObject obj )
+        {
+            Physical physical = obj as Physical;
+            if( physical == null ) { return false; }
+
+            if( attachedObjects.Contains(obj) ) { return true; }
+
+            foreach( Physical attached in GetAttachedAsPhysical() ) {
+                if( attached.Externalize(physical) ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
         public override CheckResult CanAttach( GameObject obj )
         {
+            if( Contains(obj) ) { return CheckResult.VALID; }
             Physical physical = obj as Physical;
             if( physical == null ) { return CheckResult.INVALID; }
 
@@ -86,6 +102,22 @@ namespace AdventureDemo
             if( capacity >= 0  && physical.GetVolume() > remainingCapacity ) { return CheckResult.RESTRICTED; }
 
             return CheckResult.VALID;
+        }
+        public override bool Attach( GameObject obj )
+        {
+            if( !isExternal ) { return base.Attach(obj); }
+
+            if( obj == null ) { return false; }
+            if( attachedObjects.Contains(obj) ) { return true; }
+
+            if( CanAttach(obj) != CheckResult.VALID ) { return false; }
+            if( parentObject.container != null && parentObject.container.CanAttach(obj) != CheckResult.VALID ) { return false; } // XXX: This might be incorrect due to 
+                                                                                                                                 // attaching objects to an external attachment point changes the volume and weight of the parentObject
+            if( obj.container != null && !obj.container.Remove(obj) ) { return false; }
+            attachedObjects.Add(obj);
+            obj.SetContainer(parentObject.container); // XXX: obj has no reference to this attachmentpoint (it doesn't know what it is attached to, only what it is contained by)
+
+            return true;
         }
 
         public virtual Physical[] GetAttachedPhysicals()

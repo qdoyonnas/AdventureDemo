@@ -10,12 +10,15 @@ namespace AdventureDemo
     class GrabVerb : Verb
     {
         AttachmentPoint inventory;
+        Physical physicalSelf;
 
         public GrabVerb( GameObject self, AttachmentPoint inventory )
             : base(self)
         {
             this.inventory = inventory;
             _displayLabel = "Grab";
+
+            physicalSelf = self as Physical;
         }
 
         public override bool Action( GameObject target )
@@ -35,12 +38,19 @@ namespace AdventureDemo
         {
             if( target.container == null || inventory == null ) { return CheckResult.INVALID; }
 
-            if( target.container.GetParent() == self ) {
+            Physical physical = target as Physical;
+            if( physical == null ) { return CheckResult.INVALID; }
+
+            if( physical.Contains(physicalSelf) ) {
+                return CheckResult.INVALID;
+            }
+
+            if( inventory.Contains(target) ) {
                 CheckResult check = self.container.CanAttach(target);
                 if( check >= CheckResult.RESTRICTED ) {
                     return check;
                 }
-            } else if( target.container == self.container ) {
+            } else if( target.container == self.container ) { // XXX: This needs to into account amalgam objects
                 CheckResult check = inventory.CanAttach(target);
                 if( check >= CheckResult.RESTRICTED ) {
                     return check;

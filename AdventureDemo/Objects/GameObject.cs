@@ -12,6 +12,8 @@ namespace AdventureDemo
 {
     class GameObject
     {
+        #region Fields
+
         public string name;
         public string description;
 
@@ -45,7 +47,10 @@ namespace AdventureDemo
 
         protected List<DataDelegate> relevantData;
 
-        // Constructors
+        #endregion
+
+        #region Constructors
+
         public GameObject( Dictionary<string, object> data )
         {
 
@@ -76,7 +81,8 @@ namespace AdventureDemo
 
         public virtual bool SetContainer( AttachmentPoint newContainer )
         {
-            if( !newContainer.Contains(this) ) { return false; }
+            bool result = newContainer != null && !newContainer.Contains(this);
+            if( result ) { return false; }
 
             _container = newContainer;
             return true;
@@ -87,7 +93,7 @@ namespace AdventureDemo
         /// <param name="actor">Controlling Actor.</param>
         /// <param name="possession">Degree of possession affecting what verbs are collected.</param>
         /// <returns></returns>
-        public virtual bool SetActor( Actor actor, PossessionType possession ) // XXX: Consider using type other than string
+        public virtual bool SetActor( Actor actor ) // XXX: Consider using type other than string
         {
             if( actor != null && this.actor != null ) { return false; }
             _actor = actor;
@@ -95,13 +101,17 @@ namespace AdventureDemo
             return true;
         }
 
+        #endregion
+
+        #region Verb Methods
+
         public virtual void CollectVerbs( Actor actor, PossessionType possession )
         {
-            if( _actor != null ) {
-                if( !verbs.ContainsKey(possession) ) { return; }
-                foreach( Verb verb in verbs[possession] ) {
-                    verb.AddVerb( actor );
-                }
+            if( actor == null ) { return; }
+
+            if( !verbs.ContainsKey(possession) ) { return; }
+            foreach( Verb verb in verbs[possession] ) {
+                verb.AddVerb( actor );
             }
         }
         public virtual List<Verb> CollectVerbs()
@@ -134,7 +144,10 @@ namespace AdventureDemo
             }
         }
 
-        // Data Methods
+        #endregion
+
+        #region Descriptive Methods
+
         /// <summary>
         /// Returns a String that best fufills the requested data.
         /// Serves a bridge between UI and objects disconnecting the need for explicit calls.
@@ -199,6 +212,8 @@ namespace AdventureDemo
                 new GameObjectVerbsDescriptivePageSection()
             };
         }
+
+        #endregion
     }
 
     public class GameObjectData

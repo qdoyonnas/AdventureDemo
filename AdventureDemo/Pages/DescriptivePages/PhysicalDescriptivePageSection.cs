@@ -33,30 +33,24 @@ namespace AdventureDemo
         {
             bool canObserve = observer.CanObserve(page.target);
 
-            // TODO: Route this through observer knowledge instead
-            if( !canObserve ) {
-                weightText.Inlines.Add( WaywardTextParser.Parse("???") );
-                volumeText.Inlines.Add( WaywardTextParser.Parse("???") );
-            } else {
-                GameObjectData weightData = page.target.GetData("weight");
-                GameObjectData partialWeightData = page.target.GetData("weight partial");
-                GameObjectData volumeData = page.target.GetData("volume");
-                GameObjectData partialVolumeData = page.target.GetData("volume partial");
+            GameObjectData weightData = page.target.GetData("weight");
+            GameObjectData partialWeightData = page.target.GetData("weight partial");
+            GameObjectData volumeData = page.target.GetData("volume");
+            GameObjectData partialVolumeData = page.target.GetData("volume partial");
 
-                if( weightData.text != partialWeightData.text ) {
-                    weightText.Inlines.Add( WaywardTextParser.Parse("[0] ([1])",
-                        () => { return weightData.span; },
-                        () => { return partialWeightData.span; }) );
-                } else {
-                    weightText.Inlines.Add( weightData.span );
-                }
-                if( volumeData.text != partialVolumeData.text ) {
-                    volumeText.Inlines.Add( WaywardTextParser.Parse("[0] ([1])",
-                        () => { return volumeData.span; },
-                        () => { return partialVolumeData.span; }) );
-                } else {
-                    volumeText.Inlines.Add( volumeData.span );
-                }
+            if( weightData.text != partialWeightData.text ) {
+                weightText.Inlines.Add( WaywardTextParser.Parse("[0] ([1])",
+                    () => { return weightData.span; },
+                    () => { return partialWeightData.span; }) );
+            } else {
+                weightText.Inlines.Add( weightData.span );
+            }
+            if( volumeData.text != partialVolumeData.text ) {
+                volumeText.Inlines.Add( WaywardTextParser.Parse("[0] ([1])",
+                    () => { return volumeData.span; },
+                    () => { return partialVolumeData.span; }) );
+            } else {
+                volumeText.Inlines.Add( volumeData.span );
             }
 
             FetchMaterials();

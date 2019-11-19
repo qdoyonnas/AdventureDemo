@@ -25,12 +25,12 @@ namespace AdventureDemo
             verbs.Clear();
 
             if( controlledObject != null ) {
-                bool success = controlledObject.SetActor(null, PossessionType.EMBODIMENT);
+                bool success = controlledObject.SetActor(null);
                 if( !success ) { return; }
             }
 			controlledObject = obj;
             if( controlledObject != null ) {
-                bool success = controlledObject.SetActor(this, PossessionType.EMBODIMENT);
+                bool success = controlledObject.SetActor(this);
                 if( !success ) {
                     controlledObject = null;
                     return;
