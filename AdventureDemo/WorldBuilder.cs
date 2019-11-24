@@ -18,8 +18,8 @@ namespace AdventureDemo
 
         public WorldBuilder()
         {
-            SetupSpawnLists();
             SetupMaterials();
+            SetupSpawnLists();
         }
         void SetupSpawnLists()
         {
@@ -32,18 +32,31 @@ namespace AdventureDemo
             //      relevant containers.
             spawnLists["crew_equipment"] = new SpawnList( new SpawnEntry[] {
                 new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
-                    { "name", "uniform" }, { "volume", 2.0 }, { "weight", 6.0 } },
+                        { "name", "uniform" }, { "volume", 2.0 },
+                        { "materials", new KeyValuePair<Material, double>[] {
+                            new KeyValuePair<Material, double>(materials["synththread"], 1) }
+                        }
+                    },
                     0.5, 2, false ),
                 new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
-                    { "name", "headset" }, { "volume", 0.4 }, { "weight", 1.0 } },
+                        { "name", "headset" }, { "volume", 0.4 },
+                        { "materials", new KeyValuePair<Material, double>[] {
+                            new KeyValuePair<Material, double>(materials["steel"], 1) }
+                        }
+                    },
                     0.2, 1 ),
                 new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
-                    { "name", "mints" }, { "volume", 0.01 }, { "weight", 0.01 } },
+                    { "name", "mints" }, { "volume", 0.01 } },
                     0.2, 4 ),
             });
             spawnLists["crew_quarters"] = new SpawnList( new SpawnEntry[] {
                 new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
-                    { "name", "bed" }, { "volume", 100.0 }, { "weight", 200.0 } }, 
+                        { "name", "bed" }, { "volume", 100.0 },
+                        { "materials", new KeyValuePair<Material, double>[] {
+                            new KeyValuePair<Material, double>(materials["steel"], 2),
+                            new KeyValuePair<Material, double>(materials["synththread"], 1) }
+                        }
+                    },
                     1.0, 1 ),
                 new SpawnEntry( typeof(Physical), new Dictionary<string, object>() {
                     { "name", "desk" }, { "volume", 90.0 }, { "weight", 200.0 } },
@@ -95,6 +108,7 @@ namespace AdventureDemo
             AddMaterial( "copper", 15, "#D88C17" );
             AddMaterial( "gold", 16, "#F2DB1D" );
             AddMaterial( "flesh", 2.5, "#D82C7D" );
+            AddMaterial( "synththread", 1.5, "#9DDFCC" );
         }
 
         public void BuildWorld()
@@ -107,7 +121,9 @@ namespace AdventureDemo
             
             Human playerChar = new Human( "Dirk Casirov" );
             playerChar.description = "a mysterious individual";
-            FindRoom("spaceship/hallway/cabin").GetContents().Attach(playerChar);
+            Container cabin = FindRoom("spaceship/hallway/cabin");
+            cabin.GetContents().Attach(playerChar);
+            cabin.GetContents().Attach( new Physical("wrench", 0.5 , Utilities.Pair<Material, double>(materials["steel"], 1) ) );
 
             //WaywardWill will = new WaywardWill();
             //space.GetContents().Attach(will);

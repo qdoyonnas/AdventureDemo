@@ -71,6 +71,7 @@
     <Compile Include="Objects\WaywardWill.cs" />
     <Compile Include="Pages\DescriptivePages\GameObjectVerbsDescriptivePageSection.cs" />
     <Compile Include="Pages\DescriptivePages\OrganismDescriptivePageSection.cs" />
+    <Compile Include="Pages\DescriptivePages\PhysicalAmalgamDescriptivePageSection.cs" />
     <Compile Include="Pages\DescriptivePages\PhysicalAttachmentDescriptivePageSection.cs" />
     <Compile Include="Pages\VerbosePage.cs" />
     <Compile Include="Systems\Attachments\AttachmentPoint.cs" />

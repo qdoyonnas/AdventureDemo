@@ -50,7 +50,7 @@ namespace AdventureDemo
                 if( check >= CheckResult.RESTRICTED ) {
                     return check;
                 }
-            } else if( target.container == self.container ) { // XXX: This needs to into account amalgam objects
+            } else if( target.container == self.container ) { // XXX: This needs to take into account amalgam objects
                 CheckResult check = inventory.CanAttach(target);
                 if( check >= CheckResult.RESTRICTED ) {
                     return check;

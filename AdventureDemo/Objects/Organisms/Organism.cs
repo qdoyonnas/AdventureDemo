@@ -16,14 +16,5 @@ namespace AdventureDemo
             : base( name )
         {
         }
-
-        public override List<DescriptivePageSection> DisplayDescriptivePage()
-        {
-            List<DescriptivePageSection> sections = base.DisplayDescriptivePage();
-
-            sections.Add( new OrganismDescriptivePageSection() );
-
-            return sections;
-        }
     }
 }

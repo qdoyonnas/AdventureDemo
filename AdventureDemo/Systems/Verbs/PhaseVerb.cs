@@ -28,7 +28,14 @@ namespace AdventureDemo
         }
         public bool Action( AttachmentPoint target )
         {
-            target.Attach(self);
+            Physical physicalSelf = self as Physical;
+            if( physicalSelf != null ) {
+                Physical parent = PhysicalUtilities.FindParentPhysical(physicalSelf);
+                target.Attach(parent);
+            } else {
+                target.Attach(self);
+            }
+
             return true;
         }
 

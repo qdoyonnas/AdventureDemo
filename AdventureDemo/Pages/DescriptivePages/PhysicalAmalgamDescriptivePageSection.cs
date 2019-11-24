@@ -8,73 +8,63 @@ using WaywardEngine;
 
 namespace AdventureDemo
 {
-    class OrganismDescriptivePageSection : DescriptivePageSection
+    class PhysicalAmalgamDescriptivePageSection : DescriptivePageSection
     {
-        Organism organism;
-        StackPanel bodyParts;
+        PhysicalAmalgam amalgam;
+        StackPanel parts;
 
-        public OrganismDescriptivePageSection()
-            : base( "DescriptiveOrganism" )
+        public PhysicalAmalgamDescriptivePageSection()
+            : base("DescriptiveAmalgam")
         {
-            bodyParts = Utilities.FindNode<StackPanel>( element, "BodyParts" );
+            parts = Utilities.FindNode<StackPanel>(element, "Parts");
         }
 
         public override void AssignPage( DescriptivePage page )
         {
             base.AssignPage(page);
             if( page != null ) {
-                organism = page.target as Organism;
+                amalgam = page.target as PhysicalAmalgam;
             }
         }
 
         public override void Clear()
         {
-            bodyParts.Children.Clear();
+            parts.Children.Clear();
         }
+
         public override void DisplayContents()
         {
-            DisplayBody();
+            foreach( Physical part in amalgam.GetParts() ) {
+                DisplayPart(part);
+            }
 
-            if( bodyParts.Children.Count == 0 ) {
+            if( parts.Children.Count == 0 ) {
                 element.Visibility = System.Windows.Visibility.Collapsed;
             }
         }
-        protected virtual void DisplayBody()
-        {
-            if( !observer.CanObserve(organism) ) { return; }
-            
-        }
-        protected virtual void DisplayBodyPart(GameObject obj, StackPanel stack)
+
+        void DisplayPart( Physical part )
         {
             Grid entry = GameManager.instance.GetResource<Grid>("AttachmentObjectEntry");
             if( entry == null ) { throw new System.NullReferenceException("Resource 'AttachmentObjectEntry' could not be found"); }
-            stack.Children.Add(entry);
+            parts.Children.Add(entry);
 
             TextBlock text = Utilities.FindNode<TextBlock>(entry, "Data1");
             if( text != null ) {
-                text.Inlines.Add( observer.Observe(obj, "name upper").span );
+                text.Inlines.Add( observer.Observe(part, "name upper").span );
             }
 
             text = Utilities.FindNode<TextBlock>(entry, "Data2");
             if( text != null ) {
-                text.Inlines.Add( observer.Observe(obj, "weight partial").span );
+                text.Inlines.Add( observer.Observe(part, "weight partial").span );
             }
 
             text = Utilities.FindNode<TextBlock>(entry, "Data3");
             if( text != null ) {
-                text.Inlines.Add( observer.Observe(obj, "volume partial").span );
+                text.Inlines.Add( observer.Observe(part, "volume partial").span );
             }
 
             StackPanel subData = Utilities.FindNode<StackPanel>(entry, "SubData");
-            BodyPart part = obj as BodyPart;
-            if( part != null ) {
-                foreach( BodyAttachmentPoint point in part.bodyParts ) {
-                    foreach( GameObject child in point.GetAttached() ) {
-                        DisplayBodyPart(child, subData);
-                    }
-                }
-            }
-
             if( subData.Children.Count == 0 ) {
                 subData.Visibility = System.Windows.Visibility.Collapsed;
             }

@@ -113,11 +113,11 @@
         </ScrollViewer>
     </Border>
 
-    <Border x:Key="DescriptiveOrganism" x:Shared="false" Style="{StaticResource PageStyle}">
+    <Border x:Key="DescriptiveAmalgam" x:Shared="false" Style="{StaticResource PageStyle}">
         <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <TextBlock Grid.Column="0" Style="{DynamicResource Header}">Body</TextBlock>
-                <StackPanel Name="BodyParts">
+                <TextBlock Grid.Column="0" Style="{DynamicResource Header}">Parts</TextBlock>
+                <StackPanel Name="Parts">
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

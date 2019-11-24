@@ -30,28 +30,22 @@ namespace AdventureDemo
             PhysicalAmalgam leftArm = new PhysicalAmalgam("left arm");
             AddPart( leftArm );
             leftArm.AddPart( new BodyPart(this, "arm", 4, Utilities.Pair<Material, double>(flesh, 1)) );
-            leftArm.AddPart(  new ManipulatorBodyPart(this, "left hand", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
+            leftArm.AddPart( new ManipulatorBodyPart(this, "left hand", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
 
             PhysicalAmalgam rightArm = new PhysicalAmalgam("right arm");
             AddPart( rightArm );
             rightArm.AddPart( new BodyPart(this, "arm", 4, Utilities.Pair<Material, double>(flesh, 1)) );
-            rightArm.AddPart(  new ManipulatorBodyPart(this, "right hand", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
+            rightArm.AddPart( new ManipulatorBodyPart(this, "right hand", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
 
             PhysicalAmalgam leftLeg = new PhysicalAmalgam("left leg");
+            AddPart( leftLeg );
+            leftLeg.AddPart( new BodyPart(this, "left leg", 6, Utilities.Pair<Material, double>(flesh, 1)) );
+            leftLeg.AddPart( new LocomotionBodyPart(this, "left foot", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
 
-            /*
-            AddBodyPart( "torso", new BodyPart(this, "left arm", 4, Utilities.Pair<Material, double>(flesh, 1)) )
-                .AddBodyAttachmentPoint();
-            AddBodyPart( "torso", new BodyPart(this, "right arm", 4, Utilities.Pair<Material, double>(flesh, 1)) )
-                .AddBodyAttachmentPoint();
-            AddBodyPart( "torso", new BodyPart(this, "left leg", 6, Utilities.Pair<Material, double>(flesh, 1)) )
-                .AddBodyAttachmentPoint();
-            AddBodyPart( "torso", new BodyPart(this, "right leg", 6, Utilities.Pair<Material, double>(flesh, 1)) )
-                .AddBodyAttachmentPoint();
-
-            AddBodyPart("torso/left leg", new LocomotionBodyPart(this, "left foot", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
-            AddBodyPart("torso/right leg", new LocomotionBodyPart(this, "right foot", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
-            */
+            PhysicalAmalgam rightLeg = new PhysicalAmalgam("right leg");
+            AddPart( rightLeg );
+            rightLeg.AddPart( new BodyPart(this, "leg", 6, Utilities.Pair<Material, double>(flesh, 1)) );
+            rightLeg.AddPart( new LocomotionBodyPart(this, "right foot", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
         }
     }
 }

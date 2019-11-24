@@ -23,7 +23,29 @@ namespace AdventureDemo
 
         public override bool Action( GameObject target )
         {
+            if( Check(target) != CheckResult.VALID ) { return false; }
+
+            Container container = target as Container;
+            if( container != null ) {
+                return EnterContainer(container);
+            }
+
+            Connection connection = target as Connection;
+            if( connection != null ) {
+                return EnterConnection(connection);
+            }
+
             return false;
+        }
+        bool EnterContainer( Container container )
+        {
+            Physical parent = PhysicalUtilities.FindParentPhysical(physicalSelf);
+            return container.GetContents().Attach(parent);
+        }
+        bool EnterConnection( Connection connection )
+        {
+            Physical parent = PhysicalUtilities.FindParentPhysical(physicalSelf);
+            return connection.secondContainer.Attach(parent);
         }
 
         public override CheckResult Check( GameObject target )
@@ -46,7 +68,7 @@ namespace AdventureDemo
         }
         CheckResult CheckContainer( Container container )
         {
-            if( physicalSelf.container == container.GetContents() ) { return CheckResult.INVALID; }
+            if( container.Contains(physicalSelf) ) { return CheckResult.INVALID; }
             return container.CanContain(physicalSelf);
         }
 

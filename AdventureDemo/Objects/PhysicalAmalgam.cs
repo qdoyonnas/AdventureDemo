@@ -269,5 +269,18 @@ namespace AdventureDemo
         }
 
         #endregion
+
+        #region Descriptive Methods
+
+        public override List<DescriptivePageSection> DisplayDescriptivePage()
+        {
+            List<DescriptivePageSection> sections = base.DisplayDescriptivePage();
+
+            sections.Add( new PhysicalAmalgamDescriptivePageSection() );
+
+            return sections;
+        }
+
+        #endregion
     }
 }

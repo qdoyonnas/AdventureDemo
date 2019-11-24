@@ -11,4 +11,17 @@ namespace AdventureDemo
         RESTRICTED,
         VALID
     }
+
+    static class PhysicalUtilities
+    {
+
+        public static Physical FindParentPhysical( Physical obj )
+        {
+            if( obj.attachedTo != null ) {
+                return FindParentPhysical(obj.attachedTo);
+            }
+
+            return obj;
+        }
+    }
 }
