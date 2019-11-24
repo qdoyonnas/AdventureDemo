@@ -37,14 +37,6 @@ namespace AdventureDemo
             bool result = base.SetContainer(newContainer);
             if( !result ) { return false; }
 
-            foreach( BodyAttachmentPoint point in bodyParts ) {
-                if( point.isExternal ) {
-                    foreach( Physical obj in point.GetAttachedAsPhysical() ) {
-                        obj.SetContainer(newContainer);
-                    }
-                }
-            }
-
             return true;
         }
 
@@ -144,19 +136,6 @@ namespace AdventureDemo
         public override bool Contains( Physical obj )
         {
             bool result = base.Contains(obj);
-            if( result ) { return true; }
-
-            foreach( BodyAttachmentPoint point in bodyParts ) {
-                if( point.Contains(obj) ) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-        public override bool Externalize( Physical obj )
-        {
-            bool result = base.Externalize(obj);
             if( result ) { return true; }
 
             foreach( BodyAttachmentPoint point in bodyParts ) {

@@ -33,8 +33,13 @@ namespace AdventureDemo
             }
         }
 
-        public Dictionary<Material, double> materials;
-        protected double totalParts = 0;
+        protected Dictionary<Material, double> materials;
+        protected double _totalParts = 0;
+        public double totalParts {
+             get {
+                return _totalParts;
+            }
+        }
 
         #endregion
 
@@ -79,21 +84,6 @@ namespace AdventureDemo
             }
         }
 
-        public override bool SetContainer( AttachmentPoint newContainer )
-        {
-            bool result = base.SetContainer(newContainer);
-            if( !result ) { return false; }
-
-            foreach( PhysicalAttachmentPoint point in attachmentPoints ) {
-                if( point.isExternal ) {
-                    foreach( Physical obj in point.GetAttachedAsPhysical() ) {
-                        obj.SetContainer(newContainer);
-                    }
-                }
-            }
-
-            return true;
-        }
         public virtual bool SetAttachedTo( Physical obj )
         {
             _attachedTo = obj;
@@ -126,6 +116,7 @@ namespace AdventureDemo
                 }
             }
         }
+        // TODO: CollectVerbs( PossessionType possession );
 
         #endregion
 
@@ -202,16 +193,6 @@ namespace AdventureDemo
 
             return false;
         }
-        public virtual bool Externalize( Physical obj )
-        {
-            foreach( PhysicalAttachmentPoint point in attachmentPoints ) {
-                if( point.isExternal && point.Contains(obj) ) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
 
         #endregion
 
@@ -222,24 +203,34 @@ namespace AdventureDemo
             if( !materials.ContainsKey(material) ) {
                 materials.Add( material, parts );
             } else {
-                totalParts -= materials[material];
+                _totalParts -= materials[material];
                 materials[material] = parts;
             }
 
-            totalParts += parts;
+            _totalParts += parts;
         }
         public virtual void RemoveMaterial( Material material )
         {
             if( !materials.ContainsKey(material) ) { return; }
 
-            totalParts -= materials[material];
+            _totalParts -= materials[material];
             materials.Remove(material);
+        }
+        public virtual List<Material> GetMaterials()
+        {
+            return new List<Material>(materials.Keys);
+        }
+        public virtual double GetMaterialParts( Material material )
+        {
+            if( !materials.ContainsKey(material) ) { return 0; }
+
+            return materials[material];
         }
         public virtual double GetMaterialRatio( Material material, bool asPercent = false )
         {
             if( !materials.ContainsKey(material) ) { return 0; }
 
-            double ratio = materials[material] / totalParts;
+            double ratio = materials[material] / _totalParts;
 
             if( asPercent ) {
                 ratio = Math.Round(ratio * 100, 1);

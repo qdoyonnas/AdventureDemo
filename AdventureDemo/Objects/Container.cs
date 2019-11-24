@@ -118,12 +118,6 @@ namespace AdventureDemo
             bool result = base.SetContainer(newContainer);
             if( !result ) { return false; }
 
-            if( contents.isExternal ) {
-                foreach( Physical obj in contents.GetAttachedAsPhysical() ) {
-                    obj.SetContainer(newContainer);
-                }
-            }
-
             return true;
         }
 
