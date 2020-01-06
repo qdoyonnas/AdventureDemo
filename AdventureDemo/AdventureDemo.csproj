@@ -69,6 +69,7 @@
     <Compile Include="Objects\Organisms\Organism.cs" />
     <Compile Include="Objects\PhysicalAmalgam.cs" />
     <Compile Include="Objects\WaywardWill.cs" />
+    <Compile Include="Pages\DescriptivePages\DebugDescriptivePageSection.cs" />
     <Compile Include="Pages\DescriptivePages\GameObjectVerbsDescriptivePageSection.cs" />
     <Compile Include="Pages\DescriptivePages\OrganismDescriptivePageSection.cs" />
     <Compile Include="Pages\DescriptivePages\PhysicalAmalgamDescriptivePageSection.cs" />

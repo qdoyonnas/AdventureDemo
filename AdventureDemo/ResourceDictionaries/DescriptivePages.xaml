@@ -123,4 +123,19 @@
         </ScrollViewer>
     </Border>
 
+    <Border x:Key="DescriptiveDebug" x:Shared="false" Style="{StaticResource PageStyle}">
+        <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Grid.Column="0" Style="{DynamicResource Header}">Debug</TextBlock>
+                <Grid Name="Content">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
 </ResourceDictionary>

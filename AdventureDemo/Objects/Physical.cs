@@ -33,6 +33,16 @@ namespace AdventureDemo
             }
         }
 
+        public override AttachmentPoint container {
+            get {
+                if( attachedTo != null ) {
+                    return attachedTo.container;
+                }
+
+                return _container;
+            }
+        }
+
         protected Dictionary<Material, double> materials;
         protected double _totalParts = 0;
         public double totalParts {

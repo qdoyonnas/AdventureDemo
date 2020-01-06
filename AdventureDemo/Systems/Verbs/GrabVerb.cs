@@ -39,7 +39,7 @@ namespace AdventureDemo
             if( target.container == null || inventory == null ) { return CheckResult.INVALID; }
 
             Physical physical = target as Physical;
-            if( physical == null ) { return CheckResult.INVALID; }
+            if( physical == null || physical.attachedTo != null ) { return CheckResult.INVALID; }
 
             if( physical.Contains(physicalSelf) ) {
                 return CheckResult.INVALID;
@@ -50,10 +50,13 @@ namespace AdventureDemo
                 if( check >= CheckResult.RESTRICTED ) {
                     return check;
                 }
-            } else if( target.container == self.container ) { // XXX: This needs to take into account amalgam objects
-                CheckResult check = inventory.CanAttach(target);
-                if( check >= CheckResult.RESTRICTED ) {
-                    return check;
+            } else {
+                Physical parent = PhysicalUtilities.FindParentPhysical(physicalSelf);
+                if( parent.container.Contains(target) ) {
+                    CheckResult check = inventory.CanAttach(target);
+                    if( check >= CheckResult.RESTRICTED ) {
+                        return check;
+                    }
                 }
             }
 
@@ -66,11 +69,13 @@ namespace AdventureDemo
 
             if( target.container.GetParent() == self ) {
                 _displayLabel = "Drop";
+            } else {
+                _displayLabel = "Pickup";
             }
 
             base.Display(actor, target, span);
 
-            _displayLabel = "Pickup";
+            _displayLabel = "Grab";
         }
     }
 }

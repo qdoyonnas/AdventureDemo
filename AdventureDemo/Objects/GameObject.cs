@@ -208,6 +208,7 @@ namespace AdventureDemo
         public virtual List<DescriptivePageSection> DisplayDescriptivePage()
         {
             return new List<DescriptivePageSection> {
+                new DebugDescriptivePageSection(),
                 new GameObjectDescriptivePageSection(),
                 new GameObjectVerbsDescriptivePageSection()
             };

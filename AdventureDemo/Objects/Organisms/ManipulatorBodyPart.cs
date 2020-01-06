@@ -23,6 +23,7 @@ namespace AdventureDemo
         void Construct()
         {
             grasp = new PhysicalAttachmentPoint(this, -1, 1, AttachmentType.ALL);
+            AddAttachmentPoint(grasp);
             AddVerb( PossessionType.EMBODIMENT, new GrabVerb(this, grasp) );
         }
     }
