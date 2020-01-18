@@ -25,11 +25,28 @@ namespace AdventureDemo
 
         public override void DisplayContents()
         {
-            string containerContent = "Container: [0]";
-            TextBlock block = WaywardTextParser.ParseAsBlock(containerContent, 
-                () => { return page.observer.Observe(page.target.container.GetParent(), "name upper").span; }
-            );
-            content.Children.Add(block);
+            if( page == null ) {
+                content.Children.Add(WaywardTextParser.ParseAsBlock("<i>Page is Null</i>"));
+                return;
+            }
+            if( page.observer == null ) {
+                content.Children.Add(WaywardTextParser.ParseAsBlock("<i>Page Observer is Null</i>"));
+                return;
+            }
+            if( page.target == null ) {
+                content.Children.Add(WaywardTextParser.ParseAsBlock("<i>Page Target is Null</i>"));
+                return;
+            }
+
+            try {
+                string containerContent = "Container: [0]";
+                TextBlock block = WaywardTextParser.ParseAsBlock(containerContent,
+                    () => { return page.observer.Observe(page.target.container.GetParent(), "name upper").span; }
+                );
+                content.Children.Add(block);
+            } catch( NullReferenceException e ) {
+                content.Children.Add(WaywardTextParser.ParseAsBlock("Container: <i>null</i>"));
+            }
         }
     }
 }
