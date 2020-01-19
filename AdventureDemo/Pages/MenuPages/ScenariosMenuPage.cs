@@ -33,7 +33,7 @@ namespace AdventureDemo
 
         void DisplayContent()
         {
-            ScenarioData[] scenarios = DataManager.instance.GetScenarios();
+            ScenarioData[] scenarios = DataManager.instance.GetScenarioDatas();
 
             foreach( ScenarioData data in scenarios ) {
                 AddScenario(data);

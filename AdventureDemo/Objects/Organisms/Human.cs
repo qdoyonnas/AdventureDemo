@@ -22,7 +22,7 @@ namespace AdventureDemo
 
         void Construct()
         {
-            Material flesh = GameManager.instance.world.GetMaterial("flesh");
+            Material flesh = DataManager.instance.LoadMaterial("flesh");
             if( flesh == null ) { return; }
 
             AddPart( new BodyPart(this, "head", 2, Utilities.Pair<Material, double>(flesh, 1)) );

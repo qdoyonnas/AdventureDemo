@@ -10,22 +10,40 @@ namespace AdventureDemo
     class WorldManager
     {
         public PlayerActor player;
-        private List<GameObject> rootObjects;
-
-        private Dictionary<string, Material> materials;
+        private List<Container> rootObjects;
 
         public WorldManager( ScenarioData data )
         {
-            rootObjects = new List<GameObject>();
+            rootObjects = new List<Container>();
+            foreach( KeyValuePair<string,string> root in data.roots ) {
+                Container rootObject = (Container)DataManager.instance.LoadObject(root.Key);
+                AddRoot(rootObject);
 
-            materials = new Dictionary<string, Material>();
+                string[] entries = root.Value.Split(' ');
+                foreach( string entry in entries ) {
+                    string[] values = entry.Split(':');
+                    switch( values[0] ) {
+                        case "o":
+                            rootObject.GetContents().Attach( DataManager.instance.LoadObject(values[1]) );
+                            break;
+                        case "s":
+                            // Load Spawn list
+                            break;
+                    }
+                }
+            }
+
+            player = new PlayerActor();
+            WaywardWill will = new WaywardWill();
+            rootObjects[0].GetContents().Attach(will);
+            player.Control(will);
         }
 
-        public void AddRoot( GameObject obj )
+        public void AddRoot( Container obj )
         {
             rootObjects.Add(obj);
         }
-        public void RemoveRoot( GameObject obj )
+        public void RemoveRoot( Container obj )
         {
             rootObjects.Remove(obj);
         }
@@ -37,11 +55,6 @@ namespace AdventureDemo
         public GameObject GetRoot( int i )
         {
             return rootObjects[i];
-        }
-
-        public Material GetMaterial( string id )
-        {
-            return materials[id];
         }
     }
 }

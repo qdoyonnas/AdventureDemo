@@ -10,6 +10,6 @@ namespace AdventureDemo
     {
         public string name;
         public string description;
-        public string[] roots;
+        public Dictionary<string, string> roots;
     }
 }

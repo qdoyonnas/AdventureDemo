@@ -55,6 +55,39 @@ namespace AdventureDemo
 
         #region Constructors
 
+        new public static Dictionary<string, object> ParseData( ObjectData objectData )
+        {
+            Dictionary<string, object> data = GameObject.ParseData(objectData);
+
+            try {
+                data["volume"] = double.Parse(objectData.data["volume"]);
+            } catch( KeyNotFoundException e ) {
+            } catch( Exception e ) {
+                Console.WriteLine($"ERROR: Loading physical data '{objectData.id}' at 'volume' field: {e}");
+            }
+
+            try {
+                string[] matPairs = objectData.data["materials"].Split(',');
+                KeyValuePair<Material, double>[] materialPairs = new KeyValuePair<Material, double>[matPairs.Length];
+
+                for( int i = 0; i < matPairs.Length; i++ ) {
+                    matPairs[i] = matPairs[i].Trim();
+                    string[] mat = matPairs[i].Split(' ');
+                    Material material = DataManager.instance.LoadMaterial(mat[0]);
+                    double parts = double.Parse(mat[1]);
+
+                    materialPairs[i] = new KeyValuePair<Material, double>(material, parts);
+                }
+                data["materials"] = materialPairs;
+
+            } catch( KeyNotFoundException e ) {
+            } catch( Exception e ) {
+                Console.WriteLine($"ERROR: Loading physical data '{objectData.id}' at 'material' field: {e}");
+            }
+
+            return data;
+        }
+
         public Physical( Dictionary<string, object> data )
             : base(data)
         {
@@ -75,7 +108,9 @@ namespace AdventureDemo
         }
         private void Construct( double volume, KeyValuePair<Material, double>[] mats )
         {
-            this.description = "a solid object";
+            if( string.IsNullOrEmpty(this.description) ) {
+                this.description = "a solid object";
+            }
 
             attachmentPoints = new List<PhysicalAttachmentPoint>();
 

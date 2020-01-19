@@ -1,0 +1,27 @@
+{
+	"id": "silicon",
+	"name": "silicon",
+	"data": {
+		"weight": "4",
+		"color": "#84B2DF"
+	}
+};
+
+{
+	"id": "copper",
+	"name": "copper",
+	"data": {
+		"weight": "15",
+		"color": "#D88C17"
+	}
+};
+
+{
+	"id": "gold",
+	"name": "gold",
+	"data": {
+		"weight": "16",
+		"color": "#F2DB1D"
+	}
+};
+

@@ -37,7 +37,7 @@ namespace WaywardEngine
             this.AddChild( mainCanvas );
         }
 
-        private void Exit_Click( object sender, RoutedEventArgs e )
+        public void Exit_Click( object sender, RoutedEventArgs e )
         {
             Application.Current.Shutdown();
         }

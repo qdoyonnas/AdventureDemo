@@ -53,14 +53,16 @@ namespace AdventureDemo
             GameObject container = subject.container.GetParent();
             if( container == null ) { return; }
 
-            descriptions.Children.Add(WaywardTextParser.ParseAsBlock(
+            TextBlock text = WaywardTextParser.ParseAsBlock(
                 $@"[0] {(secondPerson ? "are" : "is")} in [1], [2].",
                 new WaywardTextParser.ParseDelegate[] {
                     () => { return observer.Observe(subject).span; },
                     () => { return observer.Observe(container).span; },
                     () => { return observer.Observe(container, "description").span; }
                 }
-            ));
+            );
+            text.TextWrapping = TextWrapping.Wrap;
+            descriptions.Children.Add(text);
         }
 
         public override void Clear()

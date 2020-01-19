@@ -3,9 +3,9 @@
                     xmlns:local="clr-namespace:AdventureDemo">
 
     <Border x:Key="DescriptiveGameObject" x:Shared="false" Style="{StaticResource PageStyle}">
-        <ScrollViewer MaxHeight="300" MinWidth="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer MaxHeight="300" Width="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <TextBlock Name="Description">
+                <TextBlock Name="Description" TextWrapping="Wrap">
                     <TextBlock.Resources>
                         <Style TargetType="TextBlock">
                             <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />

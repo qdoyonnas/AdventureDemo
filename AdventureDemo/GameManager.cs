@@ -86,15 +86,22 @@ namespace AdventureDemo
             SetupPlayContextMenu();
 
             world = new WorldManager(data);
+
+            Point position = new Point(WaywardManager.instance.window.ActualWidth * 0.75, WaywardManager.instance.window.ActualHeight/2);
+            DisplayOverviewPage(position, world.player);
+            position.X = WaywardManager.instance.window.ActualWidth * 0.25;
+            DisplayPlayerVerbose(position);
         }
         private void SetupPlayContextMenu()
         {
             ContextMenuHelper.ClearContextMenu(WaywardManager.instance.window);
+            ContextMenuHelper.AddContextMenuItem(WaywardManager.instance.window, "Exit", Exit);
 
             ContextMenuHelper.AddContextMenuHeader(WaywardManager.instance.window, "Page", new Dictionary<string, ContextMenuAction>() {
                 { "Overview", CreateOverviewPage },
                 { "Visual", CreateVerbosePage }
             });
+
         }
 
         public void Update()
@@ -125,6 +132,11 @@ namespace AdventureDemo
             DisplayPlayerVerbose(mousePosition);
 
             return false;
+        }
+        private bool Exit()
+        {
+            Application.Current.Shutdown();
+            return true;
         }
 
         public OverviewPage DisplayOverviewPage( Point position, Actor actor )

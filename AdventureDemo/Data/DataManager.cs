@@ -32,8 +32,11 @@ namespace AdventureDemo
         Settings settings;
         FileInfo settingsFile;
 
+        // XXX: To improve performance in files with multiple entries the dictionary should track
+        //      position in file as well as the file itself
         Dictionary<string, string> scenarioFiles;
         Dictionary<string, string> objectFiles;
+        Dictionary<string, string> materialFiles;
         Dictionary<string, string> spawnListsFiles;
 
         private DataManager()
@@ -42,6 +45,7 @@ namespace AdventureDemo
 
             scenarioFiles = new Dictionary<string, string>();
             objectFiles = new Dictionary<string, string>();
+            materialFiles = new Dictionary<string, string>();
             spawnListsFiles = new Dictionary<string, string>();
         }
 
@@ -81,15 +85,19 @@ namespace AdventureDemo
                 dataDirectory.Create();
             }
 
-            LoadDirectory("Scenarios");
-            LoadDirectory("Objects");
-            LoadDirectory("SpawnLists");
+            foreach( DirectoryInfo dir in dataDirectory.GetDirectories() ) {
+                LoadDirectory(dir);
+            }
         }
         public void LoadDirectory( string subPath )
         {
             DirectoryInfo directory = new DirectoryInfo(dataDirectory.FullName + "\\" + subPath);
             if( !directory.Exists ) { directory.Create(); return; }
 
+            LoadDirectory(directory);
+        }
+        public void LoadDirectory( DirectoryInfo directory )
+        {
             FileInfo[] files = directory.GetFiles();
             foreach( FileInfo file in files ) {
                 switch( file.Extension ) {
@@ -99,10 +107,17 @@ namespace AdventureDemo
                     case ".object":
                         AddFile<ObjectData>(file, objectFiles);
                         break;
+                    case ".material":
+                        AddFile<ObjectData>(file, materialFiles);
+                        break;
                     case ".spawn":
                         AddFile<SpawnData>(file, spawnListsFiles);
                         break;
                 }
+            }
+
+            foreach( DirectoryInfo dir in directory.GetDirectories() ) {
+                LoadDirectory(dir);
             }
         }
         void AddFile<T>( FileInfo file, Dictionary<string, string> dict )
@@ -140,7 +155,7 @@ namespace AdventureDemo
             return datas;
         }
 
-        public ScenarioData[] GetScenarios()
+        public ScenarioData[] GetScenarioDatas()
         {
             List<ScenarioData> datas = new List<ScenarioData>();
 
@@ -155,19 +170,23 @@ namespace AdventureDemo
 
             return datas.ToArray();
         }
-        public ScenarioData LoadScenario( string id )
+        public ScenarioData GetScenarioData( string id )
         {
-            return LoadData<ScenarioData>(id, scenarioFiles);
+            return GetData<ScenarioData>(id, scenarioFiles);
         }
-        public ObjectData LoadObject( string id )
+        public ObjectData GetObjectData( string id )
         {
-            return LoadData<ObjectData>(id, objectFiles);
+            return GetData<ObjectData>(id, objectFiles);
         }
-        public SpawnData LoadSpawnList( string id )
+        public ObjectData GetMaterialData( string id )
         {
-            return LoadData<SpawnData>(id, spawnListsFiles);
+            return GetData<ObjectData>(id, materialFiles);
         }
-        T LoadData<T>( string id, Dictionary<string, string> dict )
+        public SpawnData GetSpawnData( string id )
+        {
+            return GetData<SpawnData>(id, spawnListsFiles);
+        }
+        T GetData<T>( string id, Dictionary<string, string> dict )
             where T : BasicData, new()
         {
             if( !dict.ContainsKey(id) ) { return null; }
@@ -184,6 +203,32 @@ namespace AdventureDemo
             }
 
             return null;
+        }
+
+        public GameObject LoadObject( string id )
+        {
+            return LoadObject(GetObjectData(id));
+        }
+        public GameObject LoadObject( ObjectData data )
+        {
+            switch( data.type ) {
+                case "gameObject":
+                    return new GameObject(GameObject.ParseData(data));
+                case "physical":
+                    return new GameObject(GameObject.ParseData(data));
+                case "container":
+                    return new Container(Container.ParseData(data));
+                default:
+                    return null;
+            }
+        }
+        public Material LoadMaterial( string id )
+        {
+            return LoadMaterial( GetMaterialData(id) );
+        }
+        public Material LoadMaterial( ObjectData data )
+        {
+            return new Material( Material.ParseData(data) );
         }
     }
 

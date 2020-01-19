@@ -51,12 +51,21 @@ namespace AdventureDemo
 
         #region Constructors
 
+        public static Dictionary<string, object> ParseData( ObjectData objectData )
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>();
+
+            data["name"] = objectData.name;
+            data["description"] = objectData.description;
+
+            return data;
+        }
+
         public GameObject( Dictionary<string, object> data )
         {
-
             Construct(data.ContainsKey("name") ? (string)data["name"] : "Unknown Object");
 
-            description = data.ContainsKey("description") ? (string)data["discription"] : "a strange object";
+            description = data.ContainsKey("description") ? (string)data["description"] : "a strange object";
         }
         public GameObject( string name )
         {

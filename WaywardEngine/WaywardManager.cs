@@ -168,8 +168,8 @@ namespace WaywardEngine
 
         public void ClearPages()
         {
-            foreach( Page page in pages ) {
-                page.CloseAction();
+            for( int i = pages.Count-1; i >= 0; i-- ) {
+                pages[i].CloseAction();
             }
         }
 

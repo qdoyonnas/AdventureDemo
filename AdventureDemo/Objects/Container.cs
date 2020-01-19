@@ -11,6 +11,8 @@ namespace AdventureDemo
 {
     class Container : Physical
     {
+        #region Fields
+
         public double innerVolume {
             get {
                 return contents.capacity;
@@ -45,6 +47,31 @@ namespace AdventureDemo
         // TODO: This should be a dictionary of spawnlists, weights pairs
         public List<SpawnList> spawnLists;
 
+        #endregion
+
+        #region Constructors
+
+        new public static Dictionary<string, object> ParseData( ObjectData objectData )
+        {
+            Dictionary<string, object> data = Physical.ParseData(objectData);
+
+            try {
+                data["innerVolume"] = double.Parse( objectData.data["innerVolume"] );
+            } catch( KeyNotFoundException e ) {
+            } catch( Exception e ) {
+                Console.WriteLine($"ERROR: Loading container data '{objectData.id}' at 'innerVolume' field: {e}");
+            }
+
+            try {
+                data["spawnLists"] = new SpawnList[0];
+            } catch( KeyNotFoundException e ) {
+            } catch( Exception e ) {
+                Console.WriteLine($"ERROR: Loading container data '{objectData.id}' at 'innerVolume' field: {e}");
+            }
+
+            return data;
+        }
+
         public Container( Dictionary<string, object> data )
             : base(data)
         {
@@ -69,7 +96,9 @@ namespace AdventureDemo
         }
         private void Construct( double volume )
         {
-            this.description = DescriptionFromVolume(volume);
+            if( string.IsNullOrEmpty(this.description) ) {
+                this.description = DescriptionFromVolume(volume);
+            }
 
             contents = new ContainerAttachmentPoint(new Dictionary<string, object>() {
                 { "parent", this }, { "capacity", volume }, { "name", "contents" }
@@ -113,6 +142,10 @@ namespace AdventureDemo
             }
         }
 
+        #endregion
+
+        #region Container Methods
+
         public override bool SetContainer( AttachmentPoint newContainer )
         {
             bool result = base.SetContainer(newContainer);
@@ -141,19 +174,23 @@ namespace AdventureDemo
             return contents.GetAttachedAsPhysical(i);
         }
 
-        /*public override double GetWeight(bool total = true)
+        public CheckResult CanContain( Physical obj )
         {
-            double totalWeight = base.GetWeight(total);
+            if( obj == null ) { return CheckResult.INVALID; }
 
-            if( total ) {
-                foreach( Physical physical in contents.GetAttachedPhysicals() ) {
-                    totalWeight += physical.GetWeight();
-                }
-            }
+            double objVolume = obj.GetVolume();
+            if( objVolume > innerVolume ) { return CheckResult.INVALID; }
 
-            return totalWeight;
-        }*/
-        
+            if( objVolume > remainingVolume ) { return CheckResult.RESTRICTED; }
+
+            return CheckResult.VALID;
+        }
+
+
+        #endregion
+
+        #region Data Methods
+
         public virtual GameObjectData GetDescriptiveInnerVolume( string[] parameters )
         {
             GameObjectData data = new GameObjectData();
@@ -216,6 +253,10 @@ namespace AdventureDemo
             }
         }
 
+        #endregion
+
+        #region Spawn Methods
+
         public Container SpawnContents(double weight = 1)
         {
             foreach( SpawnList list in spawnLists ) {
@@ -243,17 +284,9 @@ namespace AdventureDemo
             return this;
         }
 
-        public CheckResult CanContain( Physical obj )
-        {
-            if( obj == null ) { return CheckResult.INVALID; }
+        #endregion
 
-            double objVolume = obj.GetVolume();
-            if( objVolume > innerVolume ) { return CheckResult.INVALID; }
-
-            if( objVolume > remainingVolume ) { return CheckResult.RESTRICTED; }
-
-            return CheckResult.VALID;
-        }
+        #region Connection Methods
 
         public Connection[] GetConnections()
         {
@@ -281,5 +314,7 @@ namespace AdventureDemo
         {
             contents.RemoveConnection( connection );
         }
+
+        #endregion
     }
 }

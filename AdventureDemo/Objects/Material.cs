@@ -15,6 +15,33 @@ namespace AdventureDemo
 
         public string color;
 
+        new public static Dictionary<string, object> ParseData( ObjectData objectData )
+        {
+            Dictionary<string, object> data = GameObject.ParseData(objectData);
+
+            try {
+                data["weight"] = double.Parse(objectData.data["weight"]);
+            } catch( KeyNotFoundException e ) {
+            } catch( Exception e ) {
+                Console.WriteLine($"ERROR: Loading material data '{objectData.id}' at 'weight' field: {e}");
+            }
+
+            try {
+                data["color"] = objectData.data["color"];
+            } catch( KeyNotFoundException e ) {
+            } catch( Exception e ) {
+                Console.WriteLine($"ERROR: Loading material data '{objectData.id}' at 'color' field: {e}");
+            }
+
+            return data;
+        }
+
+        public Material( Dictionary<string, object> data )
+            : base( data )
+        {
+            weightPerLiter = data.ContainsKey("weight") ? (double)data["weight"] : 0.0;
+            color = data.ContainsKey("color") ? (string)data["color"] : "#ffffff";
+        }
         public Material( string name, double weight, string color = "#ffffff" )
             : base( name )
         {
