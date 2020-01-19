@@ -23,12 +23,18 @@ namespace AdventureDemo
         }
         #endregion
 
+        #region Fields
+
         public AdventureApp application;
 
         // Prevents most functionality until after init
         public bool isInitialized = false;
 
         public WorldManager world;
+
+        #endregion
+
+        #region Initialization Methods
 
         private GameManager()
         {
@@ -46,15 +52,6 @@ namespace AdventureDemo
             application = app;
 
             StartMenu();
-        }
-        public void StartMenu()
-        {
-            if( !isInitialized ) { return; }
-
-            MainMenuPage page = new MainMenuPage();
-            Point position = new Point( 200, 300);
-
-            WaywardManager.instance.AddPage(page, position);
         }
 
         /// <summary>
@@ -75,12 +72,28 @@ namespace AdventureDemo
             return resource;
         }
 
+        #endregion
+
+        #region Game Methods
+
+        public void StartMenu()
+        {
+            if( !isInitialized ) { return; }
+
+            MainMenuPage page = new MainMenuPage();
+            Point position = new Point(200, 300);
+
+            WaywardManager.instance.AddPage(page, position);
+        }
+
         public void StartScenario( SaveData data )
         {
             // XXX: Add save loading here
         }
         public void StartScenario( ScenarioData data )
         {
+            if( !isInitialized ) { return; }
+
             WaywardManager.instance.ClearPages();
 
             SetupPlayContextMenu();
@@ -108,12 +121,15 @@ namespace AdventureDemo
         {
 
         }
-        
+
+        #endregion
+
+        #region Display Methods
+
         public void DisplayPlayerVerbose( Point position )
         {
             VerbosePage page = DisplayVerbosePage( position, world.player.GetControlled() );
         }
-
         public void DisplayRoots( Point position )
         {
             throw new System.NotImplementedException("GameManager.DisplayRoots is not implemented. Observer needs refactor");
@@ -163,5 +179,7 @@ namespace AdventureDemo
 
             return page;
         }
+
+        #endregion
     }
 }

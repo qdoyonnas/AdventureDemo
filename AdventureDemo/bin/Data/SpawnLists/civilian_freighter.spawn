@@ -1,0 +1,18 @@
+{
+	"id": "civilian_freighter_1",
+	
+	"entries": [
+		{
+			"id": "hallway_1",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "cabin_1",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		}
+	]
+};

@@ -25,6 +25,8 @@ namespace AdventureDemo
         }
         #endregion
 
+        #region Fields
+
         string root;
 
         DirectoryInfo dataDirectory;
@@ -32,21 +34,39 @@ namespace AdventureDemo
         Settings settings;
         FileInfo settingsFile;
 
-        // XXX: To improve performance in files with multiple entries the dictionary should track
-        //      position in file as well as the file itself
-        Dictionary<string, string> scenarioFiles;
-        Dictionary<string, string> objectFiles;
-        Dictionary<string, string> materialFiles;
-        Dictionary<string, string> spawnListsFiles;
+        public struct DataPointer
+        {
+            public string filePath;
+            public int start;
+            public int length;
+
+            public DataPointer( string p, int s, int e )
+            {
+                filePath = p;
+                start = s;
+                length = e;
+            }
+        }
+        Dictionary<string, DataPointer> scenarioFiles;
+        Dictionary<string, DataPointer> objectFiles;
+        Dictionary<string, DataPointer> materialFiles;
+        Dictionary<string, DataPointer> spawnListsFiles;
+
+        // XXX: Implement hybrid memory/file loading system where recently loaded data objects are stored
+        //      in memory using a queue based first-used-first-out system
+
+        #endregion
+
+        #region Initialization Methods
 
         private DataManager()
         {
             root = $@"{Directory.GetCurrentDirectory()}\..\";
 
-            scenarioFiles = new Dictionary<string, string>();
-            objectFiles = new Dictionary<string, string>();
-            materialFiles = new Dictionary<string, string>();
-            spawnListsFiles = new Dictionary<string, string>();
+            scenarioFiles = new Dictionary<string, DataPointer>();
+            objectFiles = new Dictionary<string, DataPointer>();
+            materialFiles = new Dictionary<string, DataPointer>();
+            spawnListsFiles = new Dictionary<string, DataPointer>();
         }
 
         public void Init( AdventureApp app )
@@ -76,6 +96,24 @@ namespace AdventureDemo
         public Settings GetSettings()
         {
             return new Settings(settings);
+        }
+
+        #endregion
+
+        #region File Loading Methods
+
+        public struct ParseData<T>
+        {
+            public T data;
+            public int start;
+            public int length;
+
+            public ParseData(T d, int s, int e)
+            {
+                data = d;
+                start = s;
+                length = e;
+            }
         }
 
         void SetupData()
@@ -120,51 +158,63 @@ namespace AdventureDemo
                 LoadDirectory(dir);
             }
         }
-        void AddFile<T>( FileInfo file, Dictionary<string, string> dict )
+        void AddFile<T>( FileInfo file, Dictionary<string, DataPointer> dict )
             where T : BasicData
         {
-            List<T> datas = ParseFile<T>(file);
+            List<ParseData<T>> datas = ParseFile<T>(file);
 
-            foreach( T data in datas ) {
-                dict.Add(data.id, file.FullName);
+            foreach( ParseData<T> data in datas ) {
+                dict.Add( data.data.id, new DataPointer(file.FullName, data.start, data.length) );
             }
         }
 
-        List<T> ParseFile<T>( string path )
+        List<ParseData<T>> ParseFile<T>( string path )
         {
             return ParseFile<T>( new FileInfo(path));
         }
-        List<T> ParseFile<T>( FileInfo file )
+        List<ParseData<T>> ParseFile<T>( FileInfo file )
         {
-            if( !file.Exists ) { return new List<T>(); }
+            if( !file.Exists ) { return new List<ParseData<T>>(); }
 
             StreamReader reader = file.OpenText();
             string contents = reader.ReadToEnd();
 
-            List<T> datas = new List<T>();
-            int subIndex;
+            List<ParseData<T>> datas = new List<ParseData<T>>();
+            int startIndex = 0;
+            int endIndex;
             do {
-                subIndex = contents.IndexOf("};");
-                if( subIndex == -1 ) { break; }
+                endIndex = contents.IndexOf("};", startIndex);
+                if( endIndex == -1 ) { break; }
 
-                string json = contents.Substring(0, subIndex + 1);
-                contents = contents.Remove(0, subIndex + 2);
-                datas.Add(JsonConvert.DeserializeObject<T>(json));
-            } while( subIndex != -1 );
+                endIndex++;
+                string json = contents.Substring(startIndex, endIndex - startIndex);
+                datas.Add(new ParseData<T>(
+                    JsonConvert.DeserializeObject<T>(json),
+                    startIndex, endIndex - startIndex
+                ) );
+                startIndex = endIndex + 1;
+            } while( endIndex != -1 );
 
             return datas;
         }
+
+        #endregion
+
+        #region Data Methods
 
         public ScenarioData[] GetScenarioDatas()
         {
             List<ScenarioData> datas = new List<ScenarioData>();
 
             List<string> files = new List<string>();
-            foreach( string file in scenarioFiles.Values ) {
-                if( !files.Contains(file) ) {
-                    files.Add(file);
+            foreach( DataPointer pointer in scenarioFiles.Values ) {
+                if( !files.Contains(pointer.filePath) ) {
+                    files.Add(pointer.filePath);
 
-                    datas.AddRange( ParseFile<ScenarioData>(file) );
+                    List<ParseData<ScenarioData>> parseDatas = ParseFile<ScenarioData>(pointer.filePath);
+                    foreach( ParseData<ScenarioData> parseData in parseDatas ) {
+                        datas.Add(parseData.data);
+                    }
                 }
             }
 
@@ -186,24 +236,24 @@ namespace AdventureDemo
         {
             return GetData<SpawnData>(id, spawnListsFiles);
         }
-        T GetData<T>( string id, Dictionary<string, string> dict )
+        T GetData<T>( string id, Dictionary<string, DataPointer> dict )
             where T : BasicData, new()
         {
             if( !dict.ContainsKey(id) ) { return null; }
 
             // XXX: This is the trade off of speed vs memory for either loading and parsing the file
             //      everytime data is needed or keeping all the data objects in memory at all times
-            FileInfo file = new FileInfo(dict[id]);
-            List<T> datas = ParseFile<T>(file);
+            FileInfo file = new FileInfo(dict[id].filePath);
+            string json = file.OpenText().ReadToEnd();
+            json = json.Substring(dict[id].start, dict[id].length);
+            T data = JsonConvert.DeserializeObject<T>(json);
 
-            foreach( T d in datas ) {
-                if( d.id == id ) {
-                    return d;
-                }
-            }
-
-            return null;
+            return data;
         }
+
+        #endregion
+
+        #region Load Methods
 
         public GameObject LoadObject( string id )
         {
@@ -230,7 +280,11 @@ namespace AdventureDemo
         {
             return new Material( Material.ParseData(data) );
         }
+
+        #endregion
     }
+
+    #region Settings Object
 
     public class Settings
     {
@@ -246,4 +300,6 @@ namespace AdventureDemo
             this.height = original.height;
         }
     }
+
+    #endregion
 }

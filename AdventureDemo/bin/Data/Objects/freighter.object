@@ -1,12 +1,14 @@
 {
 	"id": "freighter_1",
+	
 	"type": "container",
-	"name": "freighter",
-	"description": "a small freighter class spaceship. Gleaming metal protects the fragil internals and crew, if present.\n\nThese ships travel between populated systems transporting goods, and sometimes passengers. They form the backbone of the galactic economy but it is a dangerous business as they are usually lightly armed and vulnerable to pirating",
+	"name": "pegasus",
+	"description": "a small freighter class spaceship. Gleaming metal protects the fragil internals and crew compartments.\n\nThese ships travel between populated systems transporting goods, and sometimes passengers. They form the backbone of the galactic economy but it is a dangerous business as they are usually lightly armed and vulnerable to pirating",
 	
 	"data": {
 		"volume": "15000",
 		"innerVolume": "10000",
-		"materials": "titanium 3, glass 1"
+		"materials": "titanium 3, glass 1",
+		"spawnLists": "civilian_freighter_1"
 	}
 };
