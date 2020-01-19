@@ -1,0 +1,51 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:AdventureDemo">
+
+    <Border x:Key="MainMenu" x:Shared="false" Style="{StaticResource PageStyle}">
+        <ScrollViewer Height="300" Width="200" VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.5*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="1" Style="{DynamicResource Header}" TextAlignment="Center">
+                    <Span Name="ScenariosChoice" Style="{StaticResource Link}">Scenarios</Span>
+                </TextBlock>
+                <TextBlock Grid.Row="2" Style="{DynamicResource Header}" TextAlignment="Center">
+                    <Span Name="OptionsChoice" Style="{StaticResource Link}">Options</Span>
+                </TextBlock>
+                <TextBlock Grid.Row="3" Style="{DynamicResource Header}" TextAlignment="Center">
+                    <Span Name="ExitChoice" Style="{StaticResource Link}">Exit</Span>
+                </TextBlock>
+            </Grid>
+        </ScrollViewer>
+    </Border>
+
+    <Border x:Key="ScenariosMenu" x:Shared="false" Style="{StaticResource PageStyle}">
+        <ScrollViewer MaxHeight="600" Width="800" VerticalScrollBarVisibility="Auto">
+            <StackPanel Name="Scenarios">
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
+    <Grid x:Key="ScenarioEntry" x:Shared="false">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="4*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Column="0" VerticalAlignment="Center" Style="{DynamicResource Header}">
+            <Span Name="ScenarioName" Style="{StaticResource Link}"></Span>
+        </TextBlock>
+
+        <Border Grid.Column="1" BorderBrush="{DynamicResource BorderBrush}" Padding="{DynamicResource Padding}">
+            <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Auto">
+                <TextBlock Name="ScenarioDescription" TextWrapping="Wrap"></TextBlock>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+
+</ResourceDictionary>

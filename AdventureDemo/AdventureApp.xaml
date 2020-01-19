@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="/ResourceDictionaries/ContextMenuStyle.xaml" />
                 <ResourceDictionary Source="/ResourceDictionaries/OverviewPages.xaml" />
                 <ResourceDictionary Source="/ResourceDictionaries/DescriptivePages.xaml" />
+                <ResourceDictionary Source="/ResourceDictionaries/MenuPages.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
         

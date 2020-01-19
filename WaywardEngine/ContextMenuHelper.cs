@@ -159,6 +159,13 @@ namespace WaywardEngine
 
             return true;
         }
+
+        public static void ClearContextMenu( FrameworkElement control )
+        {
+            if( control == null ) { return; }
+
+            control.ContextMenu = null;
+        }
         #endregion
 
         #region FrameworkContentElement - TextBlock Methods
@@ -290,6 +297,13 @@ namespace WaywardEngine
             }
 
             return true;
+        }
+
+        public static void ClearContextMenu( FrameworkContentElement control )
+        {
+            if( control == null ) { return; }
+
+            control.ContextMenu = null;
         }
         #endregion
 

@@ -28,16 +28,11 @@ namespace AdventureDemo
         // Prevents most functionality until after init
         public bool isInitialized = false;
 
-        public PlayerActor player;
-        private List<GameObject> rootObjects;
-
-        public WorldBuilder world;
+        public WorldManager world;
 
         private GameManager()
         {
             WaywardManager.instance.OnUpdate += Update;
-
-            rootObjects = new List<GameObject>();
         }
 
         /// <summary>
@@ -46,20 +41,20 @@ namespace AdventureDemo
         /// <param name="app"></param>
         public void Init(AdventureApp app)
         {
-            application = app;
-            SetupGame();
             isInitialized = true;
+
+            application = app;
+
+            StartMenu();
         }
-
-        /// <summary>
-        /// Generate the world.
-        /// </summary>
-        private void SetupGame()
+        public void StartMenu()
         {
-            player = new PlayerActor();
+            if( !isInitialized ) { return; }
 
-            world = new WorldBuilder();
-            world.BuildWorld();
+            MainMenuPage page = new MainMenuPage();
+            Point position = new Point( 200, 300);
+
+            WaywardManager.instance.AddPage(page, position);
         }
 
         /// <summary>
@@ -80,36 +75,56 @@ namespace AdventureDemo
             return resource;
         }
 
+        public void StartScenario( SaveData data )
+        {
+            // XXX: Add save loading here
+        }
+        public void StartScenario( ScenarioData data )
+        {
+            WaywardManager.instance.ClearPages();
+
+            SetupPlayContextMenu();
+
+            world = new WorldManager(data);
+        }
+        private void SetupPlayContextMenu()
+        {
+            ContextMenuHelper.ClearContextMenu(WaywardManager.instance.window);
+
+            ContextMenuHelper.AddContextMenuHeader(WaywardManager.instance.window, "Page", new Dictionary<string, ContextMenuAction>() {
+                { "Overview", CreateOverviewPage },
+                { "Visual", CreateVerbosePage }
+            });
+        }
+
         public void Update()
         {
 
         }
-
-        public void AddRoot( GameObject obj )
-        {
-            rootObjects.Add( obj );
-        }
-        public void RemoveRoot( GameObject obj )
-        {
-            rootObjects.Remove( obj );
-        }
-        public int RootCount()
-        {
-            return rootObjects.Count;
-        }
-        public GameObject GetRoot( int i )
-        {
-            return rootObjects[i];
-        }
         
         public void DisplayPlayerVerbose( Point position )
         {
-            VerbosePage page = DisplayVerbosePage( position, player.GetControlled() );
+            VerbosePage page = DisplayVerbosePage( position, world.player.GetControlled() );
         }
 
         public void DisplayRoots( Point position )
         {
             throw new System.NotImplementedException("GameManager.DisplayRoots is not implemented. Observer needs refactor");
+        }
+
+        private bool CreateOverviewPage()
+        {
+            Point mousePosition = WaywardManager.instance.GetMousePosition();
+            DisplayOverviewPage(mousePosition, world.player);
+
+            return false;
+        }
+        private bool CreateVerbosePage()
+        {
+            Point mousePosition = WaywardManager.instance.GetMousePosition();
+            DisplayPlayerVerbose(mousePosition);
+
+            return false;
         }
 
         public OverviewPage DisplayOverviewPage( Point position, Actor actor )
@@ -121,7 +136,7 @@ namespace AdventureDemo
         }
         public VerbosePage DisplayVerbosePage( Point position, GameObject subject )
         {
-            VerbosePage page = new VerbosePage( player, subject );
+            VerbosePage page = new VerbosePage( world.player, subject );
             WaywardManager.instance.AddPage(page, position);
 
             return page;
@@ -131,7 +146,7 @@ namespace AdventureDemo
             DescriptivePageSection[] sections = target.DisplayDescriptivePage().ToArray();
             Point mousePosition = WaywardManager.instance.GetMousePosition();
 
-            DescriptivePage page = new DescriptivePage( player, target, sections );
+            DescriptivePage page = new DescriptivePage( world.player, target, sections );
             WaywardManager.instance.AddPage(page, mousePosition);
 
             return page;

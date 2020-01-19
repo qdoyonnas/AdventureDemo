@@ -20,25 +20,13 @@ namespace AdventureDemo
         {
             // Init the WaywardEngine
             WaywardManager.instance.Init(this, Resources);
+
+            DataManager.instance.Init(this);
+
             MainWindow window = WaywardManager.instance.window;
-            
+
             #region Load Settings
-            Settings settings = new Settings();
-
-            string path = "settings.config";
-            string longPath = $@"{Directory.GetCurrentDirectory()}\{path}";
-            if( File.Exists(longPath) ) {
-                StreamReader reader = new StreamReader(path);
-
-                string sSettings = reader.ReadToEnd();
-                settings = JsonConvert.DeserializeObject<Settings>( sSettings );
-            } else {
-                StreamWriter writer = new StreamWriter(path);
-                string sSettings = JsonConvert.SerializeObject(settings, Formatting.Indented);
-                writer.Write(sSettings);
-                writer.Close();
-            }
-
+            Settings settings = DataManager.instance.GetSettings();
             switch( settings.displayMode ) {
                 case "borderless":
                     window.ResizeMode = ResizeMode.NoResize;
@@ -46,7 +34,9 @@ namespace AdventureDemo
                     window.WindowState = WindowState.Maximized;
                     break;
                 case "fullscreen":
-                    
+                    window.ResizeMode = ResizeMode.NoResize;
+                    window.WindowStyle = WindowStyle.None;
+                    window.WindowState = WindowState.Maximized;
                     break;
                 default:
                     window.ResizeMode = ResizeMode.CanResizeWithGrip;
@@ -58,40 +48,12 @@ namespace AdventureDemo
             #endregion
 
             // Game Setup
-            window.Title = "AdventureDemo";
+            window.Title = "Path to the Stars";
             window.mainCanvas.Style = Resources["WindowBackground"] as Style;
-            SetupContextMenu();
 
             window.Show();
 
-            //WaywardManager.instance.StartTutorial();
             GameManager.instance.Init(this);
-            GameManager.instance.DisplayOverviewPage( new Point(800, 150), GameManager.instance.player );
-            GameManager.instance.DisplayPlayerVerbose( new Point(150, 150) );
-        }
-        private void SetupContextMenu()
-        {
-            ContextMenuHelper.AddContextMenuHeader(WaywardManager.instance.window, "Page", new Dictionary<string, ContextMenuAction>() {
-                { "Overview", CreateOverviewPage },
-                { "Visual", CreateVerbosePage }
-            });
-        }
-
-        private bool CreateOverviewPage()
-        {
-            Point mousePosition = WaywardManager.instance.GetMousePosition();
-
-            GameManager.instance.DisplayOverviewPage(mousePosition, GameManager.instance.player);
-
-            return false;
-        }
-        private bool CreateVerbosePage()
-        {
-            Point mousePosition = WaywardManager.instance.GetMousePosition();
-
-            GameManager.instance.DisplayPlayerVerbose(mousePosition);
-
-            return false;
         }
 
         private void Application_DispatcherUnhandledException( object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e )
@@ -100,12 +62,5 @@ namespace AdventureDemo
             e.Handled = true;
             this.Shutdown();
         }
-    }
-
-    public class Settings
-    {
-        public string displayMode = "windowed";
-        public int width = 1024;
-        public int height = 768;
     }
 }

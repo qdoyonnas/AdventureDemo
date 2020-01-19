@@ -1,0 +1,9 @@
+{
+	"id": "space",
+	"type": "container",
+	"name": "space",
+	"description": "the deep, dark of space, broken up by the pinpoint lights of countless stars",
+	"data": {
+		"innerVolume": "-1"
+	}
+};

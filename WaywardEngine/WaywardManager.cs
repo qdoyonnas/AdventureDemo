@@ -126,12 +126,21 @@ namespace WaywardEngine
         /// <param name="position">Position of page inside mainCanvas.</param>
         public void AddPage( Page page, Point position )
         {
-            window.mainCanvas.Children.Add(page.GetElement());
+            FrameworkElement element = page.GetElement();
 
-            Canvas.SetLeft(page.GetElement(), position.X);
-            Canvas.SetTop(page.GetElement(), position.Y);
+            window.mainCanvas.Children.Add(element);
+            SetPosition(element, position);
 
-            WaywardManager.instance.pages.Add(page);
+            instance.pages.Add(page);
+        }
+        public void SetPosition( FrameworkElement element, Point position )
+        {
+            element.Loaded += (sender, e) =>
+            {
+                position = new Point(position.X - (element.ActualWidth / 2), position.Y - (element.ActualHeight / 2));
+                Canvas.SetLeft(element, position.X);
+                Canvas.SetTop(element, position.Y);
+            };
         }
 
         public void DisplayMessage( string message )
@@ -157,9 +166,11 @@ namespace WaywardEngine
             AddPage( box, position );
         }
 
-        public void StartTutorial()
+        public void ClearPages()
         {
-            DisplayMessage("Welcome to the Wayward Engine!");
+            foreach( Page page in pages ) {
+                page.CloseAction();
+            }
         }
 
         public delegate void UpdateDelegate();

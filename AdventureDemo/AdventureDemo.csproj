@@ -61,6 +61,12 @@
       <DependentUpon>AdventureApp.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data\BasicData.cs" />
+    <Compile Include="Data\ObjectData.cs" />
+    <Compile Include="Data\SaveData.cs" />
+    <Compile Include="Data\ScenarioData.cs" />
+    <Compile Include="Data\SpawnData.cs" />
+    <Compile Include="Data\SpawnList.cs" />
     <Compile Include="Objects\Material.cs" />
     <Compile Include="Objects\Organisms\BodyPart.cs" />
     <Compile Include="Objects\Organisms\Human.cs" />
@@ -74,7 +80,10 @@
     <Compile Include="Pages\DescriptivePages\OrganismDescriptivePageSection.cs" />
     <Compile Include="Pages\DescriptivePages\PhysicalAmalgamDescriptivePageSection.cs" />
     <Compile Include="Pages\DescriptivePages\PhysicalAttachmentDescriptivePageSection.cs" />
+    <Compile Include="Pages\MenuPages\MainMenuPage.cs" />
+    <Compile Include="Pages\MenuPages\ScenariosMenuPage.cs" />
     <Compile Include="Pages\VerbosePage.cs" />
+    <Compile Include="Data\DataManager.cs" />
     <Compile Include="Systems\Attachments\AttachmentPoint.cs" />
     <Compile Include="Systems\Attachments\BodyAttachmentPointcs.cs" />
     <Compile Include="Systems\Attachments\ContainerAttachmentPoint.cs" />
@@ -85,7 +94,7 @@
     <Compile Include="Systems\Verbs\PossessVerb.cs" />
     <Compile Include="Systems\Verbs\TraversalVerb.cs" />
     <Compile Include="Utilities.cs" />
-    <Compile Include="WorldBuilder.cs" />
+    <Compile Include="WorldManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameManager.cs" />
@@ -143,6 +152,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ResourceDictionaries\DescriptivePages.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourceDictionaries\MenuPages.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

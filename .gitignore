@@ -1,6 +1,8 @@
-WaywardEngine/bin/
+WaywardEngine/bin/Debug/
+WaywardEngine/bin/Release/
 WaywardEngine/obj/
-AdventureDemo/bin/
+AdventureDemo/bin/Debug/
+AdventureDemo/bin/Release/
 AdventureDemo/obj/
 
 .vs/
