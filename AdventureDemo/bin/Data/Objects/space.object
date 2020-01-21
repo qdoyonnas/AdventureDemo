@@ -1,9 +1,10 @@
 {
 	"id": "space",
-	"type": "container",
+	"type": "ContainerData",
+	
 	"name": "space",
 	"description": "a pitch black void, broken up by the pinpoint lights of countless stars",
-	"data": {
-		"innerVolume": "-1"
-	}
-};
+	
+	"volume": "-1",
+	"innerVolume": "-1"
+}

@@ -1,32 +1,33 @@
+[
+
 {
 	"id": "titanium",
 	
 	"name": "titanium",
 	"description": "a very sturdy metal",
-	"data": {
-		"weight": "17",
-		"color": "#6F9BAB"
-	}
-};
+	
+	"weight": 17,
+	"color": "#6F9BAB"
+},
 
 {
 	"id": "glass",
 	
 	"name": "glass",
 	"description": "a solid clear barrier",
-	"data": {
-		"weight": "8",
-		"color": "#B5F2FF"
-	}
-};
+	
+	"weight": 8,
+	"color": "#B5F2FF"
+},
 
 {
 	"id": "synththread",
 	
 	"name": "synththread",
 	"description": "cloth like and synthetically manufactured from in-organic materials",
-	"data": {
-		"weight": "1.5",
-		"color": "#9DDFCC"
-	}
-};
+	
+	"weight": 1.5,
+	"color": "#9DDFCC"
+}
+
+]

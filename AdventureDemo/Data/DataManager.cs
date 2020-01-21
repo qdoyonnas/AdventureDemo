@@ -7,6 +7,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Reflection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace AdventureDemo
 {
@@ -37,20 +38,25 @@ namespace AdventureDemo
         public struct DataPointer
         {
             public string filePath;
-            public int start;
-            public int length;
+            public int index;
 
-            public DataPointer( string p, int s, int e )
+            public DataPointer( string p, int i )
             {
                 filePath = p;
-                start = s;
-                length = e;
+                index = i;
             }
         }
         Dictionary<string, DataPointer> scenarioFiles;
         Dictionary<string, DataPointer> objectFiles;
         Dictionary<string, DataPointer> materialFiles;
         Dictionary<string, DataPointer> spawnListsFiles;
+
+        List<ObjectData> objectDataMemory;
+        List<MaterialData> materialDataMemory;
+        List<SpawnData> spawnDataMemory;
+        int objectMemoryLength = 50;
+        int materialMemoryLength = 50;
+        int spawnMemoryLength = 50;
 
         // XXX: Implement hybrid memory/file loading system where recently loaded data objects are stored
         //      in memory using a queue based first-used-first-out system
@@ -67,6 +73,10 @@ namespace AdventureDemo
             objectFiles = new Dictionary<string, DataPointer>();
             materialFiles = new Dictionary<string, DataPointer>();
             spawnListsFiles = new Dictionary<string, DataPointer>();
+
+            objectDataMemory = new List<ObjectData>();
+            materialDataMemory = new List<MaterialData>();
+            spawnDataMemory = new List<SpawnData>();
         }
 
         public void Init( AdventureApp app )
@@ -102,20 +112,6 @@ namespace AdventureDemo
 
         #region File Loading Methods
 
-        public struct ParseData<T>
-        {
-            public T data;
-            public int start;
-            public int length;
-
-            public ParseData(T d, int s, int e)
-            {
-                data = d;
-                start = s;
-                length = e;
-            }
-        }
-
         void SetupData()
         {
             dataDirectory = new DirectoryInfo(root + "Data");
@@ -123,9 +119,7 @@ namespace AdventureDemo
                 dataDirectory.Create();
             }
 
-            foreach( DirectoryInfo dir in dataDirectory.GetDirectories() ) {
-                LoadDirectory(dir);
-            }
+            LoadDirectory(dataDirectory);
         }
         public void LoadDirectory( string subPath )
         {
@@ -140,16 +134,16 @@ namespace AdventureDemo
             foreach( FileInfo file in files ) {
                 switch( file.Extension ) {
                     case ".scenario":
-                        AddFile<ScenarioData>(file, scenarioFiles);
+                        AddFile(file, scenarioFiles);
                         break;
                     case ".object":
-                        AddFile<ObjectData>(file, objectFiles);
+                        AddFile(file, objectFiles);
                         break;
                     case ".material":
-                        AddFile<ObjectData>(file, materialFiles);
+                        AddFile(file, materialFiles);
                         break;
                     case ".spawn":
-                        AddFile<SpawnData>(file, spawnListsFiles);
+                        AddFile(file, spawnListsFiles);
                         break;
                 }
             }
@@ -158,44 +152,22 @@ namespace AdventureDemo
                 LoadDirectory(dir);
             }
         }
-        void AddFile<T>( FileInfo file, Dictionary<string, DataPointer> dict )
-            where T : BasicData
-        {
-            List<ParseData<T>> datas = ParseFile<T>(file);
 
-            foreach( ParseData<T> data in datas ) {
-                dict.Add( data.data.id, new DataPointer(file.FullName, data.start, data.length) );
+        void AddFile( FileInfo file, Dictionary<string, DataPointer> dict )
+        {
+            try {
+                JToken jToken = JToken.Parse(file.OpenText().ReadToEnd());
+                JArray jArray = jToken as JArray;
+                if( jArray != null ) {
+                    for( int i = 0; i < jArray.Count; i++ ) {
+                        dict.Add(jArray[i]["id"].ToString(), new DataPointer(file.FullName, i));
+                    }
+                } else {
+                    dict.Add(jToken["id"].ToString(), new DataPointer(file.FullName, 0));
+                }
+            } catch( Exception e ) {
+                Console.Write($"ERROR: Could not parse file {file.Name}: {e}");
             }
-        }
-
-        List<ParseData<T>> ParseFile<T>( string path )
-        {
-            return ParseFile<T>( new FileInfo(path));
-        }
-        List<ParseData<T>> ParseFile<T>( FileInfo file )
-        {
-            if( !file.Exists ) { return new List<ParseData<T>>(); }
-
-            StreamReader reader = file.OpenText();
-            string contents = reader.ReadToEnd();
-
-            List<ParseData<T>> datas = new List<ParseData<T>>();
-            int startIndex = 0;
-            int endIndex;
-            do {
-                endIndex = contents.IndexOf("};", startIndex);
-                if( endIndex == -1 ) { break; }
-
-                endIndex++;
-                string json = contents.Substring(startIndex, endIndex - startIndex);
-                datas.Add(new ParseData<T>(
-                    JsonConvert.DeserializeObject<T>(json),
-                    startIndex, endIndex - startIndex
-                ) );
-                startIndex = endIndex + 1;
-            } while( endIndex != -1 );
-
-            return datas;
         }
 
         #endregion
@@ -211,9 +183,20 @@ namespace AdventureDemo
                 if( !files.Contains(pointer.filePath) ) {
                     files.Add(pointer.filePath);
 
-                    List<ParseData<ScenarioData>> parseDatas = ParseFile<ScenarioData>(pointer.filePath);
-                    foreach( ParseData<ScenarioData> parseData in parseDatas ) {
-                        datas.Add(parseData.data);
+                    FileInfo file = new FileInfo(pointer.filePath);
+                    try {
+                        JToken jToken = JToken.Parse(file.OpenText().ReadToEnd());
+                        if( jToken.Type == JTokenType.Array ) {
+                            ScenarioData[] fileData = jToken.ToObject<ScenarioData[]>();
+                            foreach( ScenarioData data in fileData ) {
+                                if( data != null ) { datas.Add(data); }
+                            }
+                        } else {
+                            ScenarioData data = jToken.ToObject<ScenarioData>();
+                            if( data != null ) { datas.Add(data); }
+                        }
+                    } catch( Exception e ) {
+                        Console.Write($"ERROR: Could not parse ScenarioData from file {file.Name}: {e}");
                     }
                 }
             }
@@ -222,63 +205,157 @@ namespace AdventureDemo
         }
         public ScenarioData GetScenarioData( string id )
         {
-            return GetData<ScenarioData>(id, scenarioFiles);
+            JToken token = RetrieveDataFromFile<ScenarioData>(id, scenarioFiles);
+            return GetScenarioData(token);
         }
-        public ObjectData GetObjectData( string id )
+        public ScenarioData GetScenarioData( JToken token )
         {
-            return GetData<ObjectData>(id, objectFiles);
-        }
-        public ObjectData GetMaterialData( string id )
-        {
-            return GetData<ObjectData>(id, materialFiles);
-        }
-        public SpawnData GetSpawnData( string id )
-        {
-            return GetData<SpawnData>(id, spawnListsFiles);
-        }
-        T GetData<T>( string id, Dictionary<string, DataPointer> dict )
-            where T : BasicData, new()
-        {
-            if( !dict.ContainsKey(id) ) { return null; }
+            if( token.Type == JTokenType.String ) { return GetScenarioData(token.Value<string>()); }
 
-            // XXX: This is the trade off of speed vs memory for either loading and parsing the file
-            //      everytime data is needed or keeping all the data objects in memory at all times
-            FileInfo file = new FileInfo(dict[id].filePath);
-            string json = file.OpenText().ReadToEnd();
-            json = json.Substring(dict[id].start, dict[id].length);
-            T data = JsonConvert.DeserializeObject<T>(json);
+            ScenarioData data = null;
+
+            try {
+                data = token.ToObject<ScenarioData>();
+            } catch( Exception e ) {
+                Console.WriteLine($"ERROR: Failed converting JSON into ScenarioData: {e}");
+            }
 
             return data;
         }
 
-        #endregion
-
-        #region Load Methods
-
-        public GameObject LoadObject( string id )
+        public ObjectData GetObjectData( string id )
         {
-            return LoadObject(GetObjectData(id));
+            ObjectData data = RetrieveDataFromMemory<ObjectData>(id, objectDataMemory);
+            if( data != null ) { return data; }
+
+            JToken token = RetrieveDataFromFile<ObjectData>(id, objectFiles);
+            return GetObjectData(token);
         }
-        public GameObject LoadObject( ObjectData data )
+        public ObjectData GetObjectData( JToken token )
         {
-            switch( data.type ) {
-                case "gameObject":
-                    return new GameObject(GameObject.ParseData(data));
-                case "physical":
-                    return new GameObject(GameObject.ParseData(data));
-                case "container":
-                    return new Container(Container.ParseData(data));
-                default:
-                    return null;
+            if( token.Type == JTokenType.String ) { return GetObjectData(token.Value<string>()); }
+
+            ObjectData data = null;
+
+            try {
+                if( token["basedOn"] != null && token["basedOn"].Type != JTokenType.Null ) {
+                    ObjectData basedData = GetObjectData(token["basedOn"]);
+                    data = basedData;
+                    JsonReader reader = token.CreateReader();
+                    JsonSerializer.CreateDefault().Populate(reader, data);
+                } else {
+                    string typeName = "AdventureDemo." + token["type"].Value<string>();
+                    Type objectType = Type.GetType(typeName);
+                    data = (ObjectData)token.ToObject(objectType);
+                }
+            } catch( Exception e ) {
+                Console.WriteLine($"ERROR: Failed converting JSON into ObjectData: {e}");
+            }
+
+            if( data != null ) {
+                UpdateObjectMemory(data);
+            }
+            return data;
+        }
+        public void UpdateObjectMemory( ObjectData data )
+        {
+            objectDataMemory.Insert(0, data);
+            if( objectDataMemory.Count > objectMemoryLength ) {
+                objectDataMemory.RemoveAt(objectDataMemory.Count - 1);
             }
         }
-        public Material LoadMaterial( string id )
+
+        public MaterialData GetMaterialData( string id )
         {
-            return LoadMaterial( GetMaterialData(id) );
+            MaterialData data = RetrieveDataFromMemory<MaterialData>(id, materialDataMemory);
+            if( data != null ) { return data; }
+
+            JToken token = RetrieveDataFromFile<MaterialData>(id, objectFiles);
+            return GetMaterialData(token);
         }
-        public Material LoadMaterial( ObjectData data )
+        public MaterialData GetMaterialData( JToken token )
         {
-            return new Material( Material.ParseData(data) );
+            if( token.Type == JTokenType.String ) { return GetMaterialData(token.Value<string>()); }
+
+
+
+            return null;
+        }
+
+        public JToken RetrieveDataFromFile<T>( string id, Dictionary<string, DataPointer> files )
+            where T : BasicData
+        {
+            if( !files.ContainsKey(id) ) { return null; } // XXX: Look for new file?
+
+            DataPointer pointer = objectFiles[id];
+
+            FileInfo file = new FileInfo(pointer.filePath);
+            try {
+                JToken jObject;
+                if( pointer.index != 0 ) {
+                    JArray jArray = JArray.Parse(file.OpenText().ReadToEnd());
+                    jObject = jArray[pointer.index];
+                } else {
+                    jObject = JToken.Parse(file.OpenText().ReadToEnd());
+                }
+
+                return jObject;
+            } catch( Exception e ) {
+                Console.WriteLine($"ERROR: Failed retrieving data with id '{id}': {e}");
+                return null;
+            }
+        }
+        public T RetrieveDataFromMemory<T>( string id, List<T> memory )
+            where T : BasicData
+        {
+            foreach( T data in memory ) {
+                if( data.id == id ) {
+                    return data;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Searches all files and memory lists. SLOW!
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public BasicData GetData( string id )
+        {
+            BasicData data;
+            data = GetObjectData(id);
+            if( data != null ) { return data; }
+
+            data = GetMaterialData(id);
+            if( data != null ) { return data; }
+
+            data = GetScenarioData(id);
+            if( data != null ) { return data; }
+
+            return null;
+        }
+        /// <summary>
+        /// Searches all files and memory lists. SLOW!
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public BasicData GetData( JToken token )
+        {
+            if( token.Type == JTokenType.String ) { return GetData(token.Value<string>()); }
+
+            BasicData data;
+            data = GetObjectData(token);
+            if( data != null ) { return data; }
+
+            data = GetMaterialData(token);
+            if( data != null ) { return data; }
+
+            data = GetScenarioData(token);
+            if( data != null ) { return data; }
+
+            return null;
         }
 
         #endregion

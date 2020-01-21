@@ -34,8 +34,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NCalc, Version=3.5.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CoreCLR-NCalc.2.2.70\lib\net45\NCalc.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -61,11 +64,19 @@
       <DependentUpon>AdventureApp.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data\BasicData.cs" />
-    <Compile Include="Data\ObjectData.cs" />
-    <Compile Include="Data\SaveData.cs" />
-    <Compile Include="Data\ScenarioData.cs" />
-    <Compile Include="Data\SpawnData.cs" />
+    <Compile Include="Data\Datas\BasicData.cs" />
+    <Compile Include="Data\Datas\Objects\ContainerData.cs" />
+    <Compile Include="Data\Datas\Objects\MaterialData.cs" />
+    <Compile Include="Data\Datas\Objects\ObjectData.cs" />
+    <Compile Include="Data\Datas\Objects\PhysicalData.cs" />
+    <Compile Include="Data\Datas\SaveData.cs" />
+    <Compile Include="Data\Datas\ScenarioData.cs" />
+    <Compile Include="Data\Datas\SpawnData.cs" />
+    <Compile Include="Data\DynamicValues\DataReference.cs" />
+    <Compile Include="Data\DynamicValues\DynamicDouble.cs" />
+    <Compile Include="Data\DynamicValues\DynamicString.cs" />
+    <Compile Include="Data\DynamicValues\DynamicValue.cs" />
+    <Compile Include="Data\DynamicValues\MaterialReference.cs" />
     <Compile Include="Data\SpawnList.cs" />
     <Compile Include="Objects\Material.cs" />
     <Compile Include="Objects\Organisms\BodyPart.cs" />

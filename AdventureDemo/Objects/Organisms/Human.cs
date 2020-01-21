@@ -22,7 +22,7 @@ namespace AdventureDemo
 
         void Construct()
         {
-            Material flesh = DataManager.instance.LoadMaterial("flesh");
+            /*Material flesh = DataManager.instance.LoadMaterial("flesh");
             if( flesh == null ) { return; }
 
             AddPart( new BodyPart(this, "head", 2, Utilities.Pair<Material, double>(flesh, 1)) );
@@ -45,7 +45,7 @@ namespace AdventureDemo
             PhysicalAmalgam rightLeg = new PhysicalAmalgam("right leg");
             AddPart( rightLeg );
             rightLeg.AddPart( new BodyPart(this, "leg", 6, Utilities.Pair<Material, double>(flesh, 1)) );
-            rightLeg.AddPart( new LocomotionBodyPart(this, "right foot", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );
+            rightLeg.AddPart( new LocomotionBodyPart(this, "right foot", 0.5, Utilities.Pair<Material, double>(flesh, 1)) );*/
         }
     }
 }

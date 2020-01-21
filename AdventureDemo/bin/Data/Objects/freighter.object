@@ -1,14 +1,23 @@
 {
 	"id": "freighter_1",
+	"type": "ContainerData",
 	
-	"type": "container",
-	"name": "pegasus",
+	"name": "[Pegasus, Rocinante, Albatross, Serenity, First Shard]",
+	
 	"description": "a small freighter class spaceship. Gleaming metal protects the fragil internals and crew compartments.\n\nThese ships travel between populated systems transporting goods, and sometimes passengers. They form the backbone of the galactic economy but it is a dangerous business as they are usually lightly armed and vulnerable to pirating",
 	
-	"data": {
-		"volume": "15000",
-		"innerVolume": "10000",
-		"materials": "titanium 3, glass 1",
-		"spawnLists": "civilian_freighter_1"
-	}
-};
+	"volume": "10000:15000",
+	"materials": [
+		{
+			"material": "titanium",
+			"parts": 3
+		},
+		{
+			"material": "glass",
+			"parts": 1
+		}
+	],
+	
+	"innerVolume": "[volume] * 0.75",
+	"spawnLists": ["civilian_freighter_1"]
+}

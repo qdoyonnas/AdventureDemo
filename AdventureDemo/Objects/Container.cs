@@ -51,27 +51,6 @@ namespace AdventureDemo
 
         #region Constructors
 
-        new public static Dictionary<string, object> ParseData( ObjectData objectData )
-        {
-            Dictionary<string, object> data = Physical.ParseData(objectData);
-
-            try {
-                data["innerVolume"] = double.Parse( objectData.data["innerVolume"] );
-            } catch( KeyNotFoundException e ) {
-            } catch( Exception e ) {
-                Console.WriteLine($"ERROR: Loading container data '{objectData.id}' at 'innerVolume' field: {e}");
-            }
-
-            try {
-                data["spawnLists"] = new SpawnList[0];
-            } catch( KeyNotFoundException e ) {
-            } catch( Exception e ) {
-                Console.WriteLine($"ERROR: Loading container data '{objectData.id}' at 'innerVolume' field: {e}");
-            }
-
-            return data;
-        }
-
         public Container( Dictionary<string, object> data )
             : base(data)
         {

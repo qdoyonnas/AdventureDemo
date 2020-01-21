@@ -1,3 +1,5 @@
+[
+
 {
 	"id": "silicon",
 	"name": "silicon",
@@ -5,7 +7,7 @@
 		"weight": "4",
 		"color": "#84B2DF"
 	}
-};
+},
 
 {
 	"id": "copper",
@@ -14,7 +16,7 @@
 		"weight": "15",
 		"color": "#D88C17"
 	}
-};
+},
 
 {
 	"id": "gold",
@@ -23,5 +25,6 @@
 		"weight": "16",
 		"color": "#F2DB1D"
 	}
-};
+}
 
+]
