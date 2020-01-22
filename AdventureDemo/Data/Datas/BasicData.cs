@@ -5,8 +5,10 @@ using Newtonsoft.Json.Linq;
 
 namespace AdventureDemo
 {
-    class BasicData
+    abstract class BasicData
     {
         public string id = null;
+
+        public abstract object Create();
     }
 }

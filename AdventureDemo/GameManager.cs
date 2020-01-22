@@ -31,6 +31,7 @@ namespace AdventureDemo
         public bool isInitialized = false;
 
         public WorldManager world;
+        public Random random;
 
         #endregion
 

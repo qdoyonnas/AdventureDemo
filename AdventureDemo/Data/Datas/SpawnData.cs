@@ -8,7 +8,7 @@ namespace AdventureDemo
 {
     class SpawnData : BasicData
     {
-        public SpawnList Create()
+        public override object Create()
         {
             return new SpawnList();
         }

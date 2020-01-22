@@ -12,7 +12,7 @@ namespace AdventureDemo
 
         public KeyValuePair<Material, double> GetValue(KeyValuePair<Material, double>[] currentMats)
         {
-            Material mat = (Material)material.GetData<MaterialData>().Create();
+            Material mat = material.LoadData<Material>(typeof(MaterialData));
 
             return new KeyValuePair<Material, double>(mat, parts);
         }

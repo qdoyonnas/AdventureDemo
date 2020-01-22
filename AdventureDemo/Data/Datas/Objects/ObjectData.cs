@@ -21,7 +21,7 @@ namespace AdventureDemo
 
             return data;
         }
-        public virtual GameObject Create()
+        public override object Create()
         {
             GameObject gameObject = null;
 

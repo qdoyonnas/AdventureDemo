@@ -15,5 +15,10 @@ namespace AdventureDemo
         {
             roots = new Dictionary<string, DataReference[]>();
         }
+
+        public override object Create()
+        {
+            return new WorldManager(this);
+        }
     }
 }

@@ -12,21 +12,26 @@ namespace AdventureDemo
         public PlayerActor player;
         private List<Container> rootObjects;
 
-        public Random random;
+        public int randomSeed = -1;
 
         public WorldManager( ScenarioData data )
         {
-            random = new Random();
+            if( randomSeed != -1 ) {
+                GameManager.instance.random = new Random(randomSeed);
+            } else {
+                GameManager.instance.random = new Random();
+            }
 
             rootObjects = new List<Container>();
             foreach( string key in data.roots.Keys ) {
-                Container root = DataManager.instance.GetObjectData(key).Create() as Container;
+                Container root = DataManager.instance.LoadObject<Container>(key, typeof(ContainerData));
                 if( root == null ) { continue; }
 
                 AddRoot(root);
 
                 foreach( DataReference dataReference in data.roots[key] ) {
-                    GameObject obj = dataReference.GetData<ObjectData>().Create();
+                    GameObject obj = dataReference.LoadData<GameObject>(typeof(ObjectData));
+                    root.GetContents().Attach(obj);
                 }
             }
 

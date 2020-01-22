@@ -15,12 +15,14 @@ namespace AdventureDemo
             value = v;
         }
 
-        public T GetData<T>()
-            where T : BasicData
+        public BasicData GetData(Type type)
         {
-            JToken token = JToken.Parse(value);
-
-            return (T)DataManager.instance.GetData(token);
+            return DataManager.instance.GetData(value, type);
+        }
+        public T LoadData<T>(Type dataType)
+            where T : class
+        {
+            return DataManager.instance.LoadObject<T>(value, dataType);
         }
     }
 

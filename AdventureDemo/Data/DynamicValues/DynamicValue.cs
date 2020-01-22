@@ -30,18 +30,18 @@ namespace AdventureDemo
         {
             expression = expression.Trim();
 
-            Regex regex = new Regex(@"^\[(?:([^,\]]+),*)+\]$");
-            Match match = regex.Match(expression);
-
-            if( !match.Success ) { return false; }
+            if( !Regex.IsMatch(expression, @"^\[[^\]]+\]$") ) { return false; }
             method = Method.CHOICE;
 
-            choices = new T[match.Groups.Count-1];
-            for( int i = 1; i < match.Groups.Count; i++ ) {
+            Regex regex = new Regex(@"\s*([^,\[\]]+),*");
+            MatchCollection matches = regex.Matches(expression);
+
+            choices = new T[matches.Count];
+            for( int i = 0; i < matches.Count; i++ ) {
                 try {
-                    choices[i-1] = parse.Invoke(match.Groups[i].Value);
+                    choices[i] = parse.Invoke(matches[i].Groups[1].Value);
                 } catch( Exception e ) {
-                    throw new Exception($"DynamicValue could not parse '{match.Groups[i].Value}' in EvaluateForChoice: {e}");
+                    throw new Exception($"DynamicValue could not parse '{matches[i].Groups[1].Value}' in EvaluateForChoice: {e}");
                 }
             }
 

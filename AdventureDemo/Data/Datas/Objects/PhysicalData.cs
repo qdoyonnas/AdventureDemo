@@ -29,7 +29,7 @@ namespace AdventureDemo
 
             return data;
         }
-        public override GameObject Create()
+        public override object Create()
         {
             Physical physical = null;
 

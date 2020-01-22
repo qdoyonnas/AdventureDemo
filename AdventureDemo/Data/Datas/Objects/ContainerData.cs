@@ -22,14 +22,14 @@ namespace AdventureDemo
             if( spawnLists != null && spawnLists.Length > 0 ) {
                 SpawnList[] spawns = new SpawnList[spawnLists.Length];
                 for( int i = 0; i < spawnLists.Length; i++ ) {
-                    spawns[i] = spawnLists[i].GetData<SpawnData>().Create();
+                    spawns[i] = spawnLists[i].LoadData<SpawnList>(typeof(SpawnData));
                 }
                 data["spawnLists"] = spawns;
             }
 
             return data;
         }
-        public override GameObject Create()
+        public override object Create()
         {
             Container container = null;
 
