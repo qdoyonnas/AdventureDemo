@@ -58,9 +58,7 @@ namespace AdventureDemo
 
             if( data.ContainsKey("spawnLists") ) {
                 spawnLists = new List<SpawnList>( (SpawnList[])data["spawnLists"] );
-                if( data.ContainsKey("spawnNow") && (bool)data["spawnNow"] ) {
-                    SpawnContents();
-                }
+                SpawnContents();
             }
         }
         public Container( string name, double innerVolume ) 

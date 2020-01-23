@@ -67,7 +67,7 @@ namespace AdventureDemo
 
         public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
         {
-            return new DynamicDouble((string)reader.Value);
+            return new DynamicDouble(reader.Value.ToString());
         }
 
         public override bool CanWrite => false;

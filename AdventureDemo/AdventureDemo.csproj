@@ -71,13 +71,12 @@
     <Compile Include="Data\Datas\Objects\PhysicalData.cs" />
     <Compile Include="Data\Datas\SaveData.cs" />
     <Compile Include="Data\Datas\ScenarioData.cs" />
-    <Compile Include="Data\Datas\SpawnData.cs" />
+    <Compile Include="Data\Datas\SpawnList.cs" />
     <Compile Include="Data\DynamicValues\DataReference.cs" />
     <Compile Include="Data\DynamicValues\DynamicDouble.cs" />
     <Compile Include="Data\DynamicValues\DynamicString.cs" />
     <Compile Include="Data\DynamicValues\DynamicValue.cs" />
     <Compile Include="Data\DynamicValues\MaterialReference.cs" />
-    <Compile Include="Data\SpawnList.cs" />
     <Compile Include="Objects\Material.cs" />
     <Compile Include="Objects\Organisms\BodyPart.cs" />
     <Compile Include="Objects\Organisms\Human.cs" />

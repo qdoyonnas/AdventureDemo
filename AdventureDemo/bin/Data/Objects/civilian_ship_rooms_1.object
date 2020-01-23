@@ -1,0 +1,31 @@
+[
+
+{
+	"id": "hallway_1",
+	"type": "ContainerData",
+	
+	"name": "hallway",
+	"description": "a common starship hallway with sleek metallic panels and a ceiling light strip",
+	
+	"materials": [
+		{ "material": "titanium", "parts": 1 }
+	],
+	"volume": 600,
+	"innerVolume": 500
+},
+
+{
+	"id": "cabin_1",
+	"type": "ContainerData",
+	
+	"name": "cabin",
+	"description": "your average starship cabin, cramped and not very luxurious",
+	
+	"materials": [
+		{ "material": "titanium", "parts": 1 }
+	],
+	"volume": 300,
+	"innerVolume": 200
+},
+	
+]

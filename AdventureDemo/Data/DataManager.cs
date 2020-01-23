@@ -197,7 +197,7 @@ namespace AdventureDemo
                 return DataType.OBJECT;
             } else if( type == (typeof(ScenarioData)) || type.IsSubclassOf(typeof(ScenarioData)) ) {
                 return DataType.SCENARIO;
-            } else if( type == (typeof(SpawnData)) || type.IsSubclassOf(typeof(SpawnData)) ) {
+            } else if( type == (typeof(SpawnList)) || type.IsSubclassOf(typeof(SpawnList)) ) {
                 return DataType.SPAWN;
             } else {
                 return DataType.UNKNOWN;

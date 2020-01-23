@@ -22,7 +22,7 @@ namespace AdventureDemo
             if( spawnLists != null && spawnLists.Length > 0 ) {
                 SpawnList[] spawns = new SpawnList[spawnLists.Length];
                 for( int i = 0; i < spawnLists.Length; i++ ) {
-                    spawns[i] = spawnLists[i].LoadData<SpawnList>(typeof(SpawnData));
+                    spawns[i] = spawnLists[i].LoadData<SpawnList>(typeof(SpawnList));
                 }
                 data["spawnLists"] = spawns;
             }
