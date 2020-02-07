@@ -8,6 +8,38 @@
         <Setter Property="BorderThickness" Value="{StaticResource BorderThickness}" />
     </Style>
 
+    <Style x:Key="InputBoxStyle" TargetType="TextBox">
+        <Setter Property="Padding" Value="{StaticResource Padding}" />
+
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="{StaticResource BorderThickness}" />
+        <Setter Property="CaretBrush" Value="{StaticResource ForegroundBrush}" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                        <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource ForegroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource HighlightedBorderBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Border x:Key="BlankPage" x:Shared="false" Style="{StaticResource DefaultPageStyle}">
         <StackPanel>
             <Label Name="Title" HorizontalAlignment="Center" Margin="0" FontSize="16">New Page</Label>
@@ -22,6 +54,13 @@
         <StackPanel Margin="{StaticResource Padding}">
             <TextBlock TextAlignment="Center" Name="MessageText"></TextBlock>
             <TextBlock Foreground="{StaticResource DisabledForegroundBrush}" TextAlignment="Center" Name="Subtext"></TextBlock>
+        </StackPanel>
+    </Border>
+
+    <Border x:Key="InputPage" x:Shared="false" Style="{StaticResource DefaultPageStyle}">
+        <StackPanel Margin="{StaticResource Padding}">
+            <TextBox Name="InputBox" Margin="5" MaxLength="256" Width="400" Style="{StaticResource InputBoxStyle}"/>
+            <TextBlock><Italic>Suggestions go here</Italic></TextBlock>
         </StackPanel>
     </Border>
     

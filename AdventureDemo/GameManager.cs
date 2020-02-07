@@ -85,6 +85,7 @@ namespace AdventureDemo
             Point position = new Point(200, 300);
 
             WaywardManager.instance.AddPage(page, position);
+            WaywardManager.instance.SelectInputPage();
         }
 
         public void StartScenario( SaveData data )

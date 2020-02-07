@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="ContextMenuHelper.cs" />
     <Compile Include="Pages\ContentPage.cs" />
+    <Compile Include="Pages\InputPage.cs" />
     <Compile Include="Pages\Message.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="WaywardManager.cs" />

@@ -2,7 +2,7 @@
 	"id": "space",
 	"type": "ContainerData",
 	
-	"name": "space",
+	"name": "Space",
 	"description": "a pitch black void, broken up by the pinpoint lights of countless stars",
 	
 	"volume": "-1",

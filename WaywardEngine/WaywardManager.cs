@@ -31,6 +31,8 @@ namespace WaywardEngine
         public MainWindow window;
         public List<Page> pages;
 
+        public InputPage inputPage;
+
         // Mouse grab target (to prevent grabbing more than one page at a time)
         public Page grabbedPage;
 
@@ -164,6 +166,19 @@ namespace WaywardEngine
             position = new Point( position.X - ( box.GetElement().ActualWidth / 2 ),
                             position.Y - ( box.GetElement().ActualHeight / 2 ) );
             AddPage( box, position );
+        }
+
+        public void SelectInputPage()
+        {
+            if( inputPage == null ) {
+                Point position = new Point(WaywardManager.instance.application.MainWindow.Width / 2,
+                                    WaywardManager.instance.application.MainWindow.Height * 0.9);
+
+                inputPage = new InputPage();
+                AddPage(inputPage, position);
+            }
+
+            inputPage.Focus();
         }
 
         public void ClearPages()
