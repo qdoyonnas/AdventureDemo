@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using WaywardEngine;
 
 namespace AdventureDemo
@@ -15,6 +16,12 @@ namespace AdventureDemo
         public Actor observer {
             get {
                 return _observer;
+            }
+        }
+        bool _secondPerson = false;
+        public bool secondPerson {
+            get {
+                return _secondPerson;
             }
         }
 
@@ -42,23 +49,36 @@ namespace AdventureDemo
 
             descriptions = Utilities.FindNode<StackPanel>(panel, "Descriptions");
 
-            DisplayObject();
+            UpdateSecondPerson();
+            Display();
         }
 
-        public void DisplayObject()
+        public void UpdateSecondPerson()
         {
             if( subject == null ) { return; }
-            bool secondPerson = subject.GetData("name").text.ToLower() == "you";
+            _secondPerson = subject.GetData("name").text.ToLower() == "you";
+        }
+
+        public void Display()
+        {
+            if( subject == null ) { return; }
 
             GameObject container = subject.container.GetParent();
-            if( container == null ) { return; }
+            if( container != null ) {
+                DisplayContainer(container);
+            }
+        }
 
+        private void DisplayContainer(GameObject obj)
+        {
+            GameObjectData objData = observer.Observe(obj);
+            bool unique = Char.IsUpper(objData.text[0]);
             TextBlock text = WaywardTextParser.ParseAsBlock(
-                $@"[0] {(secondPerson ? "are" : "is")} in [1], [2].",
+                $@"[0] {(secondPerson ? "are" : "is")} in {(unique ? "" : "a ")}[1], [2].",
                 new WaywardTextParser.ParseDelegate[] {
                     () => { return observer.Observe(subject).span; },
-                    () => { return observer.Observe(container).span; },
-                    () => { return observer.Observe(container, "description").span; }
+                    () => { return objData.span; },
+                    () => { return observer.Observe(obj, "description").span; }
                 }
             );
             text.TextWrapping = TextWrapping.Wrap;
@@ -72,7 +92,7 @@ namespace AdventureDemo
 
         public override void Update()
         {
-            DisplayObject();
+            Display();
         }
     }
 }
