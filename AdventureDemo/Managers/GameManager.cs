@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows;
 using WaywardEngine;
 
@@ -118,6 +116,14 @@ namespace AdventureDemo
                 { "Visual", CreateVerbosePage },
                 { "Input", WaywardManager.instance.SelectInputPage }
             });
+
+            WaywardManager.instance.window.KeyDown += ( sender, e ) =>
+            {
+                if( e.Key != Key.Enter ||
+                InputManager.instance.inputBusy ) { return; }
+
+                WaywardManager.instance.SelectInputPage();
+            };
 
         }
 

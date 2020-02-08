@@ -11,6 +11,8 @@ namespace WaywardEngine
         public delegate bool InputDelegate( InputEventArgs e );
         public event InputDelegate inputReceived;
 
+        public bool inputBusy = false;
+
         public virtual void ParseInput( string input )
         {
             if( input.Length <= 0 ) { return; }
