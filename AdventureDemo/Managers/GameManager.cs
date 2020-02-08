@@ -175,11 +175,16 @@ namespace AdventureDemo
         }
         public DescriptivePage DisplayDescriptivePage( GameObject target )
         {
-            DescriptivePageSection[] sections = target.DisplayDescriptivePage().ToArray();
             Point mousePosition = WaywardManager.instance.GetMousePosition();
 
+            return DisplayDescriptivePage(mousePosition, target);
+        }
+        public DescriptivePage DisplayDescriptivePage( Point position, GameObject target )
+        {
+            DescriptivePageSection[] sections = target.DisplayDescriptivePage().ToArray();
             DescriptivePage page = new DescriptivePage( world.player, target, sections );
-            WaywardManager.instance.AddPage(page, mousePosition);
+
+            WaywardManager.instance.AddPage(page, position);
 
             return page;
         }

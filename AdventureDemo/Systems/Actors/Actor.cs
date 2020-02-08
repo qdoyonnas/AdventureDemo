@@ -127,7 +127,8 @@ namespace AdventureDemo
         {
             if( e.parsed ) { return true; }
 
-            GameManager.instance.DisplayDescriptivePage(controlledObject);
+            Point position = new Point(WaywardManager.instance.window.Width / 2, WaywardManager.instance.window.Height * 0.4);
+            GameManager.instance.DisplayDescriptivePage(position, controlledObject);
 
             return true;
         }

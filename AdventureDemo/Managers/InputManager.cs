@@ -122,6 +122,4 @@ namespace AdventureDemo
             return true;
         }
     }
-
-
 }
