@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WaywardEngine;
 
 namespace AdventureDemo
 {
@@ -12,6 +9,10 @@ namespace AdventureDemo
             : base(self)
         {
             _displayLabel = "Possess";
+
+            validInputs = new string[] {
+                "possess", "control"
+            };
         }
 
         public override bool Action( GameObject target )
@@ -30,6 +31,16 @@ namespace AdventureDemo
             }
 
             return CheckResult.INVALID;
+        }
+
+        public override bool ParseInput( InputEventArgs e )
+        {
+            if( e.parsed ) { return true; }
+            if( e.words.Length <= 1 ) { return false; }
+
+            WaywardManager.instance.DisplayMessage($"Take control of {e.words[1]}");
+
+            return true;
         }
     }
 }

@@ -9,7 +9,7 @@
 
     <Color x:Key="WaywardAuburn">#A07F00</Color>
     <SolidColorBrush x:Key="WaywardAuburnBrush" Color="{StaticResource WaywardAuburn}" />
-    <Color x:Key="WaywardGold">#F5C50D</Color>
+    <Color x:Key="WaywardGold">#FACA13</Color>
     <SolidColorBrush x:Key="WaywardGoldBrush" Color="{StaticResource WaywardGold}" />
 
     <LinearGradientBrush x:Key="BackgroundBrush">

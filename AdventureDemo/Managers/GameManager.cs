@@ -85,7 +85,6 @@ namespace AdventureDemo
             Point position = new Point(200, 300);
 
             WaywardManager.instance.AddPage(page, position);
-            WaywardManager.instance.SelectInputPage();
         }
 
         public void StartScenario( SaveData data )
@@ -106,6 +105,8 @@ namespace AdventureDemo
             DisplayOverviewPage(position, world.player);
             position.X = WaywardManager.instance.window.ActualWidth * 0.25;
             DisplayPlayerVerbose(position);
+
+            WaywardManager.instance.SelectInputPage();
         }
         private void SetupPlayContextMenu()
         {
@@ -114,7 +115,8 @@ namespace AdventureDemo
 
             ContextMenuHelper.AddContextMenuHeader(WaywardManager.instance.window, "Page", new Dictionary<string, ContextMenuAction>() {
                 { "Overview", CreateOverviewPage },
-                { "Visual", CreateVerbosePage }
+                { "Visual", CreateVerbosePage },
+                { "Input", WaywardManager.instance.SelectInputPage }
             });
 
         }
@@ -137,21 +139,21 @@ namespace AdventureDemo
             throw new System.NotImplementedException("GameManager.DisplayRoots is not implemented. Observer needs refactor");
         }
 
-        private bool CreateOverviewPage()
+        public bool CreateOverviewPage()
         {
             Point mousePosition = WaywardManager.instance.GetMousePosition();
             DisplayOverviewPage(mousePosition, world.player);
 
             return false;
         }
-        private bool CreateVerbosePage()
+        public bool CreateVerbosePage()
         {
             Point mousePosition = WaywardManager.instance.GetMousePosition();
             DisplayPlayerVerbose(mousePosition);
 
             return false;
         }
-        private bool Exit()
+        public bool Exit()
         {
             Application.Current.Shutdown();
             return true;

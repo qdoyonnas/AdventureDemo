@@ -15,6 +15,8 @@ namespace AdventureDemo
             : base(self)
         {
             _displayLabel = "Phase";
+
+            validInputs = new string[] { "phase" };
         }
 
         public override bool Action( GameObject target )
@@ -101,6 +103,16 @@ namespace AdventureDemo
                 }
                 ContextMenuHelper.AddContextMenuHeader(span, new TextBlock(self.GetData("name upper").span), items, result != CheckResult.RESTRICTED);
             }
+        }
+
+        public override bool ParseInput( InputEventArgs e )
+        {
+            if( e.parsed ) { return true; }
+            if( e.words.Length <= 1 ) { return false; }
+
+            WaywardManager.instance.DisplayMessage($"Phase into {e.words[1]}");
+
+            return true;
         }
     }
 }

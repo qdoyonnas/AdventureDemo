@@ -18,6 +18,10 @@ namespace AdventureDemo
         {
             _displayLabel = "Walk";
 
+            validInputs = new string[] {
+                "walk", "move", "go"
+            };
+
             physicalSelf = self as Physical;
         }
 
@@ -83,6 +87,16 @@ namespace AdventureDemo
                     ContextMenuHelper.AddContextMenuItem( span, WaywardTextParser.ParseAsBlock(displayLabel) , delegate { return Action(target); } );
                 }
             }
+        }
+
+        public override bool ParseInput( InputEventArgs e )
+        {
+            if( e.parsed ) { return true; }
+            if( e.words.Length <= 1 ) { return false; }
+
+            WaywardManager.instance.DisplayMessage($"Move to {e.words[1]}");
+
+            return false;
         }
     }
 }

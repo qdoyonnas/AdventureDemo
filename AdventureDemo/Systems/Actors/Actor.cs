@@ -13,11 +13,16 @@ namespace AdventureDemo
     {
 		protected GameObject controlledObject;
 
+        protected readonly Dictionary<string[], InputManager.InputDelegate> commands;
+
 		protected readonly List<Verb> verbs;
 
 		public Actor()
         {
-			verbs = new List<Verb>();
+            verbs = new List<Verb>();
+
+            commands = new Dictionary<string[], InputManager.InputDelegate>();
+            commands.Add(new string[] { "view", "look", "observe", "l" }, ParseView);
         }
 
 		public virtual void Control( GameObject obj )
@@ -93,6 +98,38 @@ namespace AdventureDemo
         public virtual void AddVerb( Verb verb )
         {
             verbs.Add(verb);
+        }
+
+        public virtual bool ParseInput( InputEventArgs e )
+        {
+            if( e.parsed ) { return true; }
+
+            if( InputManager.instance.CheckCommands(commands, e) ) {
+                return true;
+            }
+
+            foreach( Verb verb in verbs ) {
+                foreach( string i in verb.validInputs ) {
+                    if( i == e.action ) {
+                        if( verb.ParseInput(e) ) {
+                            e.parsed = true;
+                            return true;
+                        }
+
+                        break;
+                    }
+                }
+            }
+
+            return false;
+        }
+        public virtual bool ParseView( InputEventArgs e )
+        {
+            if( e.parsed ) { return true; }
+
+            GameManager.instance.DisplayDescriptivePage(controlledObject);
+
+            return true;
         }
     }
 

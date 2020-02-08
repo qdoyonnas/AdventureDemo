@@ -36,6 +36,7 @@ namespace AdventureDemo
             }
 
             player = new PlayerActor();
+            InputManager.instance.inputReceived += player.ParseInput;
             WaywardWill will = new WaywardWill();
             rootObjects[0].GetContents().Attach(will);
             player.Control(will);

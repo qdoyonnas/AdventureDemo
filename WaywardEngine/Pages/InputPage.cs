@@ -10,11 +10,13 @@ namespace WaywardEngine
 {
     public class InputPage : Page
     {
+        public InputManagerBase manager;
         TextBox inputBox;
 
-        public InputPage()
+        public InputPage( InputManagerBase manager )
             : base("InputPage")
         {
+            this.manager = manager;
             ContextMenuHelper.AddContextMenuItem(element, "Close", CloseAction);
 
             inputBox = Utilities.FindNode<TextBox>(element, "InputBox");
@@ -24,9 +26,22 @@ namespace WaywardEngine
         void TextEntered( object sender, KeyEventArgs e )
         {
             if( e.Key == Key.Enter ) {
-                WaywardManager.instance.DisplayMessage(inputBox.Text);
+                manager.ParseInput(inputBox.Text);
                 inputBox.Clear();
             }
+        }
+
+        public override bool CloseAction()
+        {
+            WaywardManager.instance.window.mainCanvas.Children.Remove(element);
+            WaywardManager.instance.pages.Remove(this);
+            WaywardManager.instance.inputPage = null;
+
+            if( WaywardManager.instance.pages.Count > 0 ) {
+                WaywardManager.instance.pages.Last().SetBorderColor("HighlightedBorderBrush");
+            }
+
+            return false;
         }
 
         public void Focus()

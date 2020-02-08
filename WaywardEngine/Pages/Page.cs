@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace WaywardEngine
 {
@@ -29,6 +26,10 @@ namespace WaywardEngine
             // Newest Page is always in front (also assures no overlapping zIndex values)
             int maxZ = Utilities.GetMaxZOfCanvas( WaywardManager.instance.window.mainCanvas );
             Canvas.SetZIndex( element, maxZ + 1 );
+            if( WaywardManager.instance.pages.Count > 0 ) {
+                WaywardManager.instance.pages.Last().RemovedFromTop();
+            }
+            SetBorderColor("HighlightedBorderBrush");
         }
 
         public FrameworkElement GetElement()
@@ -49,6 +50,7 @@ namespace WaywardEngine
             WaywardManager.instance.SetLeftMouseUpHandler( OnMouseUp, true );
 
             Utilities.BringToFrontOfCanvas(WaywardManager.instance.window.mainCanvas, element);
+            SetTop();
         }
         protected virtual void OnMouseUp( object sender, MouseButtonEventArgs e )
         {
@@ -69,11 +71,36 @@ namespace WaywardEngine
             Canvas.SetLeft( element, offsetPosition.X );
             Canvas.SetTop( element, offsetPosition.Y );
         }
-        
-        public bool CloseAction()
+
+        public void SetTop()
+        {
+            WaywardManager.instance.pages.Last().RemovedFromTop();
+
+            WaywardManager.instance.pages.Remove(this);
+            WaywardManager.instance.pages.Add(this);
+            Border pageBorder = element as Border;
+            SetBorderColor("HighlightedBorderBrush");
+        }
+        public void RemovedFromTop()
+        {
+            SetBorderColor("BorderBrush");
+        }
+        public void SetBorderColor( string brushKey )
+        {
+            Border pageBorder = element as Border;
+            if( pageBorder != null ) {
+                pageBorder.BorderBrush = WaywardManager.instance.GetResource<Brush>(brushKey);
+            }
+        }
+
+        public virtual bool CloseAction()
         {
             WaywardManager.instance.window.mainCanvas.Children.Remove(element);
             WaywardManager.instance.pages.Remove(this);
+
+            if( WaywardManager.instance.pages.Count > 0 ) {
+                WaywardManager.instance.pages.Last().SetBorderColor("HighlightedBorderBrush");
+            }
 
             return false;
         }

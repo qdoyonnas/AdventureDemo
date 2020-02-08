@@ -19,7 +19,7 @@ namespace AdventureDemo
         private void Application_Startup( object sender, StartupEventArgs e )
         {
             // Init the WaywardEngine
-            WaywardManager.instance.Init(this, Resources);
+            WaywardManager.instance.Init(this, InputManager.instance, Resources);
 
             DataManager.instance.Init(this);
 

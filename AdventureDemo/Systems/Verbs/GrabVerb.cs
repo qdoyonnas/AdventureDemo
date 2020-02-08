@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using WaywardEngine;
 
 namespace AdventureDemo
 {
@@ -17,6 +14,10 @@ namespace AdventureDemo
         {
             this.inventory = inventory;
             _displayLabel = "Grab";
+
+            validInputs = new string[] {
+                "grab", "drop", "pickup", "take"
+            };
 
             physicalSelf = self as Physical;
         }
@@ -76,6 +77,16 @@ namespace AdventureDemo
             base.Display(actor, target, span);
 
             _displayLabel = "Grab";
+        }
+
+        public override bool ParseInput( InputEventArgs e )
+        {
+            if( e.parsed ) { return true; }
+            if( e.words.Length <= 1 ) { return false; }
+
+            WaywardManager.instance.DisplayMessage($"Grab {e.words[1]}");
+
+            return true;
         }
     }
 }

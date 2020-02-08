@@ -31,6 +31,7 @@ namespace WaywardEngine
         public MainWindow window;
         public List<Page> pages;
 
+        public InputManagerBase inputManager;
         public InputPage inputPage;
 
         // Mouse grab target (to prevent grabbing more than one page at a time)
@@ -50,10 +51,12 @@ namespace WaywardEngine
         /// </summary>
         /// <param name="app"></param>
         /// <param name="resources"></param>
-        public void Init( Application app, ResourceDictionary resources )
+        public void Init( Application app, InputManagerBase inputManager, ResourceDictionary resources )
         {
             application = app;
             window = new MainWindow();
+
+            this.inputManager = inputManager;
 
             // Load all WaywardEngine resources and pass them to the application
             resources.MergedDictionaries.Add( new ResourceDictionary {
@@ -168,17 +171,19 @@ namespace WaywardEngine
             AddPage( box, position );
         }
 
-        public void SelectInputPage()
+        public bool SelectInputPage()
         {
             if( inputPage == null ) {
-                Point position = new Point(WaywardManager.instance.application.MainWindow.Width / 2,
-                                    WaywardManager.instance.application.MainWindow.Height * 0.9);
+                Point position = new Point(application.MainWindow.Width / 2,
+                                    application.MainWindow.Height * 0.9);
 
-                inputPage = new InputPage();
+                inputPage = new InputPage(inputManager);
                 AddPage(inputPage, position);
             }
 
             inputPage.Focus();
+
+            return false;
         }
 
         public void ClearPages()
@@ -186,6 +191,21 @@ namespace WaywardEngine
             for( int i = pages.Count-1; i >= 0; i-- ) {
                 pages[i].CloseAction();
             }
+        }
+        public void ClearPages( Type type )
+        {
+            if( type == null ) { return; }
+
+            for( int i = pages.Count - 1; i >= 0; i-- ) {
+                if( type.IsAssignableFrom(pages[i].GetType()) ) {
+                    pages[i].CloseAction();
+                }
+            }
+        }
+
+        public void CloseTopPage()
+        {
+            pages.Last().CloseAction();
         }
 
         public delegate void UpdateDelegate();

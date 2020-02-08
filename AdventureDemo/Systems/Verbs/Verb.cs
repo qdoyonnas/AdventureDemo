@@ -18,11 +18,15 @@ namespace AdventureDemo
                 return _displayLabel;
             }
         }
+
+        public string[] validInputs { get; protected set; }
+
         readonly public GameObject self;
 
         public Verb( GameObject self )
         {
             this.self = self;
+            validInputs = new string[0];
         }
 
         /// <summary>
@@ -52,6 +56,21 @@ namespace AdventureDemo
         {
             if( actor.HasVerb(this.GetType()) ) { return; }
             actor.AddVerb(this);
+        }
+
+        public virtual bool ParseInput( InputEventArgs e )
+        {
+            if( e.parsed ) { return true; }
+
+            string message = $"Verb Found:\n{displayLabel} with params:";
+
+            for( int i = 1; i < e.words.Length; i++ ) {
+                message += $"\n{e.words[i]}";
+            }
+
+            WaywardManager.instance.DisplayMessage(message);
+
+            return true;
         }
     }
 }

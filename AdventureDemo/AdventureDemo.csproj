@@ -64,19 +64,20 @@
       <DependentUpon>AdventureApp.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data\Datas\BasicData.cs" />
-    <Compile Include="Data\Datas\Objects\ContainerData.cs" />
-    <Compile Include="Data\Datas\Objects\MaterialData.cs" />
-    <Compile Include="Data\Datas\Objects\ObjectData.cs" />
-    <Compile Include="Data\Datas\Objects\PhysicalData.cs" />
-    <Compile Include="Data\Datas\SaveData.cs" />
-    <Compile Include="Data\Datas\ScenarioData.cs" />
-    <Compile Include="Data\Datas\SpawnList.cs" />
-    <Compile Include="Data\DynamicValues\DataReference.cs" />
-    <Compile Include="Data\DynamicValues\DynamicDouble.cs" />
-    <Compile Include="Data\DynamicValues\DynamicString.cs" />
-    <Compile Include="Data\DynamicValues\DynamicValue.cs" />
-    <Compile Include="Data\DynamicValues\MaterialReference.cs" />
+    <Compile Include="DataObjects\BasicData.cs" />
+    <Compile Include="DataObjects\Objects\ContainerData.cs" />
+    <Compile Include="DataObjects\Objects\MaterialData.cs" />
+    <Compile Include="DataObjects\Objects\ObjectData.cs" />
+    <Compile Include="DataObjects\Objects\PhysicalData.cs" />
+    <Compile Include="DataObjects\SaveData.cs" />
+    <Compile Include="DataObjects\ScenarioData.cs" />
+    <Compile Include="DataObjects\SpawnList.cs" />
+    <Compile Include="DataObjects\DynamicValues\DataReference.cs" />
+    <Compile Include="DataObjects\DynamicValues\DynamicDouble.cs" />
+    <Compile Include="DataObjects\DynamicValues\DynamicString.cs" />
+    <Compile Include="DataObjects\DynamicValues\DynamicValue.cs" />
+    <Compile Include="DataObjects\DynamicValues\MaterialReference.cs" />
+    <Compile Include="Managers\InputManager.cs" />
     <Compile Include="Objects\Material.cs" />
     <Compile Include="Objects\Organisms\BodyPart.cs" />
     <Compile Include="Objects\Organisms\Human.cs" />
@@ -93,7 +94,7 @@
     <Compile Include="Pages\MenuPages\MainMenuPage.cs" />
     <Compile Include="Pages\MenuPages\ScenariosMenuPage.cs" />
     <Compile Include="Pages\VerbosePage.cs" />
-    <Compile Include="Data\DataManager.cs" />
+    <Compile Include="Managers\DataManager.cs" />
     <Compile Include="Systems\Attachments\AttachmentPoint.cs" />
     <Compile Include="Systems\Attachments\BodyAttachmentPointcs.cs" />
     <Compile Include="Systems\Attachments\ContainerAttachmentPoint.cs" />
@@ -104,10 +105,10 @@
     <Compile Include="Systems\Verbs\PossessVerb.cs" />
     <Compile Include="Systems\Verbs\TraversalVerb.cs" />
     <Compile Include="Utilities.cs" />
-    <Compile Include="WorldManager.cs" />
+    <Compile Include="Managers\WorldManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameManager.cs" />
+    <Compile Include="Managers\GameManager.cs" />
     <Compile Include="Objects\Container.cs" />
     <Compile Include="Objects\GameObject.cs" />
     <Compile Include="Systems\Verbs\IVerbSuggest.cs" />
