@@ -293,5 +293,20 @@ namespace AdventureDemo
         }
 
         #endregion
+
+        #region Helper Methods
+
+        public override List<GameObject> GetChildObjects()
+        {
+            List<GameObject> children = base.GetChildObjects();
+
+            foreach( Connection connection in contents.GetConnections() ) {
+                children.Add(connection.secondContainer.GetParent());
+            }
+
+            return children;
+        }
+
+        #endregion
     }
 }

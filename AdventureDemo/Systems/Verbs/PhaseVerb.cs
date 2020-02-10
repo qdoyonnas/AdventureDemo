@@ -23,7 +23,9 @@ namespace AdventureDemo
         {
             Physical physical = target as Physical;
             if( physical != null ) {
-                return Action(physical.GetAttachmentPoints()[0]);
+                if( Action(physical.GetAttachmentPoints()[0]) ) {
+                    return base.Action(target);
+                }
             }
 
             return false;
@@ -108,11 +110,58 @@ namespace AdventureDemo
         public override bool ParseInput( InputEventArgs e )
         {
             if( e.parsed ) { return true; }
-            if( e.words.Length <= 1 ) { return false; }
+            if( e.parameters.Length <= 0 ) {
+                WaywardManager.instance.DisplayMessage("Phase where?");
+                return true; 
+            }
 
-            WaywardManager.instance.DisplayMessage($"Phase into {e.words[1]}");
+            if( CheckForOutInput(e) ) { return true; }
 
+            GameObject foundObject = GetInputTarget(e);
+            if( foundObject == null ) { return false; }
+
+            if( Check(foundObject) == CheckResult.VALID ) {
+                Action(foundObject);
+                return true;
+            } else {
+                WaywardManager.instance.DisplayMessage($"Could not phase into {foundObject.GetData("name").text}.");
+            }
+
+            return false;
+        }
+        private bool CheckForOutInput( InputEventArgs e )
+        {
+            if( e.parameters[0].ToLower() != "out" ) { return false; }
+
+            if( self.container != null ) {
+                GameObject container = self.container.GetParent();
+                if( container.container != null
+                    && Check(container.container.GetParent()) == CheckResult.VALID ) {
+                    Action(container.container.GetParent());
+                    return true;
+                }
+            }
+
+            WaywardManager.instance.DisplayMessage("Could not phase out.");
             return true;
+        }
+        private GameObject GetInputTarget( InputEventArgs e )
+        {
+            GameObject[] foundObjects = GameManager.instance.world.FindObjects(self, e.parameters);
+            if( foundObjects.Length <= 0 ) {
+                string message = $"No such place as ";
+                for( int i = 0; i < e.parameters.Length; i++ ) {
+                    message += $"'{e.parameters[i]}'";
+                    if( i != e.parameters.Length - 1 ) {
+                        message += " or ";
+                    }
+                }
+
+                WaywardManager.instance.DisplayMessage(message);
+                return null;
+            }
+
+            return foundObjects[0];
         }
     }
 }

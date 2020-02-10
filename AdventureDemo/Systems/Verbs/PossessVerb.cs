@@ -21,7 +21,7 @@ namespace AdventureDemo
 
             self.actor.Control(target);
 
-            return true;
+            return base.Action(target);
         }
 
         public override CheckResult Check( GameObject target )

@@ -20,6 +20,11 @@ namespace WaywardEngine
             if( inputReceived != null ) {
                 InputEventArgs e = new InputEventArgs(input);
                 inputReceived.Invoke(e);
+
+                if( !e.parsed ) {
+                    // XXX: This message should be displayed in the inputBox
+                    WaywardManager.instance.DisplayMessage("Command not found.");
+                }
             }
         }
 
@@ -51,6 +56,7 @@ namespace WaywardEngine
         public string input { get; private set; }
         public string[] words { get; private set; }
         public string action { get; private set; }
+        public string[] parameters{ get; private set; }
         public bool parsed = false;
 
         public InputEventArgs( string i )
@@ -58,6 +64,10 @@ namespace WaywardEngine
             input = i;
             words = i.Split(' ');
             action = words[0].ToLower();
+            parameters = new string[words.Length - 1];
+            if( parameters.Length > 0 ) {
+                Array.Copy(words, 1, parameters, 0, parameters.Length);
+            }
         }
     }
 

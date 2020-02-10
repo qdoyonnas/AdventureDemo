@@ -32,7 +32,7 @@ namespace AdventureDemo
                 inventory.Attach(target);
             }
 
-            return true;
+            return base.Action(target);
         }
 
         public override CheckResult Check( GameObject target )

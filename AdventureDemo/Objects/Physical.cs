@@ -96,12 +96,6 @@ namespace AdventureDemo
             }
         }
 
-        public virtual bool SetAttachedTo( Physical obj )
-        {
-            _attachedTo = obj;
-            return true;
-        }
-
         #endregion
 
         #region Verb Methods
@@ -177,6 +171,7 @@ namespace AdventureDemo
         {
             return attachmentPoints.Count;
         }
+
         public virtual void AddAttachmentPoint( Dictionary<string, object> data )
         {
             if( !data.ContainsKey("parent") ) {
@@ -193,6 +188,7 @@ namespace AdventureDemo
         {
             attachmentPoints.Remove(point);
         }
+
         public virtual bool Contains( Physical obj )
         {
             if( this == obj ) { return true; }
@@ -228,6 +224,7 @@ namespace AdventureDemo
             _totalParts -= materials[material];
             materials.Remove(material);
         }
+
         public virtual List<Material> GetMaterials()
         {
             return new List<Material>(materials.Keys);
@@ -264,6 +261,7 @@ namespace AdventureDemo
 
             return sections;
         }
+
         public virtual GameObjectData GetDescriptiveWeight( string[] parameters )
         {
             bool getTotal = !(parameters.Length > 0 && parameters[0] == "partial");
@@ -320,6 +318,28 @@ namespace AdventureDemo
                 () => { return matData.span; },
                 () => { return WaywardTextParser.Parse($@"{GetMaterialRatio(mat.Key, true)}%"); }
             ) );
+        }
+
+        #endregion
+
+        #region Helper Methods
+
+        public virtual bool SetAttachedTo( Physical obj )
+        {
+            _attachedTo = obj;
+            return true;
+        }
+
+
+        public override List<GameObject> GetChildObjects()
+        {
+            List<GameObject> children = base.GetChildObjects();
+
+            foreach( PhysicalAttachmentPoint point in attachmentPoints ) {
+                children.AddRange(point.GetAttached());
+            }
+
+            return children;
         }
 
         #endregion

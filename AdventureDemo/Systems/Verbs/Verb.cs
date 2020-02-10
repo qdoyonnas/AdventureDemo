@@ -36,7 +36,11 @@ namespace AdventureDemo
         /// <param name="data">Arbitrary key-value dictionary to be used for parameter passing.</param>
         /// <returns></returns>
         public abstract CheckResult Check( GameObject target );
-        public abstract bool Action( GameObject target );
+        public virtual bool Action( GameObject target )
+        {
+            WaywardManager.instance.Update(); // XXX: (UPDATE) This is the place to update the game properly
+            return true;
+        }
 
         public virtual void Display( Actor actor, GameObject target, FrameworkContentElement span )
         {

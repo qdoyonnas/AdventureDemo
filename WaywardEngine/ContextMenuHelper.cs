@@ -20,9 +20,7 @@ namespace WaywardEngine
             newItem.Header = label;
             if( action != null ) {
                 newItem.Click += delegate {
-                    if( action() ) {
-                        WaywardManager.instance.Update();
-                    }
+                    action();
                 };
             }
 

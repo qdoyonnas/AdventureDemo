@@ -282,5 +282,18 @@ namespace AdventureDemo
         }
 
         #endregion
+
+        #region Helper Methods
+
+        public override List<GameObject> GetChildObjects()
+        {
+            List<GameObject> children = base.GetChildObjects();
+
+            children.AddRange(parts);
+
+            return children;
+        }
+
+        #endregion
     }
 }

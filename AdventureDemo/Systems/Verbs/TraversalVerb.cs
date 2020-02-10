@@ -29,17 +29,21 @@ namespace AdventureDemo
         {
             if( Check(target) != CheckResult.VALID ) { return false; }
 
+            bool success = false;
             Container container = target as Container;
             if( container != null ) {
-                return EnterContainer(container);
+                success = EnterContainer(container);
             }
 
-            Connection connection = target as Connection;
-            if( connection != null ) {
-                return EnterConnection(connection);
+            if( !success ) {
+                Connection connection = target as Connection;
+                if( connection != null ) {
+                    success = EnterConnection(connection);
+                }
             }
 
-            return false;
+            if( success ) { base.Action(target); }
+            return success;
         }
         bool EnterContainer( Container container )
         {

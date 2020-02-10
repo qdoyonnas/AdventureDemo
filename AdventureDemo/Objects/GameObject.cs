@@ -214,7 +214,20 @@ namespace AdventureDemo
         }
 
         #endregion
+
+        #region Helper Methods
+
+        public virtual List<GameObject> GetChildObjects()
+        {
+            List<GameObject> children = new List<GameObject>();
+
+            return children;
+        }
+
+        #endregion
     }
+
+    #region GameObjectData
 
     public class GameObjectData
     {
@@ -251,4 +264,6 @@ namespace AdventureDemo
             return text;
         }
     }
+
+    #endregion
 }
