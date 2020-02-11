@@ -118,7 +118,11 @@ namespace AdventureDemo
             if( CheckForOutInput(e) ) { return true; }
 
             GameObject foundObject = GetInputTarget(e);
-            if( foundObject == null ) { return false; }
+            if( foundObject == null ) { return true; }
+            if( foundObject == self ) {
+                WaywardManager.instance.DisplayMessage($"You cannot phase into yourself.");
+                return true;
+            }
 
             if( Check(foundObject) == CheckResult.VALID ) {
                 Action(foundObject);

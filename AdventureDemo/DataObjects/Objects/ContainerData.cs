@@ -11,6 +11,20 @@ namespace AdventureDemo
         public DynamicDouble innerVolume = new DynamicDouble("0");
         public DataReference[] spawnLists;
 
+        public ContainerData()
+        {
+            spawnLists = new DataReference[0];
+        }
+        public ContainerData( ContainerData data )
+            : base(data)
+        {
+            innerVolume = new DynamicDouble(data.innerVolume);
+            spawnLists = new DataReference[data.spawnLists.Length];
+            for( int i = 0; i < spawnLists.Length; i++ ) {
+                spawnLists[i] = new DataReference(data.spawnLists[i].value);
+            }
+        }
+
         public override Dictionary<string, object> GenerateData()
         {
             Dictionary<string, object> data = base.GenerateData();

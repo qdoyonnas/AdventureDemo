@@ -11,6 +11,21 @@ namespace AdventureDemo
         public DynamicDouble volume = new DynamicDouble("0");
         public MaterialReference[] materials;
 
+        public PhysicalData()
+        {
+            materials = new MaterialReference[0];
+        }
+        public PhysicalData( PhysicalData data )
+            : base(data)
+        {
+            volume = new DynamicDouble(data.volume);
+
+            materials = new MaterialReference[data.materials.Length];
+            for( int i = 0; i < materials.Length; i++ ) {
+                materials[i] = new MaterialReference(data.materials[i]);
+            }
+        }
+
         public override Dictionary<string, object> GenerateData()
         {
             Dictionary<string, object> data = base.GenerateData();

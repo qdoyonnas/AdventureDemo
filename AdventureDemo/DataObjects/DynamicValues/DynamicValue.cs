@@ -21,8 +21,27 @@ namespace AdventureDemo
 
         public T[] choices;
 
+        public string originalExpression;
         public Expression expression;
         public string[] parameters;
+
+        public DynamicValue()
+        {
+            choices = new T[0];
+        }
+        public DynamicValue( DynamicValue<T> value )
+        {
+            method = value.method;
+            choices = new T[value.choices.Length];
+            Array.Copy(value.choices, choices, choices.Length);
+
+            if( value.expression != null ) {
+                originalExpression = value.originalExpression;
+                expression = new Expression(value.originalExpression);
+                parameters = new string[value.parameters.Length];
+                Array.Copy(value.parameters, parameters, parameters.Length);
+            }
+        }
 
         protected delegate T ParseDelegate( string expression );
 
@@ -82,6 +101,7 @@ namespace AdventureDemo
             if( !regex.IsMatch(expression) ) { return false; }
 
             method = Method.EXPRESSION;
+            this.originalExpression = expression;
             this.expression = new Expression(expression);
 
             regex = new Regex(@"\[(\w+)\]");

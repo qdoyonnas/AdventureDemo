@@ -1,0 +1,15 @@
+{
+	"id": "wrench",
+	"type": "PhysicalData",
+	
+	"name": "wrench",
+	"description": "a tool used for tightening bolts",
+	
+	"volume": "0.5",
+	"materials": [
+		{
+			"material": "titanium",
+			"parts": 1
+		}
+	]
+}

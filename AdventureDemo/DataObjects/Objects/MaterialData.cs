@@ -11,6 +11,13 @@ namespace AdventureDemo
         public double weight = 1;
         public string color = "#ffffff";
 
+        public MaterialData() { }
+        public MaterialData( MaterialData data )
+        {
+            weight = data.weight;
+            color = data.color;
+        }
+
         public override Dictionary<string, object> GenerateData()
         {
             Dictionary<string, object> data = base.GenerateData();

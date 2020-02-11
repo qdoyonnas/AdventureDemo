@@ -100,6 +100,7 @@
     <Compile Include="Systems\Attachments\ContainerAttachmentPoint.cs" />
     <Compile Include="Systems\Attachments\PhysicalAttachmentPoint.cs" />
     <Compile Include="Objects\Connection.cs" />
+    <Compile Include="Systems\Verbs\CreateVerb.cs" />
     <Compile Include="Systems\Verbs\PhaseVerb.cs" />
     <Compile Include="Systems\Verbs\GrabVerb.cs" />
     <Compile Include="Systems\Verbs\PossessVerb.cs" />

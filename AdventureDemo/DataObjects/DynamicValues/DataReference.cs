@@ -8,7 +8,7 @@ namespace AdventureDemo
     [JsonConverter(typeof(DataReferenceConverter))]
     class DataReference
     {
-        string value;
+        public string value;
 
         public DataReference( string v )
         {

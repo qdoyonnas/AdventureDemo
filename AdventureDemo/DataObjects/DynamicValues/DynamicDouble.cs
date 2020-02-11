@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using NCalc;
 
 namespace AdventureDemo
 {
@@ -23,6 +24,8 @@ namespace AdventureDemo
                 throw new Exception($"DynamicDouble could not parse '{expression}' as value: {e}");
             }
         }
+        public DynamicDouble( DynamicDouble value )
+            : base(value) { }
 
         private double EvaluateExpression( Dictionary<string, object> data )
         {

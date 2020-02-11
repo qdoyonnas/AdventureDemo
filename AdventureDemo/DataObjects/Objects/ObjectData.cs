@@ -12,6 +12,14 @@ namespace AdventureDemo
         public DynamicString name = new DynamicString("unknown object");
         public string description = "a strange object";
 
+        public ObjectData() { }
+        public ObjectData( ObjectData data )
+            : base(data)
+        {
+            type = data.type;
+            name = new DynamicString(data.name);
+        }
+
         public virtual Dictionary<string, object> GenerateData()
         {
             Dictionary<string, object> data = new Dictionary<string, object>();

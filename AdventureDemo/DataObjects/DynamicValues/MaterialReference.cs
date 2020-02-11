@@ -10,6 +10,13 @@ namespace AdventureDemo
         public DataReference material;
         public double parts;
 
+        public MaterialReference() { }
+        public MaterialReference( MaterialReference mat )
+        {
+            material = new DataReference(mat.material.value);
+            parts = mat.parts;
+        }
+
         public KeyValuePair<Material, double> GetValue(KeyValuePair<Material, double>[] currentMats)
         {
             Material mat = material.LoadData<Material>(typeof(MaterialData));

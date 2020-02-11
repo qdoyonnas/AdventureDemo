@@ -10,6 +10,18 @@ namespace AdventureDemo
     {
         public SpawnEntry[] entries;
 
+        public SpawnList()
+        {
+            entries = new SpawnEntry[0];
+        }
+        public SpawnList( SpawnList list )
+        {
+            entries = new SpawnEntry[list.entries.Length];
+            for( int i = 0; i < entries.Length; i++ ) {
+                entries[i] = new SpawnEntry(list.entries[i]);
+            }
+        }
+
         public override object Create()
         {
             return this;
@@ -29,6 +41,15 @@ namespace AdventureDemo
         public double spawnChance = 0;
         public int spawnQuantity = 1;
         public bool independantSpawn = true;
+
+        public SpawnEntry() { }
+        public SpawnEntry( SpawnEntry entry )
+        {
+            id = new DataReference(entry.id.value);
+            spawnChance = entry.spawnChance;
+            spawnQuantity = entry.spawnQuantity;
+            independantSpawn = entry.independantSpawn;
+        }
 
         public void Spawn( Container container, double weight )
         {

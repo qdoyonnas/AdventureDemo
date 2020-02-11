@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-using System.Text.RegularExpressions;
-using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -121,14 +116,14 @@ namespace AdventureDemo
 
             LoadDirectory(dataDirectory);
         }
-        public void LoadDirectory( string subPath )
+        private void LoadDirectory( string subPath )
         {
             DirectoryInfo directory = new DirectoryInfo(dataDirectory.FullName + "\\" + subPath);
             if( !directory.Exists ) { directory.Create(); return; }
 
             LoadDirectory(directory);
         }
-        public void LoadDirectory( DirectoryInfo directory )
+        private void LoadDirectory( DirectoryInfo directory )
         {
             FileInfo[] files = directory.GetFiles();
             foreach( FileInfo file in files ) {
@@ -278,7 +273,10 @@ namespace AdventureDemo
             if( memory == null ) { return null; }
             foreach( BasicData data in memory ) {
                 if( data.id == id ) {
-                    return data;
+                    Type dataType = data.GetType();
+                    BasicData copiedData = (BasicData)Activator.CreateInstance(dataType, data);
+
+                    return copiedData;
                 }
             }
 
@@ -312,7 +310,9 @@ namespace AdventureDemo
         {
             List<BasicData> memory = GetMemory(type);
 
-            memory.Insert(0, data);
+            Type dataType = data.GetType();
+            BasicData copiedData = (BasicData)Activator.CreateInstance(dataType, data);
+            memory.Insert(0, copiedData);
             if( memory.Count > memoryLength ) {
                 memory.RemoveAt(memory.Count - 1);
             }
@@ -330,6 +330,18 @@ namespace AdventureDemo
         {
             Type type = null;
             string typeName = nameSpace + token["type"].Value<string>();
+            try {
+                type = Type.GetType(typeName);
+            } catch( Exception e ) {
+                Console.WriteLine($"ERROR: Failed retrieving type '{typeName}': {e}");
+            }
+
+            return type;
+        }
+        private Type GetTypeFromString( string str )
+        {
+            Type type = null;
+            string typeName = nameSpace + str;
             try {
                 type = Type.GetType(typeName);
             } catch( Exception e ) {

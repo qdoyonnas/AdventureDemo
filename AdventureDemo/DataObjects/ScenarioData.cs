@@ -15,6 +15,13 @@ namespace AdventureDemo
         {
             roots = new Dictionary<string, DataReference[]>();
         }
+        public ScenarioData( ScenarioData data )
+            : base(data)
+        {
+            name = data.name;
+            description = data.description;
+            roots = new Dictionary<string, DataReference[]>(data.roots);
+        }
 
         public override object Create()
         {

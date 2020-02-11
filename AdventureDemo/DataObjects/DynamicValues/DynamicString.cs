@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using NCalc;
 
 namespace AdventureDemo
 {
@@ -19,6 +20,8 @@ namespace AdventureDemo
             method = Method.VALUE;
             choices = new string[] { expression };
         }
+        public DynamicString( DynamicString str )
+            : base(str) { }
 
         private string EvaluateExpression( Dictionary<string, object> data )
         {

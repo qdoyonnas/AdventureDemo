@@ -30,6 +30,7 @@ namespace AdventureDemo
             AddVerb( PossessionType.EMBODIMENT, new PhaseVerb(this) );
             AddVerb( PossessionType.EMBODIMENT, new GrabVerb(this, contents) );
             AddVerb( PossessionType.EMBODIMENT, new PossessVerb(this) );
+            AddVerb(PossessionType.EMBODIMENT, new CreateVerb(this));
         }
     }
 }
