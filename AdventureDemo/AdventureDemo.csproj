@@ -78,7 +78,11 @@
     <Compile Include="DataObjects\DynamicValues\DynamicString.cs" />
     <Compile Include="DataObjects\DynamicValues\DynamicValue.cs" />
     <Compile Include="DataObjects\DynamicValues\MaterialReference.cs" />
+    <Compile Include="DataObjects\Verbs\CreateVerbData.cs" />
     <Compile Include="DataObjects\Verbs\GrabVerbData.cs" />
+    <Compile Include="DataObjects\Verbs\PhaseVerbData.cs" />
+    <Compile Include="DataObjects\Verbs\PossessVerbData.cs" />
+    <Compile Include="DataObjects\Verbs\TraversalVerbData.cs" />
     <Compile Include="DataObjects\Verbs\VerbData.cs" />
     <Compile Include="Managers\InputManager.cs" />
     <Compile Include="Objects\Material.cs" />

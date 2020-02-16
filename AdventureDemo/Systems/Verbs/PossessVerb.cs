@@ -16,8 +16,10 @@ namespace AdventureDemo
             _validInputs = new string[] {
                 "possess", "control"
             };
+
+            updatesGame = false;
         }
-        protected override void InitVerb() {}
+        protected override void OnAssign() {}
 
         public override bool Action( GameObject target )
         {
@@ -25,16 +27,18 @@ namespace AdventureDemo
 
             self.actor.Control(target);
 
-            return base.Action(target);
+            return true;
         }
 
         public override CheckResult Check( GameObject target )
         {
-            if( target.CollectVerbs().Count > 0 ) {
-                return CheckResult.VALID;
+            if( target == self 
+                || target.CollectVerbs().Count <= 0 ) 
+            {
+                return CheckResult.INVALID;
             }
 
-            return CheckResult.INVALID;
+            return CheckResult.VALID;
         }
 
         public override bool ParseInput( InputEventArgs e )

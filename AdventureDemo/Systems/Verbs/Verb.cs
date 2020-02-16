@@ -33,18 +33,24 @@ namespace AdventureDemo
             }
             set {
                 _self = value;
-                InitVerb();
+                OnAssign();
             }
         }
 
-        public Verb() {}
+        public bool updatesGame = true;
+
+        public Verb() 
+        {
+            Construct();
+        }
         public Verb( GameObject self )
         {
+            Construct();
             this.self = self;
         }
 
         protected abstract void Construct();
-        protected abstract void InitVerb();
+        protected abstract void OnAssign();
 
         /// <summary>
         /// Returns a bool indicating whether this Verb's action can be performed
@@ -53,10 +59,22 @@ namespace AdventureDemo
         /// <param name="data">Arbitrary key-value dictionary to be used for parameter passing.</param>
         /// <returns></returns>
         public abstract CheckResult Check( GameObject target );
-        public virtual bool Action( GameObject target )
+        public abstract bool Action( GameObject target );
+
+        public virtual bool Register( GameObject target, bool fromPlayer )
         {
-            WaywardManager.instance.Update(); // XXX: (UPDATE) This is the place to update the game properly
-            return true;
+            // XXX: When timeline is implemented this should replaced with a registration to the timeline
+
+            bool success = Action(target); 
+
+            if( fromPlayer ) {
+                if( success && updatesGame ) {
+                    GameManager.instance.Update();
+                }
+                WaywardManager.instance.Update();
+            }
+
+            return success;
         }
 
         public virtual void Display( Actor actor, GameObject target, FrameworkContentElement span )
@@ -67,7 +85,7 @@ namespace AdventureDemo
                 if( check == CheckResult.RESTRICTED ) {
                     items.Add( WaywardTextParser.ParseAsBlock($@"<gray>{displayLabel}</gray>") , null );
                 } else {
-                    items.Add( WaywardTextParser.ParseAsBlock(displayLabel) , delegate { return Action(target); } );
+                    items.Add( WaywardTextParser.ParseAsBlock(displayLabel) , delegate { return Register(target, true); } );
                 }
                 ContextMenuHelper.AddContextMenuHeader(span, new TextBlock(self.GetData("name upper").span), items, check != CheckResult.RESTRICTED);
             }

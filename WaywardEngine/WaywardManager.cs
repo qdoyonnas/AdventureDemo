@@ -208,12 +208,8 @@ namespace WaywardEngine
             pages.Last().CloseAction();
         }
 
-        public delegate void UpdateDelegate();
-        public event UpdateDelegate OnUpdate;
         public void Update()
         {
-            OnUpdate();
-
             for( int i = pages.Count-1; i >= 0; i-- ) {
                 pages[i].Clear();
                 pages[i].Update();

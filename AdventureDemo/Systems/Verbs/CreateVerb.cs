@@ -6,15 +6,25 @@ namespace AdventureDemo
 {
     class CreateVerb : Verb
     {
-        public CreateVerb(GameObject self)
-            : base(self)
+        public CreateVerb() : base() { }
+        public CreateVerb(GameObject self) : base(self) {}
+
+        protected override void Construct()
         {
             _displayLabel = "Create";
+            _validInputs = new string[] { "create" };
 
-            validInputs = new string[] { "create" };
+            updatesGame = false;
         }
+        protected override void OnAssign() {}
 
         public override CheckResult Check( GameObject target ) { return CheckResult.INVALID; }
+
+        public override bool Action(GameObject target)
+        {
+            WaywardManager.instance.Update();
+            return true;
+        }
 
         public override bool ParseInput( InputEventArgs e )
         {

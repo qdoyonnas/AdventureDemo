@@ -37,6 +37,11 @@ namespace AdventureDemo
 
             try {
                 gameObject = new GameObject(GenerateData());
+                foreach( VerbReference verbReference in verbs ) {
+                    KeyValuePair<Verb, PossessionType> verb = verbReference.GetValue();
+                    verb.Key.self = gameObject;
+                    gameObject.AddVerb(verb.Value, verb.Key);
+                }
             } catch( Exception e ) {
                 Console.WriteLine($"ERROR: Could not instantiate GameObject from ObjectData: {e}");
             }

@@ -97,6 +97,7 @@ namespace AdventureDemo
         public override CheckResult CanAttach( GameObject obj )
         {
             if( Contains(obj) ) { return CheckResult.VALID; }
+
             Physical physical = obj as Physical;
             if( physical == null ) { return CheckResult.INVALID; }
 

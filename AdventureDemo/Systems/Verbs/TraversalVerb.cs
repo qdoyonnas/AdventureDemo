@@ -24,7 +24,7 @@ namespace AdventureDemo
                 "walk", "move", "go"
             };
         }
-        protected override void InitVerb()
+        protected override void OnAssign()
         {
             physicalSelf = self as Physical;
         }
@@ -46,7 +46,6 @@ namespace AdventureDemo
                 }
             }
 
-            if( success ) { base.Action(target); }
             return success;
         }
         bool EnterContainer( Container container )
@@ -92,7 +91,7 @@ namespace AdventureDemo
                 if( check == CheckResult.RESTRICTED ) {
                     ContextMenuHelper.AddContextMenuItem( span, WaywardTextParser.ParseAsBlock($@"<gray>{displayLabel}</gray>") , null, false );
                 } else {
-                    ContextMenuHelper.AddContextMenuItem( span, WaywardTextParser.ParseAsBlock(displayLabel) , delegate { return Action(target); } );
+                    ContextMenuHelper.AddContextMenuItem( span, WaywardTextParser.ParseAsBlock(displayLabel) , delegate { return Register(target, true); } );
                 }
             }
         }

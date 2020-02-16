@@ -21,7 +21,9 @@ namespace WaywardEngine
                 InputEventArgs e = new InputEventArgs(input);
                 inputReceived.Invoke(e);
 
-                if( !e.parsed ) {
+                if( e.parsed ) {
+                    WaywardManager.instance.Update();
+                } else {
                     // XXX: This message should be displayed in the inputBox
                     WaywardManager.instance.DisplayMessage("Command not found.");
                 }

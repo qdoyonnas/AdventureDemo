@@ -27,7 +27,7 @@ namespace AdventureDemo
         private InputManager()
         {
             commands = new Dictionary<string[], InputDelegate>();
-            commands.Add(new string[] { "display", "dsp" }, DisplayCommand);
+            commands.Add(new string[] { "message", "msg" }, DisplayCommand);
             commands.Add(new string[] { "close", "c" }, ClosePage);
             commands.Add(new string[] { "exit", "quit" }, ExitGame);
             commands.Add(new string[] { "open", "o" }, OpenPage);

@@ -11,6 +11,7 @@ namespace AdventureDemo
 {
     class PhaseVerb : Verb
     {
+        public PhaseVerb() : base() { }
         public PhaseVerb( GameObject self ) : base(self) {}
 
         protected override void Construct()
@@ -18,16 +19,16 @@ namespace AdventureDemo
             _displayLabel = "Phase";
 
             _validInputs = new string[] { "phase" };
+
+            updatesGame = false;
         }
-        protected override void InitVerb() {}
+        protected override void OnAssign() {}
 
         public override bool Action( GameObject target )
         {
             Physical physical = target as Physical;
             if( physical != null ) {
-                if( Action(physical.GetAttachmentPoints()[0]) ) {
-                    return base.Action(target);
-                }
+                Action(physical.GetAttachmentPoints()[0]);
             }
 
             return false;
@@ -47,25 +48,34 @@ namespace AdventureDemo
 
         public override CheckResult Check( GameObject target )
         {
-            CheckResult check = CheckResult.VALID;
+            CheckResult check = CheckResult.INVALID;
+
             if( self.container.GetParent() == target
                 && target.container != null 
                 && target.container != self.container )
             {
                 check = target.container.CanAttach(self);
-                if( check == CheckResult.VALID ) {
+                if( check >= CheckResult.RESTRICTED ) {
                     return check;
                 }
             }
 
             Physical physical = target as Physical;
             if( physical != null ) {
+
+                Physical physicalSelf = self as Physical;
+                if( physicalSelf != null
+                    && physicalSelf.Contains(physical) )
+                {
+                    return CheckResult.INVALID;
+                }
+
                 foreach( AttachmentPoint point in physical.GetAttachmentPoints() ) {
                     if( point == self.container ) { continue; }
 
                     CheckResult pointCheck = point.CanAttach(self);
                     check = pointCheck > check ? pointCheck : check;
-                    if( check == CheckResult.VALID ) {
+                    if( check >= CheckResult.RESTRICTED ) {
                         return check;
                     }
                 }
@@ -74,9 +84,26 @@ namespace AdventureDemo
             return check;
         }
 
+        public bool Register(AttachmentPoint point, bool fromPlayer)
+        {
+            // XXX: When timeline is implemented this should replaced with a registration to the timeline
+
+            bool success = Action(point); 
+
+            if( fromPlayer ) {
+                if( success && updatesGame ) {
+                    GameManager.instance.Update();
+                }
+                WaywardManager.instance.Update();
+            }
+
+            return success;
+        }
+
         public override void Display( Actor actor, GameObject target, FrameworkContentElement span )
         {
             if( target == self ) { return; }
+            if( Check(target) < CheckResult.RESTRICTED ) { return; }
 
             string actionLabel = displayLabel;
 
@@ -103,7 +130,7 @@ namespace AdventureDemo
                 if( result == CheckResult.RESTRICTED ) {
                     items.Add( WaywardTextParser.ParseAsBlock($@"<gray>{actionLabel}</gray>") , null );
                 } else {
-                    items.Add( WaywardTextParser.ParseAsBlock(actionLabel) , delegate { return Action(point); } );
+                    items.Add( WaywardTextParser.ParseAsBlock(actionLabel) , delegate { return Register(point, true); } );
                 }
                 ContextMenuHelper.AddContextMenuHeader(span, new TextBlock(self.GetData("name upper").span), items, result != CheckResult.RESTRICTED);
             }
@@ -153,6 +180,7 @@ namespace AdventureDemo
         }
         private GameObject GetInputTarget( InputEventArgs e )
         {
+            // XXX: Broken behaviour if target has a name with spaces
             GameObject[] foundObjects = GameManager.instance.world.FindObjects(self, e.parameters);
             if( foundObjects.Length <= 0 ) {
                 string message = $"No such place as ";

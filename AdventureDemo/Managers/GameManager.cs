@@ -37,7 +37,6 @@ namespace AdventureDemo
 
         private GameManager()
         {
-            WaywardManager.instance.OnUpdate += Update;
         }
 
         /// <summary>
@@ -129,7 +128,7 @@ namespace AdventureDemo
 
         public void Update()
         {
-
+            // Timeline here
         }
 
         #endregion

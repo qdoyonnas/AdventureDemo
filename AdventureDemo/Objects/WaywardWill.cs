@@ -21,14 +21,10 @@ namespace AdventureDemo
 
             attachmentTypes.Add( AttachmentType.ALL );
 
-            contents = new PhysicalAttachmentPoint( new Dictionary<string, object>() {
-                { "parent", this }, { "name", "Grasp" }, { "quantity", -1 },
-                { "types", new AttachmentType[] { AttachmentType.ALL } }
-            });
-            AddAttachmentPoint(contents);
-
             AddVerb( PossessionType.EMBODIMENT, new PhaseVerb(this) );
-            AddVerb( PossessionType.EMBODIMENT, new GrabVerb(this, contents) );
+            GrabVerb grab = new GrabVerb(-1, -1);
+            grab.self = this;
+            AddVerb( PossessionType.EMBODIMENT, grab );
             AddVerb( PossessionType.EMBODIMENT, new PossessVerb(this) );
             AddVerb(PossessionType.EMBODIMENT, new CreateVerb(this));
         }
