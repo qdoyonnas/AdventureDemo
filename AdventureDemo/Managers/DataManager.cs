@@ -46,10 +46,12 @@ namespace AdventureDemo
         Dictionary<string, DataPointer> objectFiles;
         Dictionary<string, DataPointer> materialFiles;
         Dictionary<string, DataPointer> spawnFiles;
+        Dictionary<string, DataPointer> verbFiles;
 
         List<BasicData> objectDataMemory;
         List<BasicData> materialDataMemory;
         List<BasicData> spawnDataMemory;
+        List<BasicData> verbDataMemory;
         int memoryLength = 50;
 
         // XXX: Implement hybrid memory/file loading system where recently loaded data objects are stored
@@ -68,10 +70,12 @@ namespace AdventureDemo
             objectFiles = new Dictionary<string, DataPointer>();
             materialFiles = new Dictionary<string, DataPointer>();
             spawnFiles = new Dictionary<string, DataPointer>();
+            verbFiles = new Dictionary<string, DataPointer>();
 
             objectDataMemory = new List<BasicData>();
             materialDataMemory = new List<BasicData>();
             spawnDataMemory = new List<BasicData>();
+            verbDataMemory = new List<BasicData>();
         }
 
         public void Init( AdventureApp app )
@@ -140,6 +144,9 @@ namespace AdventureDemo
                     case ".spawn":
                         AddFile(file, spawnFiles);
                         break;
+                    case ".verb":
+                        AddFile(file, verbFiles);
+                        break;
                 }
             }
 
@@ -182,18 +189,21 @@ namespace AdventureDemo
             SCENARIO,
             OBJECT,
             SPAWN,
-            MATERIAL
+            MATERIAL,
+            VERB
         }
         private DataType GetTypeId( Type type )
         {
-            if( type == (typeof(MaterialData)) || type.IsSubclassOf(typeof(MaterialData)) ) {
+            if( typeof(MaterialData).IsAssignableFrom(type) ) {
                 return DataType.MATERIAL;
-            } else if( type == (typeof(ObjectData)) || type.IsSubclassOf(typeof(ObjectData)) ) {
+            } else if( typeof(ObjectData).IsAssignableFrom(type) ) {
                 return DataType.OBJECT;
-            } else if( type == (typeof(ScenarioData)) || type.IsSubclassOf(typeof(ScenarioData)) ) {
+            } else if( typeof(ScenarioData).IsAssignableFrom(type) ) {
                 return DataType.SCENARIO;
-            } else if( type == (typeof(SpawnList)) || type.IsSubclassOf(typeof(SpawnList)) ) {
+            } else if( typeof(SpawnList).IsAssignableFrom(type) ) {
                 return DataType.SPAWN;
+            } else if( typeof(VerbData).IsAssignableFrom(type) ) {
+                return DataType.VERB;
             } else {
                 return DataType.UNKNOWN;
             }
@@ -209,6 +219,8 @@ namespace AdventureDemo
                     return scenarioFiles;
                 case DataType.SPAWN:
                     return spawnFiles;
+                case DataType.VERB:
+                    return verbFiles;
                 default:
                     Console.WriteLine($"ERROR: Did not find files for data of type '{type}'");
                     return null;
@@ -225,6 +237,8 @@ namespace AdventureDemo
                     return null;
                 case DataType.SPAWN:
                     return spawnDataMemory;
+                case DataType.VERB:
+                    return verbDataMemory;
                 default:
                     Console.WriteLine($"ERROR: Did not find memory array for data of type '{type}'");
                     return null;

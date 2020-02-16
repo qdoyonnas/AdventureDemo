@@ -65,6 +65,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataObjects\BasicData.cs" />
+    <Compile Include="DataObjects\DynamicValues\VerbReference.cs" />
     <Compile Include="DataObjects\Objects\ContainerData.cs" />
     <Compile Include="DataObjects\Objects\MaterialData.cs" />
     <Compile Include="DataObjects\Objects\ObjectData.cs" />
@@ -77,6 +78,8 @@
     <Compile Include="DataObjects\DynamicValues\DynamicString.cs" />
     <Compile Include="DataObjects\DynamicValues\DynamicValue.cs" />
     <Compile Include="DataObjects\DynamicValues\MaterialReference.cs" />
+    <Compile Include="DataObjects\Verbs\GrabVerbData.cs" />
+    <Compile Include="DataObjects\Verbs\VerbData.cs" />
     <Compile Include="Managers\InputManager.cs" />
     <Compile Include="Objects\Material.cs" />
     <Compile Include="Objects\Organisms\BodyPart.cs" />

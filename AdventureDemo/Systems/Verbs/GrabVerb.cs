@@ -9,16 +9,20 @@ namespace AdventureDemo
         AttachmentPoint inventory;
         Physical physicalSelf;
 
-        public GrabVerb( GameObject self, AttachmentPoint inventory )
-            : base(self)
+        public GrabVerb() : base() { }
+        public GrabVerb( GameObject self ) : base(self) {}
+
+        protected override void Construct()
         {
-            this.inventory = inventory;
             _displayLabel = "Grab";
 
-            validInputs = new string[] {
+            _validInputs = new string[] {
                 "grab", "drop", "pickup", "take"
             };
-
+        }
+        protected override void InitVerb()
+        {
+            this.inventory = inventory;
             physicalSelf = self as Physical;
         }
 

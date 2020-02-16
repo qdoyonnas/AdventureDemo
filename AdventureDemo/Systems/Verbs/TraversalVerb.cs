@@ -13,15 +13,19 @@ namespace AdventureDemo
     {
         Physical physicalSelf;
 
-        public TraversalVerb( GameObject self )
-            : base(self)
+        public TraversalVerb(): base() { }
+        public TraversalVerb( GameObject self ) : base(self) {}
+
+        protected override void Construct()
         {
             _displayLabel = "Walk";
 
-            validInputs = new string[] {
+            _validInputs = new string[] {
                 "walk", "move", "go"
             };
-
+        }
+        protected override void InitVerb()
+        {
             physicalSelf = self as Physical;
         }
 

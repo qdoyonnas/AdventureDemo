@@ -19,15 +19,32 @@ namespace AdventureDemo
             }
         }
 
-        public string[] validInputs { get; protected set; }
+        public string[] _validInputs = new string[0];
+        public string[] validInputs { 
+            get {
+                return _validInputs;
+            }
+        }
 
-        readonly public GameObject self;
+        private GameObject _self;
+        public GameObject self {
+            get {
+                return _self;
+            }
+            set {
+                _self = value;
+                InitVerb();
+            }
+        }
 
+        public Verb() {}
         public Verb( GameObject self )
         {
             this.self = self;
-            validInputs = new string[0];
         }
+
+        protected abstract void Construct();
+        protected abstract void InitVerb();
 
         /// <summary>
         /// Returns a bool indicating whether this Verb's action can be performed

@@ -12,6 +12,8 @@ namespace AdventureDemo
         public DynamicString name = new DynamicString("unknown object");
         public string description = "a strange object";
 
+        public VerbReference[] verbs;
+
         public ObjectData() { }
         public ObjectData( ObjectData data )
             : base(data)

@@ -5,15 +5,19 @@ namespace AdventureDemo
 {
     class PossessVerb : Verb
     {
+        public PossessVerb() : base() { }
         public PossessVerb( GameObject self )
-            : base(self)
+            : base(self) {}
+
+        protected override void Construct()
         {
             _displayLabel = "Possess";
 
-            validInputs = new string[] {
+            _validInputs = new string[] {
                 "possess", "control"
             };
         }
+        protected override void InitVerb() {}
 
         public override bool Action( GameObject target )
         {

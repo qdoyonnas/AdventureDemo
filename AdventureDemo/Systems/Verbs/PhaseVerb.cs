@@ -11,13 +11,15 @@ namespace AdventureDemo
 {
     class PhaseVerb : Verb
     {
-        public PhaseVerb( GameObject self )
-            : base(self)
+        public PhaseVerb( GameObject self ) : base(self) {}
+
+        protected override void Construct()
         {
             _displayLabel = "Phase";
 
-            validInputs = new string[] { "phase" };
+            _validInputs = new string[] { "phase" };
         }
+        protected override void InitVerb() {}
 
         public override bool Action( GameObject target )
         {

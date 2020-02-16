@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 
 namespace AdventureDemo
 {
-    //[JsonConverter(typeof(MaterialReferenceConverter))]
     class MaterialReference
     {
         public DataReference material;
@@ -24,23 +23,4 @@ namespace AdventureDemo
             return new KeyValuePair<Material, double>(mat, parts);
         }
     }
-
-    /*class MaterialReferenceConverter : JsonConverter
-    {
-        public override bool CanConvert( Type objectType )
-        {
-            return typeof(MaterialReference).IsAssignableFrom(objectType);
-        }
-
-        public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
-        {
-
-        }
-
-        public override bool CanWrite => false;
-        public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer )
-        {
-            throw new NotImplementedException();
-        }
-    }*/
 }
