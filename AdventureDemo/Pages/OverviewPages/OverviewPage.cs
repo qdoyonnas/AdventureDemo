@@ -27,7 +27,9 @@ namespace AdventureDemo
 
             overviewContentPanels = new Dictionary<GameObject, StackPanel>();
             foreach( GameObject obj in observer.GetSubjectObjects() ) {
-                DisplayObject(obj);
+                if( obj != null ) {
+                    DisplayObject(obj);
+                }
             }
 
             SetTitle("Overview");

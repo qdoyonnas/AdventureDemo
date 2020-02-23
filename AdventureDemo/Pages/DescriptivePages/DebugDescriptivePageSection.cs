@@ -47,6 +47,18 @@ namespace AdventureDemo
             } catch( NullReferenceException e ) {
                 content.Children.Add(WaywardTextParser.ParseAsBlock("Container: <i>null</i>"));
             }
+
+            string attachmentString = "Attachment Types: ";
+            if( page.target.attachmentTypes.Count > 0 ) {
+                foreach( AttachmentType type in page.target.attachmentTypes ) {
+                    attachmentString += type.ToString() + " ";
+                }
+            } else {
+                attachmentString += "<i>none</i>";
+            }
+            TextBlock attachmentBlock = WaywardTextParser.ParseAsBlock(attachmentString);
+            Grid.SetColumn(attachmentBlock, 1);
+            content.Children.Add(attachmentBlock);
         }
     }
 }

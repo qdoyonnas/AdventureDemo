@@ -1,0 +1,11 @@
+{
+	"id": "possess",
+	
+	"type": "PossessVerbData",
+	"label": "Possess",
+	
+	"validInputs": [
+		"possess",
+		"control"
+	]
+}

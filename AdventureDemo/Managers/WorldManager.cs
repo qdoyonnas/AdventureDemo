@@ -37,9 +37,12 @@ namespace AdventureDemo
 
             player = new PlayerActor();
             InputManager.instance.inputReceived += player.ParseInput;
-            WaywardWill will = new WaywardWill();
-            rootObjects[0].GetContents().Attach(will);
-            player.Control(will);
+            
+            GameObject will = DataManager.instance.LoadObject<GameObject>("wayward_will", typeof(PhysicalData));
+            if( will != null ) {
+                rootObjects[0].GetContents().Attach(will);
+                player.Control(will);
+            }
         }
 
         public void AddRoot( Container obj )

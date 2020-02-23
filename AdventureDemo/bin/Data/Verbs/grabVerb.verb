@@ -1,0 +1,16 @@
+{
+	"id": "will_grab",
+	
+	"type": "GrabVerbData",
+	"label": "Grab",
+	
+	"validInputs": [
+		"grab",
+		"pickup",
+		"take",
+		"drop"
+	],
+	
+	"quantity": -1,
+	"capacity": -1
+}

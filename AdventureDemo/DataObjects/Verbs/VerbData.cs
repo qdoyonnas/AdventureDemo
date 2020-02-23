@@ -6,7 +6,7 @@ namespace AdventureDemo
     {
         public string type;
 
-        public string displayLabel;
+        public string label;
         public string[] validInputs;
 
         public VerbData() 
@@ -16,7 +16,7 @@ namespace AdventureDemo
         public VerbData( VerbData data )
         {
             type = data.type;
-            displayLabel = data.displayLabel;
+            label = data.label;
 
             validInputs = new string[data.validInputs.Length];
             Array.Copy(data.validInputs, validInputs, validInputs.Length);

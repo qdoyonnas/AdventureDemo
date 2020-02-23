@@ -12,7 +12,9 @@ namespace AdventureDemo
         public DynamicString name = new DynamicString("unknown object");
         public string description = "a strange object";
 
-        public VerbReference[] verbs;
+        public AttachmentType[] attachmentTypes = new AttachmentType[0];
+
+        public VerbReference[] verbs = new VerbReference[0];
 
         public ObjectData() { }
         public ObjectData( ObjectData data )
@@ -20,6 +22,14 @@ namespace AdventureDemo
         {
             type = data.type;
             name = new DynamicString(data.name);
+
+            attachmentTypes = new AttachmentType[data.attachmentTypes.Length];
+            Array.Copy(data.attachmentTypes, attachmentTypes, attachmentTypes.Length);
+
+            verbs = new VerbReference[data.verbs.Length];
+            for( int i = 0; i < verbs.Length; i++ ) {
+                verbs[i] = new VerbReference(data.verbs[i]);
+            }
         }
 
         public virtual Dictionary<string, object> GenerateData()
@@ -28,6 +38,8 @@ namespace AdventureDemo
 
             data["name"] = this.name.GetValue(null);
             data["description"] = this.description;
+
+            data["attachmentTypes"] = this.attachmentTypes;
 
             return data;
         }

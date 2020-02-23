@@ -1,0 +1,24 @@
+{
+	"id": "wayward_will",
+	"type": "PhysicalData",
+	
+	"name": "Wayward Will",
+	"description": "the will of the Wayward Engine",
+	
+	"attachmentTypes": ["ALL"],
+	
+	"verbs": [
+		{
+			"verb": "phase",
+			"possession": "EMBODIMENT"
+		},
+		{
+			"verb": "possess",
+			"possession": "EMBODIMENT"
+		},
+		{
+			"verb": "will_grab",
+			"possession": "EMBODIMENT"
+		}
+	]
+}

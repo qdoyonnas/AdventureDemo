@@ -56,6 +56,12 @@ namespace AdventureDemo
             Construct(data.ContainsKey("name") ? (string)data["name"] : "Unknown Object");
 
             description = data.ContainsKey("description") ? (string)data["description"] : "a strange object";
+
+            if( data.ContainsKey("attachmentTypes") ) {
+                foreach( AttachmentType type in (AttachmentType[])data["attachmentTypes"] ) {
+                    attachmentTypes.Add(type);
+                }
+            }
         }
         public GameObject( string name )
         {
