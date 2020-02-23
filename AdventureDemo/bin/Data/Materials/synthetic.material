@@ -11,6 +11,16 @@
 },
 
 {
+	"id": "steel",
+	
+	"name": "steel",
+	"description": "a very sturdy metal",
+	
+	"weight": 15,
+	"color": "#6F9BAB"
+},
+
+{
 	"id": "glass",
 	
 	"name": "glass",

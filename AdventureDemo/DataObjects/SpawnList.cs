@@ -30,7 +30,10 @@ namespace AdventureDemo
         public void Spawn( Container container, double weight )
         {
             foreach( SpawnEntry entry in entries ) {
-                entry.Spawn(container, weight);
+                GameObject obj = entry.Spawn(weight);
+                if( obj != null ) { 
+                    container.GetContents().Attach(obj);
+                }
             }
         }
     }
@@ -51,10 +54,11 @@ namespace AdventureDemo
             independantSpawn = entry.independantSpawn;
         }
 
-        public void Spawn( Container container, double weight )
+        public GameObject Spawn( double weight )
         {
             GameObject gameObject = id.LoadData<GameObject>(typeof(ObjectData));
-            container.GetContents().Attach(gameObject);
+
+            return gameObject;
         }
     }
 }

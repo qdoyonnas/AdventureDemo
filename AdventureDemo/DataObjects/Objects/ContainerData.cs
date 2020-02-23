@@ -9,12 +9,9 @@ namespace AdventureDemo
     class ContainerData : PhysicalData
     {
         public DynamicDouble innerVolume = new DynamicDouble("0");
-        public DataReference[] spawnLists;
+        public DataReference[] spawnLists = new DataReference[0];
 
-        public ContainerData()
-        {
-            spawnLists = new DataReference[0];
-        }
+        public ContainerData() {}
         public ContainerData( ContainerData data )
             : base(data)
         {

@@ -1,0 +1,58 @@
+[
+
+{
+	"id": "hammer",
+	"type": "PhysicalAmalgamData",
+	
+	"name": "hammer",
+	"description": "a common tool for applying blunt force",
+	
+	"parts": [
+		{
+			"id": "hammer_head",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "hammer_handle",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+	]
+},
+
+{
+	"id": "hammer_head",
+	"type": "PhysicalData",
+	
+	"name": "hammer head",
+	"description": "the head of a hammer",
+	
+	"volume": "0.2",
+	"materials": [
+		{
+			"material": "steel",
+			"parts": 1
+		}
+	]
+},
+
+{
+	"id": "hammer_handle",
+	"type": "PhysicalData",
+	
+	"name": "hammer handle",
+	"description": "the handle of a hammer",
+	
+	"volume": "0.4",
+	"materials": [
+		{
+			"material": "wood",
+			"parts": 1
+		}
+	]
+}
+
+]

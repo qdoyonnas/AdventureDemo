@@ -8,6 +8,10 @@ namespace AdventureDemo
 {
     class PhaseVerbData : VerbData
     {
+        public PhaseVerbData() { }
+        public PhaseVerbData(PhaseVerbData data)
+            : base(data) { }
+
         public override object Create()
         {
             return new PhaseVerb();

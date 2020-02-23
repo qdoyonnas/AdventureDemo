@@ -8,6 +8,10 @@ namespace AdventureDemo
 {
     class TraversalVerbData : VerbData
     {
+        public TraversalVerbData() { }
+        public TraversalVerbData( TraversalVerbData data )
+            : base(data) { }
+
         public override object Create()
         {
             return new TraversalVerb();

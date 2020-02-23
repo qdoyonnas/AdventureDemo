@@ -1,8 +1,23 @@
+[
+
 {
 	"id": "flesh",
+	
 	"name": "flesh",
-	"data": {
-		"weight": "2.5",
-		"color": "#D82C7D"
-	}
+	"description": "from a carbon-based life-form",
+	
+	"weight": "2.5",
+	"color": "#D82C7D"
+},
+
+{
+	"id": "wood",
+	
+	"name": "wood",
+	"description": "from a carbon-based flora",
+	
+	"weight": "5",
+	"color": "#AD5C07"
 }
+
+]

@@ -17,7 +17,7 @@ namespace AdventureDemo
             }
         }
 
-        List<Physical> parts;
+        List<Physical> parts = new List<Physical>();
 
         public new double totalParts {
             get {
@@ -47,7 +47,6 @@ namespace AdventureDemo
         }
         void Construct()
         {
-            parts = new List<Physical>();
             volume = 0;
         }
 
