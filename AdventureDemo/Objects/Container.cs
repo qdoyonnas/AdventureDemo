@@ -33,7 +33,7 @@ namespace AdventureDemo
         public new double weight {
             get {
                 double totalWeight = 0;
-                foreach( KeyValuePair<Material, double> material in materials ) {
+                foreach( KeyValuePair<Material, double> material in _materials ) {
                     totalWeight += material.Key.GetWeight( (volume - innerVolume) * material.Value );
                 }
 

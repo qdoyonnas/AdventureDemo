@@ -19,6 +19,19 @@ namespace AdventureDemo
 
         List<Physical> parts = new List<Physical>();
 
+        protected override Dictionary<Material, double> materials {
+            get {
+                Dictionary<Material, double> allMats = new Dictionary<Material, double>();
+
+                List<Material> mats = GetMaterials();
+                foreach( Material mat in mats ) {
+                    allMats[mat] = GetMaterialParts(mat);
+                }
+
+                return allMats;
+            }
+        }
+
         public new double totalParts {
             get {
                 double total = 0;
@@ -242,6 +255,8 @@ namespace AdventureDemo
         }
         public override double GetMaterialParts( Material material )
         {
+            // XXX: This needs work to take in to account relative volume of different parts
+
             double materialParts = 0;
 
             foreach( Physical part in parts ) {

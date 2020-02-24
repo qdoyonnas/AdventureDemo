@@ -17,7 +17,7 @@ namespace AdventureDemo
         protected double weight {
             get {
                 double totalWeight = 0;
-                foreach( KeyValuePair<Material, double> material in materials ) {
+                foreach( KeyValuePair<Material, double> material in _materials ) {
                     totalWeight += material.Key.GetWeight( volume * GetMaterialRatio(material.Key) );
                 }
 
@@ -43,7 +43,12 @@ namespace AdventureDemo
             }
         }
 
-        protected Dictionary<Material, double> materials;
+        protected Dictionary<Material, double> _materials;
+        protected virtual Dictionary<Material, double> materials {
+            get {
+                return _materials;
+            }
+        }
         protected double _totalParts = 0;
         public double totalParts {
              get {
@@ -90,7 +95,7 @@ namespace AdventureDemo
             relevantData.Add(GetDescriptiveMaterials);
 
             this.volume = volume;
-            materials = new Dictionary<Material, double>();
+            _materials = new Dictionary<Material, double>();
             foreach( KeyValuePair<Material, double> mat in mats ) {
                 AddMaterial( mat.Key, mat.Value );
             }
@@ -208,38 +213,38 @@ namespace AdventureDemo
 
         public virtual void AddMaterial( Material material, double parts )
         {
-            if( !materials.ContainsKey(material) ) {
-                materials.Add( material, parts );
+            if( !_materials.ContainsKey(material) ) {
+                _materials.Add( material, parts );
             } else {
-                _totalParts -= materials[material];
-                materials[material] = parts;
+                _totalParts -= _materials[material];
+                _materials[material] = parts;
             }
 
             _totalParts += parts;
         }
         public virtual void RemoveMaterial( Material material )
         {
-            if( !materials.ContainsKey(material) ) { return; }
+            if( !_materials.ContainsKey(material) ) { return; }
 
-            _totalParts -= materials[material];
-            materials.Remove(material);
+            _totalParts -= _materials[material];
+            _materials.Remove(material);
         }
 
         public virtual List<Material> GetMaterials()
         {
-            return new List<Material>(materials.Keys);
+            return new List<Material>(_materials.Keys);
         }
         public virtual double GetMaterialParts( Material material )
         {
-            if( !materials.ContainsKey(material) ) { return 0; }
+            if( !_materials.ContainsKey(material) ) { return 0; }
 
-            return materials[material];
+            return _materials[material];
         }
         public virtual double GetMaterialRatio( Material material, bool asPercent = false )
         {
-            if( !materials.ContainsKey(material) ) { return 0; }
+            if( !_materials.ContainsKey(material) ) { return 0; }
 
-            double ratio = materials[material] / _totalParts;
+            double ratio = _materials[material] / _totalParts;
 
             if( asPercent ) {
                 ratio = Math.Round(ratio * 100, 1);
@@ -292,7 +297,7 @@ namespace AdventureDemo
             if( parameters.Length > 0 ) {
                 if( !int.TryParse(parameters[0], out index)
                     || index < 0
-                    || index >= materials.Count ) 
+                    || index >= _materials.Count ) 
                 {
                     index = -1;
                 }
