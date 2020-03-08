@@ -8,7 +8,7 @@ namespace AdventureDemo
 {
     class CreateVerbData : VerbData
     {
-        public override object Create()
+        protected override object CreateInstance()
         {
             return new CreateVerb();
         }

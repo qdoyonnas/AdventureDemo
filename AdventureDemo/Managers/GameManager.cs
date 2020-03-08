@@ -29,15 +29,12 @@ namespace AdventureDemo
         public bool isInitialized = false;
 
         public WorldManager world;
-        public Random random;
 
         #endregion
 
         #region Initialization Methods
 
-        private GameManager()
-        {
-        }
+        private GameManager() {}
 
         /// <summary>
         /// Init the GameManager and start the game.
@@ -79,14 +76,16 @@ namespace AdventureDemo
             if( !isInitialized ) { return; }
 
             MainMenuPage page = new MainMenuPage();
-            Point position = new Point(200, 300);
+            //Point position = new Point(200, 300);
 
-            WaywardManager.instance.AddPage(page, position);
+            WaywardManager.instance.AddPage(page, WaywardManager.instance.GetRelativeWindowPoint(0.5, 0.3));
         }
 
-        public void StartScenario( SaveData data )
+        public void CreateWorld( WorldData data )
         {
-            // XXX: Add save loading here
+            if( !isInitialized ) { return; }
+
+            world = new WorldManager(data, -1);
         }
         public void StartScenario( ScenarioData data )
         {
@@ -94,9 +93,9 @@ namespace AdventureDemo
 
             WaywardManager.instance.ClearPages();
 
-            SetupPlayContextMenu();
+            world.LoadScenario(data);
 
-            world = new WorldManager(data);
+            SetupPlayContextMenu();
 
             Point position = new Point(WaywardManager.instance.window.ActualWidth * 0.75, WaywardManager.instance.window.ActualHeight/2);
             DisplayOverviewPage(position, world.player);
@@ -105,6 +104,11 @@ namespace AdventureDemo
 
             WaywardManager.instance.SelectInputPage();
         }
+        public void LoadData( SaveData data )
+        {
+            // XXX: Add save loading here
+        }
+
         private void SetupPlayContextMenu()
         {
             ContextMenuHelper.ClearContextMenu(WaywardManager.instance.window);

@@ -14,7 +14,7 @@ namespace AdventureDemo
         #region Fields
 
         protected double volume;
-        protected double weight {
+        protected virtual double weight {
             get {
                 double totalWeight = 0;
                 foreach( KeyValuePair<Material, double> material in _materials ) {
@@ -50,7 +50,7 @@ namespace AdventureDemo
             }
         }
         protected double _totalParts = 0;
-        public double totalParts {
+        public virtual double totalParts {
              get {
                 return _totalParts;
             }
@@ -335,7 +335,6 @@ namespace AdventureDemo
             return true;
         }
 
-
         public override List<GameObject> GetChildObjects()
         {
             List<GameObject> children = base.GetChildObjects();
@@ -345,6 +344,36 @@ namespace AdventureDemo
             }
 
             return children;
+        }
+
+        public override bool MatchesSearch(Dictionary<string, string> properties)
+        {
+            foreach( KeyValuePair<string, string> property in properties.ToArray() ) {
+                properties.Remove(property.Key);
+                switch( property.Key ) {
+                    case "volume":
+                        if( !SearchComparator.CompareNumber(volume, property.Value) ) {
+                            return false;
+                        }
+                        break;
+                    case "weight":
+                        if( !SearchComparator.CompareNumber(weight, property.Value) ) {
+                            return false;
+                        }
+                        break;
+                    case "totalWeight":
+                        if( !SearchComparator.CompareNumber(GetWeight(true), property.Value) ) {
+                            return false;
+                        }
+                        break;
+                    // XXX: Add Materials, Attachment Points
+                    default:
+                        properties[property.Key] = property.Value;
+                        break;
+                }
+            }
+
+            return base.MatchesSearch(properties);
         }
 
         #endregion

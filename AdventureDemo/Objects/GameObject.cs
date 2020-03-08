@@ -230,6 +230,31 @@ namespace AdventureDemo
             return children;
         }
 
+        public virtual bool MatchesSearch( Dictionary<string, string> properties )
+        {
+            foreach( KeyValuePair<string, string> property in properties.ToArray() ) {
+                properties.Remove(property.Key);
+                switch( property.Key ) {
+                    case "name":
+                        if( !SearchComparator.CompareString(name, property.Value) ) {
+                            return false;
+                        }
+                        break;
+                    case "description":
+                        if( !description.Contains(property.Value) ) {
+                            return false;
+                        }
+                        break;
+                    // XXX: Add Verbs
+                    default:
+                        properties[property.Key] = property.Value;
+                        break;
+                }
+            }
+
+            return properties.Count == 0;
+        }
+
         #endregion
     }
 

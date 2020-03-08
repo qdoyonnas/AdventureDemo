@@ -43,7 +43,7 @@ namespace AdventureDemo
                 case Method.VALUE:
                     return choices[0];
                 case Method.CHOICE:
-                    int i = GameManager.instance.random.Next(0, choices.Length);
+                    int i = GameManager.instance.world.random.Next(0, choices.Length);
                     return choices[i];
                 case Method.EXPRESSION:
                     return EvaluateExpression(data);

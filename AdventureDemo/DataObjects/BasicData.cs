@@ -8,13 +8,25 @@ namespace AdventureDemo
     abstract class BasicData
     {
         public string id = null;
+        public string referenceId = null;
 
         public BasicData() { }
         public BasicData( BasicData data )
         {
             id = data.id;
+            referenceId = data.id;
         }
 
-        public abstract object Create();
+        public object Create()
+        {
+            object obj = CreateInstance();
+
+            if( !string.IsNullOrEmpty(referenceId) ) {
+                GameManager.instance.world.SaveObjectReference(referenceId, obj);
+            }
+
+            return obj;
+        }
+        protected abstract object CreateInstance();
     }
 }

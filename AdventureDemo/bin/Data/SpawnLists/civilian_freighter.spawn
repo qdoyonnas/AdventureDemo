@@ -11,7 +11,7 @@
 		{
 			"id": "cabin_1",
 			"spawnChance": 1,
-			"spawnQuantity": 1,
+			"spawnQuantity": 4,
 			"independentSpawn": false
 		}
 	]

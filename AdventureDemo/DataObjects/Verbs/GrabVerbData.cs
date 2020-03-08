@@ -18,7 +18,7 @@ namespace AdventureDemo
             capacity = data.capacity;
         }
 
-        public override object Create()
+        protected override object CreateInstance()
         {
             return new GrabVerb(quantity, capacity);
         }

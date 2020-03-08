@@ -14,9 +14,12 @@ namespace AdventureDemo
     class ScenariosMenuPage : WaywardEngine.ContentPage
     {
         StackPanel scenariosPanel;
+        WorldData worldData;
 
-        public ScenariosMenuPage()
+        public ScenariosMenuPage( WorldData world )
         {
+            worldData = world;
+
             FrameworkElement content = GameManager.instance.GetResource<FrameworkElement>("ScenariosMenu");
             AddContent(content);
             SetTitle("Scenarios");
@@ -33,7 +36,7 @@ namespace AdventureDemo
 
         void DisplayContent()
         {
-            ScenarioData[] scenarios = DataManager.instance.GetScenarioDatas();
+            ScenarioData[] scenarios = DataManager.instance.GetScenarioDatas(worldData);
 
             foreach( ScenarioData data in scenarios ) {
                 AddScenario(data);

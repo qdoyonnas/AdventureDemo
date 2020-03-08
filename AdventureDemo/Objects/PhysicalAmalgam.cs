@@ -11,7 +11,7 @@ namespace AdventureDemo
     {
         #region Fields
 
-        public new double weight {
+        protected override double weight {
             get {
                 return 0;
             }
@@ -32,7 +32,7 @@ namespace AdventureDemo
             }
         }
 
-        public new double totalParts {
+        public override double totalParts {
             get {
                 double total = 0;
 
@@ -306,6 +306,25 @@ namespace AdventureDemo
             children.AddRange(parts);
 
             return children;
+        }
+
+        public override bool MatchesSearch(Dictionary<string, string> properties)
+        {
+            foreach( KeyValuePair<string, string> property in properties.ToArray() ) {
+                properties.Remove(property.Key);
+                switch( property.Key ) {
+                    case "partCount":
+                        if( !SearchComparator.CompareNumber(GetPartsCount(), property.Value) ) {
+                            return false;
+                        }
+                        break;
+                    default:
+                        properties[property.Key] = property.Value;
+                        break;
+                }
+            }
+
+            return base.MatchesSearch(properties);
         }
 
         #endregion

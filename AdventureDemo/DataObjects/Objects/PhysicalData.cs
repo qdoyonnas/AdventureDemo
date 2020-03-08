@@ -44,14 +44,14 @@ namespace AdventureDemo
 
             return data;
         }
-        public override object Create()
+        protected override object CreateInstance()
         {
             Physical physical = null;
 
             try {
                 physical = new Physical(GenerateData());
 
-                // XXX: This is a direct copy of the codee in ObjectData.create()
+                // XXX: This is a direct copy of the code in ObjectData.create()
                 //      The correct way to do this would be to add copy constructor to every object,
                 //      and then new constructors to every object taking the closest base class,
                 //      at which point the create functions of dataObjects can chain.

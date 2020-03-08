@@ -40,7 +40,7 @@ namespace AdventureDemo
 
             return data;
         }
-        public override object Create()
+        protected override object CreateInstance()
         {
             Container container = null;
 

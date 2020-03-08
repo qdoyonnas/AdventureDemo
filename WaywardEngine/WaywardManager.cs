@@ -24,6 +24,8 @@ namespace WaywardEngine
         }
         #endregion
 
+        #region Fields
+
         // Prevents most functionality until after init
         public bool isInitialized = false;
 
@@ -37,13 +39,13 @@ namespace WaywardEngine
         // Mouse grab target (to prevent grabbing more than one page at a time)
         public Page grabbedPage;
 
-        public Random random;
+        #endregion
 
-        private WaywardManager( int seed = -1 )
+        #region Initialization
+
+        private WaywardManager()
         {
             pages = new List<Page>();
-            
-            random = seed == -1 ? new Random() : new Random(seed);
         }
 
         /// <summary>
@@ -83,6 +85,114 @@ namespace WaywardEngine
             }
             return resource;
         }
+
+        #endregion
+
+        #region Update Methods
+
+        public void Update()
+        {
+            for( int i = pages.Count-1; i >= 0; i-- ) {
+                pages[i].Clear();
+                pages[i].Update();
+            }
+        }
+
+        #endregion
+
+        #region Page Methods
+
+        /// <summary>
+        /// Add passed in page to the window.mainCanvas.
+        /// </summary>
+        /// <param name="page">Page to be added.</param>
+        /// <param name="position">Position of page inside mainCanvas.</param>
+        public void AddPage( Page page, Point position )
+        {
+            FrameworkElement element = page.GetElement();
+
+            window.mainCanvas.Children.Add(element);
+            SetPosition(element, position);
+
+            instance.pages.Add(page);
+        }
+        public void SetPosition( FrameworkElement element, Point position )
+        {
+            element.Loaded += (sender, e) =>
+            {
+                position = new Point(position.X - (element.ActualWidth / 2), position.Y - (element.ActualHeight / 2));
+                Canvas.SetLeft(element, position.X);
+                Canvas.SetTop(element, position.Y);
+            };
+        }
+
+        public bool SelectInputPage()
+        {
+            if( inputPage == null ) {
+                Point position = new Point(application.MainWindow.Width / 2,
+                                    application.MainWindow.Height * 0.9);
+
+                inputPage = new InputPage(inputManager);
+                AddPage(inputPage, position);
+            }
+
+            inputPage.Focus();
+
+            return false;
+        }
+
+        public void ClearPages()
+        {
+            for( int i = pages.Count-1; i >= 0; i-- ) {
+                pages[i].CloseAction();
+            }
+        }
+        public void ClearPages( Type type )
+        {
+            if( type == null ) { return; }
+
+            for( int i = pages.Count - 1; i >= 0; i-- ) {
+                if( type.IsAssignableFrom(pages[i].GetType()) ) {
+                    pages[i].CloseAction();
+                }
+            }
+        }
+
+        public void CloseTopPage()
+        {
+            pages.Last().CloseAction();
+        }
+
+        #region Message Methods
+
+        public void DisplayMessage( string message )
+        {
+            DisplayMessage( message, "Click to close" );
+        }
+        public void DisplayMessage( string message, string subtext )
+        {
+            Point position = new Point( WaywardManager.instance.application.MainWindow.Width / 2,
+                                    WaywardManager.instance.application.MainWindow.Height / 4 );
+
+            DisplayMessage( message, subtext, position );
+        }
+        public void DisplayMessage( string message, Point position )
+        {
+            DisplayMessage( message, "Click to close", position );
+        }
+        public void DisplayMessage( string message, string subtext, Point position )
+        {
+            Message box = new Message( message, subtext );
+            position = new Point( position.X - ( box.GetElement().ActualWidth / 2 ),
+                            position.Y - ( box.GetElement().ActualHeight / 2 ) );
+            AddPage( box, position );
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Inputs
 
         /// <summary>
         /// Return mouse position relative to window.mainCanvas.
@@ -124,96 +234,16 @@ namespace WaywardEngine
             }
         }
 
-        /// <summary>
-        /// Add passed in page to the window.mainCanvas.
-        /// </summary>
-        /// <param name="page">Page to be added.</param>
-        /// <param name="position">Position of page inside mainCanvas.</param>
-        public void AddPage( Page page, Point position )
-        {
-            FrameworkElement element = page.GetElement();
+        #endregion
 
-            window.mainCanvas.Children.Add(element);
-            SetPosition(element, position);
+        #region Utility
 
-            instance.pages.Add(page);
-        }
-        public void SetPosition( FrameworkElement element, Point position )
+        public Point GetRelativeWindowPoint( double x, double y )
         {
-            element.Loaded += (sender, e) =>
-            {
-                position = new Point(position.X - (element.ActualWidth / 2), position.Y - (element.ActualHeight / 2));
-                Canvas.SetLeft(element, position.X);
-                Canvas.SetTop(element, position.Y);
-            };
+            return new Point(WaywardManager.instance.window.ActualWidth * x, WaywardManager.instance.window.ActualHeight * y);
         }
 
-        public void DisplayMessage( string message )
-        {
-            DisplayMessage( message, "Click to close" );
-        }
-        public void DisplayMessage( string message, string subtext )
-        {
-            Point position = new Point( WaywardManager.instance.application.MainWindow.Width / 2,
-                                    WaywardManager.instance.application.MainWindow.Height / 4 );
+        #endregion
 
-            DisplayMessage( message, subtext, position );
-        }
-        public void DisplayMessage( string message, Point position )
-        {
-            DisplayMessage( message, "Click to close", position );
-        }
-        public void DisplayMessage( string message, string subtext, Point position )
-        {
-            Message box = new Message( message, subtext );
-            position = new Point( position.X - ( box.GetElement().ActualWidth / 2 ),
-                            position.Y - ( box.GetElement().ActualHeight / 2 ) );
-            AddPage( box, position );
-        }
-
-        public bool SelectInputPage()
-        {
-            if( inputPage == null ) {
-                Point position = new Point(application.MainWindow.Width / 2,
-                                    application.MainWindow.Height * 0.9);
-
-                inputPage = new InputPage(inputManager);
-                AddPage(inputPage, position);
-            }
-
-            inputPage.Focus();
-
-            return false;
-        }
-
-        public void ClearPages()
-        {
-            for( int i = pages.Count-1; i >= 0; i-- ) {
-                pages[i].CloseAction();
-            }
-        }
-        public void ClearPages( Type type )
-        {
-            if( type == null ) { return; }
-
-            for( int i = pages.Count - 1; i >= 0; i-- ) {
-                if( type.IsAssignableFrom(pages[i].GetType()) ) {
-                    pages[i].CloseAction();
-                }
-            }
-        }
-
-        public void CloseTopPage()
-        {
-            pages.Last().CloseAction();
-        }
-
-        public void Update()
-        {
-            for( int i = pages.Count-1; i >= 0; i-- ) {
-                pages[i].Clear();
-                pages[i].Update();
-            }
-        }
     }
 }

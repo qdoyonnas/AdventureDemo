@@ -9,23 +9,32 @@ namespace AdventureDemo
     {
         public string name = "Unnamed Scenario";
         public string description = "No description";
-        public Dictionary<string, DataReference[]> roots;
 
-        public ScenarioData()
-        {
-            roots = new Dictionary<string, DataReference[]>();
-        }
+        public string world = null;
+
+        public LocatorDataReference[] objects = new LocatorDataReference[0];
+
+        public LocatorDataReference playerInfo = null;
+
+        public ScenarioData() {}
         public ScenarioData( ScenarioData data )
             : base(data)
         {
             name = data.name;
             description = data.description;
-            roots = new Dictionary<string, DataReference[]>(data.roots);
+
+            world = data.world;
+
+            objects = new LocatorDataReference[data.objects.Length];
+            for( int i = 0; i < objects.Length; i++ ) {
+                objects[i] = new LocatorDataReference(data.objects[i]);
+            }
+            playerInfo = new LocatorDataReference(data.playerInfo);
         }
 
-        public override object Create()
+        protected override object CreateInstance()
         {
-            return new WorldManager(this);
+            return null;
         }
     }
 }

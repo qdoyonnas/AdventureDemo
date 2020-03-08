@@ -58,6 +58,7 @@ namespace WaywardEngine
         public string input { get; private set; }
         public string[] words { get; private set; }
         public string action { get; private set; }
+        public string parameterInput{ get; private set; }
         public string[] parameters{ get; private set; }
         public bool parsed = false;
 
@@ -66,10 +67,8 @@ namespace WaywardEngine
             input = i;
             words = i.Split(' ');
             action = words[0].ToLower();
-            parameters = new string[words.Length - 1];
-            if( parameters.Length > 0 ) {
-                Array.Copy(words, 1, parameters, 0, parameters.Length);
-            }
+            parameterInput = input.Substring(action.Length + 1);
+            parameters = parameterInput.Split(' ');
         }
     }
 

@@ -13,24 +13,24 @@ namespace AdventureDemo
     {
         #region Fields
 
-        public double innerVolume {
+        protected double innerVolume {
             get {
                 return contents.capacity;
             }
         }
-
-        public double filledVolume {
+        
+        protected double filledVolume {
             get {
                 return contents.filledCapacity;
             }
         }
-        public double remainingVolume {
+        protected double remainingVolume {
             get {
                 return contents.remainingCapacity;
             }
         }
-
-        public new double weight {
+        
+        protected override double weight {
             get {
                 double totalWeight = 0;
                 foreach( KeyValuePair<Material, double> material in _materials ) {
@@ -305,6 +305,40 @@ namespace AdventureDemo
             }
 
             return children;
+        }
+
+        public override bool MatchesSearch(Dictionary<string, string> properties)
+        {
+            foreach( KeyValuePair<string, string> property in properties.ToArray() ) {
+                properties.Remove(property.Key);
+                switch( property.Key ) {
+                    case "innerVolume":
+                        if( !SearchComparator.CompareNumber(innerVolume, property.Value) ) {
+                            return false;
+                        }
+                        break;
+                    case "filledVolume":
+                        if( !SearchComparator.CompareNumber(filledVolume, property.Value) ) {
+                            return false;
+                        }
+                        break;
+                    case "remainingVolume":
+                        if( !SearchComparator.CompareNumber(remainingVolume, property.Value) ) {
+                            return false;
+                        }
+                        break;
+                    case "contentCount":
+                        if( !SearchComparator.CompareNumber(GetContentCount(), property.Value) ) {
+                            return false;
+                        }
+                        break;
+                    default:
+                        properties[property.Key] = property.Value;
+                        break;
+                }
+            }
+
+            return base.MatchesSearch(properties);
         }
 
         #endregion

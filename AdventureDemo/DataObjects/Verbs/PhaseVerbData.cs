@@ -12,7 +12,7 @@ namespace AdventureDemo
         public PhaseVerbData(PhaseVerbData data)
             : base(data) { }
 
-        public override object Create()
+        protected override object CreateInstance()
         {
             return new PhaseVerb();
         }

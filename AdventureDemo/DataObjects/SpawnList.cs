@@ -8,12 +8,9 @@ namespace AdventureDemo
 {
     class SpawnList : BasicData
     {
-        public SpawnEntry[] entries;
+        public SpawnEntry[] entries = new SpawnEntry[0];
 
-        public SpawnList()
-        {
-            entries = new SpawnEntry[0];
-        }
+        public SpawnList() {}
         public SpawnList( SpawnList list )
         {
             entries = new SpawnEntry[list.entries.Length];
@@ -22,7 +19,7 @@ namespace AdventureDemo
             }
         }
 
-        public override object Create()
+        protected override object CreateInstance()
         {
             return this;
         }
@@ -30,8 +27,8 @@ namespace AdventureDemo
         public void Spawn( Container container, double weight )
         {
             foreach( SpawnEntry entry in entries ) {
-                GameObject obj = entry.Spawn(weight);
-                if( obj != null ) { 
+                GameObject[] objects = entry.Spawn(weight);
+                foreach( GameObject obj in objects ) {
                     container.GetContents().Attach(obj);
                 }
             }
@@ -54,11 +51,20 @@ namespace AdventureDemo
             independantSpawn = entry.independantSpawn;
         }
 
-        public GameObject Spawn( double weight )
+        public GameObject[] Spawn( double weight )
         {
-            GameObject gameObject = id.LoadData<GameObject>(typeof(ObjectData));
+            List<GameObject> objects = new List<GameObject>();
 
-            return gameObject;
+            for( int i = 0; i < spawnQuantity; i++ ) {
+                double roll = GameManager.instance.world.random.NextDouble() * weight;
+                if( roll > 1 - spawnChance ) {
+                    objects.Add( id.LoadData<GameObject>(typeof(ObjectData)) );
+                } else if( !independantSpawn ) {
+                    break;
+                }
+            }
+
+            return objects.ToArray();
         }
     }
 }

@@ -34,16 +34,16 @@ namespace AdventureDemo
                 return true;
             }
 
-            int index = e.input.IndexOf(" ");
-            string input = e.input.Substring(index).Trim();
-            GameObject createdObject = DataManager.instance.LoadObject<GameObject>(input, typeof(ObjectData));
+            // XXX: Should this iterate over all e.parameters to spawn multiple objects at once?
+            //      Though it is common principle that data ids should be one word it *isn't* enforced
+            GameObject createdObject = DataManager.instance.LoadObject<GameObject>(e.parameterInput, typeof(ObjectData));
             if( createdObject == null ) {
-                WaywardManager.instance.DisplayMessage($"Could not create object '{input}'.");
+                WaywardManager.instance.DisplayMessage($"Could not create object '{e.parameterInput}'.");
                 return true;
             }
 
             if( self.container.CanAttach(createdObject) != CheckResult.VALID ) {
-                WaywardManager.instance.DisplayMessage($"Could not place created object '{input}' in current space.");
+                WaywardManager.instance.DisplayMessage($"Could not place created object '{e.parameterInput}' in current space.");
                 return true;
             }
 

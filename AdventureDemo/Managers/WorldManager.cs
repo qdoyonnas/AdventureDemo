@@ -9,18 +9,22 @@ namespace AdventureDemo
 {
     class WorldManager
     {
+        // XXX: Incorrect use of Random
+        //      every use of random should be done from a common 'world seed'
+        //      offset by the unique 'position' of the object in that world
+        public Random random;
+
         public PlayerActor player;
         private List<Container> rootObjects;
 
-        public int randomSeed = -1;
+        private Dictionary<string, object> objectReferenceIds = new Dictionary<string, object>();
 
-        public WorldManager( ScenarioData data )
+        public int worldSeed = -1;
+
+        public WorldManager( WorldData data, int seed )
         {
-            if( randomSeed != -1 ) {
-                GameManager.instance.random = new Random(randomSeed);
-            } else {
-                GameManager.instance.random = new Random();
-            }
+            worldSeed = seed;
+            random = worldSeed == -1 ? new Random() : new Random(worldSeed);
 
             rootObjects = new List<Container>();
             foreach( string key in data.roots.Keys ) {
@@ -34,15 +38,19 @@ namespace AdventureDemo
                     root.GetContents().Attach(obj);
                 }
             }
+        }
+
+        public void LoadScenario( ScenarioData data )
+        {
+            foreach( LocatorDataReference objectData in data.objects ) {
+                objectData.LoadData<GameObject>(typeof(ObjectData));
+            }
 
             player = new PlayerActor();
             InputManager.instance.inputReceived += player.ParseInput;
             
-            GameObject will = DataManager.instance.LoadObject<GameObject>("wayward_will", typeof(PhysicalData));
-            if( will != null ) {
-                rootObjects[0].GetContents().Attach(will);
-                player.Control(will);
-            }
+            GameObject playerObj = data.playerInfo.LoadData<GameObject>(typeof(ObjectData));
+            player.Control(playerObj);
         }
 
         public void AddRoot( Container obj )
@@ -63,47 +71,48 @@ namespace AdventureDemo
             return rootObjects[i];
         }
         
-        public GameObject[] FindObjects( GameObject relativeObject, params string[] inputs )
+        public void SaveObjectReference( string id, object obj )
         {
-            return FindObjects(relativeObject, 3, inputs);
+            objectReferenceIds[id] = obj;
         }
-        public GameObject[] FindObjects( GameObject relativeObject, int searchDepth, params string[] inputs )
+        public object GetObjectReference( string id )
+        {
+            if( !objectReferenceIds.ContainsKey(id) ) { return null; }
+
+            return objectReferenceIds[id];
+        }
+
+        // XXX: Searching is recursive and therefore prone to heavy slowdown
+        //      The following solutions need to be implemented:
+        //      (1) Frame limiting with foundObjects being updated throughout the process (and correctly used by the searching objects)
+        //      (2) Multi-threading, the searching should happen on a separate thread entirely
+        public GameObject[] FindObjects( Dictionary<string, string> properties )
+        {
+            return FindObjects(GetRoot(0), 3, properties);
+        }
+        public GameObject[] FindObjects( int searchDepth, Dictionary<string, string> properties )
+        {
+            return FindObjects(GetRoot(0), searchDepth, properties);
+        }
+        public GameObject[] FindObjects( GameObject relativeObject, Dictionary<string, string> properties )
+        {
+            return FindObjects(relativeObject, 3, properties);
+        }
+        public GameObject[] FindObjects( GameObject relativeObject, int searchDepth, Dictionary<string, string> properties )
         {
             List<GameObject> foundObjects = new List<GameObject>();
             List<GameObject> objectsToSearch = new List<GameObject>();
 
-            if( relativeObject.container != null ) {
-                objectsToSearch.Add(relativeObject.container.GetParent());
+            if( relativeObject.MatchesSearch(properties) ) {
+                foundObjects.Add(relativeObject);
             }
-
-            for( int i = inputs.Length-1; i >= 0; i-- ) {
-                string lowerInput = inputs[i].ToLower();
-                if( lowerInput == "self"
-                    || lowerInput == "me"
-                    || lowerInput == relativeObject.GetData("name").text.ToLower() ) {
-                    foundObjects.Add(relativeObject);
-                }
-
-                for( int o = 0; o < objectsToSearch.Count; o++ ) {
-                    SearchObject(lowerInput, objectsToSearch[o], foundObjects, objectsToSearch, true);
+            if( searchDepth > 0 ) {
+                foreach( GameObject child in relativeObject.GetChildObjects() ) {
+                    foundObjects.AddRange( FindObjects( child, searchDepth - 1, properties ) );
                 }
             }
             
             return foundObjects.ToArray();
-        }
-        private void SearchObject( string input, GameObject obj, List<GameObject> foundObjects, List<GameObject> objectsToSearch, bool searchChildren )
-        {
-            if( input == obj.GetData("name").text.ToLower() ) {
-                foundObjects.Add(obj);
-            }
-
-            if( searchChildren ) {
-                foreach( GameObject child in obj.GetChildObjects() ) {
-                    if( !objectsToSearch.Contains(child) ) {
-                        objectsToSearch.Add(child);
-                    }
-                }
-            }
         }
     }
 }

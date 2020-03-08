@@ -24,7 +24,7 @@ namespace AdventureDemo
         #region Fields
 
         string root;
-        string nameSpace;
+        public string nameSpace;
 
         DirectoryInfo dataDirectory;
 
@@ -42,6 +42,7 @@ namespace AdventureDemo
                 index = i;
             }
         }
+        Dictionary<string, DataPointer> worldFiles;
         Dictionary<string, DataPointer> scenarioFiles;
         Dictionary<string, DataPointer> objectFiles;
         Dictionary<string, DataPointer> materialFiles;
@@ -66,6 +67,7 @@ namespace AdventureDemo
             root = $@"{Directory.GetCurrentDirectory()}\..\";
             nameSpace = this.GetType().Namespace + ".";
 
+            worldFiles = new Dictionary<string, DataPointer>();
             scenarioFiles = new Dictionary<string, DataPointer>();
             objectFiles = new Dictionary<string, DataPointer>();
             materialFiles = new Dictionary<string, DataPointer>();
@@ -132,6 +134,9 @@ namespace AdventureDemo
             FileInfo[] files = directory.GetFiles();
             foreach( FileInfo file in files ) {
                 switch( file.Extension ) {
+                    case ".world":
+                        AddFile(file, worldFiles);
+                        break;
                     case ".scenario":
                         AddFile(file, scenarioFiles);
                         break;
@@ -367,6 +372,30 @@ namespace AdventureDemo
 
         #endregion
 
+        public WorldData[] GetWorldDatas()
+        {
+            List<WorldData> datas = new List<WorldData>();
+
+            List<string> files = new List<string>();
+            foreach( DataPointer pointer in worldFiles.Values ) {
+                if( !files.Contains(pointer.filePath) ) {
+                    files.Add(pointer.filePath);
+
+                    FileInfo file = new FileInfo(pointer.filePath);
+                    try {
+                        JToken jToken = JToken.Parse(file.OpenText().ReadToEnd());
+                        ForEachJToken(jToken, ( token ) => {
+                            WorldData data = token.ToObject<WorldData>();
+                            datas.Add(data);
+                        });
+                    } catch( Exception e ) {
+                        Console.Write($"ERROR: Could not parse WorldData from file {file.Name}: {e}");
+                    }
+                }
+            }
+
+            return datas.ToArray();
+        }
         public ScenarioData[] GetScenarioDatas()
         {
             List<ScenarioData> datas = new List<ScenarioData>();
@@ -391,6 +420,19 @@ namespace AdventureDemo
 
             return datas.ToArray();
         }
+        public ScenarioData[] GetScenarioDatas( WorldData worldData )
+        {
+            ScenarioData[] datas = GetScenarioDatas();
+            List<ScenarioData> filteredDatas = new List<ScenarioData>();
+
+            foreach( ScenarioData data in datas ) {
+                if( data.world == worldData.id ) {
+                    filteredDatas.Add(data);
+                }
+            }
+
+            return filteredDatas.ToArray();
+        }
 
         public BasicData GetData( string str, Type type )
         {
@@ -414,7 +456,6 @@ namespace AdventureDemo
             }
             return ParseTokenToData(token, type);
         }
-
         public T LoadObject<T>( string str, Type dataType )
             where T : class
         {

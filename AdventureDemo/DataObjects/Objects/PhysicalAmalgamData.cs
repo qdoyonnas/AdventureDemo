@@ -20,16 +20,19 @@ namespace AdventureDemo
             }
         }
 
-        public override object Create()
+        protected override object CreateInstance()
         {
             PhysicalAmalgam amalgam = null;
 
             try {
                 amalgam = new PhysicalAmalgam(GenerateData());
                 foreach( SpawnEntry entry in parts ) {
-                    Physical part = entry.Spawn(1) as Physical;
-                    if( part != null ) {
-                        amalgam.AddPart(part);
+                    GameObject[] parts = entry.Spawn(1);
+                    foreach( GameObject part in parts ) {
+                        Physical physicalPart = part as Physical;
+                        if( physicalPart != null ) {
+                            amalgam.AddPart(physicalPart);
+                        }
                     }
                 }
             } catch( Exception e ) {

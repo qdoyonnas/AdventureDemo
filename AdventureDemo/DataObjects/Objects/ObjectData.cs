@@ -43,7 +43,7 @@ namespace AdventureDemo
 
             return data;
         }
-        public override object Create()
+        protected override object CreateInstance()
         {
             GameObject gameObject = null;
 

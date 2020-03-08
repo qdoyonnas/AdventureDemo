@@ -25,19 +25,7 @@
 		{ "material": "titanium", "parts": 1 }
 	],
 	"volume": 300,
-	"innerVolume": 200,
-	
-	"spawnLists": [
-		{
-			"entries": [
-				{
-					"id": "hammer",
-					"spawnChance": 1,
-					"spawnQuantity": 1
-				}
-			]
-		}
-	]
+	"innerVolume": 200
 },
 	
 ]

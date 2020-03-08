@@ -15,24 +15,23 @@ namespace AdventureDemo
     {
         public MainMenuPage()
         {
-            SetTitle("Path to the Stars");
+            SetTitle("Wayward Engine");
             element.ContextMenu = null;
 
             FrameworkElement contents = GameManager.instance.GetResource<FrameworkElement>("MainMenu");
             AddContent(contents);
 
-            Span choice = Utilities.FindNode<Span>(element, "ScenariosChoice");
-            choice.MouseUp += OnScenarioChoice;
+            Span choice = Utilities.FindNode<Span>(element, "WorldsChoice");
+            choice.MouseUp += OnWorldChoice;
             choice = Utilities.FindNode<Span>(element, "OptionsChoice");
             choice.MouseUp += OnOptionsChoice;
             choice = Utilities.FindNode<Span>(element, "ExitChoice");
             choice.MouseUp += OnExitChoice;
         }
 
-        void OnScenarioChoice( object sender, MouseButtonEventArgs e )
+        void OnWorldChoice( object sender, MouseButtonEventArgs e )
         {
-            Point position = new Point(WaywardManager.instance.window.ActualWidth / 2, WaywardManager.instance.window.ActualHeight / 2);
-            WaywardManager.instance.AddPage(new ScenariosMenuPage(), position);
+            WaywardManager.instance.AddPage(new WorldsMenuPage(), WaywardManager.instance.GetRelativeWindowPoint(0.5, 0.5));
 
             CloseAction();
         }

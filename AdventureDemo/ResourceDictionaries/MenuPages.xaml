@@ -12,7 +12,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="1" Style="{DynamicResource Header}" TextAlignment="Center">
-                    <Span Name="ScenariosChoice" Style="{StaticResource Link}">Scenarios</Span>
+                    <Span Name="WorldsChoice" Style="{StaticResource Link}">Start</Span>
                 </TextBlock>
                 <TextBlock Grid.Row="2" Style="{DynamicResource Header}" TextAlignment="Center">
                     <Span Name="OptionsChoice" Style="{StaticResource Link}">Options</Span>
@@ -23,6 +23,17 @@
             </Grid>
         </ScrollViewer>
     </Border>
+
+    <Border x:Key="WorldsMenu" x:Shared="false" Style="{StaticResource PageStyle}">
+        <ScrollViewer MaxHeight="800" Width="1000" VerticalScrollBarVisibility="Auto">
+            <StackPanel Name="Worlds">
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
+    <TextBlock x:Key="WorldEntry" x:Shared="false" HorizontalAlignment="Center" FontSize="64">
+        <Span Name="WorldName" Style="{StaticResource Link}" />
+    </TextBlock>
 
     <Border x:Key="ScenariosMenu" x:Shared="false" Style="{StaticResource PageStyle}">
         <ScrollViewer MaxHeight="600" Width="800" VerticalScrollBarVisibility="Auto">
@@ -38,12 +49,12 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Column="0" VerticalAlignment="Center" Style="{DynamicResource Header}">
-            <Span Name="ScenarioName" Style="{StaticResource Link}"></Span>
+            <Span Name="ScenarioName" Style="{StaticResource Link}" />
         </TextBlock>
 
         <Border Grid.Column="1" BorderBrush="{DynamicResource BorderBrush}" Padding="{DynamicResource Padding}">
             <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Auto">
-                <TextBlock Name="ScenarioDescription" TextWrapping="Wrap"></TextBlock>
+                <TextBlock Name="ScenarioDescription" TextWrapping="Wrap" />
             </ScrollViewer>
         </Border>
     </Grid>

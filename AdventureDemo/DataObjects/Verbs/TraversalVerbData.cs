@@ -12,7 +12,7 @@ namespace AdventureDemo
         public TraversalVerbData( TraversalVerbData data )
             : base(data) { }
 
-        public override object Create()
+        protected override object CreateInstance()
         {
             return new TraversalVerb();
         }

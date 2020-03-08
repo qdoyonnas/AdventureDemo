@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Collections.Generic;
 using WaywardEngine;
 
 namespace AdventureDemo
@@ -168,16 +169,15 @@ namespace AdventureDemo
 
         private GameObject GetInputTarget( InputEventArgs e )
         {
-            // XXX: Broken behaviour if target has a name with spaces
-            GameObject[] foundObjects = GameManager.instance.world.FindObjects(self, e.parameters);
+            if( e.parameterInput == "self" || e.parameterInput == "me" ) {
+                return self;
+            }
+
+            Dictionary<string, string> properties = new Dictionary<string, string>();
+            properties["name"] = e.parameterInput;
+            GameObject[] foundObjects = GameManager.instance.world.FindObjects( self, properties );
             if( foundObjects.Length <= 0 ) {
-                string message = $"No such thing as ";
-                for( int i = 0; i < e.parameters.Length; i++ ) {
-                    message += $"'{e.parameters[i]}'";
-                    if( i != e.parameters.Length - 1 ) {
-                        message += " or ";
-                    }
-                }
+                string message = $"No such thing as {e.parameterInput}";
 
                 WaywardManager.instance.DisplayMessage(message);
                 return null;
