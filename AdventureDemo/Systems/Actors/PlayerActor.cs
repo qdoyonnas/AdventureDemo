@@ -21,7 +21,7 @@ namespace AdventureDemo
             base.Control(obj);
 
             controlledName = obj.name;
-            obj.name = "You";
+            obj.name = $"You ({obj.name})";
         }
 
         public override bool CanObserve( GameObject obj )

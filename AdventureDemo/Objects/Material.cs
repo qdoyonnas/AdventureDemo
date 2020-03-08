@@ -9,11 +9,11 @@ using System.Windows.Media;
 
 namespace AdventureDemo
 {
-    class Material : GameObject
+    class Material : GameObject, IEquatable<Material>
     {
         double weightPerLiter;
 
-        public string color;
+        string color;
 
         public Material( Dictionary<string, object> data )
             : base( data )
@@ -33,6 +33,11 @@ namespace AdventureDemo
             return volume * weightPerLiter;
         }
 
+        public string GetColor()
+        {
+            return color;
+        }
+
         public override GameObjectData GetName( string[] parameters )
         {
             GameObjectData data = base.GetName(parameters);
@@ -43,6 +48,47 @@ namespace AdventureDemo
             data.span.Style = linkStyle;
 
             return data;
+        }
+
+        public bool Equals(Material other)
+        {
+            if( Object.ReferenceEquals(other, null) ) {
+                return false;
+            }
+            if( Object.ReferenceEquals(this, other) ) {
+                return true;
+            }
+            if( this.GetType() != other.GetType() ) {
+                return false;
+            }
+
+            if( GetWeight() != other.GetWeight() ) {
+                return false;
+            }
+            if( GetName().text != other.GetName().text ) {
+                return false;
+            }
+            if( GetDescription().text != other.GetDescription().text ) {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool operator ==(Material lhs, Material rhs)
+        {
+            if( Object.ReferenceEquals(lhs, null) ) {
+                if( Object.ReferenceEquals(rhs, null) ) {
+                    return true;
+                }
+                return false;
+            }
+
+            return lhs.Equals(rhs);
+        }
+        public static bool operator !=(Material lhs, Material rhs)
+        {
+            return !(lhs == rhs);
         }
     }
 }

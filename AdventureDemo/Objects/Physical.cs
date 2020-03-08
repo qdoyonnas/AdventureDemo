@@ -236,9 +236,15 @@ namespace AdventureDemo
         }
         public virtual double GetMaterialParts( Material material )
         {
-            if( !_materials.ContainsKey(material) ) { return 0; }
+            double totalParts = 0;
 
-            return _materials[material];
+            foreach( KeyValuePair<Material, double> mat in materials ) {
+                if( mat.Key == material ) {
+                    totalParts += mat.Value;
+                }
+            }
+
+            return totalParts;
         }
         public virtual double GetMaterialRatio( Material material, bool asPercent = false )
         {

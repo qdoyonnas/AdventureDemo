@@ -66,12 +66,10 @@ namespace AdventureDemo
             }
 
             StackPanel subData = Utilities.FindNode<StackPanel>(entry, "SubData");
-            BodyPart part = obj as BodyPart;
+            PhysicalAmalgam part = obj as PhysicalAmalgam;
             if( part != null ) {
-                foreach( BodyAttachmentPoint point in part.bodyParts ) {
-                    foreach( GameObject child in point.GetAttached() ) {
-                        DisplayBodyPart(child, subData);
-                    }
+                foreach( Physical child in part.GetParts() ) {
+                    DisplayBodyPart(child, subData);
                 }
             }
 

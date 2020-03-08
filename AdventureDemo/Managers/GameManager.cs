@@ -75,10 +75,21 @@ namespace AdventureDemo
         {
             if( !isInitialized ) { return; }
 
+            WaywardManager.instance.ClearPages();
+
             MainMenuPage page = new MainMenuPage();
             //Point position = new Point(200, 300);
 
             WaywardManager.instance.AddPage(page, WaywardManager.instance.GetRelativeWindowPoint(0.5, 0.3));
+
+            SetupMenuContextMenu();
+        }
+
+        private void SetupMenuContextMenu()
+        {
+            ContextMenuHelper.ClearContextMenu(WaywardManager.instance.window);
+
+            ContextMenuHelper.AddContextMenuItem(WaywardManager.instance.window, "Exit", Exit);
         }
 
         public void CreateWorld( WorldData data )
@@ -112,7 +123,7 @@ namespace AdventureDemo
         private void SetupPlayContextMenu()
         {
             ContextMenuHelper.ClearContextMenu(WaywardManager.instance.window);
-            ContextMenuHelper.AddContextMenuItem(WaywardManager.instance.window, "Exit", Exit);
+            ContextMenuHelper.AddContextMenuItem(WaywardManager.instance.window, "Exit", ExitGame);
 
             ContextMenuHelper.AddContextMenuHeader(WaywardManager.instance.window, "Page", new Dictionary<string, ContextMenuAction>() {
                 { "Overview", CreateOverviewPage },
@@ -165,6 +176,17 @@ namespace AdventureDemo
         public bool Exit()
         {
             Application.Current.Shutdown();
+            return true;
+        }
+        public bool ExitGame()
+        {
+            WaywardManager.instance.ClearPages();
+            WaywardManager.instance.AddPage( new ScenariosMenuPage(world.data), WaywardManager.instance.GetRelativeWindowPoint(0.5, 0.5) );
+
+            world.Unload();
+
+            SetupMenuContextMenu();
+
             return true;
         }
 

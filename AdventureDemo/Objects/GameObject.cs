@@ -171,7 +171,7 @@ namespace AdventureDemo
             }
             return objectData[key](parameters);
         }
-        public virtual GameObjectData GetName( string[] parameters )
+        public virtual GameObjectData GetName( params string[] parameters )
         {
             GameObjectData data = new GameObjectData();
             bool upper = parameters.Length > 0 && parameters[0] == "upper";
@@ -183,7 +183,7 @@ namespace AdventureDemo
 
             return data;
         }
-        public virtual GameObjectData GetDescription( string[] parameters )
+        public virtual GameObjectData GetDescription( params string[] parameters )
         {
             GameObjectData data = new GameObjectData();
 
@@ -192,7 +192,7 @@ namespace AdventureDemo
 
             return data;
         }
-        public virtual GameObjectData GetRelevantData( string[] parameters )
+        public virtual GameObjectData GetRelevantData( params string[] parameters )
         {
             int index = 0;
             try {

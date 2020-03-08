@@ -21,8 +21,13 @@ namespace AdventureDemo
 
         public int worldSeed = -1;
 
+        public WorldData data;
+        public ScenarioData scenarioData;
+
         public WorldManager( WorldData data, int seed )
         {
+            this.data = data;
+
             worldSeed = seed;
             random = worldSeed == -1 ? new Random() : new Random(worldSeed);
 
@@ -42,6 +47,8 @@ namespace AdventureDemo
 
         public void LoadScenario( ScenarioData data )
         {
+            scenarioData = data;
+
             foreach( LocatorDataReference objectData in data.objects ) {
                 objectData.LoadData<GameObject>(typeof(ObjectData));
             }
@@ -103,7 +110,7 @@ namespace AdventureDemo
             List<GameObject> foundObjects = new List<GameObject>();
             List<GameObject> objectsToSearch = new List<GameObject>();
 
-            if( relativeObject.MatchesSearch(properties) ) {
+            if( relativeObject.MatchesSearch(new Dictionary<string,string>(properties)) ) {
                 foundObjects.Add(relativeObject);
             }
             if( searchDepth > 0 ) {
@@ -113,6 +120,23 @@ namespace AdventureDemo
             }
             
             return foundObjects.ToArray();
+        }
+
+        public void Unload()
+        {
+            InputManager.instance.inputReceived -= player.ParseInput;
+            player = null;
+
+            // For now delete everything non root
+            foreach( GameObject root in rootObjects ) {
+                Container containerRoot = root as Container;
+                if( containerRoot != null ) {
+                    ContainerAttachmentPoint contents = containerRoot.GetContents();
+                    foreach (GameObject obj in contents.GetAttached()) {
+                        contents.Remove(obj);
+                    }
+                }
+            }
         }
     }
 }

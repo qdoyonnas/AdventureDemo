@@ -52,8 +52,8 @@ namespace AdventureDemo
         /// <param name="obj">Object to be displayed.</param>
         public void DisplayObject( GameObject obj )
         {
+            if( obj.container == null ) { return; }
             GameObject objContainer = obj.container.GetParent();
-            if( objContainer == null ) { return; }
 
             StackPanel parent;
             if( overviewContentPanels.ContainsKey(obj) ) {

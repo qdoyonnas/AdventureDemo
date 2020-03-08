@@ -20,7 +20,18 @@
 			"data": "hammer",
 			"location": {
 				"referenceId": "playerShip",
-				subSearches: [{
+				"subSearches": [{
+					"properties": {
+						"name": "cabin"
+					}
+				}]
+			}
+		},
+		{
+			"data": "human",
+			"location": {
+				"referenceId": "playerShip",
+				"subSearches": [{
 					"properties": {
 						"name": "cabin"
 					}

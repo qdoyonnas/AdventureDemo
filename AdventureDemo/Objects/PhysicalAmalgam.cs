@@ -248,7 +248,20 @@ namespace AdventureDemo
             List<Material> mats = new List<Material>();
 
             foreach( Physical part in parts ) {
-                mats.AddRange( part.GetMaterials() );
+                foreach( Material partMat in part.GetMaterials() ) {
+                    if( mats.Count == 0 ) {
+                        mats.Add(partMat);
+                    } else {
+                        bool add = true;
+                        foreach( Material mat in mats ) {
+                            if( mat == partMat ) { 
+                                add = false;
+                                break;
+                            }
+                        }
+                        if( add ) { mats.Add(partMat); }
+                    }
+                }
             }
 
             return mats;

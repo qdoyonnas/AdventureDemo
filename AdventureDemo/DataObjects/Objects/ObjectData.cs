@@ -21,7 +21,9 @@ namespace AdventureDemo
             : base(data)
         {
             type = data.type;
+
             name = new DynamicString(data.name);
+            description = data.description;
 
             attachmentTypes = new AttachmentType[data.attachmentTypes.Length];
             Array.Copy(data.attachmentTypes, attachmentTypes, attachmentTypes.Length);

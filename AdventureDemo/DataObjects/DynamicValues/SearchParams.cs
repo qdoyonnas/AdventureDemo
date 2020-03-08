@@ -50,7 +50,7 @@ namespace AdventureDemo
 
             List<GameObject> foundObjects = new List<GameObject>();
             if( objectsToSearch.Length ==  1 ) {
-                GameObject[] worldFoundObjects = GameManager.instance.world.FindObjects(objectsToSearch[0], properties);
+                GameObject[] worldFoundObjects = GameManager.instance.world.FindObjects(objectsToSearch[0], new Dictionary<string,string>(properties));
                 if( subSearches.Length > 0 ) {
                     foundObjects.AddRange( PerformSubSearches(worldFoundObjects) );
                 } else {
@@ -90,12 +90,46 @@ namespace AdventureDemo
 
         public override string ToString()
         {
-            string str = $@"
-                referenceId: {referenceId}
-                properties: {properties.ToString()}
-                subSearches: {subSearches.ToString()}";
+            return ToString(new StringBuilder(), 4);
+        }
+        public string ToString(StringBuilder sb, int indent)
+        {
+            sb.Append(Environment.NewLine);
 
-            return str;
+            sb.Append('\t', indent);
+            sb.AppendLine("referenceId: " + (referenceId == null ? "null" : referenceId));
+
+            sb.Append('\t', indent);
+            sb.Append("properties: {");
+            if( properties.Count == 0 ) {
+                sb.Append(Environment.NewLine);
+                sb.Append('\t', indent + 1);
+                sb.AppendLine("empty");
+            } else {
+                foreach( KeyValuePair<string, string> property in properties ) {
+                    sb.Append(Environment.NewLine);
+                    sb.Append('\t', indent + 1);
+                    sb.AppendLine($"{property.Key} : {property.Value}");
+                }
+            }
+            sb.Append('\t', indent);
+            sb.AppendLine("}");
+
+            sb.Append('\t', indent);
+            sb.Append("subSearches: {");
+            if( subSearches.Length == 0 ) {
+                sb.Append(Environment.NewLine);
+                sb.Append('\t', indent + 1);
+                sb.AppendLine("empty");
+            } else {
+                foreach( SearchParams search in subSearches ) {
+                    search.ToString(sb, indent + 1);
+                }
+            }
+            sb.Append('\t', indent);
+            sb.AppendLine("}");
+
+            return sb.ToString();
         }
     }
 }

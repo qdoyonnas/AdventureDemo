@@ -1,0 +1,224 @@
+[
+
+{
+	"id": "human",
+	"type": "OrganismData",
+	
+	"name": "human",
+	"description": "a carbon-based lifeform",
+	
+	"parts": [
+		{
+			"id": "human_body",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "human_head",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "human_arm",
+			"spawnChance": 1,
+			"spawnQuantity": 2,
+			"independentSpawn": true
+		},
+		{
+			"id": "human_leg",
+			"spawnChance": 1,
+			"spawnQuantity": 2,
+			"independentSpawn": true
+		},
+	]
+},
+
+{
+	"id": "human_body",
+	"type": "PhysicalData",
+	
+	"name": "human body",
+	"description": "the torso of a carbon-based lifeform",
+	
+	"volume": "35",
+	"materials": [
+		{
+			"material": "flesh",
+			"parts": 1
+		}
+	]
+},
+
+{
+	"id": "human_head",
+	"type": "PhysicalData",
+	
+	"name": "human head",
+	"description": "the head of a carbon-based lifeform",
+	
+	"volume": "5.6",
+	"materials": [
+		{
+			"material": "flesh",
+			"parts": 1
+		}
+	]
+},
+
+{
+	"id": "human_arm",
+	"type": "PhysicalAmalgamData",
+	
+	"name": "human arm",
+	"description": "the arm of a carbon-based lifeform",
+	
+	"parts": [
+		{
+			"id": "human_upperArm",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "human_lowerArm",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "human_hand",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+	]
+},
+
+{
+	"id": "human_upperArm",
+	"type": "PhysicalData",
+	
+	"name": "human upper arm",
+	"description": "the upper arm of a carbon-based lifeform",
+	
+	"volume": "2.24",
+	"materials": [
+		{
+			"material": "flesh",
+			"parts": 1
+		}
+	]
+},
+
+{
+	"id": "human_lowerArm",
+	"type": "PhysicalData",
+	
+	"name": "human lower arm",
+	"description": "the lower arm of a carbon-based lifeform",
+	
+	"volume": "1.26",
+	"materials": [
+		{
+			"material": "flesh",
+			"parts": 1
+		}
+	]
+},
+
+{
+	"id": "human_hand",
+	"type": "PhysicalData",
+	
+	"name": "human hand",
+	"description": "the hand of a carbon-based lifeform",
+	
+	"volume": "0.42",
+	"materials": [
+		{
+			"material": "flesh",
+			"parts": 1
+		}
+	]
+},
+
+{
+	"id": "human_leg",
+	"type": "PhysicalAmalgamData",
+	
+	"name": "human leg",
+	"description": "thelegarm of a carbon-based lifeform",
+	
+	"parts": [
+		{
+			"id": "human_upperLeg",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "human_lowerLeg",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "human_foot",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+	]
+},
+
+{
+	"id": "human_upperLeg",
+	"type": "PhysicalData",
+	
+	"name": "human upper leg",
+	"description": "the upper leg of a carbon-based lifeform",
+	
+	"volume": "7.35",
+	"materials": [
+		{
+			"material": "flesh",
+			"parts": 1
+		}
+	]
+},
+
+{
+	"id": "human_lowerLeg",
+	"type": "PhysicalData",
+	
+	"name": "human lower leg",
+	"description": "the lower leg of a carbon-based lifeform",
+	
+	"volume": "3.29",
+	"materials": [
+		{
+			"material": "flesh",
+			"parts": 1
+		}
+	]
+},
+
+{
+	"id": "human_foot",
+	"type": "PhysicalData",
+	
+	"name": "human foot",
+	"description": "the foot of a carbon-based lifeform",
+	
+	"volume": "0.98",
+	"materials": [
+		{
+			"material": "flesh",
+			"parts": 1
+		}
+	]
+}
+
+]

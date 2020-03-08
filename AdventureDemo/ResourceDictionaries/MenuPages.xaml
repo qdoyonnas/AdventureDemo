@@ -31,7 +31,7 @@
         </ScrollViewer>
     </Border>
 
-    <TextBlock x:Key="WorldEntry" x:Shared="false" HorizontalAlignment="Center" FontSize="64">
+    <TextBlock x:Key="WorldEntry" x:Shared="false" HorizontalAlignment="Center" FontSize="32">
         <Span Name="WorldName" Style="{StaticResource Link}" />
     </TextBlock>
 

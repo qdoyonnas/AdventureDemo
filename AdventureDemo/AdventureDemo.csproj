@@ -71,6 +71,7 @@
     <Compile Include="DataObjects\Objects\ContainerData.cs" />
     <Compile Include="DataObjects\Objects\MaterialData.cs" />
     <Compile Include="DataObjects\Objects\ObjectData.cs" />
+    <Compile Include="DataObjects\Objects\OrganismData.cs" />
     <Compile Include="DataObjects\Objects\PhysicalAmalgamData.cs" />
     <Compile Include="DataObjects\Objects\PhysicalData.cs" />
     <Compile Include="DataObjects\SaveData.cs" />
@@ -90,11 +91,7 @@
     <Compile Include="DataObjects\WorldData.cs" />
     <Compile Include="Managers\InputManager.cs" />
     <Compile Include="Objects\Material.cs" />
-    <Compile Include="Objects\Organisms\BodyPart.cs" />
-    <Compile Include="Objects\Organisms\Human.cs" />
-    <Compile Include="Objects\Organisms\LocomotionBodyPart.cs" />
-    <Compile Include="Objects\Organisms\ManipulatorBodyPart.cs" />
-    <Compile Include="Objects\Organisms\Organism.cs" />
+    <Compile Include="Objects\Organism.cs" />
     <Compile Include="Objects\PhysicalAmalgam.cs" />
     <Compile Include="Pages\DescriptivePages\DebugDescriptivePageSection.cs" />
     <Compile Include="Pages\DescriptivePages\GameObjectVerbsDescriptivePageSection.cs" />

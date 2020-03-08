@@ -56,12 +56,12 @@ namespace AdventureDemo
         public void UpdateSecondPerson()
         {
             if( subject == null ) { return; }
-            _secondPerson = subject.GetData("name").text.ToLower() == "you";
+            _secondPerson = observer.GetControlled() == subject;
         }
 
         public void Display()
         {
-            if( subject == null ) { return; }
+            if( subject == null || subject.container == null ) { return; }
 
             GameObject container = subject.container.GetParent();
             if( container != null ) {

@@ -20,7 +20,7 @@ namespace AdventureDemo
         public LocatorDataReference( LocatorDataReference data )
         {
             this.data = data.data == null ? null : new DataReference(data.data.value);
-            this.location = data.location == null? null : new SearchParams(data.location);
+            this.location = data.location == null ? null : new SearchParams(data.location);
         }
 
         public T LoadData<T>( Type dataType )

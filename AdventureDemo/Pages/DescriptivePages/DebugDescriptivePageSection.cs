@@ -38,14 +38,21 @@ namespace AdventureDemo
                 return;
             }
 
+            string typeString = $"Type: {page.target.GetType().ToString()}";
+            TextBlock typeBlock = WaywardTextParser.ParseAsBlock(typeString);
+            content.Children.Add(typeBlock);
+
             try {
                 string containerContent = "Container: [0]";
-                TextBlock block = WaywardTextParser.ParseAsBlock(containerContent,
+                TextBlock containerBlock = WaywardTextParser.ParseAsBlock(containerContent,
                     () => { return page.observer.Observe(page.target.container.GetParent(), "name upper").span; }
                 );
-                content.Children.Add(block);
+                Grid.SetRow(containerBlock, 2);
+                content.Children.Add(containerBlock);
             } catch( NullReferenceException e ) {
-                content.Children.Add(WaywardTextParser.ParseAsBlock("Container: <i>null</i>"));
+                TextBlock containerBlock = WaywardTextParser.ParseAsBlock("Container: <i>null</i>");
+                Grid.SetRow(containerBlock, 2);
+                content.Children.Add(containerBlock);
             }
 
             string attachmentString = "Attachment Types: ";
