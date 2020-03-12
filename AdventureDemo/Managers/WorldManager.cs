@@ -15,7 +15,7 @@ namespace AdventureDemo
         public Random random;
 
         public PlayerActor player;
-        private List<Container> rootObjects;
+        private List<Container> rootObjects = new List<Container>();
 
         private Dictionary<string, object> objectReferenceIds = new Dictionary<string, object>();
 
@@ -30,8 +30,10 @@ namespace AdventureDemo
 
             worldSeed = seed;
             random = worldSeed == -1 ? new Random() : new Random(worldSeed);
+        }
 
-            rootObjects = new List<Container>();
+        public void GenerateWorld()
+        {
             foreach( string key in data.roots.Keys ) {
                 Container root = DataManager.instance.LoadObject<Container>(key, typeof(ContainerData));
                 if( root == null ) { continue; }

@@ -11,11 +11,16 @@ namespace AdventureDemo
         public DynamicDouble innerVolume = new DynamicDouble("0");
         public DataReference[] spawnLists = new DataReference[0];
 
+        public string[] connections = new string[0];
+
         public ContainerData() {}
         public ContainerData( ContainerData data )
             : base(data)
         {
             innerVolume = new DynamicDouble(data.innerVolume);
+
+            connections = new string[data.connections.Length];
+
             spawnLists = new DataReference[data.spawnLists.Length];
             for( int i = 0; i < spawnLists.Length; i++ ) {
                 spawnLists[i] = new DataReference(data.spawnLists[i].value);

@@ -78,7 +78,6 @@ namespace AdventureDemo
             WaywardManager.instance.ClearPages();
 
             MainMenuPage page = new MainMenuPage();
-            //Point position = new Point(200, 300);
 
             WaywardManager.instance.AddPage(page, WaywardManager.instance.GetRelativeWindowPoint(0.5, 0.3));
 
@@ -97,6 +96,7 @@ namespace AdventureDemo
             if( !isInitialized ) { return; }
 
             world = new WorldManager(data, -1);
+            world.GenerateWorld();
         }
         public void StartScenario( ScenarioData data )
         {

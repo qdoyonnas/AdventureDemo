@@ -141,7 +141,15 @@
 			"material": "flesh",
 			"parts": 1
 		}
+	],
+	
+	"verbs": [
+		{
+			"verb": "human_grab",
+			"possession": "EMBODIMENT"
+		}
 	]
+	
 },
 
 {
@@ -217,6 +225,13 @@
 		{
 			"material": "flesh",
 			"parts": 1
+		}
+	],
+	
+	"verbs": [
+		{
+			"verb": "human_walk",
+			"possession": "EMBODIMENT"
 		}
 	]
 }

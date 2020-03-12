@@ -1,3 +1,5 @@
+[
+
 {
 	"id": "will_grab",
 	
@@ -13,4 +15,24 @@
 	
 	"quantity": -1,
 	"capacity": -1
+},
+
+{
+	"id": "human_grab",
+	
+	"type": "GrabVerbData",
+	"label": "Grab",
+	
+	"validInputs": [
+		"grab",
+		"pickup",
+		"take",
+		"drop"
+	],
+	
+	"quantity": 1,
+	"capacity": 1
 }
+
+]
+

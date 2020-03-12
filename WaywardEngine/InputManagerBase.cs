@@ -64,11 +64,15 @@ namespace WaywardEngine
 
         public InputEventArgs( string i )
         {
+            i = i.Trim();
+
             input = i;
             words = i.Split(' ');
             action = words[0].ToLower();
-            parameterInput = input.Substring(action.Length + 1);
-            parameters = parameterInput.Split(' ');
+            if( words.Length > 1 ) {
+                parameterInput = input.Substring(action.Length + 1);
+                parameters = parameterInput.Split(' ');
+            }
         }
     }
 

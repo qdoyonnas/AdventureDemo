@@ -1,0 +1,12 @@
+{
+	"id": "human_walk",
+	
+	"type": "TraversalVerbData",
+	"label": "Walk",
+	
+	"validInputs": [
+		"walk",
+		"go",
+		"move"
+	]
+}

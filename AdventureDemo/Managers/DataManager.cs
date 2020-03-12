@@ -463,8 +463,8 @@ namespace AdventureDemo
             T obj = null;
             try {
                 obj = (T)data.Create();
-            } catch( NullReferenceException ) {
-                Console.WriteLine($"ERROR: Failed retrieving data from '{str}'");
+            } catch( NullReferenceException e ) {
+                Console.WriteLine($"ERROR: Failed retrieving data from '{str}': {e}");
             } catch( Exception e ) {
                 Console.WriteLine($"ERORR: Failed creating instance of type '{typeof(T).Name}' from data of type '{data.GetType()}': {e}");
             }

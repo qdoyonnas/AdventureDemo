@@ -11,7 +11,7 @@ using WaywardEngine;
 
 namespace AdventureDemo
 {
-    class WorldsMenuPage : WaywardEngine.ContentPage
+    class WorldsMenuPage : ContentPage
     {
         StackPanel worldsPanel;
 
@@ -24,6 +24,8 @@ namespace AdventureDemo
 
             worldsPanel = Utilities.FindNode<StackPanel>(element, "Worlds");
             DisplayContent();
+
+            ContextMenuHelper.AddContextMenuItem(element, "Back", NavigateBack);
         }
 
         void DisplayContent()
@@ -48,6 +50,18 @@ namespace AdventureDemo
             WaywardManager.instance.AddPage(new ScenariosMenuPage(world), WaywardManager.instance.GetRelativeWindowPoint(0.5, 0.5));
 
             CloseAction();
+        }
+
+        public bool NavigateBack()
+        {
+            CloseAction();
+
+            WaywardManager.instance.AddPage( 
+                new MainMenuPage(),
+                WaywardManager.instance.GetRelativeWindowPoint(0.5, 0.3)
+            );
+
+            return true;
         }
     }
 }

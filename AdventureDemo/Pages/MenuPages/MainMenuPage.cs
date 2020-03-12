@@ -11,8 +11,10 @@ using WaywardEngine;
 
 namespace AdventureDemo
 {
-    class MainMenuPage : WaywardEngine.ContentPage
+    class MainMenuPage : ContentPage
     {
+        Message tipMessage;
+
         public MainMenuPage()
         {
             SetTitle("Wayward Engine");
@@ -27,6 +29,10 @@ namespace AdventureDemo
             choice.MouseUp += OnOptionsChoice;
             choice = Utilities.FindNode<Span>(element, "ExitChoice");
             choice.MouseUp += OnExitChoice;
+
+            tipMessage = WaywardManager.instance.DisplayMessage("Tip: Most interactions with the game and menus can be performed using the right-click context menu.",
+                WaywardManager.instance.GetRelativeWindowPoint(0.5, 0.9)
+            );
         }
 
         void OnWorldChoice( object sender, MouseButtonEventArgs e )
@@ -41,6 +47,13 @@ namespace AdventureDemo
         void OnExitChoice( object sender, MouseButtonEventArgs e )
         {
             Application.Current.Shutdown();
+        }
+
+        public override bool CloseAction()
+        {
+            tipMessage.CloseAction();
+
+            return base.CloseAction();
         }
     }
 }
