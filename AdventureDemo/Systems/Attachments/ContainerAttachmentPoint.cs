@@ -59,10 +59,10 @@ namespace AdventureDemo
 
         public void AddConnection( ContainerAttachmentPoint second, double throughput = 0, bool isTwoWay = true )
         {
-            connections.Add( new Connection(this, second, throughput) );
+            connections.Add( new Connection(second, throughput) );
 
             if( isTwoWay && second != null ) {
-                second.AddConnection( new Connection(second, this, throughput) );
+                second.AddConnection( new Connection(this, throughput) );
             }
         }
 

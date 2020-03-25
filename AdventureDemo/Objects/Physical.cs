@@ -60,29 +60,36 @@ namespace AdventureDemo
 
         #region Constructors
 
+        public Physical()
+            : base()
+        {
+            Construct();
+        }
         public Physical( Dictionary<string, object> data )
             : base(data)
         {
-            Construct(
-                data.ContainsKey("volume") ? (double)data["volume"] : 0,
-                data.ContainsKey("materials") ? data["materials"] as KeyValuePair<Material, double>[] : new KeyValuePair<Material, double>[0]
-            );
-        }
-        public Physical( string name )
-            : base(name)
-        {
-            Construct(0, new KeyValuePair<Material, double>[0]);
-        }
-        public Physical( string name, double volume, params KeyValuePair<Material, double>[] mats )
-            : base(name)
-        {
-            Construct(volume, mats);
-        }
-        private void Construct( double volume, KeyValuePair<Material, double>[] mats )
-        {
-            if( string.IsNullOrEmpty(this.description) ) {
-                this.description = "a solid object";
+            Construct();
+
+            if( data.ContainsKey("volume") ) { volume = (double)data["volume"]; }
+            if( data.ContainsKey("materials") ) { 
+                foreach( KeyValuePair<Material, double> mat in data["materials"] as KeyValuePair<Material, double>[] ) {
+                    _materials.Add(mat.Key, mat.Value);
+                }
             }
+        }
+        public Physical( double volume, params KeyValuePair<Material, double>[] mats )
+            : base()
+        {
+            Construct();
+
+            this.volume = volume;
+            foreach( KeyValuePair<Material, double> mat in mats ) {
+                _materials.Add(mat.Key, mat.Value);
+            }
+        }
+        private void Construct()
+        {
+            tags.Add("physical");
 
             attachmentPoints = new List<PhysicalAttachmentPoint>();
 
@@ -94,11 +101,8 @@ namespace AdventureDemo
             relevantData.Add(GetDescriptiveWeight);
             relevantData.Add(GetDescriptiveMaterials);
 
-            this.volume = volume;
+            this.volume = 0;
             _materials = new Dictionary<Material, double>();
-            foreach( KeyValuePair<Material, double> mat in mats ) {
-                AddMaterial( mat.Key, mat.Value );
-            }
         }
 
         #endregion

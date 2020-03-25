@@ -11,10 +11,16 @@ namespace AdventureDemo
         public Organism( Dictionary<string, object> data )
             : base(data)
         {
+            Construct();
         }
         public Organism( string name )
-            : base( name )
+            : base()
         {
+            Construct();
+        }
+        private void Construct()
+        {
+            tags.Add("organism");
         }
     }
 }

@@ -18,14 +18,22 @@ namespace AdventureDemo
         public Material( Dictionary<string, object> data )
             : base( data )
         {
+            Construct();
+
             weightPerLiter = data.ContainsKey("weight") ? (double)data["weight"] : 0.0;
             color = data.ContainsKey("color") ? (string)data["color"] : "#ffffff";
         }
-        public Material( string name, double weight, string color = "#ffffff" )
-            : base( name )
+        public Material( double weight, string color = "#ffffff" )
+            : base()
         {
+            Construct();
+
             weightPerLiter = weight;
             this.color = color;
+        }
+        private void Construct()
+        {
+            tags.Add("material");
         }
 
         public double GetWeight( double volume = 1 )

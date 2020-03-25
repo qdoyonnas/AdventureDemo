@@ -50,37 +50,41 @@ namespace AdventureDemo
         #endregion
 
         #region Constructors
-
+        public Container() 
+            : base()
+        {
+            Construct();
+        }
         public Container( Dictionary<string, object> data )
             : base(data)
         {
-            Construct( data.ContainsKey("innerVolume") ? (double)data["innerVolume"] : 0 );
+            Construct();
+
+            if( data.ContainsKey("innerVolume") ) {
+                contents.SetCapacity((double)data["innerVolume"]);
+            }
 
             if( data.ContainsKey("spawnLists") ) {
                 spawnLists = new List<SpawnList>( (SpawnList[])data["spawnLists"] );
                 SpawnContents();
             }
         }
-        public Container( string name, double innerVolume ) 
-            : base(name)
+        public Container( double innerVolume )
+            : base()
         {
-            Construct(innerVolume);
+            Construct();
+
+            contents.SetCapacity(innerVolume);
         }
-        public Container( string name, double innerVolume, double totalVolume, params KeyValuePair<Material, double>[] mats )
-            : base(name, totalVolume, mats)
+        private void Construct()
         {
-            Construct(innerVolume);
-        }
-        private void Construct( double volume )
-        {
-            if( string.IsNullOrEmpty(this.description) ) {
-                this.description = DescriptionFromVolume(volume);
-            }
+            tags.Add("container");
 
             contents = new ContainerAttachmentPoint(new Dictionary<string, object>() {
-                { "parent", this }, { "capacity", volume }, { "name", "contents" }
+                { "parent", this }, { "capacity", 0.0 }, { "name", "contents" }
             });
             AddAttachmentPoint(contents);
+
             spawnLists = new List<SpawnList>();
 
             objectData["innervolume"] = GetDescriptiveInnerVolume;

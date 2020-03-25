@@ -6,6 +6,7 @@
 	
 	"name": "human",
 	"description": "a carbon-based lifeform",
+	"tags": [ "human" ],
 	
 	"parts": [
 		{

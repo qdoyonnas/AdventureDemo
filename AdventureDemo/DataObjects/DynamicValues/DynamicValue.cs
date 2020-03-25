@@ -116,5 +116,6 @@ namespace AdventureDemo
         }
 
         public abstract T GetValue( Dictionary<string, object> data );
+        public abstract T GetValue();
     }
 }

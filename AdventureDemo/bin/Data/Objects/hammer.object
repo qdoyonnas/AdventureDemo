@@ -6,6 +6,7 @@
 	
 	"name": "hammer",
 	"description": "a common tool for applying blunt force",
+	"tags": [ "tool" ],
 	
 	"parts": [
 		{

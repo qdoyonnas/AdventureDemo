@@ -53,13 +53,15 @@ namespace AdventureDemo
         {
             Construct();
         }
-        public PhysicalAmalgam( string name )
-            : base(name)
+        public PhysicalAmalgam()
+            : base()
         {
             Construct();
         }
         void Construct()
         {
+            tags.Add("amalgam");
+
             volume = 0;
         }
 

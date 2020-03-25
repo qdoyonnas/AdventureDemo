@@ -30,44 +30,45 @@ namespace AdventureDemo
             }
         }
 
+        public Connection()
+            : base()
+        {
+            Construct();
+
+            _throughput = 0;
+            _secondContainer = null;
+        }
         public Connection( Dictionary<string, object> data )
             : base(data)
         {
-            if( !data.ContainsKey("parent") ) { throw new System.ArgumentException("Connection requires a parent container"); }
-            ContainerAttachmentPoint parent = data["parent"] as ContainerAttachmentPoint;
+            Construct();
 
-            ContainerAttachmentPoint second = data.ContainsKey("second") ? data["second"] as ContainerAttachmentPoint : null;
-            double volume = data.ContainsKey("throughput") ? (double)data["throughput"] : 0;
+            if( data.ContainsKey("second") ) {
+                _secondContainer = data["second"] as ContainerAttachmentPoint;
+            }
 
-            Construct( parent, second, volume );
+            if( data.ContainsKey("throughput") ) { 
+                _throughput = (double)data["throughput"];
+            }
 
             if( !data.ContainsKey("description") ) {
                 description = "an opening";
             }
         }
-        public Connection( ContainerAttachmentPoint parent )
-            : base( "opening" )
+        public Connection( ContainerAttachmentPoint second, double throughput )
         {
-            Construct( parent, null, 0 );
-            description = "an opening";
-        }
-        public Connection( ContainerAttachmentPoint parent, ContainerAttachmentPoint second )
-            : base( "opening" )
-        {
-            Construct( parent, second, 0 );
-            description = "an opening";
-        }
-        public Connection( ContainerAttachmentPoint parent, ContainerAttachmentPoint second, double throughput )
-            : base( "opening" )
-        {
-            Construct( parent, second, throughput );
-            description = "an opening";
-        }
-        void Construct( ContainerAttachmentPoint parent, ContainerAttachmentPoint second, double throughput )
-        {
-            this._throughput = throughput;
+            Construct();
 
-            this.secondContainer = second;
+            _throughput = throughput;
+            _secondContainer = second;
+        }
+        
+        void Construct()
+        {
+            tags.Add("connection");
+
+            _throughput = 0;
+            _secondContainer = null;
         }
     }
 }

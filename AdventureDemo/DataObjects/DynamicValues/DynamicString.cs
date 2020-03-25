@@ -37,6 +37,10 @@ namespace AdventureDemo
             return (string)expression.Evaluate();
         }
 
+        public override string GetValue()
+        {
+            return GetValue(new Dictionary<string, object>());
+        }
         public override string GetValue( Dictionary<string, object> data )
         {
             switch( method ) {

@@ -59,6 +59,15 @@ namespace AdventureDemo
             _capacity = capacity;
         }
 
+        public bool SetCapacity( double capacity )
+        {
+            if( capacity < filledCapacity ) { return false; }
+
+            _capacity = capacity;
+
+            return true;
+        }
+
         public Physical GetAttachedAsPhysical( int i )
         {
             if( i < 0 || i >= attachedObjects.Count ) { return null; }

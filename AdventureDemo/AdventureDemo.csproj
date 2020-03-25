@@ -65,6 +65,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataObjects\BasicData.cs" />
+    <Compile Include="DataObjects\DynamicValues\ConnectionDataReference.cs" />
     <Compile Include="DataObjects\DynamicValues\LocatorDataReference.cs" />
     <Compile Include="DataObjects\DynamicValues\SearchParams.cs" />
     <Compile Include="DataObjects\DynamicValues\VerbReference.cs" />

@@ -17,6 +17,8 @@ namespace AdventureDemo
         public string name;
         public string description;
 
+        public List<string> tags;
+
         protected Actor _actor;
         public virtual Actor actor {
             get {
@@ -53,24 +55,34 @@ namespace AdventureDemo
 
         public GameObject( Dictionary<string, object> data )
         {
-            Construct(data.ContainsKey("name") ? (string)data["name"] : "Unknown Object");
+            Construct();
 
-            description = data.ContainsKey("description") ? (string)data["description"] : "a strange object";
+            name = data.ContainsKey("name") ? (string)data["name"] : name;
+            description = data.ContainsKey("description") ? (string)data["description"] : description;
 
             if( data.ContainsKey("attachmentTypes") ) {
                 foreach( AttachmentType type in (AttachmentType[])data["attachmentTypes"] ) {
                     attachmentTypes.Add(type);
                 }
             }
+
+            if( data.ContainsKey("tags") ) {
+                foreach( string tag in (string[])data["tags"] ) {
+                    tags.Add(tag);
+                }
+            }
+            
         }
-        public GameObject( string name )
+        public GameObject()
         {
-            Construct(name);
+            Construct();
         }
-        void Construct( string name )
+        void Construct()
         {
-            this.name = name;
-            this.description = "a strange object";
+            name = "unknown object";
+            description = "a strange object";
+
+            tags = new List<string>();
 
             objectData = new Dictionary<string, DataDelegate>();
             objectData["name"] = GetName;
@@ -243,6 +255,15 @@ namespace AdventureDemo
                     case "description":
                         if( !description.Contains(property.Value) ) {
                             return false;
+                        }
+                        break;
+                    case "tags":
+                        foreach( string tag in property.Value.Split(',', ' ') ) {
+                            if( string.IsNullOrEmpty(tag) ) { continue; }
+
+                            if( !tags.Contains(tag) ) {
+                                return false;
+                            }
                         }
                         break;
                     // XXX: Add Verbs

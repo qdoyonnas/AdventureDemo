@@ -3,13 +3,27 @@
 	
 	"entries": [
 		{
-			"id": "hallway_1",
+			"id": {
+				"basedOn": "hallway_1",
+				"referenceId": "main_hallway"
+			},
 			"spawnChance": 1,
 			"spawnQuantity": 1,
 			"independentSpawn": false
 		},
 		{
-			"id": "cabin_1",
+			"id": { 
+				"basedOn": "cabin_1",
+				"connections": [
+					{
+						"linkReference": "main_hallway",
+						"name": "doorway",
+						"description": "a doorway",
+						"throughput": "70",
+						"isTwoWay": true
+					}
+				]
+			},
 			"spawnChance": 1,
 			"spawnQuantity": 4,
 			"independentSpawn": false

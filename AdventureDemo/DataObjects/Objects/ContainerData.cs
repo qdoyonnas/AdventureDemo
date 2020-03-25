@@ -11,7 +11,7 @@ namespace AdventureDemo
         public DynamicDouble innerVolume = new DynamicDouble("0");
         public DataReference[] spawnLists = new DataReference[0];
 
-        public string[] connections = new string[0];
+        public ConnectionDataReference[] connections = new ConnectionDataReference[0];
 
         public ContainerData() {}
         public ContainerData( ContainerData data )
@@ -19,7 +19,10 @@ namespace AdventureDemo
         {
             innerVolume = new DynamicDouble(data.innerVolume);
 
-            connections = new string[data.connections.Length];
+            connections = new ConnectionDataReference[data.connections.Length];
+            for( int i = 0; i < connections.Length; i++ ) {
+                connections[i] = new ConnectionDataReference(data.connections[i]);
+            }
 
             spawnLists = new DataReference[data.spawnLists.Length];
             for( int i = 0; i < spawnLists.Length; i++ ) {
@@ -51,6 +54,19 @@ namespace AdventureDemo
 
             try {
                 container = new Container(GenerateData());
+
+                foreach( ConnectionDataReference reference in connections ) {
+                    Container linked = GameManager.instance.world.GetObjectReference(reference.linkReference) as Container;
+                    if( linked != null ) {
+                        Dictionary<string, object> connectionData = new Dictionary<string, object>();
+                        connectionData.Add("name", reference.name);
+                        connectionData.Add("description", reference.description);
+                        connectionData.Add("second", linked.GetContents());
+                        connectionData.Add("throughput", reference.throughput.GetValue(connectionData));
+
+                        container.AddConnection(connectionData, reference.isTwoWay);
+                    }
+                }
             } catch( Exception e ) {
                 Console.WriteLine($"ERROR: Could not instantiate Container from ContainerData: {e}");
             }

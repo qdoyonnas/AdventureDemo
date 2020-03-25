@@ -11,6 +11,7 @@ namespace AdventureDemo
 
         public DynamicString name = new DynamicString("unknown object");
         public string description = "a strange object";
+        public string[] tags = new string[0];
 
         public AttachmentType[] attachmentTypes = new AttachmentType[0];
 
@@ -40,6 +41,7 @@ namespace AdventureDemo
 
             data["name"] = this.name.GetValue(null);
             data["description"] = this.description;
+            data["tags"] = tags;
 
             data["attachmentTypes"] = this.attachmentTypes;
 

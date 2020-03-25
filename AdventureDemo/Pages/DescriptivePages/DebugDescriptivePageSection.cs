@@ -38,10 +38,19 @@ namespace AdventureDemo
                 return;
             }
 
+            DisplayType();
+            DisplayContainer();
+            DisplayAttachmentTypes();
+            DisplayTags();
+        }
+        private void DisplayType()
+        {
             string typeString = $"Type: {page.target.GetType().ToString()}";
             TextBlock typeBlock = WaywardTextParser.ParseAsBlock(typeString);
             content.Children.Add(typeBlock);
-
+        }
+        private void DisplayContainer()
+        {
             try {
                 string containerContent = "Container: [0]";
                 TextBlock containerBlock = WaywardTextParser.ParseAsBlock(containerContent,
@@ -55,6 +64,9 @@ namespace AdventureDemo
                 content.Children.Add(containerBlock);
             }
 
+        }
+        private void DisplayAttachmentTypes()
+        {
             string attachmentString = "Attachment Types: ";
             if( page.target.attachmentTypes.Count > 0 ) {
                 foreach( AttachmentType type in page.target.attachmentTypes ) {
@@ -63,9 +75,30 @@ namespace AdventureDemo
             } else {
                 attachmentString += "<i>none</i>";
             }
+
             TextBlock attachmentBlock = WaywardTextParser.ParseAsBlock(attachmentString);
+            Grid.SetRow(attachmentBlock, 2);
             Grid.SetColumn(attachmentBlock, 1);
             content.Children.Add(attachmentBlock);
+        }
+        private void DisplayTags()
+        {
+            string tagsString = "Tags: ";
+            string[] tags = page.target.tags.ToArray();
+            if( tags.Length > 0 ) {
+                for( int i = 0; i < tags.Length; i++ ) {
+                    tagsString += tags[i];
+                    if( i != tags.Length - 1 ) {
+                        tagsString += ", ";
+                    }
+                }
+            } else {
+                tagsString += "<i>none</i>";
+            }
+
+            TextBlock tagsBlock = WaywardTextParser.ParseAsBlock(tagsString);
+            Grid.SetRow(tagsBlock, 3);
+            content.Children.Add(tagsBlock);
         }
     }
 }
