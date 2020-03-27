@@ -77,6 +77,8 @@ namespace AdventureDemo
         }
         public GameObject GetRoot( int i )
         {
+            if( i < 0 || i >= rootObjects.Count ) { return null; }
+
             return rootObjects[i];
         }
         

@@ -456,13 +456,13 @@ namespace AdventureDemo
             }
             return ParseTokenToData(token, type);
         }
-        public T LoadObject<T>( string str, Type dataType )
+        public T LoadObject<T>( string str, Type dataType, Dictionary<string, object> context = null )
             where T : class
         {
             BasicData data = GetData(str, dataType);
             T obj = null;
             try {
-                obj = (T)data.Create();
+                obj = (T)data.Create(context);
             } catch( NullReferenceException e ) {
                 Console.WriteLine($"ERROR: Failed retrieving data from '{str}': {e}");
             } catch( Exception e ) {

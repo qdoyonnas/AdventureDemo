@@ -12,7 +12,7 @@ namespace AdventureDemo
         public PossessVerbData(PossessVerbData data) 
             :base(data) { }
 
-        protected override object CreateInstance()
+        protected override object CreateInstance(Dictionary<string, object> context = null)
         {
             return new PossessVerb();
         }

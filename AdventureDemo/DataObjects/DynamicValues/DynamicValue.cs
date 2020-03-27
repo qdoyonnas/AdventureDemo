@@ -70,7 +70,7 @@ namespace AdventureDemo
         {
             expression = expression.Trim();
 
-            Regex regex = new Regex(@"(?<min>[^:]):(?<max>.+)");
+            Regex regex = new Regex(@"(?<min>[^:]+):(?<max>.+)");
             Match match = regex.Match(expression);
 
             if( !match.Success ) { return false; }
@@ -96,16 +96,18 @@ namespace AdventureDemo
         {
             expression = expression.Trim();
 
-            Regex regex = new Regex(@"[^+-/*\^]+\s*[+-/*\^]\s*[^+-/*\^]+");
+            //Regex regex = new Regex(@"[^+-/*\^]+\s*[+-/*\^]\s*[^+-/*\^]+");
+            Regex regex = new Regex(@"^\s*\{(?<exp>[^\}]+)\}\s*$");
+            Match match = regex.Match(expression);
 
-            if( !regex.IsMatch(expression) ) { return false; }
+            if( !match.Success ) { return false; }
 
             method = Method.EXPRESSION;
-            this.originalExpression = expression;
-            this.expression = new Expression(expression);
+            this.originalExpression = match.Groups["exp"].Value;
+            this.expression = new Expression(originalExpression);
 
             regex = new Regex(@"\[(\w+)\]");
-            MatchCollection matches = regex.Matches(expression);
+            MatchCollection matches = regex.Matches(originalExpression);
             
             parameters = new string[matches.Count];
             for( int i = 0; i < matches.Count; i++ ) {

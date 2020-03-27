@@ -22,7 +22,7 @@
 				"referenceId": "playerShip",
 				"subSearches": [{
 					"properties": {
-						"name": "cabin"
+						"tags": "cabin"
 					}
 				}]
 			}
@@ -33,7 +33,7 @@
 				"referenceId": "playerShip",
 				"subSearches": [{
 					"properties": {
-						"name": "cabin"
+						"tags": "cabin"
 					}
 				}]
 			}

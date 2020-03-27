@@ -20,12 +20,12 @@ namespace AdventureDemo
             }
         }
 
-        protected override object CreateInstance()
+        protected override object CreateInstance(Dictionary<string, object> context = null)
         {
             PhysicalAmalgam amalgam = null;
 
             try {
-                amalgam = new PhysicalAmalgam(GenerateData());
+                amalgam = new PhysicalAmalgam(GenerateData(context));
                 foreach( SpawnEntry entry in parts ) {
                     GameObject[] parts = entry.Spawn(1);
                     foreach( GameObject part in parts ) {

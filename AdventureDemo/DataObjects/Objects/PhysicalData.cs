@@ -26,9 +26,9 @@ namespace AdventureDemo
             }
         }
 
-        public override Dictionary<string, object> GenerateData()
+        public override Dictionary<string, object> GenerateData(Dictionary<string, object> context = null)
         {
-            Dictionary<string, object> data = base.GenerateData();
+            Dictionary<string, object> data = base.GenerateData(context);
 
             if( materials != null && materials.Length > 0 ) {
                 KeyValuePair<Material, double>[] mats = new KeyValuePair<Material, double>[materials.Length];
@@ -44,12 +44,12 @@ namespace AdventureDemo
 
             return data;
         }
-        protected override object CreateInstance()
+        protected override object CreateInstance(Dictionary<string, object> context = null)
         {
             Physical physical = null;
 
             try {
-                physical = new Physical(GenerateData());
+                physical = new Physical(GenerateData(context));
 
                 // XXX: This is a direct copy of the code in ObjectData.create()
                 //      The correct way to do this would be to add copy constructor to every object,

@@ -23,10 +23,10 @@ namespace AdventureDemo
             this.location = data.location == null ? null : new SearchParams(data.location);
         }
 
-        public T LoadData<T>( Type dataType )
+        public T LoadData<T>( Type dataType, Dictionary<string, object> context = null )
             where T : GameObject
         {
-            T obj = data.LoadData<T>( dataType );
+            T obj = data.LoadData<T>(dataType, context);
 
             Container container = location.FindRandom() as Container;
             if( container == null ) {

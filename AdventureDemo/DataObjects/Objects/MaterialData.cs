@@ -18,7 +18,7 @@ namespace AdventureDemo
             color = data.color;
         }
 
-        public override Dictionary<string, object> GenerateData()
+        public override Dictionary<string, object> GenerateData(Dictionary<string, object> context = null)
         {
             Dictionary<string, object> data = base.GenerateData();
 
@@ -28,12 +28,12 @@ namespace AdventureDemo
             return data;
         }
 
-        protected override object CreateInstance()
+        protected override object CreateInstance(Dictionary<string, object> context = null)
         {
             Material material = null;
 
             try {
-                material = new Material(GenerateData());
+                material = new Material(GenerateData(context));
             } catch( Exception e ) {
                 Console.WriteLine($"ERROR: Could not instantiate Material from MaterialData: {e}");
             }

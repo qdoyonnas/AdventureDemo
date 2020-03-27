@@ -18,7 +18,7 @@ namespace AdventureDemo
             capacity = data.capacity;
         }
 
-        protected override object CreateInstance()
+        protected override object CreateInstance(Dictionary<string, object> context = null)
         {
             return new GrabVerb(quantity, capacity);
         }

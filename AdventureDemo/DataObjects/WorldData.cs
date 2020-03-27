@@ -25,7 +25,7 @@ namespace AdventureDemo
             roots = new Dictionary<string, DataReference[]>(data.roots);
         }
 
-        protected override object CreateInstance()
+        protected override object CreateInstance(Dictionary<string, object> context = null)
         {
             return null;
         }

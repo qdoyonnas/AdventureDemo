@@ -30,7 +30,7 @@ namespace AdventureDemo
 
         public GameObject[] FindAll()
         {
-            GameObject[] foundObjects = null;
+            GameObject[] foundObjects = new GameObject[0];
             if( referenceId == null ) {
                 foundObjects = GameManager.instance.world.FindObjects(properties);
             } else {
@@ -49,16 +49,18 @@ namespace AdventureDemo
             if( referenceId != null ) { return null; }
 
             List<GameObject> foundObjects = new List<GameObject>();
-            if( objectsToSearch.Length ==  1 ) {
-                GameObject[] worldFoundObjects = GameManager.instance.world.FindObjects(objectsToSearch[0], new Dictionary<string,string>(properties));
-                if( subSearches.Length > 0 ) {
-                    foundObjects.AddRange( PerformSubSearches(worldFoundObjects) );
+            if( objectsToSearch != null ) { 
+                if( objectsToSearch.Length ==  1 ) {
+                    GameObject[] worldFoundObjects = GameManager.instance.world.FindObjects(objectsToSearch[0], new Dictionary<string,string>(properties));
+                    if( subSearches.Length > 0 ) {
+                        foundObjects.AddRange( PerformSubSearches(worldFoundObjects) );
+                    } else {
+                        foundObjects.AddRange(worldFoundObjects);
+                    }
                 } else {
-                    foundObjects.AddRange(worldFoundObjects);
-                }
-            } else {
-                foreach( GameObject obj in objectsToSearch ) {
-                    foundObjects.AddRange( FindAllIn(obj) );
+                    foreach( GameObject obj in objectsToSearch ) {
+                        foundObjects.AddRange( FindAllIn(obj) );
+                    }
                 }
             }
 

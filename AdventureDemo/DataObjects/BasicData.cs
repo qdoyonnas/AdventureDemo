@@ -17,9 +17,9 @@ namespace AdventureDemo
             referenceId = data.id;
         }
 
-        public object Create()
+        public object Create(Dictionary<string, object> context = null)
         {
-            object obj = CreateInstance();
+            object obj = CreateInstance(context);
 
             if( !string.IsNullOrEmpty(referenceId) ) {
                 GameManager.instance.world.SaveObjectReference(referenceId, obj);
@@ -27,6 +27,6 @@ namespace AdventureDemo
 
             return obj;
         }
-        protected abstract object CreateInstance();
+        protected abstract object CreateInstance(Dictionary<string, object> context = null);
     }
 }

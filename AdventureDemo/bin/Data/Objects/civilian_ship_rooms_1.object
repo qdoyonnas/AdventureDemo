@@ -6,6 +6,7 @@
 	
 	"name": "hallway",
 	"description": "a common starship hallway with sleek metallic panels and a ceiling light strip",
+	"tags": ["hallway"],
 	
 	"materials": [
 		{ "material": "titanium", "parts": 1 }
@@ -20,6 +21,7 @@
 	
 	"name": "cabin",
 	"description": "your average starship cabin, cramped and not very luxurious",
+	"tags": ["cabin"],
 	
 	"materials": [
 		{ "material": "titanium", "parts": 1 }

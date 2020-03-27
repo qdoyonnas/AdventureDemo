@@ -18,6 +18,6 @@
 		}
 	],
 	
-	"innerVolume": "[volume] * 0.75",
+	"innerVolume": "{[volume] * 0.75}",
 	"spawnLists": ["civilian_freighter_1"]
 }

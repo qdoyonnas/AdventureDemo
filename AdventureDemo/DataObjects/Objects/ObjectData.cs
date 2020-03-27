@@ -26,6 +26,9 @@ namespace AdventureDemo
             name = new DynamicString(data.name);
             description = data.description;
 
+            tags = new string[data.tags.Length];
+            Array.Copy(data.tags, tags, tags.Length);
+
             attachmentTypes = new AttachmentType[data.attachmentTypes.Length];
             Array.Copy(data.attachmentTypes, attachmentTypes, attachmentTypes.Length);
 
@@ -35,11 +38,14 @@ namespace AdventureDemo
             }
         }
 
-        public virtual Dictionary<string, object> GenerateData()
+        public virtual Dictionary<string, object> GenerateData(Dictionary<string, object> context = null)
         {
-            Dictionary<string, object> data = new Dictionary<string, object>();
+            // XXX: 'Context' dictionary is being passed into the 'Data' dictionary used to instaniate the objects,
+            //      this might be a problem.
+            context = context == null ? new Dictionary<string, object>() : context;
+            Dictionary<string, object> data = new Dictionary<string, object>(context);
 
-            data["name"] = this.name.GetValue(null);
+            data["name"] = this.name.GetValue(data);
             data["description"] = this.description;
             data["tags"] = tags;
 
@@ -47,12 +53,12 @@ namespace AdventureDemo
 
             return data;
         }
-        protected override object CreateInstance()
+        protected override object CreateInstance(Dictionary<string, object> context = null)
         {
             GameObject gameObject = null;
 
             try {
-                gameObject = new GameObject(GenerateData());
+                gameObject = new GameObject(GenerateData(context));
                 foreach( VerbReference verbReference in verbs ) {
                     KeyValuePair<Verb, PossessionType> verb = verbReference.GetValue();
                     verb.Key.self = gameObject;

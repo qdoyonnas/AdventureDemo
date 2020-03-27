@@ -30,9 +30,9 @@ namespace AdventureDemo
             }
         }
 
-        public override Dictionary<string, object> GenerateData()
+        public override Dictionary<string, object> GenerateData(Dictionary<string, object> context = null)
         {
-            Dictionary<string, object> data = base.GenerateData();
+            Dictionary<string, object> data = base.GenerateData(context);
 
             double v = innerVolume.GetValue(data);
             if( v < 0 ) { v = double.PositiveInfinity; }
@@ -48,12 +48,12 @@ namespace AdventureDemo
 
             return data;
         }
-        protected override object CreateInstance()
+        protected override object CreateInstance(Dictionary<string, object> context = null)
         {
             Container container = null;
 
             try {
-                container = new Container(GenerateData());
+                container = new Container(GenerateData(context));
 
                 foreach( ConnectionDataReference reference in connections ) {
                     Container linked = GameManager.instance.world.GetObjectReference(reference.linkReference) as Container;

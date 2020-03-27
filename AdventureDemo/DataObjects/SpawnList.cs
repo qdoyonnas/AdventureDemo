@@ -19,15 +19,15 @@ namespace AdventureDemo
             }
         }
 
-        protected override object CreateInstance()
+        protected override object CreateInstance(Dictionary<string, object> context = null)
         {
             return this;
         }
 
-        public void Spawn( Container container, double weight )
+        public void Spawn( Container container, double weight, Dictionary<string, object> context = null )
         {
             foreach( SpawnEntry entry in entries ) {
-                GameObject[] objects = entry.Spawn(weight);
+                GameObject[] objects = entry.Spawn(weight, context);
                 foreach( GameObject obj in objects ) {
                     container.GetContents().Attach(obj);
                 }
@@ -51,14 +51,18 @@ namespace AdventureDemo
             independantSpawn = entry.independantSpawn;
         }
 
-        public GameObject[] Spawn( double weight )
+        public GameObject[] Spawn( double weight, Dictionary<string, object> context = null )
         {
             List<GameObject> objects = new List<GameObject>();
 
             for( int i = 0; i < spawnQuantity; i++ ) {
                 double roll = GameManager.instance.world.random.NextDouble() * weight;
                 if( roll > 1 - spawnChance ) {
-                    objects.Add( id.LoadData<GameObject>(typeof(ObjectData)) );
+                    context = context == null ? new Dictionary<string, object>() : context;
+                    context["spawnIndex"] = i;
+                    context["spawnRoll"] = roll;
+
+                    objects.Add( id.LoadData<GameObject>(typeof(ObjectData), context) );
                 } else if( !independantSpawn ) {
                     break;
                 }

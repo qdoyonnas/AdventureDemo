@@ -24,12 +24,12 @@ namespace AdventureDemo
         {
             return DataManager.instance.GetData(value, type);
         }
-        public virtual T LoadData<T>( Type type )
+        public virtual T LoadData<T>( Type type, Dictionary<string, object> context = null )
             where T : class
         {
             if( type == null ) { return null; }
 
-            return DataManager.instance.LoadObject<T>(value, type);
+            return DataManager.instance.LoadObject<T>(value, type, context);
         }
     }
 

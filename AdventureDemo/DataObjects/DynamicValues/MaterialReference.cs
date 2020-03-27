@@ -16,9 +16,9 @@ namespace AdventureDemo
             parts = mat.parts;
         }
 
-        public KeyValuePair<Material, double> GetValue(KeyValuePair<Material, double>[] currentMats)
+        public KeyValuePair<Material, double> GetValue(KeyValuePair<Material, double>[] currentMats, Dictionary<string, object> context = null)
         {
-            Material mat = material.LoadData<Material>(typeof(MaterialData));
+            Material mat = material.LoadData<Material>(typeof(MaterialData), context);
 
             return new KeyValuePair<Material, double>(mat, parts);
         }

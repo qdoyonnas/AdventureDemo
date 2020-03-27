@@ -18,9 +18,9 @@ namespace AdventureDemo
             possession = value.possession;
         }
 
-        public KeyValuePair<Verb, PossessionType> GetValue()
+        public KeyValuePair<Verb, PossessionType> GetValue(Dictionary<string, object> context = null)
         {
-            Verb v = verb.LoadData<Verb>(typeof(VerbData));
+            Verb v = verb.LoadData<Verb>(typeof(VerbData), context);
 
             return new KeyValuePair<Verb, PossessionType>(v, possession);
         }
