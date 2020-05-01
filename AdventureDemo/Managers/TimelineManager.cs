@@ -29,12 +29,14 @@ namespace AdventureDemo
         public struct TimelineEvent {
             public TimelineDelegate action { get; private set; }
             public GameObject gameObject { get; private set; }
+            public Verb verb { get; private set; }
             public double timestamp { get; private set; }
 
-            public TimelineEvent( TimelineDelegate action, GameObject gameObject, double timestamp )
+            public TimelineEvent( TimelineDelegate action, GameObject gameObject, Verb verb, double timestamp )
             {
                 this.action = action;
                 this.gameObject = gameObject;
+                this.verb = verb;
                 this.timestamp = timestamp;
             }
         }
@@ -51,6 +53,9 @@ namespace AdventureDemo
                 this.beforeTime = beforeTime;
             }
         }
+
+        public delegate void OnActionDelegate(GameObject gameObject, Verb verb, double timestamp);
+        public event OnActionDelegate OnAction;
 
         #endregion
 
@@ -125,6 +130,7 @@ namespace AdventureDemo
 
                 now = e.timestamp;
                 e.action();
+
             }
             ClearEvents( new ClearEventFilter(null, 0, endTime) );
 
