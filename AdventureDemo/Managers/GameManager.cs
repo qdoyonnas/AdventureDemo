@@ -9,6 +9,7 @@ namespace AdventureDemo
     class GameManager
     {
         #region Singleton
+        
         public static GameManager _instance;
         public static GameManager instance {
             get {
@@ -19,6 +20,8 @@ namespace AdventureDemo
                 return _instance;
             }
         }
+        private GameManager() {}
+
         #endregion
 
         #region Fields
@@ -33,8 +36,6 @@ namespace AdventureDemo
         #endregion
 
         #region Initialization Methods
-
-        private GameManager() {}
 
         /// <summary>
         /// Init the GameManager and start the game.
@@ -141,9 +142,9 @@ namespace AdventureDemo
 
         }
 
-        public void Update()
+        public void Update(double time)
         {
-            // Timeline here
+            TimelineManager.instance.AdvanceTimeline(time);
         }
 
         #endregion

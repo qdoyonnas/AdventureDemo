@@ -16,8 +16,6 @@ namespace AdventureDemo
             _validInputs = new string[] {
                 "possess", "control"
             };
-
-            updatesGame = false;
         }
         protected override void OnAssign() {}
 

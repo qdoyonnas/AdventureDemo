@@ -19,8 +19,6 @@ namespace AdventureDemo
             _displayLabel = "Phase";
 
             _validInputs = new string[] { "phase" };
-
-            updatesGame = false;
         }
         protected override void OnAssign() {}
 
@@ -86,13 +84,11 @@ namespace AdventureDemo
 
         public bool Register(AttachmentPoint point, bool fromPlayer)
         {
-            // XXX: When timeline is implemented this should replaced with a registration to the timeline
-
-            bool success = Action(point); 
+            bool success = TimelineManager.instance.RegisterEvent( () => { Action(point); }, self, actionTime );
 
             if( fromPlayer ) {
-                if( success && updatesGame ) {
-                    GameManager.instance.Update();
+                if( success ) {
+                    GameManager.instance.Update(actionTime);
                 }
                 WaywardManager.instance.Update();
             }

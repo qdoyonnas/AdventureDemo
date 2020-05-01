@@ -37,7 +37,7 @@ namespace AdventureDemo
             }
         }
 
-        public bool updatesGame = true;
+        public double actionTime = 0; // XXX: Temporary hard coded value
 
         public Verb() 
         {
@@ -61,15 +61,15 @@ namespace AdventureDemo
         public abstract CheckResult Check( GameObject target );
         public abstract bool Action( GameObject target );
 
-        public virtual bool Register( GameObject target, bool fromPlayer )
+        public virtual bool Register( GameObject target, bool fromPlayer = false )
         {
-            // XXX: When timeline is implemented this should replaced with a registration to the timeline
+            bool success = TimelineManager.instance.RegisterEvent( () => { Action(target); }, self, actionTime );
 
-            bool success = Action(target); 
+            // XXX: Set the game objects current action here
 
             if( fromPlayer ) {
-                if( success && updatesGame ) {
-                    GameManager.instance.Update();
+                if( success ) {
+                    GameManager.instance.Update(actionTime);
                 }
                 WaywardManager.instance.Update();
             }

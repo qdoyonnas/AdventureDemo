@@ -91,6 +91,7 @@
     <Compile Include="DataObjects\Verbs\VerbData.cs" />
     <Compile Include="DataObjects\WorldData.cs" />
     <Compile Include="Managers\InputManager.cs" />
+    <Compile Include="Managers\TimelineManager.cs" />
     <Compile Include="Objects\Material.cs" />
     <Compile Include="Objects\Organism.cs" />
     <Compile Include="Objects\PhysicalAmalgam.cs" />

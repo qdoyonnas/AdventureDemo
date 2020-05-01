@@ -13,8 +13,6 @@ namespace AdventureDemo
         {
             _displayLabel = "Create";
             _validInputs = new string[] { "create" };
-
-            updatesGame = false;
         }
         protected override void OnAssign() {}
 

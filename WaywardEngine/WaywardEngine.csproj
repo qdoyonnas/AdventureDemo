@@ -67,6 +67,7 @@
     <Compile Include="Utilities.cs" />
     <Compile Include="WaywardManager.cs" />
     <Compile Include="WaywardTextParser.cs" />
+    <Compile Include="WaywardTime.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

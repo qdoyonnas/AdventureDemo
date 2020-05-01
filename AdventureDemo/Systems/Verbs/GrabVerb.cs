@@ -25,6 +25,8 @@ namespace AdventureDemo
         {
             _displayLabel = "Grab";
 
+            actionTime = 100;
+
             _validInputs = new string[] {
                 "grab", "drop", "pickup", "take"
             };

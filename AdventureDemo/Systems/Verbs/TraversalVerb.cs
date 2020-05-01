@@ -20,6 +20,8 @@ namespace AdventureDemo
         {
             _displayLabel = "Walk";
 
+            actionTime = 500;
+
             _validInputs = new string[] {
                 "walk", "move", "go"
             };
