@@ -130,7 +130,7 @@ namespace AdventureDemo
 
                 now = e.timestamp;
                 e.action();
-
+                OnAction(e.gameObject, e.verb, e.timestamp);
             }
             ClearEvents( new ClearEventFilter(null, 0, endTime) );
 
