@@ -63,7 +63,7 @@ namespace AdventureDemo
 
         public virtual bool Register( GameObject target, bool fromPlayer = false )
         {
-            bool success = TimelineManager.instance.RegisterEvent( () => { Action(target); }, self, actionTime );
+            bool success = TimelineManager.instance.RegisterEvent( () => { Action(target); }, self, this, actionTime );
 
             // XXX: Set the game objects current action here
 

@@ -54,15 +54,12 @@ namespace AdventureDemo
             }
         }
 
-        public delegate void OnActionDelegate(GameObject gameObject, Verb verb, double timestamp);
-        public event OnActionDelegate OnAction;
-
         #endregion
 
         public double now { get; private set; }
         private List<TimelineEvent> timeline = new List<TimelineEvent>();
 
-        public bool RegisterEvent( TimelineDelegate action, GameObject gameObject, double timeOut, double fromTime = -1 )
+        public bool RegisterEvent( TimelineDelegate action, GameObject gameObject, Verb verb, double timeOut, double fromTime = -1 )
         {
             fromTime = fromTime == -1 ? now : fromTime;
             double timestamp = fromTime + timeOut;
@@ -70,7 +67,7 @@ namespace AdventureDemo
                 Console.WriteLine("WARNING: Timeline Event was set to trigger before now.");
             }
 
-            TimelineEvent e = new TimelineEvent( action, gameObject, timestamp );
+            TimelineEvent e = new TimelineEvent( action, gameObject, verb, timestamp );
             bool done = false;
             for( int i = 0; i < timeline.Count; i++ ) {
                 if( timestamp < timeline[i].timestamp ) {
@@ -130,7 +127,6 @@ namespace AdventureDemo
 
                 now = e.timestamp;
                 e.action();
-                OnAction(e.gameObject, e.verb, e.timestamp);
             }
             ClearEvents( new ClearEventFilter(null, 0, endTime) );
 

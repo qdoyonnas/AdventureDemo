@@ -24,12 +24,14 @@ namespace AdventureDemo
 
         public override bool Action( GameObject target )
         {
+            bool success = false;
+
             Physical physical = target as Physical;
             if( physical != null ) {
-                Action(physical.GetAttachmentPoints()[0]);
+                success = Action(physical.GetAttachmentPoints()[0]);
             }
 
-            return false;
+            return success;
         }
         public bool Action( AttachmentPoint target )
         {
@@ -41,6 +43,12 @@ namespace AdventureDemo
                 target.Attach(self);
             }
 
+            if( self != null && self.actor != null ) {
+                self.actor.OnTurnVerbosePages( WaywardTextParser.ParseAsBlock($"[0] {displayLabel.ToLower()} into [1].", 
+                    () => { return self.GetData("name top").span; },
+                    () => { return target.GetParent().GetData("name").span; }
+                ) );
+            }
             return true;
         }
 
@@ -84,7 +92,7 @@ namespace AdventureDemo
 
         public bool Register(AttachmentPoint point, bool fromPlayer)
         {
-            bool success = TimelineManager.instance.RegisterEvent( () => { Action(point); }, self, actionTime );
+            bool success = TimelineManager.instance.RegisterEvent( () => { Action(point); }, self, this, actionTime );
 
             if( fromPlayer ) {
                 if( success ) {

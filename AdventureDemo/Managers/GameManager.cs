@@ -153,7 +153,7 @@ namespace AdventureDemo
 
         public void DisplayPlayerVerbose( Point position )
         {
-            VerbosePage page = DisplayVerbosePage( position, world.player.GetControlled() );
+            VerbosePage page = DisplayVerbosePage( position, world.player );
         }
         public void DisplayRoots( Point position )
         {
@@ -198,9 +198,9 @@ namespace AdventureDemo
 
             return page;
         }
-        public VerbosePage DisplayVerbosePage( Point position, GameObject subject )
+        public VerbosePage DisplayVerbosePage( Point position, Actor actor )
         {
-            VerbosePage page = new VerbosePage( world.player, subject );
+            VerbosePage page = new VerbosePage( actor );
             WaywardManager.instance.AddPage(page, position);
 
             return page;

@@ -10,7 +10,7 @@ namespace AdventureDemo
 {
     class PlayerActor : Actor
     {
-        private string controlledName; // Temporary until objects can be renamed in game
+        private string controlledName; // XXX: Temporary until objects can be renamed in game
 
         public override void Control( GameObject obj )
         {

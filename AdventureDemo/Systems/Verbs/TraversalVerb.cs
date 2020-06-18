@@ -39,26 +39,45 @@ namespace AdventureDemo
             Container container = target as Container;
             if( container != null ) {
                 success = EnterContainer(container);
+                
             }
 
             if( !success ) {
                 Connection connection = target as Connection;
                 if( connection != null ) {
                     success = EnterConnection(connection);
+                    
                 }
             }
 
+            
             return success;
         }
         bool EnterContainer( Container container )
         {
             Physical parent = PhysicalUtilities.FindParentPhysical(physicalSelf);
+
+            SendMessage( container );
+
             return container.GetContents().Attach(parent);
         }
         bool EnterConnection( Connection connection )
         {
             Physical parent = PhysicalUtilities.FindParentPhysical(physicalSelf);
+
+            SendMessage( connection.secondContainer.GetParent() );
+
             return connection.secondContainer.Attach(parent);
+        }
+
+        private void SendMessage( GameObject target )
+        {
+            if( physicalSelf != null && physicalSelf.actor != null ) {
+                physicalSelf.actor.OnTurnVerbosePages( WaywardTextParser.ParseAsBlock($"[0] {displayLabel.ToLower()} into [1]",
+                    () => { return self.GetData("name top").span; },
+                    () => { return target.GetData("name").span; }
+                ) );
+            }
         }
 
         public override CheckResult Check( GameObject target )

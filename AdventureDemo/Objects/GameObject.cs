@@ -49,6 +49,10 @@ namespace AdventureDemo
 
         protected List<DataDelegate> relevantData;
 
+        // Events
+        public delegate void OnActionDelegate();
+        public event OnActionDelegate OnAction;
+
         #endregion
 
         #region Constructors
@@ -186,7 +190,7 @@ namespace AdventureDemo
         public virtual GameObjectData GetName( params string[] parameters )
         {
             GameObjectData data = new GameObjectData();
-            bool upper = parameters.Length > 0 && parameters[0] == "upper";
+            bool upper = parameters.Length > 0 && parameters.Contains("upper");
 
             data.text = upper ? char.ToUpper(name[0]) + name.Substring(1) : name;
 

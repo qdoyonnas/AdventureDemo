@@ -33,6 +33,8 @@ namespace AdventureDemo
             }
         }
 
+        // XXX: Prevents large entities having parts in different containers
+        //      example: reaching into a box.
         public override AttachmentPoint container {
             get {
                 if( attachedTo != null ) {
@@ -40,6 +42,16 @@ namespace AdventureDemo
                 }
 
                 return _container;
+            }
+        }
+
+        public override Actor actor {
+            get {
+                if( attachedTo != null ) {
+                    return attachedTo.actor;
+                }
+
+                return _actor;
             }
         }
 
@@ -275,6 +287,15 @@ namespace AdventureDemo
             sections.Add( new PhysicalAttachmentDescriptivePageSection() );
 
             return sections;
+        }
+
+        public override GameObjectData GetName(params string[] parameters)
+        {
+            if( parameters.Contains("top") && attachedTo != null ) {
+                return attachedTo.GetName(parameters);
+            } else {
+                return base.GetName(parameters);
+            }
         }
 
         public virtual GameObjectData GetDescriptiveWeight( string[] parameters )

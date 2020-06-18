@@ -18,30 +18,25 @@ namespace AdventureDemo
                 return _observer;
             }
         }
-        bool _secondPerson = false;
+
         public bool secondPerson {
             get {
-                return _secondPerson;
+                return observer == GameManager.instance.world.player;
             }
         }
-
-        GameObject _subject;
         public GameObject subject {
             get {
-                return _subject;
-            }
-            set {
-                _subject = value;
-                Update();
+                return observer.GetControlled();
             }
         }
 
         StackPanel descriptions;
 
-        public VerbosePage(Actor observer, GameObject subject = null) : base()
+        public VerbosePage(Actor observer) : base()
         {
             _observer = observer;
-            _subject = subject;
+            _observer.MessageVerbosePages += PrintMessage;
+            _observer.TurnVerbosePages += TurnPage;
 
             SetTitle(". . .");
             FrameworkElement panel = GameManager.instance.GetResource<FrameworkElement>("VerbosePage");
@@ -49,14 +44,7 @@ namespace AdventureDemo
 
             descriptions = Utilities.FindNode<StackPanel>(panel, "Descriptions");
 
-            UpdateSecondPerson();
             Display();
-        }
-
-        public void UpdateSecondPerson()
-        {
-            if( subject == null ) { return; }
-            _secondPerson = observer.GetControlled() == subject;
         }
 
         public void Display()
@@ -72,27 +60,40 @@ namespace AdventureDemo
         private void DisplayContainer(GameObject obj)
         {
             GameObjectData objData = observer.Observe(obj);
+
             bool unique = Char.IsUpper(objData.text[0]);
+
             TextBlock text = WaywardTextParser.ParseAsBlock(
                 $@"[0] {(secondPerson ? "are" : "is")} in {(unique ? "" : "a ")}[1], [2].",
-                new WaywardTextParser.ParseDelegate[] {
                     () => { return observer.Observe(subject).span; },
                     () => { return objData.span; },
                     () => { return observer.Observe(obj, "description").span; }
-                }
             );
+
             text.TextWrapping = TextWrapping.Wrap;
             descriptions.Children.Add(text);
         }
 
-        public override void Clear()
+        public void TurnPage()
         {
             descriptions.Children.Clear();
         }
 
+        public override void Clear() {}
+
         public override void Update()
         {
             Display();
+        }
+
+        public void PrintMessage(string message)
+        {
+            TextBlock text = WaywardTextParser.ParseAsBlock(message);
+            descriptions.Children.Add(text);
+        }
+        public void PrintMessage(TextBlock text)
+        {
+            descriptions.Children.Add(text);
         }
     }
 }

@@ -23,8 +23,12 @@ namespace AdventureDemo
         {
             if( Check(target) != CheckResult.VALID ) { return false; }
 
-            self.actor.Control(target);
+            self.actor.OnTurnVerbosePages( WaywardTextParser.ParseAsBlock($"[0] {displayLabel.ToLower()} [1]",
+                () => { return self.GetData("name top").span; },
+                () => { return target.GetData("name").span; }
+            ) );
 
+            self.actor.Control(target);
             return true;
         }
 

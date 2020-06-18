@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using WaywardEngine;
 
 namespace AdventureDemo
@@ -11,21 +12,27 @@ namespace AdventureDemo
     // TODO: Split Actor and PlayerActor code
     abstract class Actor
     {
-		protected GameObject controlledObject;
+        #region Fields
 
+        protected GameObject controlledObject;
         protected readonly Dictionary<string[], InputManager.InputDelegate> commands;
-
 		protected readonly List<Verb> verbs;
+        protected readonly List<WaywardEngine.Page> relatedPages;
+
+        #endregion
 
 		public Actor()
         {
             verbs = new List<Verb>();
+            relatedPages = new List<WaywardEngine.Page>();
 
             commands = new Dictionary<string[], InputManager.InputDelegate>();
             commands.Add(new string[] { "view", "look", "observe", "l" }, ParseView);
         }
 
-		public virtual void Control( GameObject obj )
+        #region Control
+
+        public virtual void Control( GameObject obj )
         {
             verbs.Clear();
 
@@ -60,16 +67,24 @@ namespace AdventureDemo
             return subjects;
         }
 
-		/// <summary>
+        #endregion
+
+        #region Observation
+
+        /// <summary>
         /// Returns a bool indicating whether obj can be perceived at all. For example, if it should
         /// appear in an Overview page.
         /// </summary>
         /// <param name="obj">Object to be observed.</param>
         /// <returns></returns>
-		public abstract bool CanObserve( GameObject obj );
+        public abstract bool CanObserve( GameObject obj );
 
 		public abstract GameObjectData Observe( GameObject obj );
 		public abstract GameObjectData Observe( GameObject obj, string dataKey );
+
+        #endregion
+
+        #region Verbs
 
         public virtual bool HasVerb( Type type )
         {
@@ -99,6 +114,10 @@ namespace AdventureDemo
         {
             verbs.Add(verb);
         }
+
+        #endregion
+
+        #region Inputs
 
         public virtual bool ParseInput( InputEventArgs e )
         {
@@ -132,6 +151,29 @@ namespace AdventureDemo
 
             return true;
         }
+
+        #endregion
+
+        #region Events
+
+        public delegate void TurnVerbosePagesDelegate();
+        public event TurnVerbosePagesDelegate TurnVerbosePages;
+        public virtual void OnTurnVerbosePages( TextBlock text = null )
+        {
+            TurnVerbosePages?.Invoke();
+            if( text != null ) {
+                OnMessageVerbosePages(text);
+            }
+        }
+
+        public delegate void MessageVerbosePagesDelegate( TextBlock text );
+        public event MessageVerbosePagesDelegate MessageVerbosePages;
+        public virtual void OnMessageVerbosePages( TextBlock text )
+        {
+            MessageVerbosePages?.Invoke(text);
+        }
+
+        #endregion
     }
 
     public enum PossessionType {
