@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Windows.Controls;
 using WaywardEngine;
 
 namespace AdventureDemo
@@ -23,10 +25,17 @@ namespace AdventureDemo
         {
             if( Check(target) != CheckResult.VALID ) { return false; }
 
-            self.actor.OnTurnVerbosePages( WaywardTextParser.ParseAsBlock($"[0] {displayLabel.ToLower()} [1]",
+            // Create data dictionary to be passed to observers
+            Dictionary<string, object> data = new Dictionary<string, object>();
+
+            // Message for Verbose pages
+            data["message"] = WaywardTextParser.ParseAsBlock($"[0] {displayLabel.ToLower()} [1].",
                 () => { return self.GetData("name top").span; },
                 () => { return target.GetData("name").span; }
-            ) );
+            );
+            data["turnPage"] = true;
+
+            self.OnAction(data);
 
             self.actor.Control(target);
             return true;

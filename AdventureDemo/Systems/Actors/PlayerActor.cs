@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+using System.Windows.Controls;
 using WaywardEngine;
 
 namespace AdventureDemo
@@ -12,16 +9,39 @@ namespace AdventureDemo
     {
         private string controlledName; // XXX: Temporary until objects can be renamed in game
 
+        public override void OnObservedActionTaken(Dictionary<string, object> data)
+        {
+            TextBlock text = null;
+            if( data.ContainsKey("message") ) {
+                text = data["message"] as TextBlock;
+            }
+
+            bool turnPage = false;
+            if( data.ContainsKey("turnPage") ) {
+                try {
+                    turnPage = (bool)data["turnPage"];
+                } catch {
+                    // XXX: error log?
+                }
+            }
+
+            if( turnPage ) {
+                OnTurnVerbosePages(text);
+            } else if( text != null ) {
+                OnMessageVerbosePages( text );
+            }
+        }
+
         public override void Control( GameObject obj )
         {
-            if( controlledObject != null && !string.IsNullOrEmpty(controlledName) ) {
-                controlledObject.name = controlledName;
+            if( controlledObject != null ) {
+                controlledObject.nickname = controlledName;
             }
 
             base.Control(obj);
 
-            controlledName = obj.name;
-            obj.name = $"You ({obj.name})";
+            controlledName = obj.nickname;
+            obj.nickname = $"You";
         }
 
         public override bool CanObserve( GameObject obj )

@@ -72,12 +72,17 @@ namespace AdventureDemo
 
         private void SendMessage( GameObject target )
         {
-            if( physicalSelf != null && physicalSelf.actor != null ) {
-                physicalSelf.actor.OnTurnVerbosePages( WaywardTextParser.ParseAsBlock($"[0] {displayLabel.ToLower()} into [1]",
-                    () => { return self.GetData("name top").span; },
-                    () => { return target.GetData("name").span; }
-                ) );
-            }
+            // Create data dictionary to be passed to observers
+            Dictionary<string, object> data = new Dictionary<string, object>();
+
+            // Message for Verbose pages
+            data["message"] = WaywardTextParser.ParseAsBlock($"[0] {displayLabel.ToLower()} into [1].",
+                () => { return self.GetData("name top").span; },
+                () => { return target.GetData("name").span; }
+            );
+            data["turnPage"] = true;
+
+            self.OnAction(data);
         }
 
         public override CheckResult Check( GameObject target )

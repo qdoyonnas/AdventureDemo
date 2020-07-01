@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Documents;
-using System.Windows.Media;
 using WaywardEngine;
 
 namespace AdventureDemo
@@ -15,6 +13,7 @@ namespace AdventureDemo
         #region Fields
 
         public string name;
+        public string nickname; // XXX: Temp until knowledge is implemented
         public string description;
 
         public List<string> tags;
@@ -49,9 +48,16 @@ namespace AdventureDemo
 
         protected List<DataDelegate> relevantData;
 
-        // Events
-        public delegate void OnActionDelegate();
-        public event OnActionDelegate OnAction;
+        #endregion
+
+        #region Events
+
+        public delegate void OnActionDelegate( Dictionary<string, object> data );
+        public event OnActionDelegate OnActionEvent;
+        public virtual void OnAction( Dictionary<string, object> data )
+        {
+            OnActionEvent?.Invoke(data);
+        }
 
         #endregion
 
@@ -84,6 +90,7 @@ namespace AdventureDemo
         void Construct()
         {
             name = "unknown object";
+            nickname = "";
             description = "a strange object";
 
             tags = new List<string>();
@@ -190,9 +197,20 @@ namespace AdventureDemo
         public virtual GameObjectData GetName( params string[] parameters )
         {
             GameObjectData data = new GameObjectData();
-            bool upper = parameters.Length > 0 && parameters.Contains("upper");
+            bool upper = parameters.Contains("upper");
 
-            data.text = upper ? char.ToUpper(name[0]) + name.Substring(1) : name;
+            string alias = name;
+            bool proper = parameters.Contains("proper");
+            if( !proper && !string.IsNullOrEmpty(nickname) ) {
+                alias = nickname;
+            }
+
+            bool complete = parameters.Contains("complete");
+            if( complete && !string.IsNullOrEmpty(nickname) ) {
+                alias = $"{nickname} ({name})";
+            }
+
+            data.text = upper ? char.ToUpper(alias[0]) + alias.Substring(1) : alias;
 
             data.SetSpan( data.text );
             data.span.Style = GameManager.instance.GetResource<Style>("Link");

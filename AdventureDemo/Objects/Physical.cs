@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
+using System.Windows.Controls;
 using WaywardEngine;
 
 namespace AdventureDemo
@@ -115,6 +113,19 @@ namespace AdventureDemo
 
             this.volume = 0;
             _materials = new Dictionary<Material, double>();
+        }
+
+        #endregion
+
+        #region Events
+
+        public override void OnAction(Dictionary<string, object> data)
+        {
+            if( attachedTo == null ) {
+                base.OnAction(data);
+            } else {
+                attachedTo.OnAction(data);
+            }
         }
 
         #endregion

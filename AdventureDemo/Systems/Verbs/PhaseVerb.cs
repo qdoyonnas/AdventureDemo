@@ -43,12 +43,18 @@ namespace AdventureDemo
                 target.Attach(self);
             }
 
-            if( self != null && self.actor != null ) {
-                self.actor.OnTurnVerbosePages( WaywardTextParser.ParseAsBlock($"[0] {displayLabel.ToLower()} into [1].", 
-                    () => { return self.GetData("name top").span; },
-                    () => { return target.GetParent().GetData("name").span; }
-                ) );
-            }
+            // Create data dictionary to be passed to observers
+            Dictionary<string, object> data = new Dictionary<string, object>();
+
+            // Message for Verbose pages
+            data["message"] = WaywardTextParser.ParseAsBlock($"[0] {displayLabel.ToLower()} into [1].", 
+                () => { return self.GetData("name top").span; },
+                () => { return target.GetParent().GetData("name").span; }
+            );
+            data["turnPage"] = true;
+
+            self.OnAction(data);
+
             return true;
         }
 

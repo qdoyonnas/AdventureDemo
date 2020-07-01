@@ -35,7 +35,7 @@ namespace AdventureDemo
 
             _observer = observer;
             _target = target;
-            SetTitle( observer.Observe(_target, "name upper").text );
+            SetTitle( observer.Observe(_target, "name upper complete").text );
 
             foreach( DescriptivePageSection section in sections ) {
                 AddSection(section, false);
@@ -65,7 +65,7 @@ namespace AdventureDemo
         public override void Clear() {}
         public override void Update()
         {
-            SetTitle( observer.Observe(_target, "name upper").text );
+            SetTitle( observer.Observe(_target, "name upper complete").text );
             DisplayTarget();
         }
     }

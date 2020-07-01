@@ -21,6 +21,32 @@ namespace AdventureDemo
 
         #endregion
 
+        #region Events
+
+        public delegate void TurnVerbosePagesDelegate();
+        public event TurnVerbosePagesDelegate TurnVerbosePages;
+        public virtual void OnTurnVerbosePages( TextBlock text = null )
+        {
+            TurnVerbosePages?.Invoke();
+            if( text != null ) {
+                OnMessageVerbosePages(text);
+            }
+        }
+
+        public delegate void MessageVerbosePagesDelegate( TextBlock text );
+        public event MessageVerbosePagesDelegate MessageVerbosePages;
+        public virtual void OnMessageVerbosePages( TextBlock text )
+        {
+            MessageVerbosePages?.Invoke(text);
+        }
+
+        public virtual void OnObservedActionTaken( Dictionary<string, object> data )
+        {
+            // Do Something
+        }
+
+        #endregion
+
 		public Actor()
         {
             verbs = new List<Verb>();
@@ -38,9 +64,13 @@ namespace AdventureDemo
 
             if( controlledObject != null ) {
                 bool success = controlledObject.SetActor(null);
+                
                 if( !success ) { return; }
+                controlledObject.OnActionEvent -= OnObservedActionTaken;
             }
+
 			controlledObject = obj;
+
             if( controlledObject != null ) {
                 bool success = controlledObject.SetActor(this);
                 if( !success ) {
@@ -49,6 +79,7 @@ namespace AdventureDemo
                 }
             }
 
+            controlledObject.OnActionEvent += OnObservedActionTaken;
             controlledObject.CollectVerbs(this, PossessionType.EMBODIMENT);
         }
 		public virtual GameObject GetControlled()
@@ -150,27 +181,6 @@ namespace AdventureDemo
             GameManager.instance.DisplayDescriptivePage(position, controlledObject);
 
             return true;
-        }
-
-        #endregion
-
-        #region Events
-
-        public delegate void TurnVerbosePagesDelegate();
-        public event TurnVerbosePagesDelegate TurnVerbosePages;
-        public virtual void OnTurnVerbosePages( TextBlock text = null )
-        {
-            TurnVerbosePages?.Invoke();
-            if( text != null ) {
-                OnMessageVerbosePages(text);
-            }
-        }
-
-        public delegate void MessageVerbosePagesDelegate( TextBlock text );
-        public event MessageVerbosePagesDelegate MessageVerbosePages;
-        public virtual void OnMessageVerbosePages( TextBlock text )
-        {
-            MessageVerbosePages?.Invoke(text);
         }
 
         #endregion
