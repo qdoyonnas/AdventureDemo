@@ -50,6 +50,12 @@ namespace AdventureDemo
         }
 
         protected abstract void Construct();
+
+        /// <summary>
+        /// Called when the verb is assigned a gameObject as 'self'.
+        /// As an example, can be used to add necessary objects for the verb to function
+        /// to the assigned gameObject.
+        /// </summary>
         protected abstract void OnAssign();
 
         /// <summary>
