@@ -37,6 +37,7 @@ namespace AdventureDemo
             _observer = observer;
             _observer.MessageVerbosePages += PrintMessage;
             _observer.TurnVerbosePages += TurnPage;
+            _observer.DisplayVerbosePages += Display;
 
             SetTitle(". . .");
             FrameworkElement panel = GameManager.instance.GetResource<FrameworkElement>("VerbosePage");
@@ -74,17 +75,15 @@ namespace AdventureDemo
             descriptions.Children.Add(text);
         }
 
-        public void TurnPage()
+        public void TurnPage(bool display)
         {
             descriptions.Children.Clear();
+            if( display ) { Display(); }
         }
 
         public override void Clear() {}
 
-        public override void Update()
-        {
-            Display();
-        }
+        public override void Update() {}
 
         public void PrintMessage(string message)
         {

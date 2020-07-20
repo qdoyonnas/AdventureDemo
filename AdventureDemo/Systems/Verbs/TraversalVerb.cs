@@ -81,6 +81,7 @@ namespace AdventureDemo
                 () => { return target.GetData("name").span; }
             );
             data["turnPage"] = true;
+            data["displayAfter"] = true;
 
             self.OnAction(data);
         }

@@ -23,14 +23,11 @@ namespace AdventureDemo
 
         #region Events
 
-        public delegate void TurnVerbosePagesDelegate();
+        public delegate void TurnVerbosePagesDelegate(bool display);
         public event TurnVerbosePagesDelegate TurnVerbosePages;
-        public virtual void OnTurnVerbosePages( TextBlock text = null )
+        public virtual void OnTurnVerbosePages(bool display)
         {
-            TurnVerbosePages?.Invoke();
-            if( text != null ) {
-                OnMessageVerbosePages(text);
-            }
+            TurnVerbosePages?.Invoke(display);
         }
 
         public delegate void MessageVerbosePagesDelegate( TextBlock text );
@@ -38,6 +35,13 @@ namespace AdventureDemo
         public virtual void OnMessageVerbosePages( TextBlock text )
         {
             MessageVerbosePages?.Invoke(text);
+        }
+
+        public delegate void DisplayVerbosePagesDelegate();
+        public event DisplayVerbosePagesDelegate DisplayVerbosePages;
+        public virtual void OnDisplayVerbosePages()
+        {
+            DisplayVerbosePages?.Invoke();
         }
 
         public virtual void OnObservedActionTaken( Dictionary<string, object> data )

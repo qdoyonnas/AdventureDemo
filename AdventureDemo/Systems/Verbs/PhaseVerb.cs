@@ -52,6 +52,7 @@ namespace AdventureDemo
                 () => { return target.GetParent().GetData("name").span; }
             );
             data["turnPage"] = true;
+            data["displayAfter"] = true;
 
             self.OnAction(data);
 

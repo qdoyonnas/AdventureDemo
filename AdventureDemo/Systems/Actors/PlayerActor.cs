@@ -25,10 +25,23 @@ namespace AdventureDemo
                 }
             }
 
+            bool displayAfter = false;
+            if( data.ContainsKey("displayAfter") ) {
+                try {
+                    displayAfter = (bool)data["displayAfter"];
+                } catch {
+                    // XXX: error log?
+                }
+            }
+
             if( turnPage ) {
-                OnTurnVerbosePages(text);
-            } else if( text != null ) {
+                OnTurnVerbosePages(!displayAfter);
+            }
+            if( text != null ) {
                 OnMessageVerbosePages( text );
+            }
+            if( displayAfter ) {
+                OnDisplayVerbosePages();
             }
         }
 

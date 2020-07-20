@@ -13,6 +13,8 @@ namespace AdventureDemo
         {
             _displayLabel = "Wait";
 
+            actionTime = 500;
+
             _validInputs = new string[] { "wait" };
         }
         
@@ -27,6 +29,7 @@ namespace AdventureDemo
                 () => { return target.GetData("name").span; }
             );
             data["turnPage"] = true;
+            data["displayAfter"] = true;
 
             self.OnAction(data);
 
