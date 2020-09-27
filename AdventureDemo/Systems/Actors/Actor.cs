@@ -17,6 +17,7 @@ namespace AdventureDemo
         protected GameObject controlledObject;
         protected readonly Dictionary<string[], InputManager.InputDelegate> commands;
 		protected readonly List<Verb> verbs;
+        protected readonly List<Verb> inherentVerbs; // Verbs that belong to the actor and are always available regardless of controlled object
         protected readonly List<WaywardEngine.Page> relatedPages;
 
         #endregion
@@ -54,6 +55,8 @@ namespace AdventureDemo
 		public Actor()
         {
             verbs = new List<Verb>();
+            inherentVerbs = new List<Verb>();
+            inherentVerbs.Add( new WaitVerb() );
             relatedPages = new List<WaywardEngine.Page>();
 
             commands = new Dictionary<string[], InputManager.InputDelegate>();
@@ -65,6 +68,11 @@ namespace AdventureDemo
         public virtual void Control( GameObject obj )
         {
             verbs.Clear();
+
+            foreach( Verb verb in inherentVerbs ) {
+                verb.self = obj;
+                verbs.Add(verb);
+            }
 
             if( controlledObject != null ) {
                 bool success = controlledObject.SetActor(null);

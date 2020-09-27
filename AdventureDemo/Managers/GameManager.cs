@@ -109,9 +109,13 @@ namespace AdventureDemo
 
             SetupPlayContextMenu();
 
-            Point position = new Point(WaywardManager.instance.window.ActualWidth * 0.75, WaywardManager.instance.window.ActualHeight/2);
+            Point position = new Point(WaywardManager.instance.window.ActualWidth * 0.75, WaywardManager.instance.window.ActualHeight/3.1);
             DisplayOverviewPage(position, world.player);
-            position.X = WaywardManager.instance.window.ActualWidth * 0.25;
+
+            position = new Point(WaywardManager.instance.window.ActualWidth * 0.75, WaywardManager.instance.window.ActualHeight/1.4);
+            DisplayTimelinePage(position, world.player);
+
+            position = new Point(WaywardManager.instance.window.ActualWidth * 0.25, WaywardManager.instance.window.ActualHeight/2.2);
             DisplayPlayerVerbose(position);
 
             WaywardManager.instance.SelectInputPage();
@@ -129,6 +133,7 @@ namespace AdventureDemo
             ContextMenuHelper.AddContextMenuHeader(WaywardManager.instance.window, "Page", new Dictionary<string, ContextMenuAction>() {
                 { "Overview", CreateOverviewPage },
                 { "Visual", CreateVerbosePage },
+                { "Timeline", CreateTimelinePage },
                 { "Input", WaywardManager.instance.SelectInputPage }
             });
 
@@ -174,6 +179,13 @@ namespace AdventureDemo
 
             return false;
         }
+        public bool CreateTimelinePage()
+        {
+            Point mousePosition = WaywardManager.instance.GetMousePosition();
+            DisplayTimelinePage(mousePosition, world.player);
+
+            return false;
+        }
         public bool Exit()
         {
             Application.Current.Shutdown();
@@ -216,6 +228,13 @@ namespace AdventureDemo
             DescriptivePageSection[] sections = target.DisplayDescriptivePage().ToArray();
             DescriptivePage page = new DescriptivePage( world.player, target, sections );
 
+            WaywardManager.instance.AddPage(page, position);
+
+            return page;
+        }
+        public TimelinePage DisplayTimelinePage( Point position, Actor actor )
+        {
+            TimelinePage page = new TimelinePage( actor );
             WaywardManager.instance.AddPage(page, position);
 
             return page;

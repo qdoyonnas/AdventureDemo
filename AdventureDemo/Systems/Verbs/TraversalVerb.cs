@@ -57,17 +57,25 @@ namespace AdventureDemo
         {
             Physical parent = PhysicalUtilities.FindParentPhysical(physicalSelf);
 
-            SendMessage( container );
+            bool success = container.GetContents().Attach(parent);
 
-            return container.GetContents().Attach(parent);
+            if( success ) {
+                SendMessage( container );
+            }
+
+            return success;
         }
         bool EnterConnection( Connection connection )
         {
             Physical parent = PhysicalUtilities.FindParentPhysical(physicalSelf);
 
-            SendMessage( connection.secondContainer.GetParent() );
+            bool success = connection.secondContainer.Attach(parent);
 
-            return connection.secondContainer.Attach(parent);
+            if( success ) {
+                SendMessage( connection.secondContainer.GetParent() );
+            }
+
+            return success;
         }
 
         private void SendMessage( GameObject target )

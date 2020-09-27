@@ -107,7 +107,12 @@ namespace AdventureDemo
                     position.X = WaywardManager.instance.window.ActualWidth * 0.25;
                     GameManager.instance.DisplayPlayerVerbose(position);
                     break;
-
+                case "t":
+                case "tml":
+                case "timeline":
+                    position.X = WaywardManager.instance.window.ActualWidth * 0.75;
+                    GameManager.instance.DisplayTimelinePage(position, GameManager.instance.world.player);
+                    break;
                 default:
                     return false;
             }

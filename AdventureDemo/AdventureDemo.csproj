@@ -103,6 +103,7 @@
     <Compile Include="Pages\MenuPages\MainMenuPage.cs" />
     <Compile Include="Pages\MenuPages\ScenariosMenuPage.cs" />
     <Compile Include="Pages\MenuPages\WorldsMenuPage.cs" />
+    <Compile Include="Pages\TimelinePage.cs" />
     <Compile Include="Pages\VerbosePage.cs" />
     <Compile Include="Managers\DataManager.cs" />
     <Compile Include="Systems\Attachments\AttachmentPoint.cs" />

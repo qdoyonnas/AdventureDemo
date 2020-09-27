@@ -83,7 +83,7 @@ namespace AdventureDemo
             if( data.ContainsKey("volume") ) { volume = (double)data["volume"]; }
             if( data.ContainsKey("materials") ) { 
                 foreach( KeyValuePair<Material, double> mat in data["materials"] as KeyValuePair<Material, double>[] ) {
-                    _materials.Add(mat.Key, mat.Value);
+                    AddMaterial(mat.Key, mat.Value);
                 }
             }
         }
@@ -94,7 +94,7 @@ namespace AdventureDemo
 
             this.volume = volume;
             foreach( KeyValuePair<Material, double> mat in mats ) {
-                _materials.Add(mat.Key, mat.Value);
+                AddMaterial(mat.Key, mat.Value);
             }
         }
         private void Construct()

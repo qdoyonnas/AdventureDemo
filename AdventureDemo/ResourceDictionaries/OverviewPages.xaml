@@ -24,21 +24,21 @@
     </Grid>
 
     <Border x:Key="OverviewContents" x:Shared="false" Style="{StaticResource PageStyle}">
-        <ScrollViewer MaxHeight="600" Width="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer MinHeight="500" MaxHeight="500" Width="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
             <StackPanel Name="Contents">
             </StackPanel>
         </ScrollViewer>
     </Border>
 
     <Border x:Key="OverviewEvents" x:Shared="false" Style="{StaticResource PageStyle}">
-        <ScrollViewer MinHeight="350" MaxHeight="350" Width="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer MinHeight="200" MaxHeight="200" Width="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
             <StackPanel Name="Events">
             </StackPanel>
         </ScrollViewer>
     </Border>
 
     <Border x:Key="VerbosePage" x:Shared="false" Style="{StaticResource PageStyle}">
-        <ScrollViewer MinHeight="350" MaxHeight="350" Width="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer MinHeight="650" MaxHeight="650" Width="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
             <StackPanel Name="Descriptions">
             </StackPanel>
         </ScrollViewer>

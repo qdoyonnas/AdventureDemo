@@ -36,9 +36,10 @@ namespace AdventureDemo
             data["turnPage"] = true;
             data["displayAfter"] = true;
 
+            self.actor.Control(target);
+
             self.OnAction(data);
 
-            self.actor.Control(target);
             return true;
         }
 

@@ -44,11 +44,26 @@ namespace AdventureDemo
         {
             if( Check(target) != CheckResult.VALID ) { return false; }
 
-            if( target.container.GetParent() == self ) {
+            bool drop = target.container.GetParent() == self;
+            if( drop ) {
                 self.container.Attach(target);
             } else {
                 inventory.Attach(target);
             }
+
+            // Create data dictionary to be passed to observers
+            Dictionary<string, object> data = new Dictionary<string, object>();
+
+            // Message for Verbose pages
+            string label = drop ? "drop" : "pickup";
+            data["message"] = WaywardTextParser.ParseAsBlock($"[0] { label } [1].", 
+                () => { return self.GetData("name top").span; },
+                () => { return target.GetData("name").span; }
+            );
+            data["turnPage"] = false;
+            data["displayAfter"] = false;
+
+            self.OnAction(data);
 
             return true;
         }

@@ -37,7 +37,13 @@ namespace AdventureDemo
         }
 
         public override CheckResult Check(GameObject target) 
-            { return CheckResult.VALID; }
+        {
+            if( target == self ) {
+                return CheckResult.VALID;
+            } else {
+                return CheckResult.INVALID;
+            }
+        }
 
         protected override void OnAssign() {}
     }
