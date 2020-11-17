@@ -20,13 +20,17 @@ namespace AdventureDemo
         
         public override bool Action(GameObject target)
         {
+            // Open dialog for choosing time
+        }
+
+        protected bool WaitAction()
+        {
             // Create data dictionary to be passed to observers
             Dictionary<string, object> data = new Dictionary<string, object>();
 
             // Message for Verbose pages
             data["message"] = WaywardTextParser.ParseAsBlock($"[0] {displayLabel.ToLower()}.",
-                () => { return self.GetData("name top").span; },
-                () => { return target.GetData("name").span; }
+                () => { return self.GetData("name top").span; }
             );
             data["turnPage"] = true;
             data["displayAfter"] = true;
@@ -46,5 +50,22 @@ namespace AdventureDemo
         }
 
         protected override void OnAssign() {}
+
+        public override bool ParseInput(InputEventArgs e)
+        {
+            if( e.parsed ) { return true; }
+
+            if( e.parameters.Length == 0 ) {
+                return Action(null);
+            } else {
+                double waitTime;
+                bool success = double.TryParse(e.parameters[0], out waitTime);
+                if( !success ) { return false; }
+
+                WaitAction();
+            }
+
+            return true;
+        }
     }
 }

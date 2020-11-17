@@ -39,18 +39,15 @@ namespace AdventureDemo
             Container container = target as Container;
             if( container != null ) {
                 success = EnterContainer(container);
-                
             }
 
             if( !success ) {
                 Connection connection = target as Connection;
                 if( connection != null ) {
                     success = EnterConnection(connection);
-                    
                 }
             }
 
-            
             return success;
         }
         bool EnterContainer( Container container )
