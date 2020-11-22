@@ -12,7 +12,8 @@
                 <ResourceDictionary Source="/ResourceDictionaries/OverviewPages.xaml" />
                 <ResourceDictionary Source="/ResourceDictionaries/DescriptivePages.xaml" />
                 <ResourceDictionary Source="/ResourceDictionaries/MenuPages.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/ResourceDictionaries/DialogPages.xaml" />
+			</ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
         
     </Application.Resources>

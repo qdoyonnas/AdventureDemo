@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:AdventureDemo">
+
+	<Border x:Key="DialogPanel" x:Shared="false" Style="{StaticResource PageStyle}">
+		<ScrollViewer MinHeight="200" MaxHeight="650" Width="250" VerticalScrollBarVisibility="Auto">
+			<StackPanel Name="Descriptions">
+				<TextBlock>Stuff</TextBlock>
+			</StackPanel>
+		</ScrollViewer>
+	</Border>
+	
+</ResourceDictionary>

@@ -21,6 +21,9 @@ namespace AdventureDemo
         public override bool Action(GameObject target)
         {
             // Open dialog for choosing time
+            WaywardManager.instance.AddPage(new DialogPage(), WaywardManager.instance.GetRelativeWindowPoint(0.5, 0.5));
+
+            return true;
         }
 
         protected bool WaitAction()
