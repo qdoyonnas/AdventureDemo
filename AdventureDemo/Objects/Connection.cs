@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace AdventureDemo
 {
-    class Connection : GameObject
+    class Connection : GameObject, IVerbSuggest
     {
         ContainerAttachmentPoint _secondContainer;
         public ContainerAttachmentPoint secondContainer {
@@ -69,6 +70,21 @@ namespace AdventureDemo
 
             _throughput = 0;
             _secondContainer = null;
+        }
+
+        public bool DisplayVerb(Verb verb, FrameworkContentElement span)
+        {
+            return false;
+        }
+
+        public bool SetDefaultVerb(Verb verb, FrameworkContentElement span)
+        {
+            if( verb is TraversalVerb ) {
+                span.MouseLeftButtonDown += delegate { verb.Register(this, true); };
+                return true;
+            }
+
+            return false;
         }
     }
 }

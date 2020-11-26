@@ -89,11 +89,14 @@ namespace AdventureDemo
             bool isDefaultSet = false;
 			if( dataKey.Contains("name") ) {
 				foreach( Verb verb in verbs) {
+                    bool verbDisplayed = false;
                     if( objSuggest != null ) {
-                        objSuggest.DisplayVerb(verb, data.span);
+                        verbDisplayed = objSuggest.DisplayVerb(verb, data.span);
                         isDefaultSet = isDefaultSet | objSuggest.SetDefaultVerb(verb, data.span);
                     }
-                    verb.Display(this, obj, data.span);
+                    if( !verbDisplayed ) {
+                        verb.Display(this, obj, data.span);
+                    }
 				}
 
                 ContextMenuHelper.AddContextMenuItem( data.span, "View", delegate { GameManager.instance.DisplayDescriptivePage(obj); return false; } );
