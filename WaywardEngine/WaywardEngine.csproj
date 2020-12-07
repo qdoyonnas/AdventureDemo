@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContextMenuHelper.cs" />
+    <Compile Include="FormattedText.cs" />
     <Compile Include="InputManagerBase.cs" />
     <Compile Include="Pages\ContentPage.cs" />
     <Compile Include="Pages\InputPage.cs" />
