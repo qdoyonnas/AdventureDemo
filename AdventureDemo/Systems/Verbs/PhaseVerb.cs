@@ -47,9 +47,9 @@ namespace AdventureDemo
             Dictionary<string, object> data = new Dictionary<string, object>();
 
             // Message for Verbose pages
-            data["message"] = WaywardTextParser.ParseAsBlock($"[0] {displayLabel.ToLower()} into [1].", 
-                () => { return self.GetData("name top").span; },
-                () => { return target.GetParent().GetData("name").span; }
+            data["message"] = new ObservableText($"[0] {displayLabel.ToLower()} into [1].", 
+                new Tuple<GameObject, string>(self, "name top"),
+                new Tuple<GameObject, string>(target.GetParent(), "name")
             );
             data["turnPage"] = true;
             data["displayAfter"] = true;

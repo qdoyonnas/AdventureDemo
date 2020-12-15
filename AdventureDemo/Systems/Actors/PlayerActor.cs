@@ -9,42 +9,6 @@ namespace AdventureDemo
     {
         private string controlledName; // XXX: Temporary until objects can be renamed in game
 
-        public override void OnObservedActionTaken(Dictionary<string, object> data)
-        {
-            TextBlock text = null;
-            if( data.ContainsKey("message") ) {
-                text = data["message"] as TextBlock;
-            }
-
-            bool turnPage = false;
-            if( data.ContainsKey("turnPage") ) {
-                try {
-                    turnPage = (bool)data["turnPage"];
-                } catch {
-                    // XXX: error log?
-                }
-            }
-
-            bool displayAfter = false;
-            if( data.ContainsKey("displayAfter") ) {
-                try {
-                    displayAfter = (bool)data["displayAfter"];
-                } catch {
-                    // XXX: error log?
-                }
-            }
-
-            if( turnPage ) {
-                OnTurnVerbosePages(!displayAfter);
-            }
-            if( text != null ) {
-                OnMessageVerbosePages( text );
-            }
-            if( displayAfter ) {
-                OnDisplayVerbosePages();
-            }
-        }
-
         public override void Control( GameObject obj )
         {
             if( controlledObject != null ) {

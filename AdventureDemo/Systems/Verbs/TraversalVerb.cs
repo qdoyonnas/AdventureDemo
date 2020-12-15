@@ -81,9 +81,9 @@ namespace AdventureDemo
             Dictionary<string, object> data = new Dictionary<string, object>();
 
             // Message for Verbose pages
-            data["message"] = WaywardTextParser.ParseAsBlock($"[0] {displayLabel.ToLower()} into [1].",
-                () => { return self.GetData("name top").span; },
-                () => { return target.GetData("name").span; }
+            data["message"] = new ObservableText($"[0] {displayLabel.ToLower()} into [1].",
+                new Tuple<GameObject, string>(self, "name top"),
+                new Tuple<GameObject, string>(target, "name")
             );
             data["turnPage"] = true;
             data["displayAfter"] = true;
@@ -119,7 +119,6 @@ namespace AdventureDemo
         {
             CheckResult check = Check(target);
             if( check >= CheckResult.RESTRICTED ) {
-                Dictionary<TextBlock, ContextMenuAction> items = new Dictionary<TextBlock, ContextMenuAction>();
                 if( check == CheckResult.RESTRICTED ) {
                     ContextMenuHelper.AddContextMenuItem( span, WaywardTextParser.ParseAsBlock($@"<gray>{displayLabel}</gray>") , null, false );
                 } else {

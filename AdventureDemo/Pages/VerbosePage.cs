@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using WaywardEngine;
@@ -30,9 +31,7 @@ namespace AdventureDemo
         public VerbosePage(Actor observer) : base()
         {
             _observer = observer;
-            _observer.MessageVerbosePages += PrintMessage;
-            _observer.TurnVerbosePages += TurnPage;
-            _observer.DisplayVerbosePages += Display;
+            observer.ObservedActionTaken += OnObservedActionTaken;
 
             SetTitle(". . .");
             FrameworkElement panel = GameManager.instance.GetResource<FrameworkElement>("VerbosePage");
@@ -68,6 +67,23 @@ namespace AdventureDemo
 
             text.TextWrapping = TextWrapping.Wrap;
             descriptions.Children.Add(text);
+        }
+
+        protected void OnObservedActionTaken( Dictionary<string, object> data )
+        {
+            if( data.ContainsKey("turnPage") && (bool)data["turnPage"] ) {
+                TurnPage(false);
+            }
+
+            if( data.ContainsKey("message") ) {
+                ObservableText observableText = data["message"] as ObservableText;
+                TextBlock block = observableText.Observe(observer);
+                descriptions.Children.Add(block);
+            }
+
+            if( data.ContainsKey("displayAfter") && (bool)data["displayAfter"] ) {
+                Display();
+            }
         }
 
         public void TurnPage(bool display)

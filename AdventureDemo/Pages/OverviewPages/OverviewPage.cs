@@ -106,7 +106,7 @@ namespace AdventureDemo
                 text.Inlines.Add( observer.Observe(obj, "data 1").span );
             }
 
-            FetchContents(entry, obj);
+            if( isMainObject) { FetchContents(entry, obj); } 
         }
         protected virtual void FetchContents( FrameworkElement entry, GameObject obj )
         {

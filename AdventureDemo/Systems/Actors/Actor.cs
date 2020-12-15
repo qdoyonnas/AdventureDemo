@@ -24,30 +24,14 @@ namespace AdventureDemo
 
         #region Events
 
-        public delegate void TurnVerbosePagesDelegate(bool display);
-        public event TurnVerbosePagesDelegate TurnVerbosePages;
-        public virtual void OnTurnVerbosePages(bool display)
-        {
-            TurnVerbosePages?.Invoke(display);
-        }
-
-        public delegate void MessageVerbosePagesDelegate( TextBlock text );
-        public event MessageVerbosePagesDelegate MessageVerbosePages;
-        public virtual void OnMessageVerbosePages( TextBlock text )
-        {
-            MessageVerbosePages?.Invoke(text);
-        }
-
-        public delegate void DisplayVerbosePagesDelegate();
-        public event DisplayVerbosePagesDelegate DisplayVerbosePages;
-        public virtual void OnDisplayVerbosePages()
-        {
-            DisplayVerbosePages?.Invoke();
-        }
+        public delegate void ObservedActionDelegate( Dictionary<string, object> data );
+        public event ObservedActionDelegate ObservedActionTaken;
 
         public virtual void OnObservedActionTaken( Dictionary<string, object> data )
         {
-            // Do Something
+            ObservedActionTaken?.Invoke(data);
+
+            // Do others stuff
         }
 
         #endregion
@@ -195,10 +179,25 @@ namespace AdventureDemo
             return true;
         }
 
-        #endregion
-    }
+		#endregion
 
-    public enum PossessionType {
+		#region Pages
+
+        public void AddPage( WaywardEngine.Page page )
+        {
+            relatedPages.Add(page);
+        }
+        public void RemovePage( WaywardEngine.Page page )
+        {
+            if( relatedPages.Contains(page) ) {
+                relatedPages.Remove(page);
+            }
+        }
+
+        #endregion
+	}
+
+	public enum PossessionType {
         EMBODIMENT,
         INTERACTION,
         CONTENT

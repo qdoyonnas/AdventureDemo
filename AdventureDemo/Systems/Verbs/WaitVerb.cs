@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Documents;
+using System.Windows;
+using System.Windows.Controls;
 using WaywardEngine;
 
 namespace AdventureDemo
@@ -41,10 +42,8 @@ namespace AdventureDemo
             actionTime = duration;
 
             // Message for Verbose pages
-            data["message"] = WaywardTextParser.ParseAsBlock($"[0] {displayLabel.ToLower()} for [1].",
-                () => { return self.GetData("name top").span; },
-                () => { return WaywardTextParser.Parse(actionTime.ToString()); }
-            );
+            data["message"] = new ObservableText($"[0] {displayLabel.ToLower()} for {actionTime.ToString()}.",
+                new Tuple<GameObject, string>(self, "name top"));
             data["turnPage"] = true;
             data["displayAfter"] = true;
 
@@ -79,6 +78,37 @@ namespace AdventureDemo
             }
 
             return true;
+        }
+
+        public bool Register(double time, bool fromPlayer = false)
+        {
+            bool success = TimelineManager.instance.RegisterEvent( () => { WaitAction(time); }, self, this, actionTime );
+
+            // XXX: Set the game objects current action here
+
+            if( fromPlayer ) {
+                if( success ) {
+                    GameManager.instance.Update(actionTime);
+                }
+                WaywardManager.instance.Update();
+            }
+
+            return success;
+        }
+
+        public override void Display(Actor actor, GameObject target, FrameworkContentElement span)
+        {
+            CheckResult check = Check(target);
+			if( check >= CheckResult.VALID ) {
+                Dictionary<TextBlock, ContextMenuAction> items = new Dictionary<TextBlock, ContextMenuAction>();
+
+                items.Add( WaywardTextParser.ParseAsBlock("10") , delegate { return Register(10.0, true); } );
+                items.Add( WaywardTextParser.ParseAsBlock("100") , delegate { return Register(100.0, true); } );
+                items.Add( WaywardTextParser.ParseAsBlock("500") , delegate { return Register(500.0, true); } );
+                items.Add( WaywardTextParser.ParseAsBlock("1000") , delegate { return Register(1000.0, true); } );
+
+                ContextMenuHelper.AddContextMenuHeader( span, WaywardTextParser.ParseAsBlock(displayLabel), items, true );
+            }
         }
     }
 }

@@ -56,9 +56,9 @@ namespace AdventureDemo
 
             // Message for Verbose pages
             string label = drop ? "drop" : "pickup";
-            data["message"] = WaywardTextParser.ParseAsBlock($"[0] { label } [1].", 
-                () => { return self.GetData("name top").span; },
-                () => { return target.GetData("name").span; }
+            data["message"] = new ObservableText($"[0] { label } [1].", 
+                new Tuple<GameObject, string>(self, "name top"),
+                new Tuple<GameObject, string>(target, "name")
             );
             data["turnPage"] = false;
             data["displayAfter"] = false;
@@ -131,7 +131,7 @@ namespace AdventureDemo
 
             if( e.parameters.Length <= 0 ) {
                 if( inventory.GetAttachedCount() == 1 ) {
-                    Action(inventory.GetAttached(0));
+                    Register(inventory.GetAttached(0), true);
                 } else {
                     WaywardManager.instance.DisplayMessage($"Drop what?");
                 }
@@ -147,7 +147,7 @@ namespace AdventureDemo
             }
 
             if( Check(foundObject) == CheckResult.VALID ) {
-                Action(foundObject);
+                Register(foundObject, true);
                 return true;
             } else {
                 WaywardManager.instance.DisplayMessage($"Could not grab {foundObject.GetData("name").text}.");
@@ -174,7 +174,7 @@ namespace AdventureDemo
                 if( physical != null && physicalSelf.Contains(physical) ) {
                     WaywardManager.instance.DisplayMessage($"You are already holding {foundObject.GetData("name").text}.");
                 } else {
-                    Action(foundObject);
+                    Register(foundObject, true);
                     return true;
                 }
             } else {
