@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     class Connection : GameObject, IVerbSuggest
     {
@@ -80,7 +80,7 @@ namespace AdventureDemo
         public bool SetDefaultVerb(Verb verb, FrameworkContentElement span)
         {
             if( verb is TraversalVerb ) {
-                span.MouseLeftButtonDown += delegate { verb.Register(this, true); };
+                span.MouseLeftButtonUp += delegate { verb.Register(new Dictionary<string, object>() {{ "target", this }}, true); };
                 return true;
             }
 

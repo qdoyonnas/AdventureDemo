@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using NCalc;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     abstract class DynamicValue<T>
     {

@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using WaywardEngine;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     class VerbosePage : WaywardEngine.ContentPage
     {

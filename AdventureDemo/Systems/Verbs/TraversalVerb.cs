@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using WaywardEngine;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     class TraversalVerb : Verb
     {
@@ -31,8 +31,16 @@ namespace AdventureDemo
             physicalSelf = self as Physical;
         }
 
-        public override bool Action( GameObject target )
+        public override bool Action( Dictionary<string, object> data )
         {
+            GameObject target = null;
+            if( data.ContainsKey("target") ) {
+                target = data["target"] as GameObject;
+            }
+            if( target == null ) {
+                return false;
+            }
+
             if( Check(target) != CheckResult.VALID ) { return false; }
 
             bool success = false;
@@ -122,7 +130,7 @@ namespace AdventureDemo
                 if( check == CheckResult.RESTRICTED ) {
                     ContextMenuHelper.AddContextMenuItem( span, WaywardTextParser.ParseAsBlock($@"<gray>{displayLabel}</gray>") , null, false );
                 } else {
-                    ContextMenuHelper.AddContextMenuItem( span, WaywardTextParser.ParseAsBlock(displayLabel) , delegate { return Register(target, true); } );
+                    ContextMenuHelper.AddContextMenuItem( span, WaywardTextParser.ParseAsBlock(displayLabel) , delegate { return Register(new Dictionary<string, object>(){{ "target", target }}, true); } );
                 }
             }
         }

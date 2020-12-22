@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using WaywardEngine;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     class PossessVerb : Verb
     {
@@ -21,22 +21,30 @@ namespace AdventureDemo
         }
         protected override void OnAssign() {}
 
-        public override bool Action( GameObject target )
+        public override bool Action( Dictionary<string, object> data )
         {
+            GameObject target = null;
+            if( data.ContainsKey("target") ) {
+                target = data["target"] as GameObject;
+            }
+            if( target == null ) {
+                return false;
+            }
+
             if( Check(target) != CheckResult.VALID ) { return false; }
 
             // Create data dictionary to be passed to observers
-            Dictionary<string, object> data = new Dictionary<string, object>();
+            Dictionary<string, object> actionData = new Dictionary<string, object>();
 
             // Message for Verbose pages
-            data["message"] = new ObservableText($"[0] {displayLabel.ToLower()} [1].",
+            actionData["message"] = new ObservableText($"[0] {displayLabel.ToLower()} [1].",
                 new Tuple<GameObject, string>(self, "name top"),
                 new Tuple<GameObject, string>(target, "name")
             );
-            data["turnPage"] = true;
-            data["displayAfter"] = true;
+            actionData["turnPage"] = true;
+            actionData["displayAfter"] = true;
 
-            self.OnAction(data);
+            self.OnAction(actionData);
             self.actor.Control(target);
 
             return true;

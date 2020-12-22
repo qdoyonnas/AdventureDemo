@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using WaywardEngine;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     abstract class Verb
     {
@@ -65,11 +65,11 @@ namespace AdventureDemo
         /// <param name="data">Arbitrary key-value dictionary to be used for parameter passing.</param>
         /// <returns></returns>
         public abstract CheckResult Check( GameObject target );
-        public abstract bool Action( GameObject target );
+        public abstract bool Action( Dictionary<string, object> data );
 
-        public virtual bool Register( GameObject target, bool fromPlayer = false )
+        public virtual bool Register( Dictionary<string, object> data, bool fromPlayer = false )
         {
-            bool success = TimelineManager.instance.RegisterEvent( () => { Action(target); }, self, this, actionTime );
+            bool success = TimelineManager.instance.RegisterEvent( () => { Action(data); }, self, this, actionTime );
 
             // XXX: Set the game objects current action here
 
@@ -91,7 +91,7 @@ namespace AdventureDemo
                 if( check == CheckResult.RESTRICTED ) {
                     items.Add( WaywardTextParser.ParseAsBlock($@"<gray>{displayLabel}</gray>") , null );
                 } else {
-                    items.Add( WaywardTextParser.ParseAsBlock(displayLabel) , delegate { return Register(target, true); } );
+                    items.Add( WaywardTextParser.ParseAsBlock(displayLabel) , delegate { return Register(new Dictionary<string, object>(){{ "target", target }}, true); } );
                 }
                 ContextMenuHelper.AddContextMenuHeader(span, new TextBlock(self.GetData("name upper").span), items, check != CheckResult.RESTRICTED);
             }

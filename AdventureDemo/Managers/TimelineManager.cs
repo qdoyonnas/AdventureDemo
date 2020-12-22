@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using WaywardEngine;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     class TimelineManager
     {

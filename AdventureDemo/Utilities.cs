@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Text.RegularExpressions;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     public enum CheckResult {
         INVALID,

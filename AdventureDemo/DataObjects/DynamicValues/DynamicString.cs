@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using NCalc;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     [JsonConverter(typeof(DynamicStringConverter))]
     class DynamicString : DynamicValue<string>

@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2042
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaywardEngine", "WaywardEngine\WaywardEngine.csproj", "{9F9F3DF5-19C2-4406-B712-92FEEC6DF2C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureDemo", "AdventureDemo\AdventureDemo.csproj", "{8DFC9FA5-6C39-4D7F-97FA-27CFC656D253}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureCore", "AdventureDemo\AdventureCore.csproj", "{8DFC9FA5-6C39-4D7F-97FA-27CFC656D253}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

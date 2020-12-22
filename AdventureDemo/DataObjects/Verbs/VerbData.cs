@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     abstract class VerbData : BasicData
     {

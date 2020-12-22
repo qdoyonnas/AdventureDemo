@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 using WaywardEngine;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     /// <summary>
     /// Interaction logic for App.xaml

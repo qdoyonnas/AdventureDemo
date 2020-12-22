@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using WaywardEngine;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     class PlayerActor : Actor
     {

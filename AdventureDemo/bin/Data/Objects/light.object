@@ -1,0 +1,81 @@
+[
+
+{
+	"id": "blinking_light",
+	"type": "PhysicalAmalgamData",
+	
+	"name": "light",
+	"description": "a blinking light indicating some alert",
+	"tags": [ "light" ],
+	
+	"parts": [
+		{
+			"id": "light_bulb",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "metal_case",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "wire",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+	]
+},
+
+{
+	"id": "light_bulb",
+	"type": "PhysicalData",
+	
+	"name": "light bulb",
+	"description": "the bulb of a light",
+	
+	"volume": "0.2",
+	"materials": [
+		{
+			"material": "glass",
+			"parts": 1
+		}
+	]
+},
+
+{
+	"id": "metal_case",
+	"type": "PhysicalData",
+	
+	"name": "metal case",
+	"description": "a metal case for enclosing vulnerable components",
+	
+	"volume": "0.4",
+	"materials": [
+		{
+			"material": "steel",
+			"parts": 1
+		}
+	]
+},
+
+{
+	"id": "wire",
+	"type": "PhysicalData",
+	
+	"name": "wire",
+	"description": "often used to conduct electricity",
+	
+	"volume": "0.1",
+	"materials": [
+		{
+			"material": "copper",
+			"parts": 1
+		}
+	]
+}
+
+]

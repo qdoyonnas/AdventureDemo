@@ -4,7 +4,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     class DataManager
     {

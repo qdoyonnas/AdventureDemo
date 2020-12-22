@@ -4,7 +4,7 @@ using System.Windows.Input;
 using System.Windows;
 using WaywardEngine;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     class GameManager
     {

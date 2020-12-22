@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     // XXX: I don't love that the Amalgam mainly circumvents the implementation of Physical
     class PhysicalAmalgam : Physical

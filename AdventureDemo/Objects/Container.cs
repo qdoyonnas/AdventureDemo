@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Documents;
 using WaywardEngine;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     class Container : Physical
     {

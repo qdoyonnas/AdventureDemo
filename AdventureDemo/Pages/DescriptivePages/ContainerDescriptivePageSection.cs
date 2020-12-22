@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using WaywardEngine;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     class ContainerDescriptivePageSection : DescriptivePageSection
     {

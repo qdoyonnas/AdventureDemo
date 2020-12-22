@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using WaywardEngine;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     class PhaseVerb : Verb
     {
@@ -22,8 +22,16 @@ namespace AdventureDemo
         }
         protected override void OnAssign() {}
 
-        public override bool Action( GameObject target )
+        public override bool Action( Dictionary<string, object> data )
         {
+            GameObject target = null;
+            if( data.ContainsKey("target") ) {
+                target = data["target"] as GameObject;
+            }
+            if( target == null ) {
+                return false;
+            }
+
             bool success = false;
 
             Physical physical = target as Physical;
@@ -165,7 +173,7 @@ namespace AdventureDemo
             }
 
             if( Check(foundObject) == CheckResult.VALID ) {
-                Action(foundObject);
+                Action(new Dictionary<string, object>() {{ "target", foundObject }});
                 return true;
             } else {
                 WaywardManager.instance.DisplayMessage($"Could not phase into {foundObject.GetData("name").text}.");
@@ -181,7 +189,7 @@ namespace AdventureDemo
                 GameObject container = self.container.GetParent();
                 if( container.container != null
                     && Check(container.container.GetParent()) == CheckResult.VALID ) {
-                    Action(container.container.GetParent());
+                    Action(new Dictionary<string, object>() {{ "target", container.container.GetParent() }});
                     return true;
                 }
             }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using WaywardEngine;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     class GameObjectDescriptivePageSection : DescriptivePageSection
     {

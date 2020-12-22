@@ -3,7 +3,7 @@ using System.Windows;
 using System.Collections.Generic;
 using WaywardEngine;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     class GrabVerb : Verb
     {
@@ -40,8 +40,16 @@ namespace AdventureDemo
             physicalSelf.AddAttachmentPoint(inventory);
         }
 
-        public override bool Action( GameObject target )
+        public override bool Action( Dictionary<string, object> data )
         {
+            GameObject target = null;
+            if( data.ContainsKey("target") ) {
+                target = data["target"] as GameObject;
+            }
+            if( target == null ) {
+                return false;
+            }
+
             if( Check(target) != CheckResult.VALID ) { return false; }
 
             bool drop = target.container.GetParent() == self;
@@ -52,18 +60,18 @@ namespace AdventureDemo
             }
 
             // Create data dictionary to be passed to observers
-            Dictionary<string, object> data = new Dictionary<string, object>();
+            Dictionary<string, object> actionData = new Dictionary<string, object>();
 
             // Message for Verbose pages
             string label = drop ? "drop" : "pickup";
-            data["message"] = new ObservableText($"[0] { label } [1].", 
+            actionData["message"] = new ObservableText($"[0] { label } [1].", 
                 new Tuple<GameObject, string>(self, "name top"),
                 new Tuple<GameObject, string>(target, "name")
             );
-            data["turnPage"] = false;
-            data["displayAfter"] = false;
+            actionData["turnPage"] = false;
+            actionData["displayAfter"] = false;
 
-            self.OnAction(data);
+            self.OnAction(actionData);
 
             return true;
         }
@@ -131,7 +139,7 @@ namespace AdventureDemo
 
             if( e.parameters.Length <= 0 ) {
                 if( inventory.GetAttachedCount() == 1 ) {
-                    Register(inventory.GetAttached(0), true);
+                    Register(new Dictionary<string, object>() {{ "target", inventory.GetAttached(0)} }, true);
                 } else {
                     WaywardManager.instance.DisplayMessage($"Drop what?");
                 }
@@ -147,7 +155,7 @@ namespace AdventureDemo
             }
 
             if( Check(foundObject) == CheckResult.VALID ) {
-                Register(foundObject, true);
+                Register(new Dictionary<string, object>() {{ "target", foundObject }}, true);
                 return true;
             } else {
                 WaywardManager.instance.DisplayMessage($"Could not grab {foundObject.GetData("name").text}.");
@@ -174,7 +182,7 @@ namespace AdventureDemo
                 if( physical != null && physicalSelf.Contains(physical) ) {
                     WaywardManager.instance.DisplayMessage($"You are already holding {foundObject.GetData("name").text}.");
                 } else {
-                    Register(foundObject, true);
+                    Register(new Dictionary<string, object>() {{ "target", foundObject }}, true);
                     return true;
                 }
             } else {

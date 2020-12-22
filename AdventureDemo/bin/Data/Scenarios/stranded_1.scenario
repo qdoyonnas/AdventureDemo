@@ -37,6 +37,19 @@
 					}
 				}]
 			}
+		},
+		{
+			"data": "blinking_light",
+			"location": {
+				"referenceId": "playerShip",
+				"subSearches": [
+					{
+						"properties": {
+							"tags": "hallway"
+						}
+					}
+				]
+			}
 		}
 	],
 	

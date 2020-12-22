@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AdventureDemo.Properties
+namespace AdventureCore.Properties
 {
 
 

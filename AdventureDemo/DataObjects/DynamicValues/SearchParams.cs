@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     // XXX: Searching is recursive and therefore prone to heavy slowdown
     //      The following solutions need to be implemented:

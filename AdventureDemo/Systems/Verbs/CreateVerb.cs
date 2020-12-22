@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using WaywardEngine;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     class CreateVerb : Verb
     {
@@ -18,7 +19,7 @@ namespace AdventureDemo
 
         public override CheckResult Check( GameObject target ) { return CheckResult.INVALID; }
 
-        public override bool Action(GameObject target)
+        public override bool Action( Dictionary<string, object> data )
         {
             WaywardManager.instance.Update();
             return true;
@@ -46,7 +47,7 @@ namespace AdventureDemo
             }
 
             self.container.Attach(createdObject);
-            Action(createdObject);
+            Action(new Dictionary<string, object>());
 
             return true;
         }

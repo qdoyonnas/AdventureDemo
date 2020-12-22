@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     class ScenarioData : BasicData
     {

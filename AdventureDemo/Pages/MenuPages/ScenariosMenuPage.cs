@@ -9,7 +9,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using WaywardEngine;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     class ScenariosMenuPage : ContentPage
     {

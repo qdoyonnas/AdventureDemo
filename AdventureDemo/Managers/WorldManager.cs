@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WaywardEngine;
 
-namespace AdventureDemo
+namespace AdventureCore
 {
     class WorldManager
     {
