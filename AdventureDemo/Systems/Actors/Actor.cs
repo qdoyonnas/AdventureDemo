@@ -41,6 +41,7 @@ namespace AdventureCore
             verbs = new List<Verb>();
             inherentVerbs = new List<Verb>();
             inherentVerbs.Add( new WaitVerb() );
+            inherentVerbs.Add( new EmoteVerb() );
             relatedPages = new List<WaywardEngine.Page>();
 
             commands = new Dictionary<string[], InputManager.InputDelegate>();

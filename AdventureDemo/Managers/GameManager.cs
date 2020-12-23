@@ -219,9 +219,9 @@ namespace AdventureCore
         }
         public DescriptivePage DisplayDescriptivePage( GameObject target )
         {
-            Point mousePosition = WaywardManager.instance.GetMousePosition();
+            //Point mousePosition = WaywardManager.instance.GetMousePosition();
 
-            return DisplayDescriptivePage(mousePosition, target);
+            return DisplayDescriptivePage(WaywardManager.instance.GetRelativeWindowPoint(0.5, 0.5), target);
         }
         public DescriptivePage DisplayDescriptivePage( Point position, GameObject target )
         {

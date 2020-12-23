@@ -26,9 +26,24 @@ namespace AdventureCore
             DialogPage dialogPage =  new DialogPage();
             dialogPage.SetTitle("Wait Time");
 
-            dialogPage.AddEntry("100", () => { Register(new Dictionary<string, object>() {{ "duration", 10.0 }}, true); });
+            dialogPage.AddInputPanel((input) => {
+                double amount = -1;
+                if( !double.TryParse(input, out amount) ) {
+                    return;
+                }
+
+                Register(new Dictionary<string, object>() {{ "duration", amount }}, true);
+            });
+
+            dialogPage.AddEntry("10", () => { Register(new Dictionary<string, object>() {{ "duration", 10.0 }}, true); });
+            dialogPage.AddEntry("20", () => { Register(new Dictionary<string, object>() {{ "duration", 20.0 }}, true); });
+            dialogPage.AddEntry("100", () => { Register(new Dictionary<string, object>() {{ "duration", 100.0 }}, true); });
+            dialogPage.AddEntry("250", () => { Register(new Dictionary<string, object>() {{ "duration", 250.0 }}, true); });
             dialogPage.AddEntry("500", () => { Register(new Dictionary<string, object>() {{ "duration", 500.0 }}, true); });
             dialogPage.AddEntry("1000", () => { Register(new Dictionary<string, object>() {{ "duration", 1000.0 }}, true); });
+            dialogPage.AddEntry("2000", () => { Register(new Dictionary<string, object>() {{ "duration", 2000.0 }}, true); });
+            dialogPage.AddEntry("4000", () => { Register(new Dictionary<string, object>() {{ "duration", 4000.0 }}, true); });
+            dialogPage.AddEntry("10000", () => { Register(new Dictionary<string, object>() {{ "duration", 10000.0 }}, true); });
 
             WaywardManager.instance.AddPage(dialogPage, WaywardManager.instance.GetRelativeWindowPoint(0.5, 0.5));
 
@@ -77,7 +92,7 @@ namespace AdventureCore
             if( e.parsed ) { return true; }
 
             if( e.parameters.Length == 0 ) {
-                return Action(null);
+                return DisplayDialog();
             } else {
                 double waitTime;
                 bool success = double.TryParse(e.parameters[0], out waitTime);
