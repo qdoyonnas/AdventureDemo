@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{8DFC9FA5-6C39-4D7F-97FA-27CFC656D253}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>AdventureDemo</RootNamespace>
+    <RootNamespace>AdventureCore</RootNamespace>
     <AssemblyName>AdventureDemo</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -112,6 +112,8 @@
     <Compile Include="Systems\Attachments\ContainerAttachmentPoint.cs" />
     <Compile Include="Systems\Attachments\PhysicalAttachmentPoint.cs" />
     <Compile Include="Objects\Connection.cs" />
+    <Compile Include="Systems\Behaviours\BehaviourStrategy.cs" />
+    <Compile Include="Systems\Behaviours\IntermittentMessageBehaviour.cs" />
     <Compile Include="Systems\Verbs\CreateVerb.cs" />
     <Compile Include="Systems\Verbs\EmoteVerb.cs" />
     <Compile Include="Systems\Verbs\PhaseVerb.cs" />

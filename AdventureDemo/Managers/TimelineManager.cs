@@ -59,6 +59,7 @@ namespace AdventureCore
         public double now { get; private set; }
         private List<TimelineEvent> timeline = new List<TimelineEvent>();
 
+        // XXX: At the moment Verb parameter is not needed, and is probably not the right way to pass along such information anyway
         public bool RegisterEvent( TimelineDelegate action, GameObject gameObject, Verb verb, double timeOut, double fromTime = -1 )
         {
             fromTime = fromTime == -1 ? now : fromTime;

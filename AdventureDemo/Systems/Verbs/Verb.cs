@@ -43,6 +43,18 @@ namespace AdventureCore
         {
             Construct();
         }
+        public Verb(Dictionary<string, object> data)
+        {
+            Construct();
+
+            _displayLabel = data.ContainsKey("label") ? (string)data["label"] : _displayLabel;
+
+            if( data.ContainsKey("validInputs") ) {
+                foreach( string type in (string[])data["validInputs"] ) {
+                    _validInputs.Add(type);
+                }
+            }
+        }
         public Verb( GameObject self )
         {
             Construct();

@@ -52,13 +52,6 @@ namespace AdventureCore
 
         public virtual void Control( GameObject obj )
         {
-            verbs.Clear();
-
-            foreach( Verb verb in inherentVerbs ) {
-                verb.self = obj;
-                verbs.Add(verb);
-            }
-
             if( controlledObject != null ) {
                 bool success = controlledObject.SetActor(null);
                 
@@ -77,7 +70,8 @@ namespace AdventureCore
             }
 
             controlledObject.OnActionEvent += OnObservedActionTaken;
-            controlledObject.CollectVerbs(this, PossessionType.EMBODIMENT);
+
+            CollectVerbs();
         }
 		public virtual GameObject GetControlled()
         {
@@ -141,6 +135,18 @@ namespace AdventureCore
         public virtual void AddVerb( Verb verb )
         {
             verbs.Add(verb);
+        }
+
+        public virtual void CollectVerbs()
+        {
+            verbs.Clear();
+
+            foreach( Verb verb in inherentVerbs ) {
+                verb.self = controlledObject;
+                verbs.Add(verb);
+            }
+
+            controlledObject.CollectVerbs(this, PossessionType.EMBODIMENT);
         }
 
         #endregion

@@ -40,7 +40,9 @@ namespace AdventureCore
             }
         }
 
+        // Behaviours
         protected Dictionary<PossessionType, List<Verb>> verbs;
+        protected List<BehaviourStrategy> behaviours;
 
         // Object data
         protected delegate GameObjectData DataDelegate( string[] parameters );
@@ -103,6 +105,7 @@ namespace AdventureCore
             relevantData = new List<DataDelegate>();
 
             verbs = new Dictionary<PossessionType, List<Verb>>();
+            behaviours = new List<BehaviourStrategy>();
 
             _attachmentTypes = new List<AttachmentType>();
         }
@@ -131,7 +134,7 @@ namespace AdventureCore
 
         #endregion
 
-        #region Verb Methods
+        #region Behaviour Methods
 
         public virtual void CollectVerbs( Actor actor, PossessionType possession )
         {
@@ -170,6 +173,23 @@ namespace AdventureCore
             } else {
                 verbs.Add( possession, new List<Verb>() { verb } );
             }
+        }
+        public virtual void RemoveVerb( PossessionType possession, Verb verb )
+        {
+            if( !verbs.ContainsKey(possession) ) { return; }
+
+            verbs[possession].Remove(verb);
+            actor.CollectVerbs();
+        }
+
+        public virtual void AddBehaviour( BehaviourStrategy behaviour )
+        {
+            behaviours.Add(behaviour);
+            behaviour.Initialize(this);
+        }
+        public virtual void RemoveBehaviour( BehaviourStrategy behaviour )
+        {
+            behaviours.Remove(behaviour);
         }
 
         #endregion

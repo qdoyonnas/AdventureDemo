@@ -14,6 +14,8 @@ namespace AdventureCore
         Physical physicalSelf;
 
         public TraversalVerb(): base() { }
+        public TraversalVerb(Dictionary<string, object> data)
+            :base(data) {}
         public TraversalVerb( GameObject self ) : base(self) {}
 
         protected override void Construct()

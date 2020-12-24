@@ -19,6 +19,10 @@
 		{
 			"verb": "will_grab",
 			"possession": "EMBODIMENT"
+		},
+		{
+			"verb":  "will_move",
+			"possession":  "EMBODIMENT"
 		}
 	]
 }

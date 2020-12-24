@@ -1,3 +1,17 @@
+[
+
+{
+	"id": "will_move",
+
+	"type": "TraversalVerbData",
+	"label": "Move",
+
+	"validInputs": [
+		"go",
+		"move"
+	]
+},
+
 {
 	"id": "human_walk",
 	
@@ -10,3 +24,5 @@
 		"move"
 	]
 }
+
+]
