@@ -12,6 +12,8 @@ namespace AdventureCore
     class PhaseVerb : Verb
     {
         public PhaseVerb() : base() { }
+        public PhaseVerb( Dictionary<string, object> data )
+            : base(data) {}
         public PhaseVerb( GameObject self ) : base(self) {}
 
         protected override void Construct()

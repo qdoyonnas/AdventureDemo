@@ -8,6 +8,8 @@ namespace AdventureCore
     class CreateVerb : Verb
     {
         public CreateVerb() : base() { }
+        public CreateVerb( Dictionary<string, object> data )
+            : base(data) {}
         public CreateVerb(GameObject self) : base(self) {}
 
         protected override void Construct()

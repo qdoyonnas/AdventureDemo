@@ -15,6 +15,21 @@ namespace AdventureCore
 
         public GrabVerb() : base() { }
         public GrabVerb( GameObject self ) : base(self) {}
+        public GrabVerb( Dictionary<string, object> data )
+            : base(data)
+        {
+            if( data.ContainsKey("quantity") ) {
+                try {
+                    quantity = (int)data["quantity"];
+                } catch { }
+            }
+
+            if( data.ContainsKey("capacity") ) {
+                try {
+                    capacity = (double)data["capacity"];
+                } catch { }
+            }
+        }
         public GrabVerb(int quantity, double capacity)
         {
             this.quantity = quantity;

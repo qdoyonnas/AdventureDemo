@@ -8,6 +8,8 @@ namespace AdventureCore
     class PossessVerb : Verb
     {
         public PossessVerb() : base() { }
+        public PossessVerb( Dictionary<string, object> data )
+            : base(data) {}
         public PossessVerb( GameObject self )
             : base(self) {}
 

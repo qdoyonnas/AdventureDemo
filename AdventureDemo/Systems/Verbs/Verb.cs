@@ -50,9 +50,10 @@ namespace AdventureCore
             _displayLabel = data.ContainsKey("label") ? (string)data["label"] : _displayLabel;
 
             if( data.ContainsKey("validInputs") ) {
-                foreach( string type in (string[])data["validInputs"] ) {
-                    _validInputs.Add(type);
-                }
+                try {
+                    string[] dataInputs = (string[])data["validInputs"];
+                    Array.Copy( dataInputs, 0, _validInputs, 0, dataInputs.Length );
+                } catch { }
             }
         }
         public Verb( GameObject self )

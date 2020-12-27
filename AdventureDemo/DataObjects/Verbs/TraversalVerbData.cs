@@ -14,7 +14,7 @@ namespace AdventureCore
 
         protected override object CreateInstance(Dictionary<string, object> context = null)
         {
-            return new TraversalVerb(GenerateData(null));
+            return new TraversalVerb(GenerateData(context));
         }
     }
 }

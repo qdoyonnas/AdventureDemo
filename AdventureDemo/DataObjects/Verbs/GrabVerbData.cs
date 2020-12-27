@@ -18,9 +18,19 @@ namespace AdventureCore
             capacity = data.capacity;
         }
 
+        public override Dictionary<string, object> GenerateData(Dictionary<string, object> context = null)
+        {
+            Dictionary<string, object> data = base.GenerateData(context);
+
+            data["quantity"] = quantity;
+            data["capacity"] = capacity;
+
+            return data;
+        }
+
         protected override object CreateInstance(Dictionary<string, object> context = null)
         {
-            return new GrabVerb(quantity, capacity);
+            return new GrabVerb(GenerateData(context));
         }
     }
 }
