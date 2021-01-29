@@ -32,6 +32,7 @@ namespace AdventureCore
         {
             _observer = observer;
             observer.ObservedActionTaken += OnObservedActionTaken;
+            TimelineManager.instance.onTimeAdvanceStart += TurnPage;
 
             SetTitle(". . .");
             FrameworkElement panel = GameManager.instance.GetResource<FrameworkElement>("VerbosePage");
@@ -71,10 +72,6 @@ namespace AdventureCore
 
         protected void OnObservedActionTaken( Dictionary<string, object> data )
         {
-            if( data.ContainsKey("turnPage") && (bool)data["turnPage"] ) {
-                TurnPage(false);
-            }
-
             if( data.ContainsKey("message") ) {
                 ObservableText observableText = data["message"] as ObservableText;
                 TextBlock block = observableText.Observe(observer);
@@ -86,10 +83,9 @@ namespace AdventureCore
             }
         }
 
-        public void TurnPage(bool display)
+        public void TurnPage()
         {
             descriptions.Children.Clear();
-            if( display ) { Display(); }
         }
 
         public override void Clear() {}

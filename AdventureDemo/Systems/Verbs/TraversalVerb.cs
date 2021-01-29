@@ -95,7 +95,7 @@ namespace AdventureCore
                 new Tuple<GameObject, string>(self, "name top"),
                 new Tuple<GameObject, string>(target, "name")
             );
-            data["turnPage"] = true;
+            data ["target"] = target;
             data["displayAfter"] = true;
 
             TimelineManager.instance.OnAction(data);

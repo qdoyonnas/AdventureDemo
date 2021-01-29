@@ -62,6 +62,9 @@ namespace AdventureCore
 		public delegate void TimeAdvancedAction(double deltaTime);
         public event TimeAdvancedAction onTimeAdvanced;
 
+        public event Action onTimeAdvanceStart;
+        public event Action onTimeAdvanceEnd;
+
         public delegate void OnActionDelegate( Dictionary<string, object> data );
         public event OnActionDelegate OnActionEvent;
         public void OnAction(Dictionary<string, object> data)
@@ -142,6 +145,8 @@ namespace AdventureCore
 
         public void AdvanceTimeline( double time )
         {
+            onTimeAdvanceStart?.Invoke();
+
             double startTime = now;
             double endTime = now + time;
 
@@ -162,6 +167,8 @@ namespace AdventureCore
             Console.WriteLine(ToString());
 
             now = endTime;
+
+            onTimeAdvanceEnd?.Invoke();
         }
     }
 }

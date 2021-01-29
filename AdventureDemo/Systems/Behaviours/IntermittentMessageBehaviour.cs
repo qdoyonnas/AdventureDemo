@@ -47,7 +47,8 @@ namespace AdventureCore
 		private void EmitMessage()
 		{
 			TimelineManager.instance.OnAction(new Dictionary<string, object>() {
-				{ "message", new ObservableText(message) }
+				{ "message", new ObservableText($@"[0] {message}",
+					new Tuple<GameObject, string>(self, "name upper")) }
 			});
 		
 			Dictionary<string, object> data = new Dictionary<string, object>();
