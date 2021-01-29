@@ -51,15 +51,7 @@ namespace AdventureCore
             try {
                 physical = new Physical(GenerateData(context));
 
-                // XXX: This is a direct copy of the code in ObjectData.create()
-                //      The correct way to do this would be to add copy constructor to every object,
-                //      and then new constructors to every object taking the closest base class,
-                //      at which point the create functions of dataObjects can chain.
-                foreach( VerbReference verbReference in verbs ) {
-                    KeyValuePair<Verb, PossessionType> verb = verbReference.GetValue();
-                    verb.Key.self = physical;
-                    physical.AddVerb(verb.Value, verb.Key);
-                }
+                PostInstantiate(physical, context);
             } catch( Exception e ) {
                 Console.WriteLine($"ERROR: Could not instantiate Physical from PhysicalData: {e}");
             }

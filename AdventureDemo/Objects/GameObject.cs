@@ -52,17 +52,6 @@ namespace AdventureCore
 
         #endregion
 
-        #region Events
-
-        public delegate void OnActionDelegate( Dictionary<string, object> data );
-        public event OnActionDelegate OnActionEvent;
-        public virtual void OnAction( Dictionary<string, object> data )
-        {
-            OnActionEvent?.Invoke(data);
-        }
-
-        #endregion
-
         #region Constructors
 
         public GameObject( Dictionary<string, object> data )
@@ -83,7 +72,6 @@ namespace AdventureCore
                     tags.Add(tag);
                 }
             }
-            
         }
         public GameObject()
         {

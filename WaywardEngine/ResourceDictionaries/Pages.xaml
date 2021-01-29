@@ -63,5 +63,17 @@
             <TextBlock><Italic>Suggestions go here</Italic></TextBlock>
         </StackPanel>
     </Border>
+
+	<Border x:Key="DebugPage" x:Shared="false" Style="{StaticResource DefaultPageStyle}">
+		<StackPanel Margin="{StaticResource Padding}">
+			<Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}" SnapsToDevicePixels="True">
+			    <ScrollViewer MinHeight="450" MaxHeight="450" Width="300" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
+				    <StackPanel Margin="{StaticResource Padding}" Name="Log">
+					</StackPanel>
+			    </ScrollViewer>
+			</Border>
+			<TextBox Margin="0,5,0,0" Name="InputBox" MaxLength="256" Width="300" Style="{StaticResource InputBoxStyle}"/>
+		</StackPanel>
+	</Border>
     
 </ResourceDictionary>

@@ -31,6 +31,7 @@ namespace AdventureCore
             commands.Add(new string[] { "close", "c" }, ClosePage);
             commands.Add(new string[] { "exit", "quit" }, ExitGame);
             commands.Add(new string[] { "open", "o" }, OpenPage);
+            commands.Add(new string[] { "debug" }, DisplayDebug);
 
             inputReceived += ManagerCommands;
         }
@@ -124,6 +125,15 @@ namespace AdventureCore
             if( e.parsed ) { return true; }
 
             GameManager.instance.Exit();
+            return true;
+        }
+        private bool DisplayDebug( InputEventArgs e )
+        {
+            if( e.parsed ) { return true; }
+            
+            string message = ( e.parameterInput != null && e.parameterInput.Length > 0) ? e.parameterInput : null;
+            WaywardManager.instance.ShowDebug(message);
+
             return true;
         }
     }

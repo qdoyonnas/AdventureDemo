@@ -15,6 +15,10 @@ namespace AdventureCore
         protected GameObject parentObject;
         protected List<GameObject> attachedObjects;
 
+        public delegate void ObjectTransitionAction(GameObject obj);
+        public event ObjectTransitionAction ObjectAttached;
+        public event ObjectTransitionAction ObjectRemoved;
+
         protected int _maxQuantity = 1; // -1 for infinite
         public int maxQuantity {
             get {
@@ -88,11 +92,15 @@ namespace AdventureCore
             attachedObjects.Add(obj);
             obj.SetContainer(this);
 
+            ObjectAttached?.Invoke(obj);
+
             return true;
         }
         public virtual bool Remove( GameObject obj )
         {
             attachedObjects.Remove(obj);
+            ObjectRemoved?.Invoke(obj);
+
             return true;
         }
 

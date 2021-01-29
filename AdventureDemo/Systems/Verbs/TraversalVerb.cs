@@ -98,7 +98,7 @@ namespace AdventureCore
             data["turnPage"] = true;
             data["displayAfter"] = true;
 
-            self.OnAction(data);
+            TimelineManager.instance.OnAction(data);
         }
 
         public override CheckResult Check( GameObject target )

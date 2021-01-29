@@ -34,6 +34,8 @@ namespace AdventureCore
 
             try {
                 material = new Material(GenerateData(context));
+
+                PostInstantiate(material, context);
             } catch( Exception e ) {
                 Console.WriteLine($"ERROR: Could not instantiate Material from MaterialData: {e}");
             }

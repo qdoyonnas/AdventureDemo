@@ -23,6 +23,8 @@ namespace AdventureCore
 
         #region Fields
 
+        WaywardEngine.WaywardManager waywardManager;
+
         string root;
         public string nameSpace;
 
@@ -48,11 +50,13 @@ namespace AdventureCore
         Dictionary<string, DataPointer> materialFiles;
         Dictionary<string, DataPointer> spawnFiles;
         Dictionary<string, DataPointer> verbFiles;
+        Dictionary<string, DataPointer> behaviourFiles;
 
         List<BasicData> objectDataMemory;
         List<BasicData> materialDataMemory;
         List<BasicData> spawnDataMemory;
         List<BasicData> verbDataMemory;
+        List<BasicData> behaviourDataMemory;
         int memoryLength = 50;
 
         // XXX: Implement hybrid memory/file loading system where recently loaded data objects are stored
@@ -64,6 +68,8 @@ namespace AdventureCore
 
         private DataManager()
         {
+            waywardManager = WaywardEngine.WaywardManager.instance;
+
             root = $@"{Directory.GetCurrentDirectory()}\..\";
             nameSpace = this.GetType().Namespace + ".";
 
@@ -73,11 +79,13 @@ namespace AdventureCore
             materialFiles = new Dictionary<string, DataPointer>();
             spawnFiles = new Dictionary<string, DataPointer>();
             verbFiles = new Dictionary<string, DataPointer>();
+            behaviourFiles = new Dictionary<string, DataPointer>();
 
             objectDataMemory = new List<BasicData>();
             materialDataMemory = new List<BasicData>();
             spawnDataMemory = new List<BasicData>();
             verbDataMemory = new List<BasicData>();
+            behaviourDataMemory = new List<BasicData>();
         }
 
         public void Init( AdventureApp app )
@@ -152,6 +160,9 @@ namespace AdventureCore
                     case ".verb":
                         AddFile(file, verbFiles);
                         break;
+                    case ".behaviour":
+                        AddFile(file, behaviourFiles);
+                        break;
                 }
             }
 
@@ -173,7 +184,7 @@ namespace AdventureCore
                     dict.Add(jToken["id"].ToString(), new DataPointer(file.FullName, 0));
                 }
             } catch( Exception e ) {
-                Console.Write($"ERROR: Could not parse file {file.Name}: {e}");
+                waywardManager.Log($@"<red>ERROR: Could not parse file {file.Name}: {e}</red>");
             }
         }
 
@@ -195,7 +206,8 @@ namespace AdventureCore
             OBJECT,
             SPAWN,
             MATERIAL,
-            VERB
+            VERB,
+            BEHAVIOUR
         }
         private DataType GetTypeId( Type type )
         {
@@ -209,6 +221,8 @@ namespace AdventureCore
                 return DataType.SPAWN;
             } else if( typeof(VerbData).IsAssignableFrom(type) ) {
                 return DataType.VERB;
+            } else if( typeof(BehaviourData).IsAssignableFrom(type) ) {
+                return DataType.BEHAVIOUR;
             } else {
                 return DataType.UNKNOWN;
             }
@@ -226,8 +240,10 @@ namespace AdventureCore
                     return spawnFiles;
                 case DataType.VERB:
                     return verbFiles;
+                case DataType.BEHAVIOUR:
+                    return behaviourFiles;
                 default:
-                    Console.WriteLine($"ERROR: Did not find files for data of type '{type}'");
+                    waywardManager.Log($@"<red>ERROR: Did not find files for data of type '{type}'</red>");
                     return null;
             }
         }
@@ -244,8 +260,10 @@ namespace AdventureCore
                     return spawnDataMemory;
                 case DataType.VERB:
                     return verbDataMemory;
+                case DataType.BEHAVIOUR:
+                    return behaviourDataMemory;
                 default:
-                    Console.WriteLine($"ERROR: Did not find memory array for data of type '{type}'");
+                    waywardManager.Log($@"<red>ERROR: Did not find memory array for data of type '{type}'</red>");
                     return null;
             }
         }
@@ -275,7 +293,7 @@ namespace AdventureCore
             try {
                 token = JToken.Parse(file.ReadToEnd());
             } catch( Exception e ) {
-                Console.WriteLine($"ERROR: Failed parsing JSON retrieved from '{pointer.filePath}' into JToken: {e}");
+                waywardManager.Log($@"<red>ERROR: Failed parsing JSON retrieved from '{pointer.filePath}' into JToken: {e}</red>");
                 return null;
             }
 
@@ -321,7 +339,7 @@ namespace AdventureCore
                 data = (BasicData)token.ToObject(objectType);
                 UpdateMemory(data, type);
             } catch( Exception e ) {
-                Console.Write($"ERROR: Failed parsing JSON to data of type '{objectType}': {e}");
+                waywardManager.Log($@"<red>ERROR: Failed parsing JSON to data of type '{objectType}': {e}</red>");
             }
             return data;
         }
@@ -347,15 +365,9 @@ namespace AdventureCore
         }
         private Type GetTypeFromJSON(JToken token)
         {
-            Type type = null;
-            string typeName = nameSpace + token["type"].Value<string>();
-            try {
-                type = Type.GetType(typeName);
-            } catch( Exception e ) {
-                Console.WriteLine($"ERROR: Failed retrieving type '{typeName}': {e}");
-            }
+            string typeName = token["type"].Value<string>();
 
-            return type;
+            return GetTypeFromString(typeName);
         }
         private Type GetTypeFromString( string str )
         {
@@ -364,7 +376,7 @@ namespace AdventureCore
             try {
                 type = Type.GetType(typeName);
             } catch( Exception e ) {
-                Console.WriteLine($"ERROR: Failed retrieving type '{typeName}': {e}");
+                waywardManager.Log($@"<red>ERROR: Failed retrieving type '{typeName}': {e}</red>");
             }
 
             return type;
@@ -389,7 +401,7 @@ namespace AdventureCore
                             datas.Add(data);
                         });
                     } catch( Exception e ) {
-                        Console.Write($"ERROR: Could not parse WorldData from file {file.Name}: {e}");
+                        waywardManager.Log($@"<red>ERROR: Could not parse WorldData from file {file.Name}: {e}</red>");
                     }
                 }
             }
@@ -413,7 +425,7 @@ namespace AdventureCore
                             datas.Add(data);
                         });
                     } catch( Exception e ) {
-                        Console.Write($"ERROR: Could not parse ScenarioData from file {file.Name}: {e}");
+                        waywardManager.Log($@"<red>ERROR: Could not parse ScenarioData from file {file.Name}: {e}</red>");
                     }
                 }
             }
@@ -445,13 +457,13 @@ namespace AdventureCore
                 try {
                     token = JToken.Parse(str);
                 } catch( Exception e ) {
-                    Console.WriteLine($"ERROR: Failed parsing '{str}' into JSON token: {e}");
+                    waywardManager.Log($@"<red>ERROR: Failed parsing '{str}' into JSON token: {e}</red>");
                     return null;
                 }
             }
 
             if( token == null ) {
-                Console.WriteLine($"ERROR: Failed retrieving token from '{str}'");
+                waywardManager.Log($@"<red>ERROR: Failed retrieving token from '{str}'</red>");
                 return null;
             }
             return ParseTokenToData(token, type);
@@ -464,9 +476,9 @@ namespace AdventureCore
             try {
                 obj = (T)data.Create(context);
             } catch( NullReferenceException e ) {
-                Console.WriteLine($"ERROR: Failed retrieving data from '{str}': {e}");
+                waywardManager.Log($@"<red>ERROR: Failed retrieving data from '{str}': {e}</red>");
             } catch( Exception e ) {
-                Console.WriteLine($"ERORR: Failed creating instance of type '{typeof(T).Name}' from data of type '{data.GetType()}': {e}");
+                waywardManager.Log($@"<red>ERORR: Failed creating instance of type '{typeof(T).Name}' from data of type '{data.GetType()}': {e}</red>");
             }
 
             return obj;

@@ -39,6 +39,8 @@ namespace WaywardEngine
         // Mouse grab target (to prevent grabbing more than one page at a time)
         public Page grabbedPage;
 
+        DebugPage debugPage;
+
         #endregion
 
         #region Initialization
@@ -66,6 +68,8 @@ namespace WaywardEngine
             } );
 
             isInitialized = true;
+
+            debugPage = new DebugPage();
         }
 
         /// <summary>
@@ -190,17 +194,48 @@ namespace WaywardEngine
             return box;
         }
 
-        #endregion
+		#endregion
+
+		#region Debug Methods
+
+        public void ShowDebug(string message = null)
+        {
+            if( !debugPage.visible ) {
+                AddPage(debugPage, GetRelativeWindowPoint(0.5, 0.5));
+                debugPage.visible = true;
+            }
+
+            if( message != null && message != string.Empty ) {
+                debugPage.DisplayMessage(message);
+            }
+        }
+        public void HideDebug()
+        {
+            debugPage.CloseAction();
+            debugPage.visible = false;
+        }
+
+        public void Log(string message)
+        {
+            debugPage.DisplayMessage(message);
+        }
+
+        public void Log(TextBlock message)
+        {
+            debugPage.DisplayMessage(message);
+        }
 
         #endregion
 
-        #region Inputs
+		#endregion
 
-        /// <summary>
-        /// Return mouse position relative to window.mainCanvas.
-        /// </summary>
-        /// <returns></returns>
-        public Point GetMousePosition()
+		#region Inputs
+
+		/// <summary>
+		/// Return mouse position relative to window.mainCanvas.
+		/// </summary>
+		/// <returns></returns>
+		public Point GetMousePosition()
         {
             return Mouse.GetPosition(window.mainCanvas);
         }

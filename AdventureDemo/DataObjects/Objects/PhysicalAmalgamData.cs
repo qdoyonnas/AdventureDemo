@@ -26,20 +26,28 @@ namespace AdventureCore
 
             try {
                 amalgam = new PhysicalAmalgam(GenerateData(context));
-                foreach( SpawnEntry entry in parts ) {
-                    GameObject[] parts = entry.Spawn(1);
-                    foreach( GameObject part in parts ) {
-                        Physical physicalPart = part as Physical;
-                        if( physicalPart != null ) {
-                            amalgam.AddPart(physicalPart);
-                        }
-                    }
-                }
+                
+                PostInstantiate(amalgam, context);
             } catch( Exception e ) {
                 Console.WriteLine($"ERROR: Could not instantiate PhysicalAmalgam from PhysicalAmalgamData: {e}");
             }
 
             return amalgam;
+        }
+
+        protected override void PostInstantiate(GameObject gameObject, Dictionary<string, object> context = null)
+        {
+            PhysicalAmalgam amalgam = gameObject as PhysicalAmalgam;
+
+            foreach( SpawnEntry entry in parts ) {
+                GameObject[] parts = entry.Spawn(1);
+                foreach( GameObject part in parts ) {
+                    Physical physicalPart = part as Physical;
+                    if( physicalPart != null ) {
+                        amalgam.AddPart(physicalPart);
+                    }
+                }
+            }
         }
     }
 }

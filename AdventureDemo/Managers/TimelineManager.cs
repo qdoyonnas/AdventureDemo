@@ -28,27 +28,25 @@ namespace AdventureCore
 
         public struct TimelineEvent {
             public TimelineDelegate action { get; private set; }
-            public GameObject gameObject { get; private set; }
-            public Verb verb { get; private set; }
             public double timestamp { get; private set; }
+            public Dictionary<string, object> data { get; private set; }
 
-            public TimelineEvent( TimelineDelegate action, GameObject gameObject, Verb verb, double timestamp )
+            public TimelineEvent( TimelineDelegate action, Dictionary<string, object> data, double timestamp )
             {
                 this.action = action;
-                this.gameObject = gameObject;
-                this.verb = verb;
                 this.timestamp = timestamp;
+                this.data = data;
             }
         }
 
         public class ClearEventFilter {
-            public GameObject gameObject;
+            public Dictionary<string, object> data;
             public double afterTime;
             public double beforeTime;
 
-            public ClearEventFilter(GameObject gameObject = null, double afterTime = 0, double beforeTime = double.MaxValue)
+            public ClearEventFilter(Dictionary<string, object> data = null, double afterTime = 0, double beforeTime = double.MaxValue)
             {
-                this.gameObject = gameObject;
+                this.data = data;
                 this.afterTime = afterTime;
                 this.beforeTime = beforeTime;
             }
@@ -59,8 +57,21 @@ namespace AdventureCore
         public double now { get; private set; }
         private List<TimelineEvent> timeline = new List<TimelineEvent>();
 
-        // XXX: At the moment Verb parameter is not needed, and is probably not the right way to pass along such information anyway
-        public bool RegisterEvent( TimelineDelegate action, GameObject gameObject, Verb verb, double timeOut, double fromTime = -1 )
+		#region Events
+
+		public delegate void TimeAdvancedAction(double deltaTime);
+        public event TimeAdvancedAction onTimeAdvanced;
+
+        public delegate void OnActionDelegate( Dictionary<string, object> data );
+        public event OnActionDelegate OnActionEvent;
+        public void OnAction(Dictionary<string, object> data)
+        {
+            OnActionEvent?.Invoke(data);
+        }
+
+        #endregion
+
+        public bool RegisterEvent( TimelineDelegate action, Dictionary<string, object> data, double timeOut, double fromTime = -1 )
         {
             fromTime = fromTime == -1 ? now : fromTime;
             double timestamp = fromTime + timeOut;
@@ -68,7 +79,7 @@ namespace AdventureCore
                 Console.WriteLine("WARNING: Timeline Event was set to trigger before now.");
             }
 
-            TimelineEvent e = new TimelineEvent( action, gameObject, verb, timestamp );
+            TimelineEvent e = new TimelineEvent( action, data, timestamp );
             bool done = false;
             for( int i = 0; i < timeline.Count; i++ ) {
                 if( timestamp < timeline[i].timestamp ) {
@@ -96,10 +107,22 @@ namespace AdventureCore
             }
 
             for( int i = timeline.Count - 1; i >= 0; i-- ) {
-                if( filter.gameObject == null || timeline[i].gameObject == filter.gameObject ) {
-                    if( timeline[i].timestamp <= filter.beforeTime && timeline[i].timestamp >= filter.afterTime ) {
-                        timeline.RemoveAt(i);
+                bool match = true;
+
+                if( filter.data != null ) {
+                    foreach(KeyValuePair<string, object> criteria in filter.data) {
+                        if( !timeline[i].data.ContainsKey(criteria.Key) || ( criteria.Value != null && timeline[i].data[criteria.Key] == criteria.Value) ) {
+                            match = false;
+                        }
                     }
+                }
+
+                if( timeline[i].timestamp > filter.beforeTime || timeline[i].timestamp < filter.afterTime ) {
+                    match = false;
+                }
+
+                if( match ) {
+                    timeline.RemoveAt(i);
                 }
             }
         }
@@ -119,14 +142,19 @@ namespace AdventureCore
 
         public void AdvanceTimeline( double time )
         {
+            double startTime = now;
             double endTime = now + time;
 
-            foreach( TimelineEvent e in timeline ) {
+            for( int i = 0; i < timeline.Count; i++ ) {
+                TimelineEvent e  = timeline[i];
+
                 if( e.timestamp > endTime ) {
                     break;
                 }
 
                 now = e.timestamp;
+                onTimeAdvanced?.Invoke(now - startTime);
+
                 e.action();
             }
             ClearEvents( new ClearEventFilter(null, 0, endTime) );
@@ -134,18 +162,6 @@ namespace AdventureCore
             Console.WriteLine(ToString());
 
             now = endTime;
-        }
-
-        public override string ToString()
-        {
-            string s = "Current Timeline\n";
-            s += "-----------------\n";
-            foreach( TimelineEvent e in timeline ) {
-                s += $"{e.gameObject.GetName().text} : {e.action} : {e.timestamp}\n";
-            }
-            s += "-----------------\n";
-
-            return s;
         }
     }
 }

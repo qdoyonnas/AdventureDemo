@@ -45,7 +45,7 @@ namespace WaywardEngine
             WaywardManager.instance.grabbedPage = this;
             grabOffset = new Point( Canvas.GetLeft(element), Canvas.GetTop(element) ) - WaywardManager.instance.GetMousePosition();
 
-            // Add handlers to mainCanvas to avoivd lose of control when moving mouse too fast
+            // Add handlers to mainCanvas to avoid lose of control when moving mouse too fast
             WaywardManager.instance.SetMouseMoveHandler( OnMouseMove, true );
             WaywardManager.instance.SetLeftMouseUpHandler( OnMouseUp, true );
 

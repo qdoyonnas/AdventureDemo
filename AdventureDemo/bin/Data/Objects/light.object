@@ -43,6 +43,16 @@
 			"material": "glass",
 			"parts": 1
 		}
+	],
+
+	"behaviours": [
+		{
+			"behaviour":  {
+				"type": "IntermittentMessageBehaviourData",
+				"message": "flashes",
+				"interval": "1000"
+			}
+		}
 	]
 },
 

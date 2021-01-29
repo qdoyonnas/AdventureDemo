@@ -46,7 +46,7 @@ namespace AdventureCore
             actionData["turnPage"] = true;
             actionData["displayAfter"] = true;
 
-            self.OnAction(actionData);
+            TimelineManager.instance.OnAction(actionData);
             self.actor.Control(target);
 
             return true;

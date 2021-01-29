@@ -64,7 +64,7 @@ namespace AdventureCore
             data["turnPage"] = true;
             data["displayAfter"] = true;
 
-            self.OnAction(data);
+            TimelineManager.instance.OnAction(data);
 
             return true;
         }
@@ -109,7 +109,10 @@ namespace AdventureCore
 
         public bool Register(AttachmentPoint point, bool fromPlayer)
         {
-            bool success = TimelineManager.instance.RegisterEvent( () => { Action(point); }, self, this, actionTime );
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data["gameObject"] = self;
+            data["verb"] = this;
+            bool success = TimelineManager.instance.RegisterEvent( () => { Action(point); }, data, actionTime );
 
             if( fromPlayer ) {
                 if( success ) {

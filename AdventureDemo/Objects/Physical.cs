@@ -117,19 +117,6 @@ namespace AdventureCore
 
         #endregion
 
-        #region Events
-
-        public override void OnAction(Dictionary<string, object> data)
-        {
-            if( attachedTo == null ) {
-                base.OnAction(data);
-            } else {
-                attachedTo.OnAction(data);
-            }
-        }
-
-        #endregion
-
         #region Verb Methods
 
         public override List<Verb> CollectVerbs()

@@ -31,7 +31,7 @@ namespace AdventureCore
         {
             ObservedActionTaken?.Invoke(data);
 
-            // Do others stuff
+            // Do other stuff
         }
 
         #endregion
@@ -46,6 +46,8 @@ namespace AdventureCore
 
             commands = new Dictionary<string[], InputManager.InputDelegate>();
             commands.Add(new string[] { "view", "look", "observe", "l" }, ParseView);
+
+            TimelineManager.instance.OnActionEvent += OnObservedActionTaken;
         }
 
         #region Control
@@ -56,7 +58,6 @@ namespace AdventureCore
                 bool success = controlledObject.SetActor(null);
                 
                 if( !success ) { return; }
-                controlledObject.OnActionEvent -= OnObservedActionTaken;
             }
 
 			controlledObject = obj;
@@ -68,8 +69,6 @@ namespace AdventureCore
                     return;
                 }
             }
-
-            controlledObject.OnActionEvent += OnObservedActionTaken;
 
             CollectVerbs();
         }

@@ -80,9 +80,12 @@ namespace AdventureCore
         public abstract CheckResult Check( GameObject target );
         public abstract bool Action( Dictionary<string, object> data );
 
-        public virtual bool Register( Dictionary<string, object> data, bool fromPlayer = false )
+        public virtual bool Register( Dictionary<string, object> actionData, bool fromPlayer = false )
         {
-            bool success = TimelineManager.instance.RegisterEvent( () => { Action(data); }, self, this, actionTime );
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data["gameObject"] = self;
+            data["verb"] = this;
+            bool success = TimelineManager.instance.RegisterEvent( () => { Action(actionData); }, data, actionTime );
 
             // XXX: Set the game objects current action here
 

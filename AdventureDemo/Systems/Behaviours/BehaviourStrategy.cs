@@ -8,6 +8,9 @@ namespace AdventureCore
 {
 	abstract class BehaviourStrategy
 	{
+		public GameObject self;
+		protected bool isInit = false;
+
 		public abstract void Initialize(GameObject self);
 		public abstract void Update();
 	}

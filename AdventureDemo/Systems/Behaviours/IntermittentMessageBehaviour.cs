@@ -1,20 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WaywardEngine;
 
 namespace AdventureCore
 {
 	class IntermittentMessageBehaviour : BehaviourStrategy
 	{
-		GameObject self;
-
 		double interval = 1000.0;
 		string message = null;
 
-		bool isInit = false;
+		public IntermittentMessageBehaviour( Dictionary<string, object> data )
+		{
+			if( data.ContainsKey("interval") ) {
+				try {
+					interval = (double)data["interval"];
+				} catch { }
+			}
 
+			if( data.ContainsKey("message") ) {
+				try {
+					message = (string)data["message"];
+				} catch { }
+			}
+		}
 		public IntermittentMessageBehaviour(string message, double interval)
 		{
 			this.message = message;
@@ -26,8 +34,10 @@ namespace AdventureCore
 			if( isInit ) { return; }
 
 			this.self = self;
-
-			TimelineManager.instance.RegisterEvent(EmitMessage, self, null, interval);
+			
+			Dictionary<string, object> data = new Dictionary<string, object>();
+			data["gameObject"] = self;
+			TimelineManager.instance.RegisterEvent(EmitMessage, data, interval);
 
 			isInit = true;
 		}
@@ -36,11 +46,13 @@ namespace AdventureCore
 
 		private void EmitMessage()
 		{
-			self.OnAction(new Dictionary<string, object>() {
-				{ "message", message }
+			TimelineManager.instance.OnAction(new Dictionary<string, object>() {
+				{ "message", new ObservableText(message) }
 			});
 		
-			TimelineManager.instance.RegisterEvent(EmitMessage, self, null, interval);
+			Dictionary<string, object> data = new Dictionary<string, object>();
+            data["gameObject"] = self;
+			TimelineManager.instance.RegisterEvent(EmitMessage, data, interval);
 		}
 	}
 }

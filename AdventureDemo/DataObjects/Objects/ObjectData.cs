@@ -16,6 +16,7 @@ namespace AdventureCore
         public AttachmentType[] attachmentTypes = new AttachmentType[0];
 
         public VerbReference[] verbs = new VerbReference[0];
+        public BehaviourReference[] behaviours = new BehaviourReference[0];
 
         public ObjectData() { }
         public ObjectData( ObjectData data )
@@ -35,6 +36,11 @@ namespace AdventureCore
             verbs = new VerbReference[data.verbs.Length];
             for( int i = 0; i < verbs.Length; i++ ) {
                 verbs[i] = new VerbReference(data.verbs[i]);
+            }
+
+            behaviours = new BehaviourReference[data.behaviours.Length];
+            for( int i = 0; i < behaviours.Length; i++ ) {
+                behaviours[i] = new BehaviourReference(data.behaviours[i]);
             }
         }
 
@@ -59,16 +65,27 @@ namespace AdventureCore
 
             try {
                 gameObject = new GameObject(GenerateData(context));
-                foreach( VerbReference verbReference in verbs ) {
-                    KeyValuePair<Verb, PossessionType> verb = verbReference.GetValue();
-                    verb.Key.self = gameObject;
-                    gameObject.AddVerb(verb.Value, verb.Key);
-                }
+                
+                PostInstantiate(gameObject, context);
             } catch( Exception e ) {
                 Console.WriteLine($"ERROR: Could not instantiate GameObject from ObjectData: {e}");
             }
 
             return gameObject;
+        }
+
+        protected virtual void PostInstantiate(GameObject gameObject, Dictionary<string, object> context = null)
+        {
+            foreach( VerbReference verbReference in verbs ) {
+                KeyValuePair<Verb, PossessionType> verb = verbReference.GetValue();
+                verb.Key.self = gameObject;
+                gameObject.AddVerb(verb.Value, verb.Key);
+            }
+
+            foreach( BehaviourReference behaviourReference in behaviours ) {
+                BehaviourStrategy behaviour = behaviourReference.GetValue();
+                gameObject.AddBehaviour(behaviour);
+            }
         }
     }
 }

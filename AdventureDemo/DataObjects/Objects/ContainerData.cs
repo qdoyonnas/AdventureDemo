@@ -55,23 +55,32 @@ namespace AdventureCore
             try {
                 container = new Container(GenerateData(context));
 
-                foreach( ConnectionDataReference reference in connections ) {
-                    Container linked = GameManager.instance.world.GetObjectReference(reference.linkReference) as Container;
-                    if( linked != null ) {
-                        Dictionary<string, object> connectionData = new Dictionary<string, object>();
-                        connectionData.Add("name", reference.name);
-                        connectionData.Add("description", reference.description);
-                        connectionData.Add("second", linked.GetContents());
-                        connectionData.Add("throughput", reference.throughput.GetValue(connectionData));
-
-                        container.AddConnection(connectionData, reference.isTwoWay);
-                    }
-                }
+                PostInstantiate(container, context);
             } catch( Exception e ) {
                 Console.WriteLine($"ERROR: Could not instantiate Container from ContainerData: {e}");
             }
 
             return container;
+        }
+
+        protected override void PostInstantiate(GameObject gameObject, Dictionary<string, object> context = null)
+        {
+            base.PostInstantiate(gameObject, context);
+
+            Container container = gameObject as Container;
+
+            foreach( ConnectionDataReference reference in connections ) {
+                Container linked = GameManager.instance.world.GetObjectReference(reference.linkReference) as Container;
+                if( linked != null ) {
+                    Dictionary<string, object> connectionData = new Dictionary<string, object>();
+                    connectionData.Add("name", reference.name);
+                    connectionData.Add("description", reference.description);
+                    connectionData.Add("second", linked.GetContents());
+                    connectionData.Add("throughput", reference.throughput.GetValue(connectionData));
+
+                    container.AddConnection(connectionData, reference.isTwoWay);
+                }
+            }
         }
     }
 }

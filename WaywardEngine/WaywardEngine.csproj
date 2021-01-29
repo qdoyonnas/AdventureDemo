@@ -63,6 +63,7 @@
     <Compile Include="FormattedText.cs" />
     <Compile Include="InputManagerBase.cs" />
     <Compile Include="Pages\ContentPage.cs" />
+    <Compile Include="Pages\DebugPage.cs" />
     <Compile Include="Pages\InputPage.cs" />
     <Compile Include="Pages\Message.cs" />
     <Compile Include="Utilities.cs" />

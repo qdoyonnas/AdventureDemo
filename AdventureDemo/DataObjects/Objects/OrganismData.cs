@@ -19,15 +19,8 @@ namespace AdventureCore
 
             try {
                 organism = new Organism(GenerateData(context));
-                foreach( SpawnEntry entry in parts ) {
-                    GameObject[] parts = entry.Spawn(1);
-                    foreach( GameObject part in parts ) {
-                        Physical physicalPart = part as Physical;
-                        if( physicalPart != null ) {
-                            organism.AddPart(physicalPart);
-                        }
-                    }
-                }
+                
+                PostInstantiate(organism, context);
             } catch( Exception e ) {
                 Console.WriteLine($"ERROR: Could not instantiate Organism from OrganismData: {e}");
             }
