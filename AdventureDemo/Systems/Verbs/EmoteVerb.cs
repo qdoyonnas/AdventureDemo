@@ -45,17 +45,14 @@ namespace AdventureCore
 			}
 			if( message == null ) { return false; }
 
-			// Create data dictionary to be passed to observers
-			Dictionary<string, object> actionData = new Dictionary<string, object>();
-
             // Message for Verbose pages
-            actionData["message"] = new ObservableText($"[0] { message }.", 
+            data["message"] = new ObservableText($"[0] { message }.", 
                 new Tuple<GameObject, string>(self, "name top")
             );
-            actionData["turnPage"] = false;
-            actionData["displayAfter"] = false;
+            data["turnPage"] = false;
+            data["displayAfter"] = false;
 
-            TimelineManager.instance.OnAction(actionData);
+            TimelineManager.instance.OnAction(data);
 
             return true;
 		}
@@ -72,7 +69,7 @@ namespace AdventureCore
             if( e.parameters.Length == 0 ) {
                 return DisplayDialog();
             } else {
-                string message = e.parameters[0];
+                string message = e.parameterInput;
 
                 Register(new Dictionary<string, object>() {{ "message", message }}, true);
             }

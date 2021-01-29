@@ -74,7 +74,7 @@ namespace AdventureCore
         {
             if( data.ContainsKey("message") ) {
                 ObservableText observableText = data["message"] as ObservableText;
-                TextBlock block = observableText.Observe(observer);
+                TextBlock block = observableText.Observed(observer);
                 descriptions.Children.Add(block);
             }
 

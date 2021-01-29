@@ -17,14 +17,14 @@ namespace AdventureCore
             data = textData;
         }
 
-        public TextBlock Observe(Actor observer)
+        public TextBlock Observed(Actor observer)
         {
-            WaywardEngine.WaywardTextParser.ParseDelegate[] spans = new WaywardEngine.WaywardTextParser.ParseDelegate[data.Length];
+            WaywardTextParser.ParseDelegate[] spans = new WaywardTextParser.ParseDelegate[data.Length];
             for( int i = 0; i < data.Length; i++ ) {
                 Tuple<GameObject, string> dat = new Tuple<GameObject, string>(data[i].Item1, data[i].Item2);
                 spans[i] = () => { return observer.Observe(dat.Item1, dat.Item2).span; };
             }
-            TextBlock block = WaywardEngine.WaywardTextParser.ParseAsBlock(template, spans);
+            TextBlock block = WaywardTextParser.ParseAsBlock(template, spans);
 
             return block;
         }

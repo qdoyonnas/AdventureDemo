@@ -48,54 +48,54 @@ namespace AdventureCore
             bool success = false;
             Container container = target as Container;
             if( container != null ) {
-                success = EnterContainer(container);
+                success = EnterContainer(container, data);
             }
 
             if( !success ) {
                 Connection connection = target as Connection;
                 if( connection != null ) {
-                    success = EnterConnection(connection);
+                    success = EnterConnection(connection, data);
                 }
             }
 
             return success;
         }
-        bool EnterContainer( Container container )
+        bool EnterContainer( Container container, Dictionary<string, object> data = null )
         {
             Physical parent = PhysicalUtilities.FindParentPhysical(physicalSelf);
 
             bool success = container.GetContents().Attach(parent);
 
             if( success ) {
-                SendMessage( container );
+                SendMessage( container, data );
             }
 
             return success;
         }
-        bool EnterConnection( Connection connection )
+        bool EnterConnection( Connection connection, Dictionary<string, object> data = null )
         {
             Physical parent = PhysicalUtilities.FindParentPhysical(physicalSelf);
 
             bool success = connection.secondContainer.Attach(parent);
 
             if( success ) {
-                SendMessage( connection.secondContainer.GetParent() );
+                SendMessage( connection.secondContainer.GetParent(), data );
             }
 
             return success;
         }
 
-        private void SendMessage( GameObject target )
+        private void SendMessage( GameObject target, Dictionary<string, object> data = null )
         {
-            // Create data dictionary to be passed to observers
-            Dictionary<string, object> data = new Dictionary<string, object>();
+            if( data == null ) {
+                data = new Dictionary<string, object>();
+            }
 
             // Message for Verbose pages
             data["message"] = new ObservableText($"[0] {displayLabel.ToLower()} into [1].",
                 new Tuple<GameObject, string>(self, "name top"),
                 new Tuple<GameObject, string>(target, "name")
             );
-            data ["target"] = target;
             data["displayAfter"] = true;
 
             TimelineManager.instance.OnAction(data);

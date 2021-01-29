@@ -24,7 +24,7 @@ namespace AdventureCore
 
         #region Structs
 
-        public delegate void TimelineDelegate();
+        public delegate void TimelineDelegate(Dictionary<string, object> data);
 
         public struct TimelineEvent {
             public TimelineDelegate action { get; private set; }
@@ -160,7 +160,7 @@ namespace AdventureCore
                 now = e.timestamp;
                 onTimeAdvanced?.Invoke(now - startTime);
 
-                e.action();
+                e.action(e.data);
             }
             ClearEvents( new ClearEventFilter(null, 0, endTime) );
 

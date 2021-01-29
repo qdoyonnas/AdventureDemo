@@ -37,6 +37,7 @@ namespace AdventureCore
 			
 			Dictionary<string, object> data = new Dictionary<string, object>();
 			data["gameObject"] = self;
+			data["label"] = message;
 			TimelineManager.instance.RegisterEvent(EmitMessage, data, interval);
 
 			isInit = true;
@@ -44,15 +45,13 @@ namespace AdventureCore
 
 		public override void Update() {}
 
-		private void EmitMessage()
+		private void EmitMessage( Dictionary<string, object> data )
 		{
-			TimelineManager.instance.OnAction(new Dictionary<string, object>() {
-				{ "message", new ObservableText($@"[0] {message}",
-					new Tuple<GameObject, string>(self, "name upper")) }
-			});
-		
-			Dictionary<string, object> data = new Dictionary<string, object>();
-            data["gameObject"] = self;
+			data["message"] = new ObservableText($@"[0] {message}",
+					new Tuple<GameObject, string>(self, "name upper")
+			);
+			TimelineManager.instance.OnAction(data);
+
 			TimelineManager.instance.RegisterEvent(EmitMessage, data, interval);
 		}
 	}

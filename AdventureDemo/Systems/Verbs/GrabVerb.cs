@@ -74,18 +74,15 @@ namespace AdventureCore
                 inventory.Attach(target);
             }
 
-            // Create data dictionary to be passed to observers
-            Dictionary<string, object> actionData = new Dictionary<string, object>();
-
             // Message for Verbose pages
             string label = drop ? "drop" : "pickup";
-            actionData["message"] = new ObservableText($"[0] { label } [1].", 
+            data["message"] = new ObservableText($"[0] { label } [1].", 
                 new Tuple<GameObject, string>(self, "name top"),
                 new Tuple<GameObject, string>(target, "name")
             );
-            actionData["displayAfter"] = false;
+            data["displayAfter"] = false;
 
-            TimelineManager.instance.OnAction(actionData);
+            TimelineManager.instance.OnAction(data);
 
             return true;
         }

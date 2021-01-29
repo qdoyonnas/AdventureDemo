@@ -26,15 +26,24 @@ namespace AdventureCore
 
         public override bool Action( Dictionary<string, object> data )
         {
+            bool success = false;
+
             GameObject target = null;
             if( data.ContainsKey("target") ) {
                 target = data["target"] as GameObject;
+                success = true;
             }
-            if( target == null ) {
-                return false;
+            if( !success ) {
+                success = false;
+                if( data.ContainsKey("point") ) {
+                    AttachmentPoint point = data["point"] as AttachmentPoint;
+                    if( point != null ) {
+                        success = Action(point);
+                    }
+                }
             }
 
-            bool success = false;
+            if( !success ) { return false; }
 
             Physical physical = target as Physical;
             if( physical != null ) {
@@ -112,7 +121,8 @@ namespace AdventureCore
             Dictionary<string, object> data = new Dictionary<string, object>();
             data["gameObject"] = self;
             data["verb"] = this;
-            bool success = TimelineManager.instance.RegisterEvent( () => { Action(point); }, data, actionTime );
+            data["point"] = point;
+            bool success = TimelineManager.instance.RegisterEvent( PerformAction, data, actionTime );
 
             if( fromPlayer ) {
                 if( success ) {

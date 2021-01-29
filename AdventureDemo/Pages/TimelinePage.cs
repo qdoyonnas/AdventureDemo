@@ -35,11 +35,44 @@ namespace AdventureCore
 
         protected void OnObservedActionTaken(Dictionary<string, object> data)
         {
-            if( data.ContainsKey("message") ) {
-                ObservableText observableText = data["message"] as ObservableText;
-                TextBlock block = observableText.Observe(observer);
-                events.Children.Insert(0, block);
+            FrameworkElement entry = GameManager.instance.GetResource<FrameworkElement>("OverviewEntry");
+            events.Children.Add(entry);
+
+            TextBlock data1 = WaywardEngine.Utilities.FindNode<TextBlock>(entry, "Data1");
+            if( data.ContainsKey("gameObject") ) {
+                try {
+                    GameObject obj = data["gameObject"] as GameObject;
+                    data1.Inlines.Add( observer.Observe(obj, "name upper").span );
+                } catch( Exception e ) {
+                    WaywardManager.instance.Log($@"<orange>WARNING: TimelinePage failed to resolve gameObject: {e}</orange>");
+                    data1.Inlines.Add( WaywardTextParser.Parse($"<i>unknown</i>") );
+                }
+            } else {
+                data1.Inlines.Add( WaywardTextParser.Parse($"<i>unknown</i>") );
             }
+
+            TextBlock data2 = WaywardEngine.Utilities.FindNode<TextBlock>(entry, "Data2");
+            if( data.ContainsKey("label") ) {
+                try {
+                    string label = data["label"] as string;
+                    data2.Inlines.Add( WaywardTextParser.Parse(label) );
+                } catch( Exception e ) {
+                    WaywardManager.instance.Log($@"<orange>WARNING: TimelinePage failed to resolve label: {e}</orange>");
+                    data2.Inlines.Add( WaywardTextParser.Parse($"<i>unknown</i>") );
+                }
+            } else {
+                data2.Inlines.Add( WaywardTextParser.Parse($"<i>unknown</i>") );
+            }
+
+            TextBlock data3 = WaywardEngine.Utilities.FindNode<TextBlock>(entry, "Data3");
+            if( data.ContainsKey("target") ) {
+                try {
+                    GameObject target = data["target"] as GameObject;
+                    data3.Inlines.Add( observer.Observe(target, "name upper").span );
+                } catch( Exception e ) {
+                    WaywardManager.instance.Log($@"<orange>WARNING: TimelinePage failed to resolve target: {e}</orange>");
+                }
+            } 
         }
     }
 }

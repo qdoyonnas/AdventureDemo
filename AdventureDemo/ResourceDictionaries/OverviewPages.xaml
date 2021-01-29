@@ -31,7 +31,7 @@
     </Border>
 
     <Border x:Key="OverviewEvents" x:Shared="false" Style="{StaticResource PageStyle}">
-        <ScrollViewer MinHeight="200" MaxHeight="200" Width="{StaticResource PageWidth}" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer MinHeight="200" MaxHeight="200" Width="400" VerticalScrollBarVisibility="Auto">
             <StackPanel Name="Events">
             </StackPanel>
         </ScrollViewer>

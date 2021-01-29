@@ -35,18 +35,16 @@ namespace AdventureCore
 
             if( Check(target) != CheckResult.VALID ) { return false; }
 
-            // Create data dictionary to be passed to observers
-            Dictionary<string, object> actionData = new Dictionary<string, object>();
 
             // Message for Verbose pages
-            actionData["message"] = new ObservableText($"[0] {displayLabel.ToLower()} [1].",
+            data["message"] = new ObservableText($"[0] {displayLabel.ToLower()} [1].",
                 new Tuple<GameObject, string>(self, "name top"),
                 new Tuple<GameObject, string>(target, "name")
             );
-            actionData["turnPage"] = true;
-            actionData["displayAfter"] = true;
+            data["turnPage"] = true;
+            data["displayAfter"] = true;
 
-            TimelineManager.instance.OnAction(actionData);
+            TimelineManager.instance.OnAction(data);
             self.actor.Control(target);
 
             return true;

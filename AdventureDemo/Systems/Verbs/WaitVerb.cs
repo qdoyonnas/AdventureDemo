@@ -35,15 +35,29 @@ namespace AdventureCore
                 Register(new Dictionary<string, object>() {{ "duration", amount }}, true);
             });
 
-            dialogPage.AddEntry("10", () => { Register(new Dictionary<string, object>() {{ "duration", 10.0 }}, true); });
-            dialogPage.AddEntry("20", () => { Register(new Dictionary<string, object>() {{ "duration", 20.0 }}, true); });
-            dialogPage.AddEntry("100", () => { Register(new Dictionary<string, object>() {{ "duration", 100.0 }}, true); });
-            dialogPage.AddEntry("250", () => { Register(new Dictionary<string, object>() {{ "duration", 250.0 }}, true); });
-            dialogPage.AddEntry("500", () => { Register(new Dictionary<string, object>() {{ "duration", 500.0 }}, true); });
-            dialogPage.AddEntry("1000", () => { Register(new Dictionary<string, object>() {{ "duration", 1000.0 }}, true); });
-            dialogPage.AddEntry("2000", () => { Register(new Dictionary<string, object>() {{ "duration", 2000.0 }}, true); });
-            dialogPage.AddEntry("4000", () => { Register(new Dictionary<string, object>() {{ "duration", 4000.0 }}, true); });
-            dialogPage.AddEntry("10000", () => { Register(new Dictionary<string, object>() {{ "duration", 10000.0 }}, true); });
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data["gameObject"] = self;
+            data["verb"] = this;
+            data["label"] = displayLabel;
+
+            data["duration"] = 10.0;
+            dialogPage.AddEntry("10", () => { Register(data, true); });
+            data["duration"] = 20.0;
+            dialogPage.AddEntry("20", () => { Register(data, true); });
+            data["duration"] = 100.0;
+            dialogPage.AddEntry("100", () => { Register(data, true); });
+            data["duration"] = 250.0;
+            dialogPage.AddEntry("250", () => { Register(data, true); });
+            data["duration"] = 500.0;
+            dialogPage.AddEntry("500", () => { Register(data, true); });
+            data["duration"] = 1000.0;
+            dialogPage.AddEntry("1000", () => { Register(data, true); });
+            data["duration"] = 2000.0;
+            dialogPage.AddEntry("2000", () => { Register(data, true); });
+            data["duration"] = 4000.0;
+            dialogPage.AddEntry("4000", () => { Register(data, true); });
+            data["duration"] = 10000.0;
+            dialogPage.AddEntry("10000", () => { Register(data, true); });
 
             WaywardManager.instance.AddPage(dialogPage, WaywardManager.instance.GetRelativeWindowPoint(0.5, 0.5));
 
@@ -60,18 +74,14 @@ namespace AdventureCore
             }
             if( duration == -1 ) { return false; }
 
-            // Create data dictionary to be passed to observers
-            Dictionary<string, object> actionData = new Dictionary<string, object>();
-
             actionTime = duration;
 
             // Message for Verbose pages
-            actionData["message"] = new ObservableText($"[0] {displayLabel.ToLower()} for {actionTime.ToString()}.",
+            data["message"] = new ObservableText($"[0] {displayLabel.ToLower()} for {actionTime.ToString()}.",
                 new Tuple<GameObject, string>(self, "name top"));
-            actionData["turnPage"] = true;
-            actionData["displayAfter"] = true;
+            data["displayAfter"] = false;
 
-            TimelineManager.instance.OnAction(actionData);
+            TimelineManager.instance.OnAction(data);
 
             return true;
         }
@@ -110,11 +120,20 @@ namespace AdventureCore
 			if( check >= CheckResult.VALID ) {
                 Dictionary<TextBlock, ContextMenuAction> items = new Dictionary<TextBlock, ContextMenuAction>();
 
+                Dictionary<string, object> data = new Dictionary<string, object>();
+                data["gameObject"] = self;
+                data["verb"] = this;
+                data["label"] = displayLabel;
+
                 items.Add( WaywardTextParser.ParseAsBlock("Custom...") , delegate { return DisplayDialog(); } );
-                items.Add( WaywardTextParser.ParseAsBlock("10") , delegate { return Register(new Dictionary<string, object>() {{ "duration", 10.0 }}, true); } );
-                items.Add( WaywardTextParser.ParseAsBlock("100") , delegate { return Register(new Dictionary<string, object>() {{ "duration", 100.0 }}, true); } );
-                items.Add( WaywardTextParser.ParseAsBlock("500") , delegate { return Register(new Dictionary<string, object>() {{ "duration", 500.0 }}, true); } );
-                items.Add( WaywardTextParser.ParseAsBlock("1000") , delegate { return Register(new Dictionary<string, object>() {{ "duration", 1000.0 }}, true); } );
+                data["duration"] = 10.0;
+                items.Add( WaywardTextParser.ParseAsBlock("10") , delegate { return Register(data, true); } );
+                data["duration"] = 100.0;
+                items.Add( WaywardTextParser.ParseAsBlock("100") , delegate { return Register(data, true); } );
+                data["duration"] = 500.0;
+                items.Add( WaywardTextParser.ParseAsBlock("500") , delegate { return Register(data, true); } );
+                data["duration"] = 1000.0;
+                items.Add( WaywardTextParser.ParseAsBlock("1000") , delegate { return Register(data, true); } );
 
                 ContextMenuHelper.AddContextMenuHeader( span, WaywardTextParser.ParseAsBlock(displayLabel), items, true );
             }
