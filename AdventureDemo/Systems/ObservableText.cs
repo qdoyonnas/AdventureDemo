@@ -17,7 +17,7 @@ namespace AdventureCore
             data = textData;
         }
 
-        public TextBlock Observed(Actor observer)
+        public TextBlock Observed(PlayerActor observer)
         {
             WaywardTextParser.ParseDelegate[] spans = new WaywardTextParser.ParseDelegate[data.Length];
             for( int i = 0; i < data.Length; i++ ) {

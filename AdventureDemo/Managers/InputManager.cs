@@ -100,7 +100,7 @@ namespace AdventureCore
                 case "ovr":
                 case "overview":
                     position.X = WaywardManager.instance.window.ActualWidth * 0.75;
-                    GameManager.instance.DisplayOverviewPage(position, GameManager.instance.world.player);
+                    GameManager.instance.DisplayOverviewPage(position);
                     break;
                 case "v":
                 case "vrb":
@@ -112,7 +112,7 @@ namespace AdventureCore
                 case "tml":
                 case "timeline":
                     position.X = WaywardManager.instance.window.ActualWidth * 0.75;
-                    GameManager.instance.DisplayTimelinePage(position, GameManager.instance.world.player);
+                    GameManager.instance.DisplayTimelinePage(position);
                     break;
                 default:
                     return false;

@@ -51,12 +51,14 @@ namespace AdventureCore
         Dictionary<string, DataPointer> spawnFiles;
         Dictionary<string, DataPointer> verbFiles;
         Dictionary<string, DataPointer> behaviourFiles;
+        Dictionary<string, DataPointer> actorFiles;
 
         List<BasicData> objectDataMemory;
         List<BasicData> materialDataMemory;
         List<BasicData> spawnDataMemory;
         List<BasicData> verbDataMemory;
         List<BasicData> behaviourDataMemory;
+        List<BasicData> actorDataMemory;
         int memoryLength = 50;
 
         // XXX: Implement hybrid memory/file loading system where recently loaded data objects are stored
@@ -80,12 +82,14 @@ namespace AdventureCore
             spawnFiles = new Dictionary<string, DataPointer>();
             verbFiles = new Dictionary<string, DataPointer>();
             behaviourFiles = new Dictionary<string, DataPointer>();
+            actorFiles = new Dictionary<string, DataPointer>();
 
             objectDataMemory = new List<BasicData>();
             materialDataMemory = new List<BasicData>();
             spawnDataMemory = new List<BasicData>();
             verbDataMemory = new List<BasicData>();
             behaviourDataMemory = new List<BasicData>();
+            actorDataMemory = new List<BasicData>();
         }
 
         public void Init( AdventureApp app )
@@ -163,6 +167,9 @@ namespace AdventureCore
                     case ".behaviour":
                         AddFile(file, behaviourFiles);
                         break;
+                    case ".actor":
+                        AddFile(file, actorFiles);
+                        break;
                 }
             }
 
@@ -207,7 +214,8 @@ namespace AdventureCore
             SPAWN,
             MATERIAL,
             VERB,
-            BEHAVIOUR
+            BEHAVIOUR,
+            ACTOR
         }
         private DataType GetTypeId( Type type )
         {
@@ -223,6 +231,8 @@ namespace AdventureCore
                 return DataType.VERB;
             } else if( typeof(BehaviourData).IsAssignableFrom(type) ) {
                 return DataType.BEHAVIOUR;
+            } else if( typeof(ActorData).IsAssignableFrom(type) ) {
+                return DataType.ACTOR;
             } else {
                 return DataType.UNKNOWN;
             }
@@ -242,6 +252,8 @@ namespace AdventureCore
                     return verbFiles;
                 case DataType.BEHAVIOUR:
                     return behaviourFiles;
+                case DataType.ACTOR:
+                    return actorFiles;
                 default:
                     waywardManager.Log($@"<red>ERROR: Did not find files for data of type '{type}'</red>");
                     return null;
@@ -262,6 +274,8 @@ namespace AdventureCore
                     return verbDataMemory;
                 case DataType.BEHAVIOUR:
                     return behaviourDataMemory;
+                case DataType.ACTOR:
+                    return actorDataMemory;
                 default:
                     waywardManager.Log($@"<red>ERROR: Did not find memory array for data of type '{type}'</red>");
                     return null;

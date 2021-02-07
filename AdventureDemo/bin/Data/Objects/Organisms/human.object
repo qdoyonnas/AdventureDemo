@@ -6,7 +6,7 @@
 	
 	"name": "human",
 	"description": "a carbon-based lifeform",
-	"tags": [ "human" ],
+	"tags": [ "human", "animal", "mammal", "humanoid" ],
 	
 	"parts": [
 		{
@@ -41,7 +41,7 @@
 	"type": "PhysicalData",
 	
 	"name": "human body",
-	"description": "the torso of a carbon-based lifeform",
+	"description": "the torso of a human",
 	
 	"volume": "35",
 	"materials": [
@@ -57,7 +57,7 @@
 	"type": "PhysicalData",
 	
 	"name": "human head",
-	"description": "the head of a carbon-based lifeform",
+	"description": "the head of a human",
 	
 	"volume": "5.6",
 	"materials": [
@@ -73,7 +73,7 @@
 	"type": "PhysicalAmalgamData",
 	
 	"name": "human arm",
-	"description": "the arm of a carbon-based lifeform",
+	"description": "the arm of a human",
 	
 	"parts": [
 		{
@@ -102,7 +102,7 @@
 	"type": "PhysicalData",
 	
 	"name": "human upper arm",
-	"description": "the upper arm of a carbon-based lifeform",
+	"description": "the upper arm of a human",
 	
 	"volume": "2.24",
 	"materials": [
@@ -118,7 +118,7 @@
 	"type": "PhysicalData",
 	
 	"name": "human lower arm",
-	"description": "the lower arm of a carbon-based lifeform",
+	"description": "the lower arm of a human",
 	
 	"volume": "1.26",
 	"materials": [
@@ -134,7 +134,7 @@
 	"type": "PhysicalData",
 	
 	"name": "human hand",
-	"description": "the hand of a carbon-based lifeform",
+	"description": "the hand of a human",
 	
 	"volume": "0.42",
 	"materials": [
@@ -158,7 +158,7 @@
 	"type": "PhysicalAmalgamData",
 	
 	"name": "human leg",
-	"description": "thelegarm of a carbon-based lifeform",
+	"description": "the leg of a human",
 	
 	"parts": [
 		{
@@ -187,7 +187,7 @@
 	"type": "PhysicalData",
 	
 	"name": "human upper leg",
-	"description": "the upper leg of a carbon-based lifeform",
+	"description": "the upper leg of a human",
 	
 	"volume": "7.35",
 	"materials": [
@@ -203,7 +203,7 @@
 	"type": "PhysicalData",
 	
 	"name": "human lower leg",
-	"description": "the lower leg of a carbon-based lifeform",
+	"description": "the lower leg of a human",
 	
 	"volume": "3.29",
 	"materials": [
@@ -219,7 +219,7 @@
 	"type": "PhysicalData",
 	
 	"name": "human foot",
-	"description": "the foot of a carbon-based lifeform",
+	"description": "the foot of a human",
 	
 	"volume": "0.98",
 	"materials": [

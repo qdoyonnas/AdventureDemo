@@ -8,8 +8,8 @@ namespace AdventureCore
 {
     class VerbosePage : WaywardEngine.ContentPage
     {
-        Actor _observer;
-        public Actor observer {
+        PlayerActor _observer;
+        public PlayerActor observer {
             get {
                 return _observer;
             }
@@ -28,7 +28,7 @@ namespace AdventureCore
 
         StackPanel descriptions;
 
-        public VerbosePage(Actor observer) : base()
+        public VerbosePage(PlayerActor observer) : base()
         {
             _observer = observer;
             observer.ObservedActionTaken += OnObservedActionTaken;

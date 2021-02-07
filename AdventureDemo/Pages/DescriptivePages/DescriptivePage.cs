@@ -19,8 +19,8 @@ namespace AdventureCore
             }
         }
 
-        Actor _observer;
-        public Actor observer {
+        PlayerActor _observer;
+        public PlayerActor observer {
             get {
                 return _observer;
             }
@@ -28,7 +28,7 @@ namespace AdventureCore
 
         List<DescriptivePageSection> sections;
 
-        public DescriptivePage( Actor observer, GameObject target, DescriptivePageSection[] sections )
+        public DescriptivePage( PlayerActor observer, GameObject target, DescriptivePageSection[] sections )
             : base()
         {
             this.sections = new List<DescriptivePageSection>();

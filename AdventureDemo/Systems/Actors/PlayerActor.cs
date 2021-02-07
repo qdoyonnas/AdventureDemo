@@ -7,42 +7,50 @@ namespace AdventureCore
 {
     class PlayerActor : Actor
     {
+        protected readonly Dictionary<string[], InputManager.InputDelegate> commands;
+
         private string controlledName; // XXX: Temporary until objects can be renamed in game
 
-        public override void Control( GameObject obj )
+        public PlayerActor()
+            :base()
+        {
+            commands = new Dictionary<string[], InputManager.InputDelegate>();
+            commands.Add(new string[] { "view", "look", "observe", "l" }, ParseView);
+        }
+
+        public override bool Control( GameObject obj )
         {
             if( controlledObject != null ) {
                 controlledObject.nickname = controlledName;
             }
 
-            base.Control(obj);
+            if( !base.Control(obj))  {
+                return false;
+            }
 
             controlledName = obj.nickname;
             obj.nickname = $"You";
+            return true;
         }
 
-        public override bool CanObserve( GameObject obj )
+		#region Observation
+
+		public List<GameObject> GetSubjectObjects()
         {
-            // TODO: Implement senses
+            // TODO: Senses here?
 
-            GameObject thisContainer = controlledObject.container.GetParent();
-            if( obj == thisContainer || obj.container == controlledObject.container ) {
-                return true;
-            } else if( obj.container != null ) {
-                GameObject objContainer = obj.container.GetParent();
-                if( objContainer != null ) {
-                    return CanObserve(objContainer);
-                }
-            }
+            List<GameObject> subjects = new List<GameObject>();
 
-            return false;
+            subjects.Add(controlledObject);
+
+            return subjects;
         }
 
-        public override GameObjectData Observe( GameObject obj )
+        public GameObjectData Observe( GameObject obj )
         {
 			return Observe(obj, "name");
         }
-		public override GameObjectData Observe( GameObject obj, string dataKey )
+		public GameObjectData Observe( GameObject obj, string dataKey )
         {
 			// TODO: Implement senses
 
@@ -72,5 +80,44 @@ namespace AdventureCore
 
 			return data;
         }
+
+        #endregion
+
+        #region Inputs
+
+        public virtual bool ParseInput( InputEventArgs e )
+        {
+            if( e.parsed ) { return true; }
+
+            if( InputManager.instance.CheckCommands(commands, e) ) {
+                return true;
+            }
+
+            foreach( Verb verb in verbs ) {
+                foreach( string i in verb.validInputs ) {
+                    if( i == e.action ) {
+                        if( verb.ParseInput(e) ) {
+                            e.parsed = true;
+                            return true;
+                        }
+
+                        break;
+                    }
+                }
+            }
+
+            return false;
+        }
+        public virtual bool ParseView( InputEventArgs e )
+        {
+            if( e.parsed ) { return true; }
+
+            Point position = new Point(WaywardManager.instance.window.Width / 2, WaywardManager.instance.window.Height * 0.4);
+            GameManager.instance.DisplayDescriptivePage(position, controlledObject);
+
+            return true;
+        }
+
+		#endregion
     }
 }

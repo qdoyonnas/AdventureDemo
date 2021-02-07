@@ -9,6 +9,7 @@ namespace AdventureCore
     class LocatorDataReference
     {
         public DataReference data = null;
+        public DataReference actor = null;
         public SearchParams location = null;
 
         public LocatorDataReference() {}
@@ -30,9 +31,14 @@ namespace AdventureCore
 
             Container container = location.FindRandom() as Container;
             if( container == null ) {
-                Console.WriteLine($"ERROR: LocatorDataReference could find location matching params: {location.ToString()}");
+                WaywardEngine.WaywardManager.instance.Log($@"<red>ERROR: LocatorDataReference could not find location matching params: {location.ToString()}</red>");
             } else {
                 container.GetContents().Attach(obj);
+            }
+
+            if( actor != null ) {
+                Actor actorObj = actor.LoadData<Actor>(typeof(ActorData), context);
+                actorObj.Control(obj);
             }
 
             return obj;

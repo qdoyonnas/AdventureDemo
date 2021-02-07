@@ -1,0 +1,171 @@
+[
+
+{
+	"id": "rat",
+	"type": "OrganismData",
+	
+	"name": "rat",
+	"description": "a small carbon-based lifeform",
+	"tags": [ "animal", "rat", "mammal" ],
+	
+	"parts": [
+		{
+			"id": "rat_body",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "rat_head",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "rat_leg",
+			"spawnChance": 1,
+			"spawnQuantity": 4,
+			"independentSpawn": true
+		},
+		{
+			"id": "rat_tail",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": true
+		},
+	]
+},
+
+{
+	"id": "rat_body",
+	"type": "PhysicalData",
+	
+	"name": "rat body",
+	"description": "the torso of a rat",
+	
+	"volume": "2",
+	"materials": [
+		{
+			"material": "flesh",
+			"parts": 1
+		}
+	]
+},
+
+{
+	"id": "rat_head",
+	"type": "PhysicalData",
+	
+	"name": "rat head",
+	"description": "the head of a rat",
+	
+	"volume": "1",
+	"materials": [
+		{
+			"material": "flesh",
+			"parts": 1
+		}
+	]
+},
+
+{
+	"id": "rat_leg",
+	"type": "PhysicalAmalgamData",
+	
+	"name": "rat leg",
+	"description": "the leg or a rat",
+	
+	"parts": [
+		{
+			"id": "rat_upperLeg",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "rat_lowerLeg",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "rat_paw",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+	]
+},
+
+{
+	"id": "rat_upperLeg",
+	"type": "PhysicalData",
+	
+	"name": "rat upper leg",
+	"description": "the upper leg of a rat",
+	
+	"volume": "0.5",
+	"materials": [
+		{
+			"material": "flesh",
+			"parts": 1
+		}
+	]
+},
+
+{
+	"id": "rat_lowerLeg",
+	"type": "PhysicalData",
+	
+	"name": "rat lower leg",
+	"description": "the lower leg of a rat",
+	
+	"volume": "0.3",
+	"materials": [
+		{
+			"material": "flesh",
+			"parts": 1
+		}
+	]
+},
+
+{
+	"id": "rat_paw",
+	"type": "PhysicalData",
+	
+	"name": "rat paw",
+	"description": "the paw of a rat",
+	
+	"volume": "0.05",
+	"materials": [
+		{
+			"material": "flesh",
+			"parts": 1
+		}
+	],
+	
+	"verbs": [
+		{
+			"verb": "rat_walk",
+			"possession": "EMBODIMENT"
+		}
+	]
+},
+
+{
+	"id":  "rat_tail",
+	"type": "PhysicalData",
+
+	"name": "rat tail",
+	"description": "the tail of a rat",
+
+	"volume": 0.03,
+	"materials": [
+		{
+			"material": "flesh",
+			"parts": 1
+		}
+	]
+}
+
+]

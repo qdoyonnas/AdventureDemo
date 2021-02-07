@@ -23,6 +23,20 @@
 		"go",
 		"move"
 	]
+},
+
+{
+	"id": "rat_walk",
+
+	"type": "TraversalVerbData",
+	"label": "Skitter",
+
+	"validInputs": [
+		"walk",
+		"go",
+		"move",
+		"skitter"
+	]
 }
 
 ]

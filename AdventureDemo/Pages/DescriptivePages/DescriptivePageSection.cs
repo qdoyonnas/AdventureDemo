@@ -11,7 +11,7 @@ namespace AdventureCore
     {
         protected FrameworkElement element;
         protected DescriptivePage page;
-        protected Actor observer;
+        protected PlayerActor observer;
 
         public DescriptivePageSection( string key )
         {

@@ -12,8 +12,8 @@ namespace AdventureCore
 {
     class OverviewPage : WaywardEngine.ContentPage
     {
-        Actor _observer;
-        public Actor observer {
+        PlayerActor _observer;
+        public PlayerActor observer {
             get {
                 return _observer;
             }
@@ -21,7 +21,7 @@ namespace AdventureCore
 
         Dictionary<GameObject, StackPanel> overviewContentPanels;
 
-        public OverviewPage(Actor observer) : base()
+        public OverviewPage(PlayerActor observer) : base()
         {
             _observer = observer;
 

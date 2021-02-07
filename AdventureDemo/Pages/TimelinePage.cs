@@ -8,8 +8,8 @@ namespace AdventureCore
 {
     class TimelinePage : WaywardEngine.ContentPage
     {
-        Actor _observer;
-        public Actor observer {
+        PlayerActor _observer;
+        public PlayerActor observer {
             get {
                 return _observer;
             }
@@ -17,7 +17,7 @@ namespace AdventureCore
 
         StackPanel events;
 
-        public TimelinePage(Actor observer) : base()
+        public TimelinePage(PlayerActor observer) : base()
         {
             _observer = observer;
             observer.ObservedActionTaken += OnObservedActionTaken;

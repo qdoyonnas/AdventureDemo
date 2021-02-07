@@ -50,6 +50,20 @@
 					}
 				]
 			}
+		},
+		{
+			"data": "rat",
+			"actor": "animal_actor",
+			"location":  {
+				"referenceId": "playerShip",
+				"subSearches": [
+					{
+						"properties": {
+							"tags": "hallway"
+						}
+					}
+				]
+			}
 		}
 	],
 	

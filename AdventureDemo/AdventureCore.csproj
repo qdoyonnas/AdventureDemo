@@ -64,6 +64,8 @@
       <DependentUpon>AdventureApp.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataObjects\Actors\ActorData.cs" />
+    <Compile Include="DataObjects\Actors\AnimalActorData.cs" />
     <Compile Include="DataObjects\BasicData.cs" />
     <Compile Include="DataObjects\Behaviours\BehaviourData.cs" />
     <Compile Include="DataObjects\Behaviours\IntermittentMessageBehaviourData.cs" />
@@ -110,6 +112,7 @@
     <Compile Include="Pages\TimelinePage.cs" />
     <Compile Include="Pages\VerbosePage.cs" />
     <Compile Include="Managers\DataManager.cs" />
+    <Compile Include="Systems\Actors\AnimalActor.cs" />
     <Compile Include="Systems\Attachments\AttachmentPoint.cs" />
     <Compile Include="Systems\Attachments\BodyAttachmentPointcs.cs" />
     <Compile Include="Systems\Attachments\ContainerAttachmentPoint.cs" />

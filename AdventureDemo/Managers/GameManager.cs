@@ -110,10 +110,10 @@ namespace AdventureCore
             SetupPlayContextMenu();
 
             Point position = new Point(WaywardManager.instance.window.ActualWidth * 0.75, WaywardManager.instance.window.ActualHeight/3.1);
-            DisplayOverviewPage(position, world.player);
+            DisplayOverviewPage(position);
 
             position = new Point(WaywardManager.instance.window.ActualWidth * 0.75, WaywardManager.instance.window.ActualHeight/1.4);
-            DisplayTimelinePage(position, world.player);
+            DisplayTimelinePage(position);
 
             position = new Point(WaywardManager.instance.window.ActualWidth * 0.25, WaywardManager.instance.window.ActualHeight/2.2);
             DisplayPlayerVerbose(position);
@@ -158,7 +158,7 @@ namespace AdventureCore
 
         public void DisplayPlayerVerbose( Point position )
         {
-            VerbosePage page = DisplayVerbosePage( position, world.player );
+            VerbosePage page = DisplayVerbosePage( position );
         }
         public void DisplayRoots( Point position )
         {
@@ -168,7 +168,7 @@ namespace AdventureCore
         public bool CreateOverviewPage()
         {
             Point mousePosition = WaywardManager.instance.GetMousePosition();
-            DisplayOverviewPage(mousePosition, world.player);
+            DisplayOverviewPage(mousePosition);
 
             return false;
         }
@@ -182,7 +182,7 @@ namespace AdventureCore
         public bool CreateTimelinePage()
         {
             Point mousePosition = WaywardManager.instance.GetMousePosition();
-            DisplayTimelinePage(mousePosition, world.player);
+            DisplayTimelinePage(mousePosition);
 
             return false;
         }
@@ -203,16 +203,16 @@ namespace AdventureCore
             return true;
         }
 
-        public OverviewPage DisplayOverviewPage( Point position, Actor actor )
+        public OverviewPage DisplayOverviewPage( Point position )
         {
-            OverviewPage page = new OverviewPage(actor);
+            OverviewPage page = new OverviewPage( world.player );
             WaywardManager.instance.AddPage( page, position );
 
             return page;
         }
-        public VerbosePage DisplayVerbosePage( Point position, Actor actor )
+        public VerbosePage DisplayVerbosePage( Point position )
         {
-            VerbosePage page = new VerbosePage( actor );
+            VerbosePage page = new VerbosePage( world.player );
             WaywardManager.instance.AddPage(page, position);
 
             return page;
@@ -232,9 +232,9 @@ namespace AdventureCore
 
             return page;
         }
-        public TimelinePage DisplayTimelinePage( Point position, Actor actor )
+        public TimelinePage DisplayTimelinePage( Point position )
         {
-            TimelinePage page = new TimelinePage( actor );
+            TimelinePage page = new TimelinePage( world.player );
             WaywardManager.instance.AddPage(page, position);
 
             return page;
