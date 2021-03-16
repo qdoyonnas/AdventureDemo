@@ -59,6 +59,10 @@ namespace AdventureCore
         List<BasicData> verbDataMemory;
         List<BasicData> behaviourDataMemory;
         List<BasicData> actorDataMemory;
+
+        Dictionary<string, DataPointer> scriptFiles;
+        List<ScriptData> scriptDataMemory;
+
         int memoryLength = 50;
 
         // XXX: Implement hybrid memory/file loading system where recently loaded data objects are stored
@@ -90,6 +94,9 @@ namespace AdventureCore
             verbDataMemory = new List<BasicData>();
             behaviourDataMemory = new List<BasicData>();
             actorDataMemory = new List<BasicData>();
+
+            scriptFiles = new Dictionary<string, DataPointer>();
+            scriptDataMemory = new List<ScriptData>();
         }
 
         public void Init( AdventureApp app )
@@ -170,6 +177,9 @@ namespace AdventureCore
                     case ".actor":
                         AddFile(file, actorFiles);
                         break;
+                    case ".cs":
+                        AddScript(file);
+                        break;
                 }
             }
 
@@ -192,6 +202,14 @@ namespace AdventureCore
                 }
             } catch( Exception e ) {
                 waywardManager.Log($@"<red>ERROR: Could not parse file {file.Name}: {e}</red>");
+            }
+        }
+        void AddScript( FileInfo file )
+        {
+            try {
+                scriptFiles.Add(Path.GetFileNameWithoutExtension(file.Name), new DataPointer(file.FullName, 0));
+            } catch( Exception e ) {
+                waywardManager.Log($@"<red>ERROR: Could not parse script file {file.Name}: {e}</red>");
             }
         }
 
@@ -299,7 +317,9 @@ namespace AdventureCore
         private JToken GetJSONFromFile( string id, Type type )
         {
             Dictionary<string, DataPointer> files = GetFiles(type);
-            if( files == null || !files.ContainsKey(id) ) { return null; }
+            if( files == null || !files.ContainsKey(id) ) {
+                waywardManager.Log($@"<red>ERROR: Data with id '{id}' of type '{type}' not found</red>");
+            }
 
             DataPointer pointer = files[id];
             StreamReader file = new StreamReader(pointer.filePath);
@@ -317,7 +337,6 @@ namespace AdventureCore
 
             return token;
         }
-
         private BasicData RetrieveDataFromMemory( string id, Type type )
         {
             List<BasicData> memory = GetMemory(type);
@@ -333,7 +352,6 @@ namespace AdventureCore
 
             return null;
         }
-
         private BasicData ParseTokenToData( JToken token, Type type )
         {
             if( token == null ) { return null; }
@@ -353,12 +371,74 @@ namespace AdventureCore
                 data = (BasicData)token.ToObject(objectType);
                 UpdateMemory(data, type);
             } catch( Exception e ) {
-                waywardManager.Log($@"<red>ERROR: Failed parsing JSON to data of type '{objectType}': {e}</red>");
+                waywardManager.Log($@"<red>ERROR: Failed parsing JSON to data of type '{objectType}'</red>: {e}");
             }
             return data;
         }
+
+        private ScriptData GetScriptFromFile( string id )
+        {
+            if( scriptFiles == null || !scriptFiles.ContainsKey(id) ) {
+                waywardManager.Log($@"<red>ERROR: Script with id '{id}' not found</red>");
+            }
+
+            DataPointer pointer = scriptFiles[id];
+            StreamReader file = new StreamReader(pointer.filePath);
+            ScriptData data = new ScriptData();
+            try {
+                data.code = file.ReadToEnd();
+                data.id = id;
+            } catch( Exception e ) {
+                waywardManager.Log($@"<red>ERROR: Failed retrieving script from '{pointer.filePath}': {e}</red>");
+                return null;
+            }
+
+            UpdateScriptMemory(data);
+            return data;
+        }
+        private ScriptData RetrieveScriptFromMemory( string id )
+        {
+            foreach( ScriptData data in scriptDataMemory ) {
+                if( data.id == id ) {
+                    ScriptData copiedData = (ScriptData)Activator.CreateInstance(typeof(ScriptData), data);
+
+                    return copiedData;
+                }
+            }
+
+            return null;
+        }
+        private ScriptData ParseTokenToScript( string str )
+        {
+            if( string.IsNullOrEmpty(str) ) { return null; }
+
+            JToken token = null;
+            try {
+                token = JToken.Parse(str);
+            } catch( Exception e ) {
+                waywardManager.Log($@"<red>ERROR: Failed Parsing string:'{str}' into JSON token:</red> {e}");
+            }
+
+            if( token == null ) {
+                waywardManager.Log($@"<red>ERROR: Failed Parsing string:'{str}' into JSON token</red>");
+            }
+
+            ScriptData data = null;
+            try {
+                data = (ScriptData)token.ToObject(typeof(ScriptData));
+                UpdateScriptMemory(data);
+            } catch( Exception e ) {
+                waywardManager.Log($@"<red>ERROR: Failed parsing JSON to script:</red> {e}");
+            }
+
+            return data;
+        }
+        
         private void UpdateMemory( BasicData data, Type type )
         {
+            // Don't save data with no id as it cannot be retrieved
+            if( data.id == String.Empty ) { return; }
+
             List<BasicData> memory = GetMemory(type);
 
             Type dataType = data.GetType();
@@ -366,6 +446,15 @@ namespace AdventureCore
             memory.Insert(0, copiedData);
             if( memory.Count > memoryLength ) {
                 memory.RemoveAt(memory.Count - 1);
+            }
+        }
+        private void UpdateScriptMemory( ScriptData data )
+        {
+            if( data.id != string.Empty ) {
+                scriptDataMemory.Insert(0, (ScriptData)Activator.CreateInstance(typeof(ScriptData), data));
+                if( scriptDataMemory.Count > memoryLength ) {
+                    scriptDataMemory.RemoveAt(scriptDataMemory.Count - 1);
+                }
             }
         }
 
@@ -460,6 +549,30 @@ namespace AdventureCore
             return filteredDatas.ToArray();
         }
 
+        public ScriptData GetScript( string str )
+        {
+            ScriptData data = null;
+            if( IsId(str) ) {
+                data = RetrieveScriptFromMemory(str);
+                if( data != null ) { return data; }
+                data = GetScriptFromFile(str);
+            } else {
+                try {
+                    data = ParseTokenToScript(str);
+                } catch( Exception e ) {
+                    waywardManager.Log($@"<red>ERROR: Failed parsing '{str}' into script: {e}</red>");
+                    return null;
+                }
+            }
+
+            if( data == null ) {
+                waywardManager.Log($@"<red>ERROR: Failed retrieving script data from '{str}'</red>");
+                return null;
+            }
+
+            return data;
+        }
+
         public BasicData GetData( string str, Type type )
         {
             JToken token;
@@ -490,9 +603,13 @@ namespace AdventureCore
             try {
                 obj = (T)data.Create(context);
             } catch( NullReferenceException e ) {
-                waywardManager.Log($@"<red>ERROR: Failed retrieving data from '{str}': {e}</red>");
+                waywardManager.Log($@"<red>ERROR: Failed retrieving data from '{str}':</red> {e}");
             } catch( Exception e ) {
-                waywardManager.Log($@"<red>ERORR: Failed creating instance of type '{typeof(T).Name}' from data of type '{data.GetType()}': {e}</red>");
+                waywardManager.Log($@"<red>ERROR: Failed creating instance of type '{typeof(T).Name}' from data of type '{data.GetType()}' with value: {str}:</red> {e}");
+            }
+
+            if( obj == null ) {
+                 waywardManager.Log($@"<red>ERROR: Failed creating instance of type '{typeof(T).Name}' from data of type '{data.GetType()}' with value: {str}</red>");
             }
 
             return obj;

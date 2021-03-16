@@ -79,7 +79,7 @@ namespace AdventureCore
 
         public bool SetDefaultVerb(Verb verb, FrameworkContentElement span)
         {
-            if( verb is TraversalVerb ) {
+            if( verb.GetType().Name == "TraversalVerb" ) {
                 span.MouseLeftButtonUp += delegate { verb.Register(new Dictionary<string, object>() {{ "target", this }}, true); };
                 return true;
             }

@@ -53,7 +53,7 @@ namespace AdventureCore
 
                 PostInstantiate(physical, context);
             } catch( Exception e ) {
-                Console.WriteLine($"ERROR: Could not instantiate Physical from PhysicalData: {e}");
+                WaywardEngine.WaywardManager.instance.Log($@"<red>ERROR: Could not instantiate Physical from PhysicalData:</red> {e}");
             }
 
             return physical;

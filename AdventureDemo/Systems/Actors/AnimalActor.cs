@@ -40,7 +40,7 @@ namespace AdventureCore
 
 		private void Act()
 		{
-			List<Verb> traversalVerbs = GetVerbs(typeof(TraversalVerb));
+			List<Verb> traversalVerbs = GetVerbs("TraversalVerb");
 			if( traversalVerbs.Count > 0 ) {
 				ContainerAttachmentPoint container = controlledObject.container as ContainerAttachmentPoint;
 				if( container != null ) {

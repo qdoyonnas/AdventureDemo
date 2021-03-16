@@ -67,7 +67,7 @@
 	<Border x:Key="DebugPage" x:Shared="false" Style="{StaticResource DefaultPageStyle}">
 		<StackPanel Margin="{StaticResource Padding}">
 			<Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}" SnapsToDevicePixels="True">
-			    <ScrollViewer MinHeight="450" MaxHeight="450" Width="300" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
+			    <ScrollViewer MinHeight="450" MaxHeight="450" Width="900" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
 				    <StackPanel Margin="{StaticResource Padding}" Name="Log">
 					</StackPanel>
 			    </ScrollViewer>

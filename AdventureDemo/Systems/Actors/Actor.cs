@@ -35,8 +35,8 @@ namespace AdventureCore
         {
             verbs = new List<Verb>();
             inherentVerbs = new List<Verb>();
-            inherentVerbs.Add( new WaitVerb() );
-            inherentVerbs.Add( new EmoteVerb() );
+            inherentVerbs.Add( DataManager.instance.LoadObject<Verb>("wait", typeof(VerbData)) );
+            inherentVerbs.Add( DataManager.instance.LoadObject<Verb>("emote", typeof(VerbData)) );
 
             TimelineManager.instance.OnActionEvent += OnObservedActionTaken;
         }
@@ -112,12 +112,12 @@ namespace AdventureCore
         {
             return verbs;
         }
-        public virtual List<Verb> GetVerbs( Type type )
+        public virtual List<Verb> GetVerbs( string type )
         {
             List<Verb> filteredVerbs = new List<Verb>();
 
             foreach( Verb verb in verbs ) {
-                if( verb.GetType() == type ) {
+                if( verb.GetType().Name == type ) {
                     filteredVerbs.Add(verb);
                 }
             }
@@ -136,6 +136,8 @@ namespace AdventureCore
             if( controlledObject == null ) { return; }
 
             foreach( Verb verb in inherentVerbs ) {
+                if( verb == null ) { continue; }
+
                 verb.self = controlledObject;
                 verbs.Add(verb);
             }

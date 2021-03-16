@@ -1,9 +1,10 @@
 {
 	"id": "phase",
-	
-	"type": "PhaseVerbData",
+
+	"script": "phaseVerb",
+
 	"label": "Phase",
-	
+
 	"validInputs": [
 		"phase"
 	]

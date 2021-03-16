@@ -3,7 +3,8 @@
 {
 	"id": "will_grab",
 	
-	"type": "GrabVerbData",
+	"script": "grabVerb",
+
 	"label": "Grab",
 	
 	"validInputs": [
@@ -13,25 +14,30 @@
 		"drop"
 	],
 	
-	"quantity": -1,
-	"capacity": -1
+	"data": {
+		"quantity": -1 ,
+		"capacity": -1 
+	}
 },
 
 {
 	"id": "human_grab",
-	
-	"type": "GrabVerbData",
+
+	"script": "grabVerb",
+
 	"label": "Grab",
-	
+
 	"validInputs": [
 		"grab",
 		"pickup",
 		"take",
 		"drop"
 	],
-	
-	"quantity": 1,
-	"capacity": 1
+
+	"data": {
+		"quantity": 1,
+		"capacity": 1
+	}
 }
 
 ]

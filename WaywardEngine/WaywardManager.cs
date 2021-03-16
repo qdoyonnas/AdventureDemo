@@ -59,6 +59,7 @@ namespace WaywardEngine
         {
             application = app;
             window = new MainWindow();
+            window.KeyUp += OnKeyUp;
 
             this.inputManager = inputManager;
 
@@ -202,10 +203,11 @@ namespace WaywardEngine
         {
             if( !debugPage.visible ) {
                 AddPage(debugPage, GetRelativeWindowPoint(0.5, 0.5));
+                debugPage.Update();
                 debugPage.visible = true;
             }
 
-            if( message != null && message != string.Empty ) {
+            if( !string.IsNullOrEmpty(message) ) {
                 debugPage.DisplayMessage(message);
             }
         }
@@ -271,6 +273,17 @@ namespace WaywardEngine
             }
         }
 
+        private void OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if( e.Key == Key.OemTilde ) {
+                if( debugPage.visible ) {
+                    HideDebug();
+                } else {
+                    ShowDebug();
+                }
+            }
+        }
+
         #endregion
 
         #region Utility
@@ -281,6 +294,5 @@ namespace WaywardEngine
         }
 
         #endregion
-
     }
 }

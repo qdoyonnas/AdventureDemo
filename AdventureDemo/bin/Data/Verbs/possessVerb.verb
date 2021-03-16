@@ -1,9 +1,10 @@
 {
 	"id": "possess",
-	
-	"type": "PossessVerbData",
+
+	"script": "possessVerb",
+
 	"label": "Possess",
-	
+
 	"validInputs": [
 		"possess",
 		"control"

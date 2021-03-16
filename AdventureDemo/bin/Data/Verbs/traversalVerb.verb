@@ -3,7 +3,8 @@
 {
 	"id": "will_move",
 
-	"type": "TraversalVerbData",
+	"script": "traversalVerb",
+
 	"label": "Move",
 
 	"validInputs": [
@@ -14,10 +15,11 @@
 
 {
 	"id": "human_walk",
-	
-	"type": "TraversalVerbData",
+
+	"script": "traversalVerb",
+
 	"label": "Walk",
-	
+
 	"validInputs": [
 		"walk",
 		"go",
@@ -28,7 +30,8 @@
 {
 	"id": "rat_walk",
 
-	"type": "TraversalVerbData",
+	"script": "traversalVerb",
+
 	"label": "Skitter",
 
 	"validInputs": [

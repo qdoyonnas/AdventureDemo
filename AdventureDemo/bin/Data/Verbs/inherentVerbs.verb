@@ -1,0 +1,27 @@
+[
+
+{
+	"id": "wait",
+
+	"script": "waitVerb",
+
+	"label": "Wait",
+
+	"validInputs": [
+		"wait"
+	]
+},
+
+{
+	"id": "emote",
+
+	"script": "emoteVerb",
+
+	"label": "Emote",
+
+	"validInputs": [
+		"emote"
+	]
+}
+
+]

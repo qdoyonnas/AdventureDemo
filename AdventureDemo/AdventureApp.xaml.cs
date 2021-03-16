@@ -48,7 +48,7 @@ namespace AdventureCore
             #endregion
 
             // Game Setup
-            window.Title = "Path to the Stars";
+            window.Title = "Adventure Core";
             window.mainCanvas.Style = Resources["WindowBackground"] as Style;
 
             window.Show();
