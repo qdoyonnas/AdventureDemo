@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AdventureCore
 {
-	abstract class BehaviourStrategy
+	public abstract class BehaviourStrategy
 	{
 		public GameObject self;
 		protected bool isInit = false;

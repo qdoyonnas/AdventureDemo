@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AdventureCore
 {
-    class PhysicalAttachmentPoint : AttachmentPoint
+    public class PhysicalAttachmentPoint : AttachmentPoint
     {
         protected double _capacity;
         public double capacity {

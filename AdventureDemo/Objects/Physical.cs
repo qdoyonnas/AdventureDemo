@@ -7,7 +7,7 @@ using WaywardEngine;
 
 namespace AdventureCore
 {
-    class Physical : GameObject
+    public class Physical : GameObject
     {
         #region Fields
 

@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace AdventureCore
 {
-    class Material : GameObject, IEquatable<Material>
+    public class Material : GameObject, IEquatable<Material>
     {
         double weightPerLiter;
 

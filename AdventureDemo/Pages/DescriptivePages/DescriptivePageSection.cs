@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace AdventureCore
 {
-    abstract class DescriptivePageSection
+    public abstract class DescriptivePageSection
     {
         protected FrameworkElement element;
         protected DescriptivePage page;

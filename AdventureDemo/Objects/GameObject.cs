@@ -8,7 +8,7 @@ using WaywardEngine;
 
 namespace AdventureCore
 {
-    class GameObject
+    public class GameObject
     {
         #region Fields
 
@@ -16,7 +16,7 @@ namespace AdventureCore
         public string nickname; // XXX: Temp until knowledge is implemented
         public string description;
 
-        public List<string> tags;
+        public readonly List<string> tags = new List<string>();
 
         protected Actor _actor;
         public virtual Actor actor {
@@ -82,8 +82,6 @@ namespace AdventureCore
             name = "unknown object";
             nickname = "";
             description = "a strange object";
-
-            tags = new List<string>();
 
             objectData = new Dictionary<string, DataDelegate>();
             objectData["name"] = GetName;

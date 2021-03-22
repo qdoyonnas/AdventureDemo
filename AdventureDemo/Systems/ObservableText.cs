@@ -6,7 +6,7 @@ using WaywardEngine;
 
 namespace AdventureCore
 {
-	class ObservableText
+	public class ObservableText
     {
         public readonly string template;
         public readonly Tuple<GameObject, string>[] data;

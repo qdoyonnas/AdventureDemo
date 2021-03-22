@@ -9,7 +9,7 @@ using WaywardEngine;
 
 namespace AdventureCore
 {
-    abstract class Actor
+    public abstract class Actor
     {
         #region Fields
 

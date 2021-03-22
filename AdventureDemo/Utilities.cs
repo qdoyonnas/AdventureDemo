@@ -11,7 +11,7 @@ namespace AdventureCore
         VALID
     }
 
-    static class PhysicalUtilities
+    public static class PhysicalUtilities
     {
 
         public static Physical FindParentPhysical( Physical obj )
@@ -24,7 +24,7 @@ namespace AdventureCore
         }
     }
 
-    static class SearchComparator
+    public static class SearchComparator
     {
         public static bool CompareString( string value, string searchValue )
         {

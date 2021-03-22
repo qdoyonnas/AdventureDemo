@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AdventureCore
 {
-    class AttachmentPoint
+    public class AttachmentPoint
     {
         public string name = "slot";
 

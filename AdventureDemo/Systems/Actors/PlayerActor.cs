@@ -6,7 +6,7 @@ using WaywardEngine;
 
 namespace AdventureCore
 {
-    class PlayerActor : Actor
+    public class PlayerActor : Actor
     {
         protected readonly Dictionary<string[], InputManager.InputDelegate> commands;
 
