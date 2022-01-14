@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using WaywardEngine;
 
 namespace AdventureCore
 {
@@ -68,7 +69,7 @@ namespace AdventureCore
                 
                 PostInstantiate(gameObject, context);
             } catch( Exception e ) {
-                Console.WriteLine($"ERROR: Could not instantiate GameObject from ObjectData: {e}");
+                WaywardManager.instance.Log($@"<red>ERROR: Could not instantiate GameObject from ObjectData: {e}</red>");
             }
 
             return gameObject;
@@ -78,6 +79,10 @@ namespace AdventureCore
         {
             foreach( VerbReference verbReference in verbs ) {
                 KeyValuePair<Verb, PossessionType> verb = verbReference.GetValue();
+                if( verb.Key == null ) {
+                    WaywardManager.instance.Log($@"<red>ERROR: Invalid verb - Skipping</red>");
+                    continue;
+                }
                 verb.Key.self = gameObject;
                 gameObject.AddVerb(verb.Value, verb.Key);
             }

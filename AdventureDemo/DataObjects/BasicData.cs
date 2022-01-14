@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace AdventureCore
 {
-    abstract class BasicData
+    public abstract class BasicData
     {
         public string id = null;
         public string referenceId = null;

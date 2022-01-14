@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AdventureCore
 {
-    class WorldData : BasicData
+    public class WorldData : BasicData
     {
         public string name = "Unnamed World";
         public string description = "No description";

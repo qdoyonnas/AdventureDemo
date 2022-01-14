@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AdventureCore
 {
-    class SpawnList : BasicData
+    public class SpawnList : BasicData
     {
         public SpawnEntry[] entries = new SpawnEntry[0];
 
@@ -35,7 +35,7 @@ namespace AdventureCore
         }
     }
 
-    class SpawnEntry
+    public class SpawnEntry
     {
         public DataReference id;
         public double spawnChance = 0;

@@ -21,6 +21,9 @@ namespace AdventureCore
         public KeyValuePair<Verb, PossessionType> GetValue(Dictionary<string, object> context = null)
         {
             Verb v = verb.LoadData<Verb>(typeof(VerbData), context);
+            if( v == null ) {
+                WaywardEngine.WaywardManager.instance.Log($@"<red>ERROR: Verb failed creating VerbData object with reference {verb.value}</red>");
+            }
 
             return new KeyValuePair<Verb, PossessionType>(v, possession);
         }

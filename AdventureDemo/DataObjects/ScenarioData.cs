@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace AdventureCore
 {
-    class ScenarioData : BasicData
+    public class ScenarioData : BasicData
     {
         public string name = "Unnamed Scenario";
         public string description = "No description";

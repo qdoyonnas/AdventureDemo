@@ -6,7 +6,7 @@ using WaywardEngine;
 
 namespace AdventureCore
 {
-    class GameManager
+    public class GameManager
     {
         #region Singleton
         

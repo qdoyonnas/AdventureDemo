@@ -6,7 +6,7 @@ using WaywardEngine;
 
 namespace AdventureCore
 {
-	class DialogPage : WaywardEngine.ContentPage
+	public class DialogPage : WaywardEngine.ContentPage
 	{
 		StackPanel optionsPanel = null;
 		TextBox inputBox = null;

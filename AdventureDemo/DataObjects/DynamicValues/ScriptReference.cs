@@ -20,7 +20,7 @@ namespace AdventureCore
             text = reference.text;
         }
 
-        public string GetCode()
+        public string GetCode(string methodName="")
         {
             ScriptData data = DataManager.instance.GetScript(text);
 

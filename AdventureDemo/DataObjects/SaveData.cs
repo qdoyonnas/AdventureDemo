@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AdventureCore
 {
-    class SaveData
+    public class SaveData
     {
     }
 }

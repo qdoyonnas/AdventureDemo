@@ -10,7 +10,7 @@ using WaywardEngine;
 
 namespace AdventureCore
 {
-    class OverviewPage : WaywardEngine.ContentPage
+    public class OverviewPage : WaywardEngine.ContentPage
     {
         PlayerActor _observer;
         public PlayerActor observer {

@@ -1,21 +1,25 @@
-using AdventureCore;
+using System;
 using System.Collections.Generic;
+using System.Windows;
+using WaywardEngine;
+using AdventureCore;
 
-class WaitVerb : Verb
+//css_include ../Data/Verbs/Scripts/defaultVerb.cs;
+
+class WaitVerb : DefaultVerb
 {
-    public WaitVerb() : base() { }
-    public WaitVerb( GameObject self ) : base(self) { }
-
-    protected override void Construct()
+    public override bool Construct(Verb verb, Dictionary<string, object> data)
     {
-        _displayLabel = "Wait";
+        verb.displayLabel = "Wait";
 
-        actionTime = 500;
+        verb.blackboard["actionTime"] = 500.0;
 
-        _validInputs = new string[] { "wait" };
+        verb.AddValidInput("wait");
+
+        return true;
     }
 
-    bool DisplayDialog()
+    bool DisplayDialog(Verb verb)
     {
         // Open dialog for choosing time
         DialogPage dialogPage =  new DialogPage();
@@ -27,39 +31,39 @@ class WaitVerb : Verb
                 return;
             }
 
-            Register(new Dictionary<string, object>() {{ "duration", amount }}, true);
+            verb.Register(new Dictionary<string, object>() {{ "duration", amount }}, true);
         });
 
         Dictionary<string, object> data = new Dictionary<string, object>();
-        data["gameObject"] = self;
-        data["verb"] = this;
-        data["label"] = displayLabel;
+        data["gameObject"] = verb.self;
+        data["verb"] = verb;
+        data["label"] = verb.displayLabel;
 
         data["duration"] = 10.0;
-        dialogPage.AddEntry("10", () => { Register(data, true); });
+        dialogPage.AddEntry("10", () => { verb.Register(data, true); });
         data["duration"] = 20.0;
-        dialogPage.AddEntry("20", () => { Register(data, true); });
+        dialogPage.AddEntry("20", () => { verb.Register(data, true); });
         data["duration"] = 100.0;
-        dialogPage.AddEntry("100", () => { Register(data, true); });
+        dialogPage.AddEntry("100", () => { verb.Register(data, true); });
         data["duration"] = 250.0;
-        dialogPage.AddEntry("250", () => { Register(data, true); });
+        dialogPage.AddEntry("250", () => { verb.Register(data, true); });
         data["duration"] = 500.0;
-        dialogPage.AddEntry("500", () => { Register(data, true); });
+        dialogPage.AddEntry("500", () => { verb.Register(data, true); });
         data["duration"] = 1000.0;
-        dialogPage.AddEntry("1000", () => { Register(data, true); });
+        dialogPage.AddEntry("1000", () => { verb.Register(data, true); });
         data["duration"] = 2000.0;
-        dialogPage.AddEntry("2000", () => { Register(data, true); });
+        dialogPage.AddEntry("2000", () => { verb.Register(data, true); });
         data["duration"] = 4000.0;
-        dialogPage.AddEntry("4000", () => { Register(data, true); });
+        dialogPage.AddEntry("4000", () => { verb.Register(data, true); });
         data["duration"] = 10000.0;
-        dialogPage.AddEntry("10000", () => { Register(data, true); });
+        dialogPage.AddEntry("10000", () => { verb.Register(data, true); });
 
         WaywardManager.instance.AddPage(dialogPage, WaywardManager.instance.GetRelativeWindowPoint(0.5, 0.5));
 
         return true;
     }
         
-    public override bool Action( Dictionary<string, object> data )
+    public override bool Action( Verb verb, Dictionary<string, object> data )
     {
         double duration = -1;
         if( data.ContainsKey("duration") ) {
@@ -69,11 +73,11 @@ class WaitVerb : Verb
         }
         if( duration == -1 ) { return false; }
 
-        actionTime = duration;
+        verb.blackboard["actionTime"] = duration;
 
         // Message for Verbose pages
-        data["message"] = new ObservableText($"[0] {displayLabel.ToLower()} for {actionTime.ToString()}.",
-            new Tuple<GameObject, string>(self, "name top"));
+        data["message"] = new ObservableText($"[0] {verb.displayLabel.ToLower()} for {duration.ToString()}.",
+            new Tuple<GameObject, string>(verb.self, "name top"));
         data["displayAfter"] = false;
 
         TimelineManager.instance.OnAction(data);
@@ -81,56 +85,56 @@ class WaitVerb : Verb
         return true;
     }
 
-    public override CheckResult Check(GameObject target) 
+    public override CheckResult Check(Verb verb, GameObject target) 
     {
-        if( target == self ) {
+        if( target == verb.self ) {
             return CheckResult.VALID;
         } else {
             return CheckResult.INVALID;
         }
     }
 
-    protected override void OnAssign() {}
-
-    public override bool ParseInput(InputEventArgs e)
+    public override bool ParseInput(Verb verb, InputEventArgs inputEventArgs)
     {
-        if( e.parsed ) { return true; }
+        if( inputEventArgs.parsed ) { return true; }
 
-        if( e.parameters.Length == 0 ) {
-            return DisplayDialog();
+        if( inputEventArgs.parameters.Length == 0 ) {
+            return DisplayDialog(verb);
         } else {
             double waitTime;
-            bool success = double.TryParse(e.parameters[0], out waitTime);
+            bool success = double.TryParse(inputEventArgs.parameters[0], out waitTime);
             if( !success ) { return false; }
 
-            Register(new Dictionary<string, object>() {{ "duration", waitTime }}, true);
+            verb.Register(new Dictionary<string, object>() {{ "duration", waitTime }}, true);
         }
 
         return true;
     }
 
-    public override void Display(Actor actor, GameObject target, FrameworkContentElement span)
+    public override bool Display(Verb verb, Actor actor, GameObject target, FrameworkContentElement span)
     {
-        CheckResult check = Check(target);
+        CheckResult check = verb.Check(target);
 		if( check >= CheckResult.VALID ) {
             Dictionary<TextBlock, ContextMenuAction> items = new Dictionary<TextBlock, ContextMenuAction>();
 
             Dictionary<string, object> data = new Dictionary<string, object>();
-            data["gameObject"] = self;
-            data["verb"] = this;
-            data["label"] = displayLabel;
+            data["gameObject"] = verb.self;
+            data["verb"] = verb;
+            data["label"] = verb.displayLabel;
 
-            items.Add( WaywardTextParser.ParseAsBlock("Custom...") , delegate { return DisplayDialog(); } );
+            items.Add( WaywardTextParser.ParseAsBlock("Custom...") , delegate { return DisplayDialog(verb); } );
             data["duration"] = 10.0;
-            items.Add( WaywardTextParser.ParseAsBlock("10") , delegate { return Register(data, true); } );
+            items.Add( WaywardTextParser.ParseAsBlock("10") , delegate { return verb.Register(data, true); } );
             data["duration"] = 100.0;
-            items.Add( WaywardTextParser.ParseAsBlock("100") , delegate { return Register(data, true); } );
+            items.Add( WaywardTextParser.ParseAsBlock("100") , delegate { return verb.Register(data, true); } );
             data["duration"] = 500.0;
-            items.Add( WaywardTextParser.ParseAsBlock("500") , delegate { return Register(data, true); } );
+            items.Add( WaywardTextParser.ParseAsBlock("500") , delegate { return verb.Register(data, true); } );
             data["duration"] = 1000.0;
-            items.Add( WaywardTextParser.ParseAsBlock("1000") , delegate { return Register(data, true); } );
+            items.Add( WaywardTextParser.ParseAsBlock("1000") , delegate { return verb.Register(data, true); } );
 
-            ContextMenuHelper.AddContextMenuHeader( span, WaywardTextParser.ParseAsBlock(displayLabel), items, true );
+            ContextMenuHelper.AddContextMenuHeader( span, WaywardTextParser.ParseAsBlock(verb.displayLabel), items, true );
         }
+
+        return true;
     }
 }

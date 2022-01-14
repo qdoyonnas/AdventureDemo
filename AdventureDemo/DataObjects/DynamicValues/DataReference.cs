@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 namespace AdventureCore
 {
     [JsonConverter(typeof(DataReferenceConverter))]
-    class DataReference
+    public class DataReference
     {
         public string value = null;
 

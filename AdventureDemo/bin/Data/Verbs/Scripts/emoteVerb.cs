@@ -1,30 +1,32 @@
-using AdventureCore;
+using System;
 using System.Collections.Generic;
+using System.Windows;
+using WaywardEngine;
+using AdventureCore;
 
-class EmoteVerb : Verb
+//css_include ../Data/Verbs/Scripts/defaultVerb.cs;
+
+class EmoteVerb : DefaultVerb
 {
-	public EmoteVerb() : base() { }
-    public EmoteVerb( GameObject self ) : base(self) {}
-
-		protected override void Construct()
+	public override bool Construct(Verb verb, Dictionary<string, object> data)
     {
-        _displayLabel = "Emote";
+        verb.displayLabel = "Emote";
 
-        actionTime = 10;
+        verb.blackboard["actionTime"] = 10.0;
 
-        _validInputs = new string[] {
-            "do", "emote"
-        };
+        verb.AddValidInput("do", "emote");
+
+        return true;
     }
 
-	bool DisplayDialog()
+	bool DisplayDialog(Verb verb)
 	{
         // Open dialog for choosing time
         DialogPage dialogPage =  new DialogPage();
         dialogPage.SetTitle("Action");
 
         dialogPage.AddInputPanel((input) => {
-            Register(new Dictionary<string, object>() {{ "message", input }}, true);
+            verb.Register(new Dictionary<string, object>() {{ "message", input }}, true);
         });
 
         WaywardManager.instance.AddPage(dialogPage, WaywardManager.instance.GetRelativeWindowPoint(0.5, 0.5));
@@ -32,7 +34,7 @@ class EmoteVerb : Verb
         return true;
 	}
 
-	public override bool Action(Dictionary<string, object> data)
+	public override bool Action(Verb verb, Dictionary<string, object> data)
 	{
 		string message = null;
 		if( data.ContainsKey("message") ) {
@@ -42,7 +44,7 @@ class EmoteVerb : Verb
 
         // Message for Verbose pages
         data["message"] = new ObservableText($"[0] { message }.", 
-            new Tuple<GameObject, string>(self, "name top")
+            new Tuple<GameObject, string>(verb.self, "name top")
         );
         data["turnPage"] = false;
         data["displayAfter"] = false;
@@ -52,33 +54,33 @@ class EmoteVerb : Verb
         return true;
 	}
 
-	public override CheckResult Check(GameObject target)
+	public override CheckResult Check(Verb verb, GameObject target)
 	{
 		return CheckResult.VALID;
 	}
 
-	public override bool ParseInput(InputEventArgs e)
+	public override bool ParseInput(Verb verb, InputEventArgs inputEventArgs)
     {
-        if( e.parsed ) { return true; }
+        if( inputEventArgs.parsed ) { return true; }
 
-        if( e.parameters.Length == 0 ) {
-            return DisplayDialog();
+        if( inputEventArgs.parameters.Length == 0 ) {
+            return DisplayDialog(verb);
         } else {
-            string message = e.parameterInput;
+            string message = inputEventArgs.parameterInput;
 
-            Register(new Dictionary<string, object>() {{ "message", message }}, true);
+            verb.Register(new Dictionary<string, object>() {{ "message", message }}, true);
         }
 
         return true;
     }
 
-    public override void Display(Actor actor, GameObject target, FrameworkContentElement span)
+    public override bool Display(Verb verb, Actor actor, GameObject target, FrameworkContentElement span)
     {
-        CheckResult check = Check(target);
+        CheckResult check = verb.Check(target);
 		if( check >= CheckResult.VALID ) {
-            ContextMenuHelper.AddContextMenuItem( span, displayLabel, delegate { DisplayDialog(); return false; } );
+            ContextMenuHelper.AddContextMenuItem( span, verb.displayLabel, delegate { DisplayDialog(verb); return false; } );
         }
-    }
 
-    protected override void OnAssign() {}
+        return true;
+    }
 }

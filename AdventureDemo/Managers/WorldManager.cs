@@ -7,7 +7,7 @@ using WaywardEngine;
 
 namespace AdventureCore
 {
-    class WorldManager
+    public class WorldManager
     {
         // XXX: Incorrect use of Random
         //      every use of random should be done from a common 'world seed'

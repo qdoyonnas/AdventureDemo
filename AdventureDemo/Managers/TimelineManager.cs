@@ -4,7 +4,7 @@ using WaywardEngine;
 
 namespace AdventureCore
 {
-    class TimelineManager
+    public class TimelineManager
     {
         #region Singleton
 

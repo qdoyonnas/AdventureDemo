@@ -9,7 +9,7 @@ using WaywardEngine;
 
 namespace AdventureCore
 {
-    class Container : Physical
+    public class Container : Physical
     {
         #region Fields
 

@@ -10,7 +10,7 @@ namespace AdventureCore
     //      The following solutions need to be implemented:
     //      (1) Frame limiting with foundObjects being updated throughout the process (and correctly used by the searching objects)
     //      (2) Multi-threading, the searching should happen on a separate thread entirely
-    class SearchParams
+    public class SearchParams
     {
         public string referenceId = null;
         public Dictionary<string, string> properties = new Dictionary<string, string>();

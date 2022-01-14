@@ -10,7 +10,7 @@ using WaywardEngine;
 
 namespace AdventureCore
 {
-    class DescriptivePage : ContentPage
+    public class DescriptivePage : ContentPage
     {
         GameObject _target;
         public GameObject target {

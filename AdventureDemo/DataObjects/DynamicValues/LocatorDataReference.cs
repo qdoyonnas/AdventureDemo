@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AdventureCore
 {
-    class LocatorDataReference
+    public class LocatorDataReference
     {
         public DataReference data = null;
         public DataReference actor = null;

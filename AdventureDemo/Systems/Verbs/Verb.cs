@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Windows;
 using System.Windows.Controls;
-using CSScriptLibrary;
+using CSScriptLib;
 using WaywardEngine;
 
 namespace AdventureCore
@@ -80,24 +80,24 @@ namespace AdventureCore
             ParseInputMethod = ParseInputDefault;
         }
         public void SetMethods(
-                MethodDelegate<bool> construct,
-                MethodDelegate<bool> onAssign,
-                MethodDelegate<CheckResult> check,
-                MethodDelegate<bool> action,
-                MethodDelegate<bool> register,
-                MethodDelegate<bool> display,
-                MethodDelegate<bool> addVerb,
-                MethodDelegate<bool> parseInput
+                ConstructDelegate construct,
+                OnAssignDelegate onAssign,
+                CheckDelegate check,
+                ActionDelegate action,
+                RegisterDelegate register,
+                DisplayDelegate display,
+                AddVerbDelegate addVerb,
+                ParseInputDelegate parseInput
             )
         {
-            ConstructMethod = construct;
-            OnAssignMethod = onAssign;
-            CheckMethod = check;
-            ActionMethod = action;
-            RegisterMethod = register;
-            DisplayMethod = display;
-            AddVerbMethod = addVerb;
-            ParseInputMethod = parseInput;
+            ConstructMethod = construct != null ? construct : ConstructDefault;
+            OnAssignMethod = onAssign != null ? onAssign : OnAssignDefault;
+            CheckMethod = check != null ? check : CheckDefault;
+            ActionMethod = action != null ? action : ActionDefault;
+            RegisterMethod = register != null ? register : RegisterDefault;
+            DisplayMethod = display != null ? display : DisplayDefault;
+            AddVerbMethod = addVerb != null ? addVerb : AddVerbDefault;
+            ParseInputMethod = parseInput != null ? parseInput : ParseInputDefault;
         }
 
         public void AddValidInput( params string[] inputs )
@@ -117,18 +117,9 @@ namespace AdventureCore
             }
         }
 
-        protected static bool ConstructDefault( params object[] parameters )
+        public delegate bool ConstructDelegate( Verb verb, Dictionary<string, object> data );
+        protected static bool ConstructDefault( Verb verb, Dictionary<string, object> data )
         {
-            Verb verb = null;
-            Dictionary<string, object> data = null;
-            try {
-                verb = (Verb)parameters[0];
-                data = (Dictionary<string, object>)parameters[1];
-            } catch( SystemException e ) {
-                WaywardManager.instance.Log($@"<red>Verb '{verb.displayLabel}' failed parsing parameters into ConstructDefault:</red> {e}");
-                return false;
-            }
-
             if( data.ContainsKey("actionTime") ) {
                 try {
                     verb.blackboard["actionTime"] = (Double)data["actionTime"];
@@ -139,7 +130,7 @@ namespace AdventureCore
 
             return true;
         }
-        protected MethodDelegate<bool> ConstructMethod;
+        protected ConstructDelegate ConstructMethod;
         public bool Construct( Dictionary<string, object> data )
         {
             if( ConstructMethod == null ) {
@@ -149,8 +140,9 @@ namespace AdventureCore
             return ConstructMethod(this, data);
         }
 
-        protected static bool OnAssignDefault( params object[] parameters ) { return true; }
-        protected MethodDelegate<bool> OnAssignMethod;
+        public delegate bool OnAssignDelegate( Verb verb );
+        protected static bool OnAssignDefault( Verb verb ) { return true; }
+        protected OnAssignDelegate OnAssignMethod;
         /// <summary>
         /// Called when the verb is assigned a gameObject as 'self'.
         /// As an example, can be used to add necessary objects for the verb to function
@@ -165,11 +157,12 @@ namespace AdventureCore
             return OnAssignMethod(this);
         }
 
-        protected static CheckResult CheckDefault( params object[] parameters )
+        public delegate CheckResult CheckDelegate( Verb verb, GameObject target );
+        protected static CheckResult CheckDefault( Verb verb, GameObject target )
         {
             return CheckResult.INVALID;
         }
-        protected MethodDelegate<CheckResult> CheckMethod;
+        protected CheckDelegate CheckMethod;
         /// <summary>
         /// Returns a bool indicating whether this Verb's action can be performed
         /// based on the passed in data.
@@ -185,21 +178,13 @@ namespace AdventureCore
             return CheckMethod(this, target);
         }
 
-        protected static bool ActionDefault( params object[] parameters )
+        public delegate bool ActionDelegate( Verb verb, Dictionary<string, object> data );
+        protected static bool ActionDefault( Verb verb, Dictionary<string, object> data )
         {
-            Verb verb = null;
-            try {
-                verb = (Verb)parameters[0];
-
-            } catch( SystemException e ) {
-                WaywardManager.instance.Log($@"<red>Verb '{verb.displayLabel}' failed parsing parameters into ActionDefault:</red> {e}");
-                return false;
-            }
-
-            WaywardEngine.WaywardManager.instance.Log($@"<yellow>Verb '{verb.displayLabel}' ran default action.</yellow>");
+            WaywardManager.instance.Log($@"<yellow>Verb '{verb.displayLabel}' ran default action.</yellow>");
             return false;
         }
-        protected MethodDelegate<bool> ActionMethod;
+        protected ActionDelegate ActionMethod;
         public bool Action( Dictionary<string, object> data )
         {
             if( ActionMethod == null ) {
@@ -209,22 +194,9 @@ namespace AdventureCore
             return ActionMethod(this, data);
         }
 
-        protected static bool RegisterDefault( params object[] parameters )
+        public delegate bool RegisterDelegate( Verb verb, Dictionary<string, object> data, bool fromPlayer = false );
+        protected static bool RegisterDefault( Verb verb, Dictionary<string, object> data, bool fromPlayer = false )
         {
-            Verb verb = null;
-            Dictionary<string, object> data = null;
-            bool fromPlayer = false;
-            try {
-                verb = (Verb)parameters[0];
-                data = (Dictionary<string, object>)parameters[1];
-                if( parameters.Length > 1 ) {
-                    fromPlayer = (bool)parameters[2];
-                }
-            } catch( SystemException e ) {
-                WaywardManager.instance.Log($@"<red>Verb '{verb.displayLabel}' failed parsing parameters into RegisterDefault:</red> {e}");
-                return false;
-            }
-
             if( !data.ContainsKey("gameObject") ) { data["gameObject"] = verb.self; }
             if( !data.ContainsKey("verb") ) { data["verb"] = verb; }
             if( !data.ContainsKey("label") ) { data["label"] = verb.displayLabel; }
@@ -252,7 +224,7 @@ namespace AdventureCore
 
             return success;
         }
-        protected MethodDelegate<bool> RegisterMethod;
+        protected RegisterDelegate RegisterMethod;
         public bool Register( Dictionary<string, object> data, bool fromPlayer = false )
         {
             if( RegisterMethod == null ) {
@@ -262,21 +234,9 @@ namespace AdventureCore
             return RegisterMethod(this, data, fromPlayer);
         }
         
-        protected static bool DisplayDefault( params object[] parameters )
+        public delegate bool DisplayDelegate( Verb verb, Actor actor, GameObject target, FrameworkContentElement span );
+        protected static bool DisplayDefault( Verb verb, Actor actor, GameObject target, FrameworkContentElement span )
         {
-            Verb verb = null;
-            Actor actor = null;
-            GameObject target = null;
-            FrameworkContentElement span = null;
-            try {
-                verb = (Verb)parameters[0];
-                actor = (Actor)parameters[1];
-                target = (GameObject)parameters[2];
-                span = (FrameworkContentElement)parameters[3];
-            } catch( SystemException e ) {
-                WaywardManager.instance.Log($@"<red>Verb '{verb.displayLabel}' failed parsing parameters into DisplayDefault:</red> {e}");
-            }
-
             CheckResult check = verb.Check(target);
 			if( check >= CheckResult.RESTRICTED ) {
                 Dictionary<TextBlock, ContextMenuAction> items = new Dictionary<TextBlock, ContextMenuAction>();
@@ -290,7 +250,7 @@ namespace AdventureCore
 
             return true;
         }
-        protected MethodDelegate<bool> DisplayMethod;
+        protected DisplayDelegate DisplayMethod;
         public bool Display( Actor actor, GameObject target, FrameworkContentElement span )
         {
             if( DisplayMethod == null ) {
@@ -300,23 +260,15 @@ namespace AdventureCore
             return DisplayMethod(this, actor, target, span);
         }
 
-        protected static bool AddVerbDefault( params object[] parameters )
+        public delegate bool AddVerbDelegate( Verb verb, Actor actor );
+        protected static bool AddVerbDefault( Verb verb, Actor actor )
         {
-            Verb verb = null;
-            Actor actor = null;
-            try {
-                verb = (Verb)parameters[0];
-                actor = (Actor)parameters[1];
-            } catch( SystemException e ) {
-                WaywardManager.instance.Log($@"<red>Verb '{verb.displayLabel}' failed parsing parameters into AddVerbDefault:</red> {e}");
-            }
-
             if( actor.HasVerb(verb.GetType()) ) { return false; }
             actor.AddVerb(verb);
 
             return true;
         }
-        protected MethodDelegate<bool> AddVerbMethod;
+        protected AddVerbDelegate AddVerbMethod;
         public bool AddVerb( Actor actor )
         {
             if( AddVerbMethod == null ) {
@@ -326,37 +278,29 @@ namespace AdventureCore
             return AddVerbMethod(this, actor);
         }
 
-        protected static bool ParseInputDefault( params object[] parameters )
+        public delegate bool ParseInputDelegate( Verb verb, InputEventArgs inputEventArgs );
+        protected static bool ParseInputDefault( Verb verb, InputEventArgs inputEventArgs )
         {
-            Verb verb = null;
-            InputEventArgs e = null;
-            try {
-                verb = (Verb)parameters[0];
-                e = (InputEventArgs)parameters[1];
-            } catch( SystemException x ) {
-                WaywardManager.instance.Log($@"<red>Verb '{verb.displayLabel}' failed parsing parameters into ParseInputDefault:</red> {x}");
-            }
-
-            if( e.parsed ) { return true; }
+            if( inputEventArgs.parsed ) { return true; }
 
             string message = $"Verb Found:\n{verb.displayLabel} with params:";
 
-            for( int i = 1; i < e.words.Length; i++ ) {
-                message += $"\n{e.words[i]}";
+            for( int i = 1; i < inputEventArgs.words.Length; i++ ) {
+                message += $"\n{inputEventArgs.words[i]}";
             }
 
             WaywardManager.instance.DisplayMessage(message);
 
             return true;
         }
-        protected MethodDelegate<bool> ParseInputMethod;
-        public bool ParseInput( InputEventArgs e )
+        protected ParseInputDelegate ParseInputMethod;
+        public bool ParseInput( InputEventArgs inputEventArgs )
         {
             if( ParseInputMethod == null ) {
                 WaywardManager.instance.Log($@"<yellow>Verb '{displayLabel}' doesn't have a ParseInputMethod.</yellow>");
             }
 
-            return ParseInputMethod(this, e);
+            return ParseInputMethod(this, inputEventArgs);
         }
     }
 }

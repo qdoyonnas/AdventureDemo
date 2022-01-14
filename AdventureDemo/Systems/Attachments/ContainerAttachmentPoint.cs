@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AdventureCore
 {
-    class ContainerAttachmentPoint : PhysicalAttachmentPoint
+    public class ContainerAttachmentPoint : PhysicalAttachmentPoint
     {
         protected List<Connection> connections;
 

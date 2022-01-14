@@ -6,7 +6,7 @@ using WaywardEngine;
 
 namespace AdventureCore
 {
-    class TimelinePage : WaywardEngine.ContentPage
+    public class TimelinePage : WaywardEngine.ContentPage
     {
         PlayerActor _observer;
         public PlayerActor observer {

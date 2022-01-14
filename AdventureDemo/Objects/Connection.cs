@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace AdventureCore
 {
-    class Connection : GameObject, IVerbSuggest
+    public class Connection : GameObject, IVerbSuggest
     {
         ContainerAttachmentPoint _secondContainer;
         public ContainerAttachmentPoint secondContainer {

@@ -6,7 +6,7 @@ using WaywardEngine;
 
 namespace AdventureCore
 {
-    class VerbosePage : WaywardEngine.ContentPage
+    public class VerbosePage : WaywardEngine.ContentPage
     {
         PlayerActor _observer;
         public PlayerActor observer {
