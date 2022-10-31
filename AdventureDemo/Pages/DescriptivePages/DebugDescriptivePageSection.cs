@@ -53,9 +53,15 @@ namespace AdventureCore
         {
             try {
                 string containerContent = "Container: [0]";
-                TextBlock containerBlock = WaywardTextParser.ParseAsBlock(containerContent,
-                    () => { return page.observer.Observe(page.target.container.GetParent(), "name upper").span; }
-                );
+                AttachmentPoint container = page.target.container;
+                TextBlock containerBlock;
+                if( container != null ) {
+                    containerBlock = WaywardTextParser.ParseAsBlock(containerContent,
+                        () => { return page.observer.Observe(container.GetParent(), "name upper").span; }
+                    );
+                } else {
+                    containerBlock = WaywardTextParser.ParseAsBlock("Container: <i>null</i>");
+                }
                 Grid.SetRow(containerBlock, 2);
                 content.Children.Add(containerBlock);
             } catch( NullReferenceException e ) {

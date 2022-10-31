@@ -13,6 +13,12 @@ namespace AdventureCore
 {
     public class Verb
     {
+        protected string _type;
+        public string type
+        {
+            get { return _type; }
+        }
+
         protected string _displayLabel;
         public string displayLabel {
             get {
@@ -66,6 +72,13 @@ namespace AdventureCore
         {
             SetDefaults();
             this.self = self;
+        }
+
+        public void SetType(string t)
+        {
+            if( _type == null ) {
+                _type = t;
+            }
         }
 
         protected void SetDefaults()
@@ -263,7 +276,7 @@ namespace AdventureCore
         public delegate bool AddVerbDelegate( Verb verb, Actor actor );
         protected static bool AddVerbDefault( Verb verb, Actor actor )
         {
-            if( actor.HasVerb(verb.GetType()) ) { return false; }
+            if( actor.HasVerb(verb.type) ) { return false; }
             actor.AddVerb(verb);
 
             return true;
@@ -272,7 +285,7 @@ namespace AdventureCore
         public bool AddVerb( Actor actor )
         {
             if( AddVerbMethod == null ) {
-                WaywardManager.instance.Log($@"<yellow>Verb '{displayLabel}' doesn't have a AddVerbMethod.</yellow>");
+                WaywardManager.instance.Log($@"<yellow>Verb '{displayLabel}' doesn't have an AddVerbMethod.</yellow>");
             }
 
             return AddVerbMethod(this, actor);

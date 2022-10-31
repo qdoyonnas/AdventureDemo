@@ -21,7 +21,7 @@
 						"name": "doorway",
 						"description": "a doorway",
 						"throughput": "70",
-						"isTwoWay": true
+						"twoWay": true
 					}
 				]
 			},

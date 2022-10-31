@@ -100,10 +100,10 @@ namespace AdventureCore
 
         #region Verbs
 
-        public virtual bool HasVerb( Type type )
+        public virtual bool HasVerb( string type)
         {
             foreach( Verb verb in verbs ) {
-                if( verb.GetType() == type ) { return true; }
+                if ( verb.type == type ) { return true; }
             }
 
             return false;

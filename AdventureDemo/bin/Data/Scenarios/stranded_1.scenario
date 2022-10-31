@@ -3,13 +3,18 @@
 	
 	"world": "pathOfTheStars",
 	
-	"name": "Stranded Freighter",
+	"name": "Stranded and Forgotten",
 	
-	"description": "Your small freighter was disabled by a massive electromagnetic storm while passing through an uninhabited system. The batteries were discharged and the ship suffered considerable electrical damage.\n\nYou were able to limp into a stable orbit around a nearby planetoid but your calculations showed that it would take a dozen years for the EM Collectors to sufficiently refill the batteries. There was no choice but to enter cryo.\n\nNow, over a decade later, it is time to wake up.",
-	
+	"description": "Your small freighter was disabled by a massive electromagnetic storm while passing through an uninhabited system. The batteries were discharged and the ship suffered considerable electrical damage.\n\nYou were able to limp into a stable orbit around a nearby planetoid but your calculations showed that it would take a great many years for the EM Collectors to sufficiently refill the batteries. There was no choice but to enter stasis.\n\nNow, centuries later, it is time to wake up.",
+
 	"objects": [
 		{
-			"data": {"basedOn": "freighter_1", "name": "Starwind", "referenceId": "playerShip"},
+			"data": {
+				"basedOn": "freighter_1",
+				"name": "Starwind",
+				"referenceId": "playerShip",
+				"spawnLists": []
+			},
 			"location": {
 				"properties": {
 					"name": "Space"
@@ -17,60 +22,48 @@
 			}
 		},
 		{
-			"data": "hammer",
+			"data": {
+				"basedOn": "hallway_1",
+				"referenceId": "crewHallway"
+			},
 			"location": {
-				"referenceId": "playerShip",
-				"subSearches": [{
-					"properties": {
-						"tags": "cabin"
-					}
-				}]
+				"referenceId": "playerShip"
 			}
 		},
 		{
-			"data": "human",
-			"location": {
-				"referenceId": "playerShip",
-				"subSearches": [{
-					"properties": {
-						"tags": "cabin"
-					}
-				}]
-			}
-		},
-		{
-			"data": "blinking_light",
-			"location": {
-				"referenceId": "playerShip",
-				"subSearches": [
+			"data": {
+				"basedOn": "cabin_1",
+				"connections": [
 					{
-						"properties": {
-							"tags": "hallway"
-						}
+						"linkReference": "crewHallway",
+						"name": "doorway",
+						"description": "a doorway",
+						"throughput": "70",
+						"twoWay": true
 					}
 				]
-			}
-		},
-		{
-			"data": "rat",
-			"actor": "animal_actor",
-			"location":  {
-				"referenceId": "playerShip",
-				"subSearches": [
-					{
-						"properties": {
-							"tags": "hallway"
-						}
-					}
-				]
+			},
+			"location": {
+				"referenceId": "playerShip"
 			}
 		}
 	],
-	
+
 	"playerInfo": {
-		"data": "wayward_will",
+		"data": {
+			"basedOn": "human",
+			"name": "Dirk",
+			"referenceId": "playerCharacter"
+		},
 		"location": {
-			"referenceId": "playerShip"
+			"referenceId": "playerShip",
+			"subSearches": [
+				{
+					"properties": {
+						"tags": "cabin"
+					}
+				}
+			]
 		}
 	}
 }

@@ -10,6 +10,7 @@ class WaitVerb : DefaultVerb
 {
     public override bool Construct(Verb verb, Dictionary<string, object> data)
     {
+        verb.SetType("WaitVerb");
         verb.displayLabel = "Wait";
 
         verb.blackboard["actionTime"] = 500.0;

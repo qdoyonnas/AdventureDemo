@@ -10,6 +10,7 @@ class TraversalVerb : DefaultVerb
 {
     public override bool Construct(Verb verb, Dictionary<string, object> data)
     {
+        verb.SetType("TraversalVerb");
         verb.displayLabel = "Walk";
 
         verb.blackboard["actionTime"] = 500.0;

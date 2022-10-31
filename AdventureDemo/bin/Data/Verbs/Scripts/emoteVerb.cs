@@ -10,6 +10,7 @@ class EmoteVerb : DefaultVerb
 {
 	public override bool Construct(Verb verb, Dictionary<string, object> data)
     {
+        verb.SetType("EmoteVerb");
         verb.displayLabel = "Emote";
 
         verb.blackboard["actionTime"] = 10.0;

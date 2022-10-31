@@ -1,10 +1,12 @@
+[
+
 {
 	"id": "wrench",
 	"type": "PhysicalData",
-	
+
 	"name": "wrench",
-	"description": "a tool used for tightening bolts",
-	
+	"description": "a tool used for tightening or loosening bolts",
+
 	"volume": "0.5",
 	"materials": [
 		{
@@ -12,4 +14,22 @@
 			"parts": 1
 		}
 	]
+},
+
+{
+	"id": "crowbar",
+	"type": "PhysicalData",
+
+	"name": "crowbar",
+	"description": "a tool used for prying apart and breaking",
+
+	"volume": "0.8",
+	"materials": [
+		{
+			"material": "titanium",
+			"parts": 1
+		}
+	]
 }
+
+]

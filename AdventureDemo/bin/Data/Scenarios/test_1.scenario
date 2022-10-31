@@ -1,0 +1,72 @@
+{
+	"id": "test1",
+	
+	"world": "pathOfTheStars",
+	
+	"name": "Test",
+	
+	"description": "Test Scenario.",
+	
+	"objects": [
+		{
+			"data": {"basedOn": "freighter_1", "name": "Starwind", "referenceId": "playerShip"},
+			"location": {
+				"properties": {
+					"name": "Space"
+				}
+			}
+		},
+		{
+			"data": "hammer",
+			"location": {
+				"referenceId": "playerShip",
+				"subSearches": [{
+					"properties": {
+						"tags": "cabin"
+					}
+				}]
+			}
+		},
+		{
+			"data": {"basedOn": "human", "name": "Dirk", "referenceId": "playerCharacter"},
+			"location": {
+				"referenceId": "playerShip",
+				"subSearches": [{
+					"properties": {
+						"tags": "cabin"
+					}
+				}]
+			}
+		},
+		{
+			"data": "blinking_light",
+			"location": {
+				"referenceId": "playerShip",
+				"subSearches": [{
+					"properties": {
+						"tags": "hallway"
+					}
+				}]
+			}
+		},
+		{
+			"data": "rat",
+			"actor": "animal_actor",
+			"location":  {
+				"referenceId": "playerShip",
+				"subSearches": [{
+					"properties": {
+						"tags": "hallway"
+					}
+				}]
+			}
+		}
+	],
+	
+	"playerInfo": {
+		"data": "wayward_will",
+		"location": {
+			"referenceId": "playerShip"
+		}
+	}
+}

@@ -48,7 +48,7 @@
             <ColumnDefinition Width="4*" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Column="0" VerticalAlignment="Center" Style="{DynamicResource Header}">
+        <TextBlock Grid.Column="0" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Style="{DynamicResource Header}">
             <Span Name="ScenarioName" Style="{StaticResource Link}" />
         </TextBlock>
 

@@ -88,7 +88,7 @@ public class DefaultVerb : IVerbScript {
 
     public virtual bool AddVerb( Verb verb, Actor actor )
     {
-        if( actor.HasVerb(verb.GetType()) ) { return false; }
+        if( actor.HasVerb(verb.type) ) { return false; }
         actor.AddVerb(verb);
 
         return true;

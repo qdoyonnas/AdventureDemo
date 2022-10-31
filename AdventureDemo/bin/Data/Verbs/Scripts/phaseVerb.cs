@@ -10,6 +10,7 @@ class PhaseVerb : DefaultVerb
 {
     public override bool Construct(Verb verb, Dictionary<string, object> data)
     {
+        verb.SetType("PossessVerb");
         verb.displayLabel = "Phase";
 
         verb.AddValidInput("phase");
@@ -111,8 +112,9 @@ class PhaseVerb : DefaultVerb
 
     public override bool Display( Verb verb, Actor actor, GameObject target, FrameworkContentElement span )
     {
-        if( target == verb.self ) { return; }
-        if( Check(target) < CheckResult.RESTRICTED ) { return; }
+        //WaywardManager.instance.Log("IN phaseVerb display");
+        if( target == verb.self ) { return false; }
+        if( Check(verb, target) < CheckResult.RESTRICTED ) { return false; }
 
         string actionLabel = verb.displayLabel;
 
@@ -139,9 +141,9 @@ class PhaseVerb : DefaultVerb
         if( result >= CheckResult.RESTRICTED ) {
             Dictionary<TextBlock, ContextMenuAction> items = new Dictionary<TextBlock, ContextMenuAction>();
             if( result == CheckResult.RESTRICTED ) {
-                items.Add( WaywardTextParser.ParseAsBlock($@"<gray>{actionLabel}</gray>") , null );
+                items.Add( WaywardTextParser.ParseAsBlock($@"<gray>{actionLabel}</gray>"), null );
             } else {
-                items.Add( WaywardTextParser.ParseAsBlock(actionLabel) , delegate { return verb.Register(point, true); } );
+                items.Add( WaywardTextParser.ParseAsBlock(actionLabel), delegate { return verb.Register(new Dictionary<string, object>() { {"target", point} }, true); } );
             }
             ContextMenuHelper.AddContextMenuHeader(span, new TextBlock(verb.self.GetData("name upper").span), items, result != CheckResult.RESTRICTED);
         }

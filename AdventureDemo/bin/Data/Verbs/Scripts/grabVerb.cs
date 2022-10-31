@@ -10,6 +10,7 @@ public class GrabVerb : DefaultVerb
 {
     public override bool Construct(Verb verb, Dictionary<string, object> data)
     {
+        verb.SetType("GrabVerb");
         verb.displayLabel = "Grab";
 
         verb.blackboard["actionTime"] = 100.0;
@@ -178,7 +179,7 @@ public class GrabVerb : DefaultVerb
 
         if( inputEventArgs.parameters.Length <= 0 ) {
             if( inventory.GetAttachedCount() == 1 ) {
-                verb.Register(new Dictionary<string, object>() {{ "target", inventory.GetAttached(0)} }, true);
+                verb.Register(new Dictionary<string, object>() { {"target", inventory.GetAttached(0)} }, true);
             } else {
                 WaywardManager.instance.DisplayMessage($"Drop what?");
             }

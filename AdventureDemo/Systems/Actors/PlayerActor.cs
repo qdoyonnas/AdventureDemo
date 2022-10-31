@@ -61,7 +61,7 @@ namespace AdventureCore
 
             bool isDefaultSet = false;
 			if( dataKey.Contains("name") ) {
-				foreach( Verb verb in verbs) {
+                foreach( Verb verb in verbs ) {
                     bool verbDisplayed = false;
                     if( objSuggest != null ) {
                         verbDisplayed = objSuggest.DisplayVerb(verb, data.span);

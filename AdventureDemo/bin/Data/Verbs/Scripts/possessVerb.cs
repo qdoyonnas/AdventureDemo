@@ -1,25 +1,24 @@
-using AdventureCore;
+using System;
 using System.Collections.Generic;
+using System.Windows;
+using WaywardEngine;
+using AdventureCore;
 
-class PossessVerb : Verb
+//css_include ../Data/Verbs/Scripts/defaultVerb.cs;
+
+class PossessVerb : DefaultVerb
 {
-    public PossessVerb() : base() { }
-    public PossessVerb( Dictionary<string, object> data )
-        : base(data) {}
-    public PossessVerb( GameObject self )
-        : base(self) {}
-
-    protected override void Construct()
+    public override bool Construct(Verb verb, Dictionary<string, object> data)
     {
-        _displayLabel = "Possess";
+        verb.SetType("PossessVerb");
+        verb.displayLabel = "Possess";
 
-        _validInputs = new string[] {
-            "possess", "control"
-        };
+        verb.AddValidInput("possess", "control");
+
+        return true;
     }
-    protected override void OnAssign() {}
 
-    public override bool Action( Dictionary<string, object> data )
+    public override bool Action( Verb verb, Dictionary<string, object> data )
     {
         GameObject target = null;
         if( data.ContainsKey("target") ) {
@@ -29,26 +28,26 @@ class PossessVerb : Verb
             return false;
         }
 
-        if( Check(target) != CheckResult.VALID ) { return false; }
+        if( Check(verb, target) != CheckResult.VALID ) { return false; }
 
 
         // Message for Verbose pages
-        data["message"] = new ObservableText($"[0] {displayLabel.ToLower()} [1].",
-            new Tuple<GameObject, string>(self, "name top"),
+        data["message"] = new ObservableText($"[0] {verb.displayLabel.ToLower()} [1].",
+            new Tuple<GameObject, string>(verb.self, "name top"),
             new Tuple<GameObject, string>(target, "name")
         );
         data["turnPage"] = true;
         data["displayAfter"] = true;
 
         TimelineManager.instance.OnAction(data);
-        self.actor.Control(target);
+        verb.self.actor.Control(target);
 
         return true;
     }
 
-    public override CheckResult Check( GameObject target )
+    public override CheckResult Check( Verb verb, GameObject target )
     {
-        if( target == self 
+        if( target == verb.self 
             || target.CollectVerbs().Count <= 0 ) 
         {
             return CheckResult.INVALID;
@@ -57,7 +56,7 @@ class PossessVerb : Verb
         return CheckResult.VALID;
     }
 
-    public override bool ParseInput( InputEventArgs e )
+    public override bool ParseInput( Verb verb, InputEventArgs e )
     {
         if( e.parsed ) { return true; }
         if( e.words.Length <= 1 ) { return false; }

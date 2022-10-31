@@ -51,6 +51,7 @@ namespace WaywardEngine
 		{
 			_log.Add(text);
 			if( visible ) {
+				Clear();
 				Update();
 			}
 		}
