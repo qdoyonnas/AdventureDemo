@@ -286,11 +286,6 @@ namespace AdventureCore
         {
             contents.AddConnection(data);
         }
-        public void AddConnection( ContainerAttachmentPoint second, double throughput = 0, bool isTwoWay = true )
-        {
-            contents.AddConnection( second, throughput, isTwoWay );
-        }
-
         public void RemoveConnection( Connection connection )
         {
             contents.RemoveConnection( connection );
@@ -305,7 +300,7 @@ namespace AdventureCore
             List<GameObject> children = base.GetChildObjects();
 
             foreach( Connection connection in contents.GetConnections() ) {
-                children.Add(connection.secondContainer.GetParent());
+                children.Add(connection.connection.container.GetParent());
             }
 
             return children;

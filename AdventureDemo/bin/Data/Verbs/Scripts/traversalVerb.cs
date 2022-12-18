@@ -89,10 +89,10 @@ class TraversalVerb : DefaultVerb
 
         Physical parent = PhysicalUtilities.FindParentPhysical(physicalSelf);
 
-        bool success = connection.secondContainer.Attach(parent);
+        bool success = connection.connection.container.Attach(parent);
 
         if( success ) {
-            SendMessage( verb, connection.secondContainer.GetParent(), data );
+            SendMessage( verb, connection.connection.container.GetParent(), data );
         }
 
         return success;
@@ -138,7 +138,7 @@ class TraversalVerb : DefaultVerb
 
         if( physicalSelf.GetVolume() > connection.throughput ) { return CheckResult.INVALID; }
 
-        return connection.secondContainer.CanAttach(verb.self);
+        return connection.connection.container.CanAttach(verb.self);
     }
     CheckResult CheckContainer( Verb verb, Container container )
     {

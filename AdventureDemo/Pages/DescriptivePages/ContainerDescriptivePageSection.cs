@@ -48,7 +48,7 @@ namespace AdventureCore
 
                 text = Utilities.FindNode<TextBlock>( objEntry, "Data2" );
                 if( text != null ) {
-                    GameObject connected = connection.secondContainer.GetParent();
+                    GameObject connected = connection.connection.container.GetParent();
                     text.Inlines.Add( observer.Observe( connected, "name upper").span );
                 }
             }

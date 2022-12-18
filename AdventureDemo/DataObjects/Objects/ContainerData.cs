@@ -75,7 +75,7 @@ namespace AdventureCore
                     Dictionary<string, object> connectionData = new Dictionary<string, object>();
                     connectionData.Add("name", reference.name);
                     connectionData.Add("description", reference.description);
-                    connectionData.Add("second", linked.GetContents());
+                    connectionData.Add("container", linked);
                     connectionData.Add("throughput", reference.throughput.GetValue(connectionData));
 
                     container.AddConnection(connectionData, reference.isTwoWay);

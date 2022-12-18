@@ -9,18 +9,13 @@ namespace AdventureCore
 {
     public class Connection : GameObject, IVerbSuggest
     {
-        ContainerAttachmentPoint _secondContainer;
-        public ContainerAttachmentPoint secondContainer {
+        protected Connection _connection;
+        public Connection connection {
             get {
-                return _secondContainer;
+                return _connection;
             }
             set {
-                if( value != null ) {
-                    _secondContainer = value;
-                } else {
-                    ContainerAttachmentPoint parentContainer = container.GetParent().container as ContainerAttachmentPoint;
-                    _secondContainer = parentContainer;
-                }
+                _connection = value;
             }
         }
 
@@ -37,15 +32,19 @@ namespace AdventureCore
             Construct();
 
             _throughput = 0;
-            _secondContainer = null;
+            _connection = null;
         }
         public Connection( Dictionary<string, object> data )
             : base(data)
         {
             Construct();
 
-            if( data.ContainsKey("second") ) {
-                _secondContainer = data["second"] as ContainerAttachmentPoint;
+            if( data.ContainsKey("parent") ) {
+                _container = data["parent"] as AttachmentPoint;
+            }
+
+            if( data.ContainsKey("connection") ) {
+                _connection = data["connection"] as Connection;
             }
 
             if( data.ContainsKey("throughput") ) { 
@@ -56,12 +55,12 @@ namespace AdventureCore
                 description = "an opening";
             }
         }
-        public Connection( ContainerAttachmentPoint second, double throughput )
+        public Connection( Connection connection, double throughput )
         {
             Construct();
 
             _throughput = throughput;
-            _secondContainer = second;
+            _connection = connection;
         }
         
         void Construct()
@@ -69,7 +68,7 @@ namespace AdventureCore
             tags.Add("connection");
 
             _throughput = 0;
-            _secondContainer = null;
+            _connection = null;
         }
 
         public bool DisplayVerb(Verb verb, FrameworkContentElement span)

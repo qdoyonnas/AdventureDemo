@@ -46,23 +46,17 @@ namespace AdventureCore
             } else {
                 data["parent"] = this;
             }
-            connections.Add( new Connection(data) );
+            Connection connection = new Connection(data);
+            connections.Add(connection);
 
-            if( isTwoWay && data.ContainsKey("second") ) {
-                ContainerAttachmentPoint second = data["second"] as ContainerAttachmentPoint;
-                data["parent"] = second;
-                data["second"] = this;
+            if( isTwoWay && data.ContainsKey("container") ) {
+                Container container = data["container"] as Container;
+                data["parent"] = container.GetContents();
+                data["connection"] = connection;
 
-                second.AddConnection( new Connection(data) );
-            }
-        }
-
-        public void AddConnection( ContainerAttachmentPoint second, double throughput = 0, bool isTwoWay = true )
-        {
-            connections.Add( new Connection(second, throughput) );
-
-            if( isTwoWay && second != null ) {
-                second.AddConnection( new Connection(this, throughput) );
+                Connection linkedConnection = new Connection(data);
+                container.AddConnection(linkedConnection);
+                connection.connection = linkedConnection;
             }
         }
 
