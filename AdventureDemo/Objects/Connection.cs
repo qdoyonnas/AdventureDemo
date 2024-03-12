@@ -37,7 +37,12 @@ namespace AdventureCore
         }
 
         double _throughput;
-        public double throughput {
+        public double naturalThroughput {
+            get {
+                return _throughput;
+            }
+        }
+        public double actualThroughput {
              get {
                 double actual = _throughput;
                 foreach(Physical obj in blockingObjects) {
@@ -94,11 +99,23 @@ namespace AdventureCore
             _connection = null;
         }
 
+        public GameObject GetBlocking()
+        {
+            if (blockingObjects.Count == 0) { return null; }
+
+            Physical largestBlocking = blockingObjects[0];
+            foreach(Physical obj in blockingObjects) {
+                if (obj.GetVolume() > largestBlocking.GetVolume()) {
+                    largestBlocking = obj;
+                }
+            }
+            return largestBlocking;
+        }
+
         public bool DisplayVerb(Verb verb, FrameworkContentElement span)
         {
             return false;
         }
-
         public bool SetDefaultVerb(Verb verb, FrameworkContentElement span)
         {
             if( verb.type == "TraversalVerb" ) {

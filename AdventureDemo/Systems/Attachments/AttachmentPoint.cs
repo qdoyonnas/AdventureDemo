@@ -60,7 +60,7 @@ namespace AdventureCore
 
         public virtual CheckResult CanAttach( GameObject obj )
         {
-            if( Contains(obj) ) { return CheckResult.VALID; }
+            if( Contains(obj) ) { return CheckResult.INVALID; }
             if( !CompareAttachmentTypes(obj) ) { return CheckResult.INVALID; }
 
             if( maxQuantity >= 0 && attachedObjects.Count >= maxQuantity ) { return CheckResult.RESTRICTED; }

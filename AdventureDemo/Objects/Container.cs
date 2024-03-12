@@ -157,6 +157,9 @@ namespace AdventureCore
 
         public CheckResult CanContain( Physical obj )
         {
+            //XXX: I feel like this needs to check for an exterior facing connection with enough throughput
+            //      ~PC entering a box that is inside their room~
+
             if( obj == null ) { return CheckResult.INVALID; }
 
             double objVolume = obj.GetVolume();

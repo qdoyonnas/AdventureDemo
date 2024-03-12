@@ -40,7 +40,9 @@ class TraversalVerb : DefaultVerb
             return false;
         }
 
-        if( verb.Check(target) != CheckResult.VALID ) { return false; }
+        //XXX: Always displaying a message on failed action is dangerous when it comes to NPCs
+        //      theoretically they should never take an action that is not valid, but this is risky
+        if ( verb.Check(target) != CheckResult.VALID ) { return false; } 
 
         bool success = false;
         Container container = target as Container;
@@ -136,9 +138,17 @@ class TraversalVerb : DefaultVerb
             return CheckResult.INVALID;
         }
 
-        if( physicalSelf.GetVolume() > connection.throughput ) { return CheckResult.INVALID; }
+        CheckResult canAttachResult = connection.connectedAttachmentPoint.CanAttach(verb.self);
+        if (canAttachResult == CheckResult.INVALID) { return canAttachResult; }
 
-        return connection.connectedAttachmentPoint.CanAttach(verb.self);
+        if (physicalSelf.GetVolume() > connection.naturalThroughput) {
+            return CheckResult.INVALID;
+        }
+        if (physicalSelf.GetVolume() > connection.actualThroughput) {
+            return CheckResult.RESTRICTED;
+        }
+
+        return canAttachResult;
     }
     CheckResult CheckContainer( Verb verb, Container container )
     {
@@ -150,7 +160,9 @@ class TraversalVerb : DefaultVerb
             return CheckResult.INVALID;
         }
 
-        if( container.Contains(physicalSelf) ) { return CheckResult.INVALID; }
+        if( container.Contains(physicalSelf) ) {
+            return CheckResult.INVALID;
+        }
         return container.CanContain(physicalSelf);
     }
 

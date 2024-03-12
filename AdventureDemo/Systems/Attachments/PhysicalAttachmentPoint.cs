@@ -105,7 +105,7 @@ namespace AdventureCore
         }
         public override CheckResult CanAttach( GameObject obj )
         {
-            if( Contains(obj) ) { return CheckResult.VALID; }
+            if( Contains(obj) ) { return CheckResult.INVALID; }
 
             Physical physical = obj as Physical;
             if( physical == null ) { return CheckResult.INVALID; }
@@ -113,7 +113,7 @@ namespace AdventureCore
             CheckResult result = base.CanAttach(obj);
             if( result != CheckResult.VALID ) { return result; }
 
-            if( capacity >= 0  && physical.GetVolume() > remainingCapacity ) { return CheckResult.RESTRICTED; }
+            if( capacity >= 0  && physical.GetVolume() >= remainingCapacity ) { return CheckResult.RESTRICTED; }
 
             return CheckResult.VALID;
         }

@@ -177,10 +177,10 @@ namespace AdventureCore
         }
         protected CheckDelegate CheckMethod;
         /// <summary>
-        /// Returns a bool indicating whether this Verb's action can be performed
+        /// Returns a CheckResult indicating whether this Verb's action can be performed
         /// based on the passed in data.
         /// </summary>
-        /// <param name="data">Arbitrary key-value dictionary to be used for parameter passing.</param>
+        /// <param name="target">GameObject to be checked against</param>
         /// <returns></returns>
         public CheckResult Check( GameObject target )
         {

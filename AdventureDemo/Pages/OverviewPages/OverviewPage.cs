@@ -159,7 +159,7 @@ namespace AdventureCore
 
                 text = Utilities.FindNode<TextBlock>( entry, "Data3");
                 if( text != null ) {
-                    text.Inlines.Add( connection.throughput.ToString() + " L" );
+                    text.Inlines.Add( connection.naturalThroughput.ToString() + " L" );
                 }
             }
         }
