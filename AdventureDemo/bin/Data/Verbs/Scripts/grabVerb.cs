@@ -60,7 +60,11 @@ public class GrabVerb : DefaultVerb
             return false;
         }
 
-        if( verb.Check(target) != CheckResult.VALID ) { return false; }
+        CheckResult result = verb.Check(target);
+        if ( result.value != CheckValue.VALID ) {
+            WaywardManager.instance.DisplayMessage(result.messages[0]);
+            return false;
+        }
 
         bool drop = target.attachPoint.GetParent() == verb.self;
         if( drop ) {
@@ -96,35 +100,35 @@ public class GrabVerb : DefaultVerb
             inventory = (PhysicalAttachmentPoint)verb.blackboard["inventory"];
             physicalSelf = (Physical)verb.blackboard["physicalSelf"];
         } catch( SystemException e ) {
-            WaywardManager.instance.Log($@"<red>GrabVerb of GameObject '{verb.self.GetName()}' failed in CheckResult:</red> {e}");
-            return CheckResult.INVALID;
+            WaywardManager.instance.Log($@"<red>GrabVerb of GameObject '{verb.self.GetName()}' failed in Check:</red> {e}");
+            return new CheckResult(CheckValue.INVALID);
         }
 
-        if( target.attachPoint == null || inventory == null ) { return CheckResult.INVALID; }
+        if( target.attachPoint == null || inventory == null ) { return new CheckResult(CheckValue.INVALID); }
 
         Physical physical = target as Physical;
-        if( physical == null || physical.attachedTo != null ) { return CheckResult.INVALID; }
+        if( physical == null || physical.attachedTo != null ) { return new CheckResult(CheckValue.INVALID); }
 
         if( physical.Contains(physicalSelf) ) {
-            return CheckResult.INVALID;
+            return new CheckResult(CheckValue.INVALID);
         }
 
         if( inventory.Contains(target) ) {
             CheckResult check = verb.self.attachPoint.CanAttach(target);
-            if( check >= CheckResult.RESTRICTED ) {
+            if( check.value >= CheckValue.RESTRICTED ) {
                 return check;
             }
         } else {
             Physical parent = PhysicalUtilities.FindParentPhysical(physicalSelf);
             if( parent.attachPoint.Contains(target) ) {
                 CheckResult check = inventory.CanAttach(target);
-                if( check >= CheckResult.RESTRICTED ) {
+                if( check.value >= CheckValue.RESTRICTED ) {
                     return check;
                 }
             }
         }
 
-        return CheckResult.INVALID;
+        return new CheckResult(CheckValue.INVALID);
     }
 
     public override bool Display( Verb verb, Actor actor, GameObject target, FrameworkContentElement span )
@@ -194,7 +198,7 @@ public class GrabVerb : DefaultVerb
             return true;
         }
 
-        if( verb.Check(foundObject) == CheckResult.VALID ) {
+        if( verb.Check(foundObject).value == CheckValue.VALID ) {
             verb.Register(new Dictionary<string, object>() {{ "target", foundObject }}, true);
             return true;
         } else {
@@ -224,7 +228,7 @@ public class GrabVerb : DefaultVerb
             return true;
         }
 
-        if( verb.Check(foundObject) == CheckResult.VALID ) {
+        if( verb.Check(foundObject).value == CheckValue.VALID ) {
             Physical physical = foundObject as Physical;
             if( physical != null && physicalSelf.Contains(physical) ) {
                 WaywardManager.instance.DisplayMessage($"You are already holding {foundObject.GetData("name").text}.");

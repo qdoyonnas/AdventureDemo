@@ -5,10 +5,32 @@ using System.Text.RegularExpressions;
 
 namespace AdventureCore
 {
-    public enum CheckResult {
+    public enum CheckValue {
         INVALID,
         RESTRICTED,
         VALID
+    }
+
+    public class CheckResult
+    {
+        public CheckValue value = CheckValue.INVALID;
+        public List<string> messages = new List<string>();
+
+        public CheckResult()
+        {
+            value = CheckValue.INVALID;
+            messages = new List<string>();
+        }
+        public CheckResult(CheckValue value)
+        {
+            this.value = value;
+            messages = new List<string>();
+        }
+        public CheckResult(CheckValue value, params string[] messages)
+        {
+            this.value = value;
+            this.messages = new List<string>(messages);
+        }
     }
 
     public static class PhysicalUtilities

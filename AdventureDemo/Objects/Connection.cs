@@ -99,7 +99,7 @@ namespace AdventureCore
             _connection = null;
         }
 
-        public GameObject GetBlocking()
+        public GameObject GetBlockingObject()
         {
             if (blockingObjects.Count == 0) { return null; }
 

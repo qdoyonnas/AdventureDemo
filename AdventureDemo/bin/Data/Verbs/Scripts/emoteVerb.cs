@@ -57,7 +57,7 @@ class EmoteVerb : DefaultVerb
 
 	public override CheckResult Check(Verb verb, GameObject target)
 	{
-		return CheckResult.VALID;
+		return new CheckResult(CheckValue.VALID);
 	}
 
 	public override bool ParseInput(Verb verb, InputEventArgs inputEventArgs)
@@ -78,7 +78,7 @@ class EmoteVerb : DefaultVerb
     public override bool Display(Verb verb, Actor actor, GameObject target, FrameworkContentElement span)
     {
         CheckResult check = verb.Check(target);
-		if( check >= CheckResult.VALID ) {
+		if( check.value >= CheckValue.VALID ) {
             ContextMenuHelper.AddContextMenuItem( span, verb.displayLabel, delegate { DisplayDialog(verb); return false; } );
         }
 

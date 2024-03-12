@@ -74,14 +74,14 @@ class PhaseVerb : DefaultVerb
 
     public override CheckResult Check( Verb verb, GameObject target )
     {
-        CheckResult check = CheckResult.INVALID;
+        CheckResult check = new CheckResult(CheckValue.INVALID);
 
         if( verb.self.container.GetParent() == target
             && target.container != null 
             && target.container != verb.self.container )
         {
             check = target.container.CanAttach(verb.self);
-            if( check >= CheckResult.RESTRICTED ) {
+            if( check.value >= CheckResult.RESTRICTED ) {
                 return check;
             }
         }
@@ -93,15 +93,16 @@ class PhaseVerb : DefaultVerb
             if( physicalSelf != null
                 && physicalSelf.Contains(physical) )
             {
-                return CheckResult.INVALID;
+                check.value = CheckValue.INVALID;
+                return check;
             }
 
             foreach( AttachmentPoint point in physical.GetAttachmentPoints() ) {
                 if( point == verb.self.container ) { continue; }
 
                 CheckResult pointCheck = point.CanAttach(verb.self);
-                check = pointCheck > check ? pointCheck : check;
-                if( check >= CheckResult.RESTRICTED ) {
+                check = pointCheck.value > check.value ? pointCheck : check;
+                if( check.value >= CheckValue.RESTRICTED ) {
                     return check;
                 }
             }
@@ -114,7 +115,7 @@ class PhaseVerb : DefaultVerb
     {
         //WaywardManager.instance.Log("IN phaseVerb display");
         if( target == verb.self ) { return false; }
-        if( Check(verb, target) < CheckResult.RESTRICTED ) { return false; }
+        if( Check(verb, target).value < CheckValue.RESTRICTED ) { return false; }
 
         string actionLabel = verb.displayLabel;
 
@@ -138,14 +139,14 @@ class PhaseVerb : DefaultVerb
         if( point == verb.self.container ) { return; }
 
         CheckResult result = point.CanAttach(verb.self);
-        if( result >= CheckResult.RESTRICTED ) {
+        if( result.value >= CheckValue.RESTRICTED ) {
             Dictionary<TextBlock, ContextMenuAction> items = new Dictionary<TextBlock, ContextMenuAction>();
-            if( result == CheckResult.RESTRICTED ) {
+            if( result.value == CheckValue.RESTRICTED ) {
                 items.Add( WaywardTextParser.ParseAsBlock($@"<gray>{actionLabel}</gray>"), null );
             } else {
                 items.Add( WaywardTextParser.ParseAsBlock(actionLabel), delegate { return verb.Register(new Dictionary<string, object>() { {"target", point} }, true); } );
             }
-            ContextMenuHelper.AddContextMenuHeader(span, new TextBlock(verb.self.GetData("name upper").span), items, result != CheckResult.RESTRICTED);
+            ContextMenuHelper.AddContextMenuHeader(span, new TextBlock(verb.self.GetData("name upper").span), items, result.value != CheckValue.RESTRICTED);
         }
     }
 

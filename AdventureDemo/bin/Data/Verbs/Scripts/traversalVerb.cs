@@ -42,7 +42,11 @@ class TraversalVerb : DefaultVerb
 
         //XXX: Always displaying a message on failed action is dangerous when it comes to NPCs
         //      theoretically they should never take an action that is not valid, but this is risky
-        if ( verb.Check(target) != CheckResult.VALID ) { return false; } 
+        CheckResult result = verb.Check(target);
+        if (result.value != CheckValue.VALID ) {
+            WaywardManager.instance.DisplayMessage(result.messages[0]);
+            return false;
+        } 
 
         bool success = false;
         Container container = target as Container;
@@ -121,7 +125,9 @@ class TraversalVerb : DefaultVerb
         Container container = target as Container;
         if( container == null ) { 
             Connection connection = target as Connection;
-            if( connection == null ) { return CheckResult.INVALID; }
+            if( connection == null ) {
+                return new CheckResult(CheckValue.INVALID, $@"Cannot enter that");
+            }
                 
             return CheckConnection(verb, connection);
         }
@@ -135,17 +141,17 @@ class TraversalVerb : DefaultVerb
             physicalSelf = (Physical)verb.blackboard["physicalSelf"];
         } catch( SystemException e ) {
             WaywardManager.instance.Log($@"<red>TraversalVerb of GameObject '{verb.self.GetName()}' failed in CheckConnection(Connection):</red> {e}");
-            return CheckResult.INVALID;
+            return new CheckResult(CheckValue.INVALID);
         }
 
         CheckResult canAttachResult = connection.connectedAttachmentPoint.CanAttach(verb.self);
-        if (canAttachResult == CheckResult.INVALID) { return canAttachResult; }
+        if (canAttachResult.value == CheckValue.INVALID) { return canAttachResult; }
 
         if (physicalSelf.GetVolume() > connection.naturalThroughput) {
-            return CheckResult.INVALID;
+            return new CheckResult(CheckValue.INVALID, $@"Cannot fit through there");
         }
         if (physicalSelf.GetVolume() > connection.actualThroughput) {
-            return CheckResult.RESTRICTED;
+            return new CheckResult(CheckValue.RESTRICTED, $@"{connection.GetBlockingObject().GetName("upper")} is blocking the way");
         }
 
         return canAttachResult;
@@ -157,11 +163,11 @@ class TraversalVerb : DefaultVerb
             physicalSelf = (Physical)verb.blackboard["physicalSelf"];
         } catch( SystemException e ) {
             WaywardManager.instance.Log($@"<red>TraversalVerb of GameObject '{verb.self.GetName()}' failed in CheckConnection(Container):</red> {e}");
-            return CheckResult.INVALID;
+            return new CheckResult(CheckValue.INVALID);
         }
 
         if( container.Contains(physicalSelf) ) {
-            return CheckResult.INVALID;
+            return new CheckResult(CheckValue.INVALID, $@"Already inside");
         }
         return container.CanContain(physicalSelf);
     }
@@ -169,8 +175,8 @@ class TraversalVerb : DefaultVerb
     public override bool Display( Verb verb, Actor actor, GameObject target, FrameworkContentElement span )
     {
         CheckResult check = verb.Check(target);
-        if( check >= CheckResult.RESTRICTED ) {
-            if( check == CheckResult.RESTRICTED ) {
+        if( check.value >= CheckValue.RESTRICTED ) {
+            if( check.value == CheckValue.RESTRICTED ) {
                 ContextMenuHelper.AddContextMenuItem( span, WaywardTextParser.ParseAsBlock($@"<gray>{verb.displayLabel}</gray>") , null, false );
             } else {
                 ContextMenuHelper.AddContextMenuItem( span, WaywardTextParser.ParseAsBlock(verb.displayLabel) , delegate { return verb.Register(new Dictionary<string, object>(){{ "target", target }}, true); } );

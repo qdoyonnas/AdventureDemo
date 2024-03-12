@@ -160,14 +160,18 @@ namespace AdventureCore
             //XXX: I feel like this needs to check for an exterior facing connection with enough throughput
             //      ~PC entering a box that is inside their room~
 
-            if( obj == null ) { return CheckResult.INVALID; }
+            if( obj == null ) { return new CheckResult(CheckValue.INVALID); }
 
             double objVolume = obj.GetVolume();
-            if( objVolume > innerVolume ) { return CheckResult.INVALID; }
+            if( objVolume > innerVolume ) {
+                return new CheckResult(CheckValue.INVALID, $@"Not enough space");
+            }
 
-            if( objVolume > remainingVolume ) { return CheckResult.RESTRICTED; }
+            if( objVolume > remainingVolume ) {
+                return new CheckResult(CheckValue.RESTRICTED, $@"Not enough space");
+            }
 
-            return CheckResult.VALID;
+            return new CheckResult(CheckValue.VALID);
         }
 
 

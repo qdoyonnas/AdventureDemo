@@ -105,17 +105,23 @@ namespace AdventureCore
         }
         public override CheckResult CanAttach( GameObject obj )
         {
-            if( Contains(obj) ) { return CheckResult.INVALID; }
+            if( Contains(obj) ) {
+                return new CheckResult(CheckValue.INVALID, $@"{obj.GetName("upper")} already in {GetParent().GetName()}");
+            }
 
             Physical physical = obj as Physical;
-            if( physical == null ) { return CheckResult.INVALID; }
+            if( physical == null ) {
+                return new CheckResult(CheckValue.INVALID);
+            }
 
             CheckResult result = base.CanAttach(obj);
-            if( result != CheckResult.VALID ) { return result; }
+            if( result.value != CheckValue.VALID ) { return result; }
 
-            if( capacity >= 0  && physical.GetVolume() >= remainingCapacity ) { return CheckResult.RESTRICTED; }
+            if( capacity >= 0  && physical.GetVolume() >= remainingCapacity ) {
+                return new CheckResult(CheckValue.RESTRICTED, $@"Not enough space");
+            }
 
-            return CheckResult.VALID;
+            return new CheckResult(CheckValue.VALID);
         }
 
         public virtual Physical[] GetAttachedPhysicals()

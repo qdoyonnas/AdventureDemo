@@ -28,7 +28,11 @@ class PossessVerb : DefaultVerb
             return false;
         }
 
-        if( Check(verb, target) != CheckResult.VALID ) { return false; }
+        CheckResult result = Check(verb, target)
+        if ( result.value != CheckValue.VALID ) {
+            WaywardManager.instance.DisplayMessage(result.messages[0]);
+            return false;
+        }
 
 
         // Message for Verbose pages
@@ -50,10 +54,10 @@ class PossessVerb : DefaultVerb
         if( target == verb.self 
             || target.CollectVerbs().Count <= 0 ) 
         {
-            return CheckResult.INVALID;
+            return new CheckResult(CheckValue.INVALID);
         }
 
-        return CheckResult.VALID;
+        return new CheckResult(CheckValue.VALID);
     }
 
     public override bool ParseInput( Verb verb, InputEventArgs e )

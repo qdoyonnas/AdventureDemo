@@ -173,7 +173,7 @@ namespace AdventureCore
         public delegate CheckResult CheckDelegate( Verb verb, GameObject target );
         protected static CheckResult CheckDefault( Verb verb, GameObject target )
         {
-            return CheckResult.INVALID;
+            return new CheckResult(CheckValue.INVALID);
         }
         protected CheckDelegate CheckMethod;
         /// <summary>
@@ -251,14 +251,14 @@ namespace AdventureCore
         protected static bool DisplayDefault( Verb verb, Actor actor, GameObject target, FrameworkContentElement span )
         {
             CheckResult check = verb.Check(target);
-			if( check >= CheckResult.RESTRICTED ) {
+			if( check.value >= CheckValue.RESTRICTED ) {
                 Dictionary<TextBlock, ContextMenuAction> items = new Dictionary<TextBlock, ContextMenuAction>();
-                if( check == CheckResult.RESTRICTED ) {
+                if( check.value == CheckValue.RESTRICTED ) {
                     items.Add( WaywardTextParser.ParseAsBlock($@"<gray>{verb.displayLabel}</gray>") , null );
                 } else {
                     items.Add( WaywardTextParser.ParseAsBlock(verb.displayLabel) , delegate { return verb.Register(new Dictionary<string, object>(){{ "target", target }}, true); } );
                 }
-                ContextMenuHelper.AddContextMenuHeader(span, new TextBlock(verb.self.GetData("name upper").span), items, check != CheckResult.RESTRICTED);
+                ContextMenuHelper.AddContextMenuHeader(span, new TextBlock(verb.self.GetData("name upper").span), items, check.value != CheckValue.RESTRICTED);
             }
 
             return true;

@@ -89,9 +89,9 @@ class WaitVerb : DefaultVerb
     public override CheckResult Check(Verb verb, GameObject target) 
     {
         if( target == verb.self ) {
-            return CheckResult.VALID;
+            return new CheckResult(CheckValue.VALID);
         } else {
-            return CheckResult.INVALID;
+            return new CheckResult(CheckValue.INVALID);
         }
     }
 
@@ -115,7 +115,7 @@ class WaitVerb : DefaultVerb
     public override bool Display(Verb verb, Actor actor, GameObject target, FrameworkContentElement span)
     {
         CheckResult check = verb.Check(target);
-		if( check >= CheckResult.VALID ) {
+		if( check.value >= CheckValue.VALID ) {
             Dictionary<TextBlock, ContextMenuAction> items = new Dictionary<TextBlock, ContextMenuAction>();
 
             Dictionary<string, object> data = new Dictionary<string, object>();

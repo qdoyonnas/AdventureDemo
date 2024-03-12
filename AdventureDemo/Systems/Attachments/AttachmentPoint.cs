@@ -60,12 +60,18 @@ namespace AdventureCore
 
         public virtual CheckResult CanAttach( GameObject obj )
         {
-            if( Contains(obj) ) { return CheckResult.INVALID; }
-            if( !CompareAttachmentTypes(obj) ) { return CheckResult.INVALID; }
+            if( Contains(obj) ) {
+                return new CheckResult(CheckValue.INVALID, $@"{obj.GetName("upper")} already in {GetParent().GetName()}");
+            }
+            if( !CompareAttachmentTypes(obj) ) {
+                return new CheckResult(CheckValue.INVALID, $@"{obj.GetName("upper")} doesn't go there");
+            }
 
-            if( maxQuantity >= 0 && attachedObjects.Count >= maxQuantity ) { return CheckResult.RESTRICTED; }
+            if( maxQuantity >= 0 && attachedObjects.Count >= maxQuantity ) {
+                return new CheckResult(CheckValue.RESTRICTED, $@"Nothing else can go there");
+            }
 
-            return CheckResult.VALID;
+            return new CheckResult(CheckValue.VALID);
         }
         public virtual bool CompareAttachmentTypes( GameObject obj )
         {
@@ -86,7 +92,7 @@ namespace AdventureCore
             if( obj == null ) { return false; }
             if( attachedObjects.Contains(obj) ) { return true; }
 
-            if( CanAttach(obj) != CheckResult.VALID ) { return false; }
+            if( CanAttach(obj).value != CheckValue.VALID ) { return false; }
 
             if( obj.attachPoint != null && !obj.attachPoint.Remove(obj) ) { return false; }
             attachedObjects.Add(obj);

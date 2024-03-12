@@ -15,7 +15,7 @@ class CreateVerb : Verb
     }
     protected override void OnAssign() {}
 
-    public override CheckResult Check( GameObject target ) { return CheckResult.INVALID; }
+    public override CheckResult Check( GameObject target ) { return new CheckResult(CheckValue.INVALID); }
 
     public override bool Action( Dictionary<string, object> data )
     {
@@ -39,7 +39,7 @@ class CreateVerb : Verb
             return true;
         }
 
-        if( self.container.CanAttach(createdObject) != CheckResult.VALID ) {
+        if( self.container.CanAttach(createdObject).value != CheckValue.VALID ) {
             WaywardManager.instance.DisplayMessage($"Could not place created object '{e.parameterInput}' in current space.");
             return true;
         }
