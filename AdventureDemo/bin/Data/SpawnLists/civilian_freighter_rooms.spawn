@@ -1,0 +1,19 @@
+[
+
+{
+	"id": "cabin_1_spawn",
+	
+	"entries": [
+		{
+			"id": {
+				"basedOn": "storage_compartment_medium",
+				"referenceId": "storage"
+			},
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		}
+	]
+}
+
+]

@@ -24,8 +24,8 @@ namespace AdventureCore
         }
 
         protected List<PhysicalAttachmentPoint> attachmentPoints;
-        protected Physical _attachedTo;
-        public Physical attachedTo {
+        protected Physical _attachedTo; //XXX: Seems redundant to something like attachPoint.GetParent() as Physical
+        public Physical attachedTo {    //      if meant as a shortcut it should be better named and handled
             get {
                 return _attachedTo;
             }
@@ -33,13 +33,13 @@ namespace AdventureCore
 
         // XXX: Prevents large entities having parts in different containers
         //      example: reaching into a box.
-        public override AttachmentPoint container {
+        public override AttachmentPoint attachPoint {
             get {
                 if( attachedTo != null ) {
-                    return attachedTo.container;
+                    return attachedTo.attachPoint;
                 }
 
-                return _container;
+                return _attachPoint;
             }
         }
 

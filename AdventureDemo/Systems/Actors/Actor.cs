@@ -83,11 +83,11 @@ namespace AdventureCore
         {
             // TODO: Implement senses
 
-            GameObject thisContainer = controlledObject.container.GetParent();
-            if( obj == thisContainer || obj.container == controlledObject.container ) {
+            GameObject thisContainer = controlledObject.attachPoint.GetParent();
+            if( obj == thisContainer || obj.attachPoint == controlledObject.attachPoint ) {
                 return true;
-            } else if( obj.container != null ) {
-                GameObject objContainer = obj.container.GetParent();
+            } else if( obj.attachPoint != null ) {
+                GameObject objContainer = obj.attachPoint.GetParent();
                 if( objContainer != null ) {
                     return CanObserve(objContainer);
                 }

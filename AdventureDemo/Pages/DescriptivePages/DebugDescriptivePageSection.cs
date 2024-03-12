@@ -53,7 +53,7 @@ namespace AdventureCore
         {
             try {
                 string containerContent = "Container: [0]";
-                AttachmentPoint container = page.target.container;
+                AttachmentPoint container = page.target.attachPoint;
                 TextBlock containerBlock;
                 if( container != null ) {
                     containerBlock = WaywardTextParser.ParseAsBlock(containerContent,

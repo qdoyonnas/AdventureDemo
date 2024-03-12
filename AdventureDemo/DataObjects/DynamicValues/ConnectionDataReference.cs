@@ -15,6 +15,7 @@ namespace AdventureCore
 
         public DynamicDouble throughput = new DynamicDouble("0");
         public bool isTwoWay = true;
+        public DataReference blockedBy = null;
 
         public ConnectionDataReference() { }
         public ConnectionDataReference( string linked, string name, string description, string throughput, bool isTwoWay )
@@ -34,6 +35,7 @@ namespace AdventureCore
 
             throughput = new DynamicDouble(data.throughput);
             isTwoWay = data.isTwoWay;
+            blockedBy = new DataReference(data.blockedBy);
         }
     }
 }

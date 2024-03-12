@@ -88,7 +88,7 @@ namespace AdventureCore
 
             if( CanAttach(obj) != CheckResult.VALID ) { return false; }
 
-            if( obj.container != null && !obj.container.Remove(obj) ) { return false; }
+            if( obj.attachPoint != null && !obj.attachPoint.Remove(obj) ) { return false; }
             attachedObjects.Add(obj);
             obj.SetContainer(this);
 

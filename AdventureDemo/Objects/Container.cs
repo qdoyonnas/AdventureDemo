@@ -278,15 +278,15 @@ namespace AdventureCore
             return contents.GetConnectionsCount();
         }
 
-        public void AddConnection( Connection connection )
+        public void AddConnection(Connection connection)
         {
             contents.AddConnection( connection );
         }
-        public void AddConnection( Dictionary<string, object> data, bool isTwoWay = true )
+        public void AddConnection(Dictionary<string, object> data)
         {
             contents.AddConnection(data);
         }
-        public void RemoveConnection( Connection connection )
+        public void RemoveConnection(Connection connection)
         {
             contents.RemoveConnection( connection );
         }
@@ -299,9 +299,11 @@ namespace AdventureCore
         {
             List<GameObject> children = base.GetChildObjects();
 
-            foreach( Connection connection in contents.GetConnections() ) {
+            // XXX: Not sure if we need this. If we do, definitely should not be in "GetChildObjects"
+            //      Adjacent containers are not "children" of this container
+            /*foreach( Connection connection in contents.GetConnections() ) {
                 children.Add(connection.connection.container.GetParent());
-            }
+            }*/
 
             return children;
         }

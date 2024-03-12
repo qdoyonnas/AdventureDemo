@@ -24,14 +24,17 @@ namespace AdventureCore
             return this;
         }
 
-        public void Spawn( Container container, double weight, Dictionary<string, object> context = null )
+        public List<GameObject> Spawn( Container container, double weight, Dictionary<string, object> context = null )
         {
+            List<GameObject> allGameObjects = new List<GameObject>();
             foreach( SpawnEntry entry in entries ) {
                 GameObject[] objects = entry.Spawn(weight, context);
                 foreach( GameObject obj in objects ) {
                     container.GetContents().Attach(obj);
                 }
+                allGameObjects.AddRange(objects);
             }
+            return allGameObjects;
         }
     }
 

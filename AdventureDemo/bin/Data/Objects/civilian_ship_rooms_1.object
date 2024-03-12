@@ -26,8 +26,9 @@
 	"materials": [
 		{ "material": "titanium", "parts": 1 }
 	],
-	"volume": 300,
-	"innerVolume": 200
-},
+	"volume": 400,
+	"innerVolume": 300,
+	"spawnLists": ["cabin_1_spawn"]
+}
 	
 ]

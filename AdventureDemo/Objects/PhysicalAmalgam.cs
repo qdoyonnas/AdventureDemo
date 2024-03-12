@@ -114,15 +114,15 @@ namespace AdventureCore
 
         public bool AddPart( Physical part )
         {
-            if( part.container != null ) {
-                if( !part.container.Remove(part) ) {
+            if( part.attachPoint != null ) {
+                if( !part.attachPoint.Remove(part) ) {
                     return false;
                 }
             }
 
             parts.Add(part);
             part.SetAttachedTo(this);
-            part.SetContainer(container);
+            part.SetContainer(attachPoint);
 
             return true;
         }

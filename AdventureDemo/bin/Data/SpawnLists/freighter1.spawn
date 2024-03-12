@@ -1,5 +1,5 @@
 {
-	"id": "civilian_freighter_1",
+	"id": "freighter_1_spawn",
 	
 	"entries": [
 		{
@@ -14,14 +14,24 @@
 		{
 			"id": { 
 				"basedOn": "cabin_1",
-				"name": "{'Cabin A' + [spawnIndex]}",
+				"name": "{'Cabin ' + [spawnIndex]}",
 				"connections": [
 					{
 						"linkReference": "main_hallway",
 						"name": "doorway",
 						"description": "a doorway",
 						"throughput": "70",
-						"twoWay": true
+						"twoWay": true,
+						"blockedBy": {
+							"entries": [
+								{
+									"id": "steel_door_1",
+									"spawnChance": 1,
+									"spawnQuantity": 1,
+									"independentSpawn": false
+								}
+							]
+						}
 					}
 				]
 			},

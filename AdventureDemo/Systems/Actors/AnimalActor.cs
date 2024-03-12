@@ -42,7 +42,7 @@ namespace AdventureCore
 		{
 			List<Verb> traversalVerbs = GetVerbs("TraversalVerb");
 			if( traversalVerbs.Count > 0 ) {
-				ContainerAttachmentPoint container = controlledObject.container as ContainerAttachmentPoint;
+				ContainerAttachmentPoint container = controlledObject.attachPoint as ContainerAttachmentPoint;
 				if( container != null ) {
 					Connection[] connections = container.GetConnections();
 					int choice = random.Next(0, connections.Length);

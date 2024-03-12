@@ -12,39 +12,12 @@
 			"data": {
 				"basedOn": "freighter_1",
 				"name": "Starwind",
-				"referenceId": "playerShip",
-				"spawnLists": []
+				"referenceId": "playerShip"
 			},
 			"location": {
 				"properties": {
 					"name": "Space"
 				}
-			}
-		},
-		{
-			"data": {
-				"basedOn": "hallway_1",
-				"referenceId": "crewHallway"
-			},
-			"location": {
-				"referenceId": "playerShip"
-			}
-		},
-		{
-			"data": {
-				"basedOn": "cabin_1",
-				"connections": [
-					{
-						"linkReference": "crewHallway",
-						"name": "doorway",
-						"description": "a doorway",
-						"throughput": "70",
-						"twoWay": true
-					}
-				]
-			},
-			"location": {
-				"referenceId": "playerShip"
 			}
 		}
 	],

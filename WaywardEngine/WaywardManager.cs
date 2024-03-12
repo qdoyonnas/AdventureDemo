@@ -120,6 +120,7 @@ namespace WaywardEngine
             SetPosition(element, position);
 
             instance.pages.Add(page);
+            Utilities.BringToFrontOfCanvas(instance.window.mainCanvas, element);
         }
         public void SetPosition( FrameworkElement element, Point position )
         {

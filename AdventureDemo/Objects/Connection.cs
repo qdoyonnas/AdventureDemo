@@ -10,7 +10,7 @@ namespace AdventureCore
     public class Connection : GameObject, IVerbSuggest
     {
         protected Connection _connection;
-        public Connection connection {
+        public Connection connectedConnection {
             get {
                 return _connection;
             }
@@ -18,13 +18,36 @@ namespace AdventureCore
                 _connection = value;
             }
         }
+        public AttachmentPoint connectedAttachmentPoint
+        {
+            get {
+                if (_connection == null) {
+                    return attachPoint.GetParent().attachPoint;
+                }
+                else {
+                    return _connection.attachPoint;
+                }
+            }
+        }
+        public GameObject connectedObject
+        {
+            get {
+                return connectedAttachmentPoint.GetParent();
+            }
+        }
 
         double _throughput;
         public double throughput {
              get {
-                return _throughput;
+                double actual = _throughput;
+                foreach(Physical obj in blockingObjects) {
+                    actual -= obj.GetVolume();
+                }
+                return actual;
             }
         }
+
+        public List<Physical> blockingObjects = new List<Physical>();
 
         public Connection()
             : base()
@@ -40,7 +63,7 @@ namespace AdventureCore
             Construct();
 
             if( data.ContainsKey("parent") ) {
-                _container = data["parent"] as AttachmentPoint;
+                _attachPoint = data["parent"] as AttachmentPoint;
             }
 
             if( data.ContainsKey("connection") ) {

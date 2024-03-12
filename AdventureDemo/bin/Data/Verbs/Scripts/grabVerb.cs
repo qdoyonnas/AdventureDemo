@@ -62,9 +62,9 @@ public class GrabVerb : DefaultVerb
 
         if( verb.Check(target) != CheckResult.VALID ) { return false; }
 
-        bool drop = target.container.GetParent() == verb.self;
+        bool drop = target.attachPoint.GetParent() == verb.self;
         if( drop ) {
-            verb.self.container.Attach(target);
+            verb.self.attachPoint.Attach(target);
         } else {
             try {
                 PhysicalAttachmentPoint inventory = (PhysicalAttachmentPoint)verb.blackboard["inventory"];
@@ -100,7 +100,7 @@ public class GrabVerb : DefaultVerb
             return CheckResult.INVALID;
         }
 
-        if( target.container == null || inventory == null ) { return CheckResult.INVALID; }
+        if( target.attachPoint == null || inventory == null ) { return CheckResult.INVALID; }
 
         Physical physical = target as Physical;
         if( physical == null || physical.attachedTo != null ) { return CheckResult.INVALID; }
@@ -110,13 +110,13 @@ public class GrabVerb : DefaultVerb
         }
 
         if( inventory.Contains(target) ) {
-            CheckResult check = verb.self.container.CanAttach(target);
+            CheckResult check = verb.self.attachPoint.CanAttach(target);
             if( check >= CheckResult.RESTRICTED ) {
                 return check;
             }
         } else {
             Physical parent = PhysicalUtilities.FindParentPhysical(physicalSelf);
-            if( parent.container.Contains(target) ) {
+            if( parent.attachPoint.Contains(target) ) {
                 CheckResult check = inventory.CanAttach(target);
                 if( check >= CheckResult.RESTRICTED ) {
                     return check;
@@ -137,9 +137,9 @@ public class GrabVerb : DefaultVerb
             return false;
         }
 
-        if( target.container == null || inventory == null ) { return false; }
+        if( target.attachPoint == null || inventory == null ) { return false; }
 
-        if( target.container.GetParent() == verb.self ) {
+        if( target.attachPoint.GetParent() == verb.self ) {
             verb.displayLabel = "Drop";
         } else {
             verb.displayLabel = "Pickup";

@@ -26,10 +26,10 @@ namespace AdventureCore
         }
 
         // Attachments
-        protected AttachmentPoint _container;
-        public virtual AttachmentPoint container {
+        protected AttachmentPoint _attachPoint;
+        public virtual AttachmentPoint attachPoint {
             get {
-                return _container;
+                return _attachPoint;
             }
         }
         
@@ -101,7 +101,7 @@ namespace AdventureCore
             bool result = newContainer != null && !newContainer.Contains(this);
             if( result ) { return false; }
 
-            _container = newContainer;
+            _attachPoint = newContainer;
             return true;
         }
         /// <summary>

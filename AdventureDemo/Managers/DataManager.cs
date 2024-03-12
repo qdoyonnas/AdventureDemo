@@ -356,7 +356,7 @@ namespace AdventureCore
         {
             if( token == null ) { return null; }
 
-            if( token["basedOn"] != null && token["basedOn"].Type != JTokenType.Null ) {
+            if (token["basedOn"] != null && token["basedOn"].Type != JTokenType.Null) {
                 return GenerateBasedData(token, type);
             }
 
@@ -576,7 +576,7 @@ namespace AdventureCore
         public BasicData GetData( string str, Type type )
         {
             JToken token;
-            if( IsId(str) ) {
+            if ( IsId(str) ) {
                 BasicData data = RetrieveDataFromMemory(str, type);
                 if( data != null ) { return data; }
                 token = GetJSONFromFile(str, type);
@@ -584,13 +584,17 @@ namespace AdventureCore
                 try {
                     token = JToken.Parse(str);
                 } catch( Exception e ) {
-                    waywardManager.Log($@"<red>ERROR: Failed parsing '{str}' into JSON token: {e}</red>");
+                    waywardManager.Log($@"<red>ERROR: Failed parsing '{str}' into JSON token</red>: {e}");
                     return null;
                 }
             }
 
             if( token == null ) {
-                waywardManager.Log($@"<red>ERROR: Failed retrieving token from '{str}'</red>");
+                waywardManager.Log($@"<red>ERROR: Failed retrieving token from</red>: '{str}'");
+                return null;
+            }
+            if (token.Type == JTokenType.Array) {
+                waywardManager.Log($@"<red>ERROR: Unexpected JsonArray from</red>: '{str}'");
                 return null;
             }
             return ParseTokenToData(token, type);

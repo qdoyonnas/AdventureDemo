@@ -52,8 +52,8 @@ namespace AdventureCore
         /// <param name="obj">Object to be displayed.</param>
         public void DisplayObject( GameObject obj )
         {
-            if( obj.container == null ) { return; }
-            GameObject objContainer = obj.container.GetParent();
+            if( obj.attachPoint == null ) { return; }
+            GameObject objContainer = obj.attachPoint.GetParent();
 
             StackPanel parent;
             if( overviewContentPanels.ContainsKey(obj) ) {
@@ -153,7 +153,7 @@ namespace AdventureCore
 
                 text = Utilities.FindNode<TextBlock>( entry, "Data2");
                 if( text != null ) {
-                    GameObject connected = connection.connection.container.GetParent();
+                    GameObject connected = connection.connectedObject;
                     text.Inlines.Add( observer.Observe( connected, "name upper").span );
                 }
 

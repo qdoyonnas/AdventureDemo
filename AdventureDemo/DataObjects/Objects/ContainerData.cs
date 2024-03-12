@@ -77,8 +77,14 @@ namespace AdventureCore
                     connectionData.Add("description", reference.description);
                     connectionData.Add("container", linked);
                     connectionData.Add("throughput", reference.throughput.GetValue(connectionData));
+                    connectionData.Add("isTwoway", reference.isTwoWay);
 
-                    container.AddConnection(connectionData, reference.isTwoWay);
+                    if (reference.blockedBy != null) {
+                        SpawnList spawn = reference.blockedBy.LoadData<SpawnList>(typeof(SpawnList));
+                        connectionData.Add("blockedBy", spawn);
+                    }
+
+                    container.AddConnection(connectionData);
                 }
             }
         }

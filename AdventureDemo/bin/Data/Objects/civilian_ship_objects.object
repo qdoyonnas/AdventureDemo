@@ -1,0 +1,18 @@
+[
+
+{
+	"id": "storage_compartment_medium",
+	"type": "ContainerData",
+	
+	"name": "storage compartment",
+	"description": "a medium sized storage compartment",
+	"tags": ["storage"],
+	
+	"materials": [
+		{ "material": "titanium", "parts": 1 }
+	],
+	"volume": 42,
+	"innerVolume": 40
+},
+
+]

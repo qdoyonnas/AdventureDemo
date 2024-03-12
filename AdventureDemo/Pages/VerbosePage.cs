@@ -45,9 +45,9 @@ namespace AdventureCore
 
         public void Display()
         {
-            if( subject == null || subject.container == null ) { return; }
+            if( subject == null || subject.attachPoint == null ) { return; }
 
-            GameObject container = subject.container.GetParent();
+            GameObject container = subject.attachPoint.GetParent();
             if( container != null ) {
                 DisplayContainer(container);
             }

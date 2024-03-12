@@ -1,0 +1,17 @@
+[
+{
+	"id": "steel_door_1",
+	"type": "PhysicalData",
+
+	"name": "steel door",
+	"description": "a door made of steel",
+
+	"volume": "70",
+	"materials": [
+		{
+			"material": "steel",
+			"parts": 1
+		}
+	]
+}
+]
