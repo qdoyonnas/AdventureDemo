@@ -55,14 +55,6 @@ namespace AdventureCore
             Dictionary<string, object> data = GenerateData(context);
             Verb verb = new Verb(data);
 
-            //
-            // Currently this will successfully load scripts, however the scripts have no access
-            // To the Verb they are being assigned to. So they cannot access things like other methods or displayLabel
-            // and the likes. I need to either pass the verb through to the methods whenever they are called, or wrap
-            // the methods in an object that is assigned the verb <- not sure how to do this while keeping the scripts
-            // separate.
-            //
-
             try {
                 IVerbScript verbScript = CSScript.Evaluator.LoadCode(script.GetCode()) as IVerbScript;
 				verb.SetMethods(

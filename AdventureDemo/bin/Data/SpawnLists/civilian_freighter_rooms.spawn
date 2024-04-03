@@ -12,6 +12,12 @@
 			"spawnChance": 1,
 			"spawnQuantity": 1,
 			"independentSpawn": false
+		},
+		{
+			"id": "blinking_light",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
 		}
 	]
 }

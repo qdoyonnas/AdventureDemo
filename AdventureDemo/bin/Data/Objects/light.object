@@ -26,7 +26,7 @@
 			"spawnChance": 1,
 			"spawnQuantity": 1,
 			"independentSpawn": false
-		},
+		}
 	]
 },
 
@@ -52,38 +52,6 @@
 				"message": "flashes",
 				"interval": "1000"
 			}
-		}
-	]
-},
-
-{
-	"id": "metal_case",
-	"type": "PhysicalData",
-	
-	"name": "metal case",
-	"description": "a metal case for enclosing vulnerable components",
-	
-	"volume": "0.4",
-	"materials": [
-		{
-			"material": "steel",
-			"parts": 1
-		}
-	]
-},
-
-{
-	"id": "wire",
-	"type": "PhysicalData",
-	
-	"name": "wire",
-	"description": "often used to conduct electricity",
-	
-	"volume": "0.1",
-	"materials": [
-		{
-			"material": "copper",
-			"parts": 1
 		}
 	]
 }

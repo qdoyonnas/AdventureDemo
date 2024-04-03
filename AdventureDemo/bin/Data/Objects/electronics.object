@@ -1,0 +1,81 @@
+[
+
+{
+	"id": "wall_button",
+	"type": "PhysicalAmalgamData",
+
+	"name": "wall button",
+	"description": "a button on a wall",
+	"tags": [ "button", "interactable" ],
+
+	"parts": [
+		{
+			"id": "button",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "metal_case",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "wire",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		}
+	]
+},
+
+{
+	"id": "button",
+	"type": "PhysicalData",
+
+	"name": "button",
+	"description": "a button",
+
+	"volume": "0.1",
+	"materials": [
+		{
+			"material": "steel",
+			"parts": 1
+		}
+	]
+},
+
+{
+	"id": "metal_case",
+	"type": "PhysicalData",
+	
+	"name": "metal case",
+	"description": "a metal case for enclosing vulnerable components",
+	
+	"volume": "0.4",
+	"materials": [
+		{
+			"material": "steel",
+			"parts": 1
+		}
+	]
+},
+
+{
+	"id": "wire",
+	"type": "PhysicalData",
+	
+	"name": "wire",
+	"description": "often used to conduct electricity",
+	
+	"volume": "0.1",
+	"materials": [
+		{
+			"material": "copper",
+			"parts": 1
+		}
+	]
+}
+
+]
