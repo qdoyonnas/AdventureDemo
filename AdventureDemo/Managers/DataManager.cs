@@ -609,11 +609,11 @@ namespace AdventureCore
             } catch( NullReferenceException e ) {
                 waywardManager.Log($@"<red>ERROR: Failed retrieving data from '{str}':</red> {e}");
             } catch( Exception e ) {
-                waywardManager.Log($@"<red>ERROR: Failed creating instance of type '{typeof(T).Name}' from data of type '{data.GetType()}' with value: {str}:</red> {e}");
+                waywardManager.Log($@"<red>ERROR: Failed creating instance of type '{typeof(T).Name}' from data of type '{data.GetType()}' with value:</red> {str}<red>:</red> {e}");
             }
 
             if( obj == null ) {
-                 waywardManager.Log($@"<red>ERROR: Failed creating instance of type '{typeof(T).Name}' from data of type '{data.GetType()}' with value: {str}</red>");
+                 waywardManager.Log($@"<red>ERROR: Failed creating instance of type '{typeof(T).Name}' from data of type '{data.GetType()}' with value:</red> {str}");
             }
 
             return obj;

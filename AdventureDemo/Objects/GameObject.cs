@@ -42,7 +42,7 @@ namespace AdventureCore
 
         // Behaviours
         protected Dictionary<PossessionType, List<Verb>> verbs;
-        protected List<BehaviourStrategy> behaviours;
+        protected List<Behaviour> behaviours;
 
         // Object data
         protected delegate GameObjectData DataDelegate( string[] parameters );
@@ -91,7 +91,7 @@ namespace AdventureCore
             relevantData = new List<DataDelegate>();
 
             verbs = new Dictionary<PossessionType, List<Verb>>();
-            behaviours = new List<BehaviourStrategy>();
+            behaviours = new List<Behaviour>();
 
             _attachmentTypes = new List<AttachmentType>();
         }
@@ -168,12 +168,11 @@ namespace AdventureCore
             actor.CollectVerbs();
         }
 
-        public virtual void AddBehaviour( BehaviourStrategy behaviour )
+        public virtual void AddBehaviour( Behaviour behaviour )
         {
             behaviours.Add(behaviour);
-            behaviour.Initialize(this);
         }
-        public virtual void RemoveBehaviour( BehaviourStrategy behaviour )
+        public virtual void RemoveBehaviour( Behaviour behaviour )
         {
             behaviours.Remove(behaviour);
         }

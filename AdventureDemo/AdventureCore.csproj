@@ -245,14 +245,14 @@
     <Compile Include="DataObjects\Actors\AnimalActorData.cs" />
     <Compile Include="DataObjects\BasicData.cs" />
     <Compile Include="DataObjects\Behaviours\BehaviourData.cs" />
-    <Compile Include="DataObjects\Behaviours\IntermittentMessageBehaviourData.cs" />
+    <Compile Include="DataObjects\Behaviours\IBehaviourScript.cs" />
     <Compile Include="DataObjects\DynamicValues\BehaviourReference.cs" />
     <Compile Include="DataObjects\DynamicValues\ConnectionDataReference.cs" />
     <Compile Include="DataObjects\DynamicValues\LocatorDataReference.cs" />
     <Compile Include="DataObjects\DynamicValues\ScriptReference.cs" />
     <Compile Include="DataObjects\DynamicValues\SearchParams.cs" />
     <Compile Include="DataObjects\DynamicValues\VerbReference.cs" />
-    <Compile Include="DataObjects\IVerbScript.cs" />
+    <Compile Include="DataObjects\Verbs\IVerbScript.cs" />
     <Compile Include="DataObjects\Objects\ContainerData.cs" />
     <Compile Include="DataObjects\Objects\MaterialData.cs" />
     <Compile Include="DataObjects\Objects\ObjectData.cs" />
@@ -268,7 +268,7 @@
     <Compile Include="DataObjects\DynamicValues\DynamicString.cs" />
     <Compile Include="DataObjects\DynamicValues\DynamicValue.cs" />
     <Compile Include="DataObjects\DynamicValues\MaterialReference.cs" />
-    <Compile Include="DataObjects\VerbData.cs" />
+    <Compile Include="DataObjects\Verbs\VerbData.cs" />
     <Compile Include="DataObjects\WorldData.cs" />
     <Compile Include="Managers\InputManager.cs" />
     <Compile Include="Managers\TimelineManager.cs" />
@@ -293,8 +293,7 @@
     <Compile Include="Systems\Attachments\ContainerAttachmentPoint.cs" />
     <Compile Include="Systems\Attachments\PhysicalAttachmentPoint.cs" />
     <Compile Include="Objects\Connection.cs" />
-    <Compile Include="Systems\Behaviours\BehaviourStrategy.cs" />
-    <Compile Include="Systems\Behaviours\IntermittentMessageBehaviour.cs" />
+    <Compile Include="Systems\Behaviours\Behaviour.cs" />
     <Compile Include="Systems\ObservableText.cs" />
     <Compile Include="Systems\Verbs\IInteractable.cs" />
     <Compile Include="Utilities.cs" />

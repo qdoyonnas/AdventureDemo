@@ -88,7 +88,12 @@ namespace AdventureCore
             }
 
             foreach( BehaviourReference behaviourReference in behaviours ) {
-                BehaviourStrategy behaviour = behaviourReference.GetValue();
+                Behaviour behaviour = behaviourReference.GetValue();
+                if (behaviour == null) {
+                    WaywardManager.instance.Log($@"<red>ERROR: Invalid behaviour - Skipping</red>");
+                    continue;
+                }
+                behaviour.self = gameObject;
                 gameObject.AddBehaviour(behaviour);
             }
         }
