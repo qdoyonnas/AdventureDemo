@@ -35,13 +35,13 @@ class EmoteVerb : DefaultVerb
         return true;
 	}
 
-	public override bool Action(Verb verb, Dictionary<string, object> data)
+	public override Dictionary<string, object> Action(Verb verb, Dictionary<string, object> data)
 	{
 		string message = null;
 		if( data.ContainsKey("message") ) {
 			message = data["message"] as string;
 		}
-		if( message == null ) { return false; }
+		if( message == null ) { return null; }
 
         // Message for Verbose pages
         data["message"] = new ObservableText($"[0] { message }.", 
@@ -50,9 +50,7 @@ class EmoteVerb : DefaultVerb
         data["turnPage"] = false;
         data["displayAfter"] = false;
 
-        TimelineManager.instance.OnAction(data);
-
-        return true;
+        return data;
 	}
 
 	public override CheckResult Check(Verb verb, GameObject target)

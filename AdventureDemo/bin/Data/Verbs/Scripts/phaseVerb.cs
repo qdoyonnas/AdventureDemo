@@ -18,7 +18,7 @@ class PhaseVerb : DefaultVerb
         return true;
     }
 
-    public override bool Action( Verb verb, Dictionary<string, object> data )
+    public override Dictionary<string, object> Action( Verb verb, Dictionary<string, object> data )
     {
         bool success = false;
 
@@ -37,16 +37,16 @@ class PhaseVerb : DefaultVerb
             }
         }
 
-        if( !success ) { return false; }
+        if( !success ) { return null; }
 
         Physical physical = target as Physical;
         if( physical != null ) {
-            success = Action(verb, physical.GetAttachmentPoints()[0]);
+            data = Action(verb, physical.GetAttachmentPoints()[0]);
         }
 
-        return success;
+        return data;
     }
-    public bool Action( Verb verb, AttachmentPoint target )
+    public Dictionary<string, object> Action( Verb verb, AttachmentPoint target )
     {
         Physical physicalSelf = verb.self as Physical;
         if( physicalSelf != null ) {
@@ -67,9 +67,7 @@ class PhaseVerb : DefaultVerb
         data["turnPage"] = true;
         data["displayAfter"] = true;
 
-        TimelineManager.instance.OnAction(data);
-
-        return true;
+        return data;
     }
 
     public override CheckResult Check( Verb verb, GameObject target )

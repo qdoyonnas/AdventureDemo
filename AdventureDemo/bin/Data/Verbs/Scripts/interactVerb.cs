@@ -20,26 +20,25 @@ public class GrabVerb : DefaultVerb
         return true;
     }
 
-    public override bool Action(Verb verb, Dictionary<string, object> data)
+    public override Dictionary<string, object> Action(Verb verb, Dictionary<string, object> data)
     {
         IInteractable target = null;
         if (data.ContainsKey("target")) {
             target = data["target"] as IInteractable;
         }
         if (target == null) {
-            return false;
+            return null;
         }
 
         CheckResult result = verb.Check(target);
         if (result.value != CheckValue.VALID) {
             WaywardManager.instance.DisplayMessage(result.messages[0]);
-            return false;
+            return null;
         }
 
         data = target.Interact(self, data);
-        TimelineManager.instance.OnAction(data);
 
-        return true;
+        return data;
     }
 
     public override CheckResult Check(Verb verb, GameObject target)

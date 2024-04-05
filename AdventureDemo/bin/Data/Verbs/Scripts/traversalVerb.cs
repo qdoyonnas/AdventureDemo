@@ -30,14 +30,14 @@ class TraversalVerb : DefaultVerb
         return true;
     }
 
-    public override bool Action( Verb verb, Dictionary<string, object> data )
+    public override Dictionary<string, object> Action( Verb verb, Dictionary<string, object> data )
     {
         GameObject target = null;
         if( data.ContainsKey("target") ) {
             target = data["target"] as GameObject;
         }
         if( target == null ) {
-            return false;
+            return null;
         }
 
         //XXX: Always displaying a message on failed action is dangerous when it comes to NPCs
@@ -45,7 +45,7 @@ class TraversalVerb : DefaultVerb
         CheckResult result = verb.Check(target);
         if (result.value != CheckValue.VALID ) {
             WaywardManager.instance.DisplayMessage(result.messages[0]);
-            return false;
+            return null;
         } 
 
         bool success = false;
@@ -61,7 +61,7 @@ class TraversalVerb : DefaultVerb
             }
         }
 
-        return success;
+        return data;
     }
     bool EnterContainer( Verb verb, Container container, Dictionary<string, object> data = null )
     {

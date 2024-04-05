@@ -23,10 +23,10 @@ public class DefaultVerb : IVerbScript {
          return true; 
     }
 
-    public virtual bool Action( Verb verb, Dictionary<string, object> data )
+    public virtual Dictionary<string, object> Action( Verb verb, Dictionary<string, object> data )
     {
         WaywardEngine.WaywardManager.instance.Log($@"<yellow>Verb '{verb.displayLabel}' ran default action.</yellow>");
-        return false;
+        return data;
     }
 
     public virtual CheckResult Check( Verb verb, GameObject target )
@@ -47,7 +47,7 @@ public class DefaultVerb : IVerbScript {
 
         bool success = false;
         try {
-            success = TimelineManager.instance.RegisterEvent( (d) => { verb.Action(d); }, data, actionTime);
+            success = TimelineManager.instance.RegisterEvent(verb.Action, data, actionTime);
         } catch( SystemException e ) {
             WaywardManager.instance.Log($@"<red>Verb '{verb.displayLabel}' failed registering action:</red> {e}");
             return false;

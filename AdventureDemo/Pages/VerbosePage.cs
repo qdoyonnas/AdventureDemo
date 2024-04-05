@@ -72,6 +72,8 @@ namespace AdventureCore
 
         protected void OnObservedActionTaken( Dictionary<string, object> data )
         {
+            if (data == null) { return; }
+
             if( data.ContainsKey("message") ) {
                 ObservableText observableText = data["message"] as ObservableText;
                 TextBlock block = observableText.Observed(observer);

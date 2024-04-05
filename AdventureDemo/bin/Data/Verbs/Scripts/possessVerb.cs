@@ -18,20 +18,20 @@ class PossessVerb : DefaultVerb
         return true;
     }
 
-    public override bool Action( Verb verb, Dictionary<string, object> data )
+    public override Dictionary<string, object> Action( Verb verb, Dictionary<string, object> data )
     {
         GameObject target = null;
         if( data.ContainsKey("target") ) {
             target = data["target"] as GameObject;
         }
         if( target == null ) {
-            return false;
+            return null;
         }
 
         CheckResult result = Check(verb, target)
         if ( result.value != CheckValue.VALID ) {
             WaywardManager.instance.DisplayMessage(result.messages[0]);
-            return false;
+            return null;
         }
 
 
@@ -43,10 +43,9 @@ class PossessVerb : DefaultVerb
         data["turnPage"] = true;
         data["displayAfter"] = true;
 
-        TimelineManager.instance.OnAction(data);
         verb.self.actor.Control(target);
 
-        return true;
+        return data;
     }
 
     public override CheckResult Check( Verb verb, GameObject target )

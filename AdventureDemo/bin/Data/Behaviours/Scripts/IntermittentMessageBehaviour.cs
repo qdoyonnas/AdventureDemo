@@ -27,7 +27,7 @@ public class IntermittentMessageBehaviour: IBehaviourScript
 		return true;
 	}
 
-	public void EmitMessage(Dictionary<string, object> data)
+	public Dictionary<string, object> EmitMessage(Dictionary<string, object> data)
 	{
 		Behaviour behaviour = (Behaviour)data["behaviour"];
 		double interval = (double)behaviour.blackboard["interval"];
@@ -36,8 +36,9 @@ public class IntermittentMessageBehaviour: IBehaviourScript
 		data["message"] = new ObservableText($@"[0] {message}",
 				new Tuple<GameObject, string>(behaviour.self, "name upper")
 		);
-		TimelineManager.instance.OnAction(data);
 
 		TimelineManager.instance.RegisterEvent(EmitMessage, data, interval);
+
+		return data;
 	}
 }

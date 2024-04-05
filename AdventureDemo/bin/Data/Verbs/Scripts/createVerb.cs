@@ -17,10 +17,10 @@ class CreateVerb : Verb
 
     public override CheckResult Check( GameObject target ) { return new CheckResult(CheckValue.INVALID); }
 
-    public override bool Action( Dictionary<string, object> data )
+    public override Dictionary<string, object> Action( Dictionary<string, object> data )
     {
         WaywardManager.instance.Update();
-        return true;
+        return data;
     }
 
     public override bool ParseInput( InputEventArgs e )

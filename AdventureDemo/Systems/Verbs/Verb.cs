@@ -191,14 +191,14 @@ namespace AdventureCore
             return CheckMethod(this, target);
         }
 
-        public delegate bool ActionDelegate( Verb verb, Dictionary<string, object> data );
-        protected static bool ActionDefault( Verb verb, Dictionary<string, object> data )
+        public delegate Dictionary<string, object> ActionDelegate( Verb verb, Dictionary<string, object> data );
+        protected static Dictionary<string, object> ActionDefault( Verb verb, Dictionary<string, object> data )
         {
             WaywardManager.instance.Log($@"<yellow>Verb '{verb.displayLabel}' ran default action.</yellow>");
-            return false;
+            return data;
         }
         protected ActionDelegate ActionMethod;
-        public bool Action( Dictionary<string, object> data )
+        public Dictionary<string, object> Action( Dictionary<string, object> data )
         {
             if( ActionMethod == null ) {
                 WaywardManager.instance.Log($@"<yellow>Verb '{displayLabel}' doesn't have a ActionMethod.</yellow>");
@@ -215,7 +215,7 @@ namespace AdventureCore
             if( !data.ContainsKey("label") ) { data["label"] = verb.displayLabel; }
             bool success = false;
             try {
-                success = TimelineManager.instance.RegisterEvent( (d) => { verb.Action(d); }, data, (Double)verb.blackboard["actionTime"]);
+                success = TimelineManager.instance.RegisterEvent(verb.Action, data, (Double)verb.blackboard["actionTime"]);
             } catch( SystemException e ) {
                 WaywardManager.instance.Log($@"<red>Verb '{verb.displayLabel}' failed registering action:</red> {e}");
                 return false;

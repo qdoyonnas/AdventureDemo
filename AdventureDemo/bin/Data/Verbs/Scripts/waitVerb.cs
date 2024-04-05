@@ -64,7 +64,7 @@ class WaitVerb : DefaultVerb
         return true;
     }
         
-    public override bool Action( Verb verb, Dictionary<string, object> data )
+    public override Dictionary<string, object> Action( Verb verb, Dictionary<string, object> data )
     {
         double duration = -1;
         if( data.ContainsKey("duration") ) {
@@ -72,7 +72,7 @@ class WaitVerb : DefaultVerb
                 duration = (double)data["duration"];
             } catch { }
         }
-        if( duration == -1 ) { return false; }
+        if( duration == -1 ) { return null; }
 
         verb.blackboard["actionTime"] = duration;
 
@@ -81,9 +81,7 @@ class WaitVerb : DefaultVerb
             new Tuple<GameObject, string>(verb.self, "name top"));
         data["displayAfter"] = false;
 
-        TimelineManager.instance.OnAction(data);
-
-        return true;
+        return data;
     }
 
     public override CheckResult Check(Verb verb, GameObject target) 

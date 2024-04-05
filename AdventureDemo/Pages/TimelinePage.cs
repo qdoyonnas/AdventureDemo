@@ -35,6 +35,8 @@ namespace AdventureCore
 
         protected void OnObservedActionTaken(Dictionary<string, object> data)
         {
+            if (data == null) { return; }
+
             FrameworkElement entry = GameManager.instance.GetResource<FrameworkElement>("OverviewEntry");
             events.Children.Add(entry);
 

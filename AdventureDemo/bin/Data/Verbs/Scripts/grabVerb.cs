@@ -50,20 +50,20 @@ public class GrabVerb : DefaultVerb
         return true;
     }
 
-    public override bool Action( Verb verb, Dictionary<string, object> data )
+    public override Dictionary<string, object> Action( Verb verb, Dictionary<string, object> data )
     {
         GameObject target = null;
         if( data.ContainsKey("target") ) {
             target = data["target"] as GameObject;
         }
         if( target == null ) {
-            return false;
+            return null;
         }
 
         CheckResult result = verb.Check(target);
         if ( result.value != CheckValue.VALID ) {
             WaywardManager.instance.DisplayMessage(result.messages[0]);
-            return false;
+            return null;
         }
 
         bool drop = target.attachPoint.GetParent() == verb.self;
@@ -75,7 +75,7 @@ public class GrabVerb : DefaultVerb
                 inventory.Attach(target);
             } catch( SystemException e ) {
                 WaywardManager.instance.Log($@"<red>GrabVerb of GameObject '{verb.self.GetName()}' failed in Action:</red> {e}");
-                return false;
+                return null;
             }
         }
 
@@ -87,9 +87,7 @@ public class GrabVerb : DefaultVerb
         );
         data["displayAfter"] = false;
 
-        TimelineManager.instance.OnAction(data);
-
-        return true;
+        return data;
     }
 
     public override CheckResult Check( Verb verb, GameObject target )
