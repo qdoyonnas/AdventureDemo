@@ -201,7 +201,7 @@ namespace AdventureCore
         public Dictionary<string, object> Action( Dictionary<string, object> data )
         {
             if( ActionMethod == null ) {
-                WaywardManager.instance.Log($@"<yellow>Verb '{displayLabel}' doesn't have a ActionMethod.</yellow>");
+                WaywardManager.instance.Log($@"<yellow>Verb '{displayLabel}' doesn't have an ActionMethod.</yellow>");
             }
 
             return ActionMethod(this, data);

@@ -51,7 +51,8 @@ namespace AdventureCore
 				IBehaviourScript behaviourScript = CSScript.Evaluator.LoadCode(script.GetCode()) as IBehaviourScript;
 				behaviour.SetMethods(
 					behaviourScript.Construct,
-					behaviourScript.OnAssign
+					behaviourScript.OnAssign,
+					behaviourScript.Interact
 				);
 			}
 			catch (SystemException e) {

@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 namespace AdventureCore
 {
+    // XXX: This feel unnecessary and causes 
+    //      "behaviours": [
+    //          {
+    //              "behaviour": {...}
+    //          }
+    //      ]
 	class BehaviourReference
 	{
         public DataReference behaviour;

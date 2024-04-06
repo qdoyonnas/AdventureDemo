@@ -148,6 +148,12 @@
 		{
 			"verb": "human_grab",
 			"possession": "EMBODIMENT"
+		},
+		{
+			"verb": {
+				"script": "interactVerb"
+			},
+			"possession":  "EMBODIMENT"
 		}
 	]
 	

@@ -64,14 +64,17 @@ namespace AdventureCore
         {
             ConstructMethod = ConstructDefault;
             OnAssignMethod = OnAssignDefault;
+            InteractMethod = InteractDefault;
         }
         public void SetMethods(
                 ConstructDelegate construct,
-                OnAssignDelegate onAssign
+                OnAssignDelegate onAssign,
+                InteractDelegate interact
             )
         {
             ConstructMethod = construct != null ? construct : ConstructDefault;
             OnAssignMethod = onAssign != null ? onAssign : OnAssignDefault;
+            InteractMethod = interact != null ? interact : InteractDefault;
         }
 
         public delegate bool ConstructDelegate(Behaviour behaviour, Dictionary<string, object> data);
@@ -104,6 +107,22 @@ namespace AdventureCore
             }
 
             return OnAssignMethod(this);
+        }
+
+        public delegate Dictionary<string, object> InteractDelegate(Behaviour behaviour, GameObject interactor, Dictionary<string, object> data);
+        protected static Dictionary<string, object> InteractDefault(Behaviour behaviour, GameObject interactor, Dictionary<string, object> data)
+        {
+            WaywardManager.instance.Log($@"<yellow>Verb '{behaviour.displayLabel}' ran default interact action.</yellow>");
+            return data;
+        }
+        protected InteractDelegate InteractMethod;
+        public Dictionary<string, object> Interact(GameObject interactor, Dictionary<string, object> data)
+        {
+            if (InteractMethod == null) {
+                WaywardManager.instance.Log($@"<yellow>Behaviour '{displayLabel}' doesn't have an InteractMethod.</yellow>");
+            }
+
+            return InteractMethod(this, interactor, data);
         }
     }
 }

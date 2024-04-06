@@ -48,7 +48,7 @@
 	"behaviours": [
 		{
 			"behaviour":  {
-				"script": "IntermittentMessageBehaviour",
+				"script": "intermittentMessageBehaviour",
 				"data": {
 					"message": "flashes",
 					"interval": 1000.0

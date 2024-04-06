@@ -4,9 +4,11 @@ using System.Windows;
 using WaywardEngine;
 using AdventureCore;
 
-public class IntermittentMessageBehaviour: IBehaviourScript
+//css_include ../Data/Behaviours/Scripts/defaultBehaviour.cs;
+
+public class IntermittentMessageBehaviour: DefaultBehaviour
 {
-	public bool Construct(Behaviour behaviour, Dictionary<string, object> data)
+	public override bool Construct(Behaviour behaviour, Dictionary<string, object> data)
 	{
 		behaviour.blackboard["interval"] = data.ContainsKey("interval") ? data["interval"] : 1000.0;
 		behaviour.blackboard["message"] = data.ContainsKey("message") ? data["message"] : "";
@@ -14,7 +16,7 @@ public class IntermittentMessageBehaviour: IBehaviourScript
 		return true;
 	}
 
-	public bool OnAssign(Behaviour behaviour)
+	public override bool OnAssign(Behaviour behaviour)
 	{
 		double interval = (double)behaviour.blackboard["interval"];
 

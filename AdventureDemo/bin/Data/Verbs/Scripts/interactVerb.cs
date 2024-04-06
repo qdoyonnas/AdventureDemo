@@ -6,7 +6,7 @@ using AdventureCore;
 
 //css_include ../Data/Verbs/Scripts/defaultVerb.cs;
 
-public class GrabVerb : DefaultVerb
+public class InteractVerb : DefaultVerb
 {
     public override bool Construct(Verb verb, Dictionary<string, object> data)
     {
@@ -22,9 +22,9 @@ public class GrabVerb : DefaultVerb
 
     public override Dictionary<string, object> Action(Verb verb, Dictionary<string, object> data)
     {
-        IInteractable target = null;
+        GameObject target = null;
         if (data.ContainsKey("target")) {
-            target = data["target"] as IInteractable;
+            target = data["target"] as GameObject;
         }
         if (target == null) {
             return null;
@@ -36,26 +36,37 @@ public class GrabVerb : DefaultVerb
             return null;
         }
 
-        data = target.Interact(self, data);
+        // XXX: Temporary interact with first behaviour
+        Behaviour interactableBehaviour = null;
+        foreach (Behaviour behaviour in target.GetBehaviours()) {
+            if (behaviour.type == "interactable") {
+                interactableBehaviour = behaviour;
+                break;
+            }
+        }
+        if (interactableBehaviour != null) {
+            data = interactableBehaviour.Interact(verb.self, data);
+        }
 
         return data;
     }
 
     public override CheckResult Check(Verb verb, GameObject target)
     {
-        IInteractable interactable = target as IInteractable;
-        if (interactable == null) {
+        List<Behaviour> interactableBehaviours = new List<Behaviour>();
+        foreach (Behaviour behaviour in target.GetBehaviours()) {
+            if (behaviour.type == "interactable") {
+                interactableBehaviours.Add(behaviour);
+            }
+        }
+
+        // Filter based on interactableBehaviours.CheckInteract()
+
+        if (interactableBehaviours.Count == 0) {
             return new CheckResult(CheckValue.INVALID, $@"No way to interact with that");
         }
 
-        CheckResult result = interactable.CanInteract(self);
-        return result;
-    }
-
-    public override bool Display(Verb verb, Actor actor, GameObject target, FrameworkContentElement span)
-    {
-
-        return false;
+        return new CheckResult(CheckValue.VALID);
     }
 
     public override bool ParseInput(Verb verb, InputEventArgs inputEventArgs)
@@ -64,5 +75,7 @@ public class GrabVerb : DefaultVerb
         if (inputEventArgs.words.Length <= 1) { return false; }
 
         WaywardManager.instance.DisplayMessage($"Interact with {inputEventArgs.words[1]}");
+
+        return true;
     }
 }

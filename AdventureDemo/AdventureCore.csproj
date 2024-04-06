@@ -295,7 +295,6 @@
     <Compile Include="Objects\Connection.cs" />
     <Compile Include="Systems\Behaviours\Behaviour.cs" />
     <Compile Include="Systems\ObservableText.cs" />
-    <Compile Include="Systems\Verbs\IInteractable.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="Managers\WorldManager.cs" />
   </ItemGroup>

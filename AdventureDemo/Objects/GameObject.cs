@@ -177,6 +177,11 @@ namespace AdventureCore
             behaviours.Remove(behaviour);
         }
 
+        public virtual Behaviour[] GetBehaviours()
+        {
+            return behaviours.ToArray();
+        }
+
         #endregion
 
         #region Descriptive Methods

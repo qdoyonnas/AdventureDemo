@@ -12,6 +12,14 @@
 			"material": "steel",
 			"parts": 1
 		}
+	],
+
+	"behaviours": [
+		{
+			"behaviour": {
+				"script": "openBehaviour"
+			}
+		}
 	]
 }
 ]

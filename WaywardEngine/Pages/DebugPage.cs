@@ -19,6 +19,8 @@ namespace WaywardEngine
 		{
 			log = Utilities.FindNode<StackPanel>(element, "Log");
 			input = Utilities.FindNode<TextBox>(element, "InputBox");
+
+			ContextMenuHelper.AddContextMenuItem(element, "Close", CloseAction);
 		}
 
 		public override void Update()

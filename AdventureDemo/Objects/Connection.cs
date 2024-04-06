@@ -62,7 +62,7 @@ namespace AdventureCore
             _throughput = 0;
             _connection = null;
         }
-        public Connection( Dictionary<string, object> data )
+        public Connection(Dictionary<string, object> data)
             : base(data)
         {
             Construct();
@@ -83,7 +83,7 @@ namespace AdventureCore
                 description = "an opening";
             }
         }
-        public Connection( Connection connection, double throughput )
+        public Connection(Connection connection, double throughput)
         {
             Construct();
 
