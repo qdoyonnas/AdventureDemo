@@ -21,7 +21,7 @@
 						"name": "doorway",
 						"description": "a doorway",
 						"throughput": "70",
-						"twoWay": true,
+						"isTwoWay": true,
 						"blockedBy": {
 							"entries": [
 								{

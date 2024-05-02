@@ -52,6 +52,7 @@ namespace AdventureCore
 				behaviour.SetMethods(
 					behaviourScript.Construct,
 					behaviourScript.OnAssign,
+					behaviourScript.OnWorldLoaded,
 					behaviourScript.Interact
 				);
 			}

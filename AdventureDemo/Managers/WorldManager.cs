@@ -47,6 +47,8 @@ namespace AdventureCore
             }
         }
 
+        public delegate bool OnWorldLoadedDelegate();
+        public event OnWorldLoadedDelegate OnWorldLoaded;
         public void LoadScenario( ScenarioData data )
         {
             scenarioData = data;
@@ -60,6 +62,7 @@ namespace AdventureCore
             
             GameObject playerObj = data.playerInfo.LoadData<GameObject>(typeof(ObjectData));
             player.Control(playerObj);
+            OnWorldLoaded?.Invoke();
         }
 
         public void AddRoot( Container obj )

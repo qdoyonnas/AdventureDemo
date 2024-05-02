@@ -8,6 +8,7 @@ namespace AdventureCore
     {
         bool Construct(Behaviour behaviour, Dictionary<string, object> data);
         bool OnAssign(Behaviour behaviour);
+        bool OnWorldLoaded(Behaviour behaviour);
         Dictionary<string, object> Interact(Behaviour behaviour, GameObject interactor, Dictionary<string, object> data);
     }
 }

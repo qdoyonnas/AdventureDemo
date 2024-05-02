@@ -148,9 +148,15 @@ namespace AdventureCore
         {
             if( ConstructMethod == null ) {
                 WaywardManager.instance.Log($@"<yellow>Verb '{displayLabel}' doesn't have a ConstructMethod.</yellow>");
+                return false;
             }
 
-            return ConstructMethod(this, data);
+            try {
+                return ConstructMethod(this, data);
+            } catch (SystemException e) {
+                WaywardManager.instance.Log($@"<red>Verb '{displayLabel}' failed running ConstructMethod:</red> {e}");
+                return false;
+            }
         }
 
         public delegate bool OnAssignDelegate( Verb verb );
@@ -165,9 +171,15 @@ namespace AdventureCore
         {
             if( OnAssignMethod == null ) {
                 WaywardManager.instance.Log($@"<yellow>Verb '{displayLabel}' doesn't have a OnAssignMethod.</yellow>");
+                return false;
             }
 
-            return OnAssignMethod(this);
+            try {
+                return OnAssignMethod(this);
+            } catch (SystemException e) {
+                WaywardManager.instance.Log($@"<red>Verb '{displayLabel}' failed running OnAssignMethod:</red> {e}");
+                return false;
+            }
         }
 
         public delegate CheckResult CheckDelegate( Verb verb, GameObject target );
@@ -186,9 +198,15 @@ namespace AdventureCore
         {
             if( CheckMethod == null ) {
                 WaywardManager.instance.Log($@"<yellow>Verb '{displayLabel}' doesn't have a CheckMethod.</yellow>");
+                return new CheckResult(CheckValue.INVALID);
             }
 
-            return CheckMethod(this, target);
+            try {
+                return CheckMethod(this, target);
+            } catch (SystemException e) {
+                WaywardManager.instance.Log($@"<red>Verb '{displayLabel}' failed running CheckMethod:</red> {e}");
+                return new CheckResult(CheckValue.INVALID);
+            }
         }
 
         public delegate Dictionary<string, object> ActionDelegate( Verb verb, Dictionary<string, object> data );
@@ -202,9 +220,15 @@ namespace AdventureCore
         {
             if( ActionMethod == null ) {
                 WaywardManager.instance.Log($@"<yellow>Verb '{displayLabel}' doesn't have an ActionMethod.</yellow>");
+                return data;
             }
 
-            return ActionMethod(this, data);
+            try {
+                return ActionMethod(this, data);
+            } catch (SystemException e) {
+                WaywardManager.instance.Log($@"<red>Verb '{displayLabel}' failed running ActionMethod:</red> {e}");
+                return data;
+            }
         }
 
         public delegate bool RegisterDelegate( Verb verb, Dictionary<string, object> data, bool fromPlayer = false );
@@ -242,9 +266,15 @@ namespace AdventureCore
         {
             if( RegisterMethod == null ) {
                 WaywardManager.instance.Log($@"<yellow>Verb '{displayLabel}' doesn't have a RegisterMethod.</yellow>");
+                return false;
             }
 
-            return RegisterMethod(this, data, fromPlayer);
+            try {
+                return RegisterMethod(this, data, fromPlayer);
+            } catch (SystemException e) {
+                WaywardManager.instance.Log($@"<red>Verb '{displayLabel}' failed running RegisterMethod:</red> {e}");
+                return false;
+            }
         }
         
         public delegate bool DisplayDelegate( Verb verb, Actor actor, GameObject target, FrameworkContentElement span );
@@ -268,9 +298,15 @@ namespace AdventureCore
         {
             if( DisplayMethod == null ) {
                 WaywardManager.instance.Log($@"<yellow>Verb '{displayLabel}' doesn't have a DisplayMethod.</yellow>");
+                return false;
             }
 
-            return DisplayMethod(this, actor, target, span);
+            try {
+                return DisplayMethod(this, actor, target, span);
+            } catch (SystemException e) {
+                WaywardManager.instance.Log($@"<red>Verb '{displayLabel}' failed running DisplayMethod:</red> {e}");
+                return false;
+            }
         }
 
         public delegate bool AddVerbDelegate( Verb verb, Actor actor );
@@ -286,9 +322,15 @@ namespace AdventureCore
         {
             if( AddVerbMethod == null ) {
                 WaywardManager.instance.Log($@"<yellow>Verb '{displayLabel}' doesn't have an AddVerbMethod.</yellow>");
+                return false;
             }
 
-            return AddVerbMethod(this, actor);
+            try {
+                return AddVerbMethod(this, actor);
+            } catch (SystemException e) {
+                WaywardManager.instance.Log($@"<red>Verb '{displayLabel}' failed running AddVerbMethod:</red> {e}");
+                return false;
+            }
         }
 
         public delegate bool ParseInputDelegate( Verb verb, InputEventArgs inputEventArgs );
@@ -311,9 +353,15 @@ namespace AdventureCore
         {
             if( ParseInputMethod == null ) {
                 WaywardManager.instance.Log($@"<yellow>Verb '{displayLabel}' doesn't have a ParseInputMethod.</yellow>");
+                return false;
             }
 
-            return ParseInputMethod(this, inputEventArgs);
+            try {
+                return ParseInputMethod(this, inputEventArgs);
+            } catch (SystemException e) {
+                WaywardManager.instance.Log($@"<red>Verb '{displayLabel}' failed running ParseInputMethod:</red> {e}");
+                return false;
+            }
         }
     }
 }

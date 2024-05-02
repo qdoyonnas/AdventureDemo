@@ -144,17 +144,16 @@ class TraversalVerb : DefaultVerb
             return new CheckResult(CheckValue.INVALID);
         }
 
-        CheckResult canAttachResult = connection.connectedAttachmentPoint.CanAttach(verb.self);
-        if (canAttachResult.value == CheckValue.INVALID) { return canAttachResult; }
-
-        if (physicalSelf.GetVolume() > connection.naturalThroughput) {
-            return new CheckResult(CheckValue.INVALID, $@"Cannot fit through there");
+        CheckResult canAttach = connection.connectedAttachmentPoint.CanAttach(verb.self);
+        WaywardManager.instance.Log($@"{verb.self.GetData("name upper")}:");
+        WaywardManager.instance.Log($@"CanAttach: {canAttach.value}, '{(canAttach.messages.Count > 0 ? canAttach.messages[0] : null)}'");
+        CheckResult canPass = connection.CanPass(verb.self);
+        WaywardManager.instance.Log($@"CanPass: {canPass.value}, '{(canPass.messages.Count > 0 ? canPass.messages[0] : null)}'");
+        if (canAttach.value < canPass.value) {
+            return canAttach;
+        } else {
+            return canPass;
         }
-        if (physicalSelf.GetVolume() > connection.actualThroughput) {
-            return new CheckResult(CheckValue.RESTRICTED, $@"{connection.GetBlockingObject().GetName("upper")} is blocking the way");
-        }
-
-        return canAttachResult;
     }
     CheckResult CheckContainer( Verb verb, Container container )
     {

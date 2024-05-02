@@ -125,5 +125,20 @@ namespace AdventureCore
 
             return false;
         }
+
+        public CheckResult CanPass(GameObject obj)
+        {
+            Physical physicalObj = obj as Physical;
+            if (physicalObj == null) {
+                return new CheckResult(CheckValue.VALID);
+            }
+
+            if (physicalObj.GetVolume() > actualThroughput) {
+                return new CheckResult(CheckValue.RESTRICTED, $"{blockingObjects[0].GetData("name upper")} is blocking the way");
+            } else if (connectedConnection != null && physicalObj.GetVolume() > connectedConnection.actualThroughput) {
+                return new CheckResult(CheckValue.RESTRICTED, $"{connectedConnection.blockingObjects[0].GetData("name upper")} is blocking the way");
+            }
+            return new CheckResult(CheckValue.VALID);
+        }
     }
 }

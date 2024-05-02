@@ -64,32 +64,47 @@ namespace AdventureCore
         {
             ConstructMethod = ConstructDefault;
             OnAssignMethod = OnAssignDefault;
+            OnWorldLoadedMethod = OnWorldLoadedDefault;
             InteractMethod = InteractDefault;
         }
         public void SetMethods(
                 ConstructDelegate construct,
                 OnAssignDelegate onAssign,
+                OnWorldLoadedDelegate onWorldLoaded,
                 InteractDelegate interact
             )
         {
             ConstructMethod = construct != null ? construct : ConstructDefault;
             OnAssignMethod = onAssign != null ? onAssign : OnAssignDefault;
+            OnWorldLoadedMethod = onWorldLoaded != null ? onWorldLoaded : OnWorldLoadedDefault;
             InteractMethod = interact != null ? interact : InteractDefault;
         }
 
         public delegate bool ConstructDelegate(Behaviour behaviour, Dictionary<string, object> data);
         protected static bool ConstructDefault(Behaviour behaviour, Dictionary<string, object> data)
         {
+            GameManager.instance.world.OnWorldLoaded += behaviour.OnWorldLoaded;
             return true;
         }
         protected ConstructDelegate ConstructMethod;
+        /// <summary>
+        /// Called when a behaviour has just been loaded from a script. Use to set initial values in blackboard
+        /// </summary>
+        /// <param name="data">(string, object> pairs of data to help instantiate the behaviour</param>
+        /// <returns></returns>
         public bool Construct(Dictionary<string, object> data)
         {
             if (ConstructMethod == null) {
                 WaywardManager.instance.Log($@"<yellow>Behaviour '{displayLabel}' doesn't have a ConstructMethod.</yellow>");
+                return false;
             }
 
-            return ConstructMethod(this, data);
+            try {
+                return ConstructMethod(this, data);
+            } catch (SystemException e) {
+                WaywardManager.instance.Log($@"<red>Behaviour '{displayLabel}' failed running ConstructMethod:</red> {e}");
+                return false;
+            }
         }
 
         public delegate bool OnAssignDelegate(Behaviour behaviour);
@@ -104,9 +119,33 @@ namespace AdventureCore
         {
             if (OnAssignMethod == null) {
                 WaywardManager.instance.Log($@"<yellow>Behaviour '{displayLabel}' doesn't have a OnAssignMethod.</yellow>");
+                return false;
             }
 
-            return OnAssignMethod(this);
+            try {
+                return OnAssignMethod(this);
+            } catch (SystemException e) {
+                WaywardManager.instance.Log($@"<red>Behaviour '{displayLabel}' failed running OnAssignMethod:</red> {e}");
+                return false;
+            }
+        }
+
+        public delegate bool OnWorldLoadedDelegate(Behaviour behaviour);
+        protected static bool OnWorldLoadedDefault(Behaviour behaviour) { return true; }
+        protected OnWorldLoadedDelegate OnWorldLoadedMethod;
+        public bool OnWorldLoaded()
+        {
+            if (OnWorldLoadedMethod == null) {
+                WaywardManager.instance.Log($@"<yellow>Behaviour '{displayLabel}' doesn't have a OnWorldLoadedMethod.</yellow>");
+                return false;
+            }
+
+            try {
+                return OnWorldLoadedMethod(this);
+            } catch (SystemException e) {
+                WaywardManager.instance.Log($@"<red>Behaviour '{displayLabel}' failed running OnWorldLoadedMethod:</red> {e}");
+                return false;
+            }
         }
 
         public delegate Dictionary<string, object> InteractDelegate(Behaviour behaviour, GameObject interactor, Dictionary<string, object> data);
@@ -120,9 +159,15 @@ namespace AdventureCore
         {
             if (InteractMethod == null) {
                 WaywardManager.instance.Log($@"<yellow>Behaviour '{displayLabel}' doesn't have an InteractMethod.</yellow>");
+                return data;
             }
 
-            return InteractMethod(this, interactor, data);
+            try {
+                return InteractMethod(this, interactor, data);
+            } catch (SystemException e) {
+                WaywardManager.instance.Log($@"<red>Behaviour '{displayLabel}' failed running InteractMethod:</red> {e}");
+                return data;
+            }
         }
     }
 }

@@ -7,7 +7,7 @@
 	"name": "human",
 	"description": "a carbon-based lifeform",
 	"tags": [ "human", "animal", "mammal", "humanoid" ],
-	
+
 	"parts": [
 		{
 			"id": "human_body",
@@ -22,17 +22,29 @@
 			"independentSpawn": false
 		},
 		{
-			"id": "human_arm",
+			"id": "human_left_arm",
 			"spawnChance": 1,
-			"spawnQuantity": 2,
+			"spawnQuantity": 1,
 			"independentSpawn": true
 		},
 		{
-			"id": "human_leg",
+			"id": "human_right_arm",
 			"spawnChance": 1,
-			"spawnQuantity": 2,
+			"spawnQuantity": 1,
 			"independentSpawn": true
 		},
+		{
+			"id": "human_left_leg",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": true
+		},
+		{
+			"id": "human_right_leg",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": true
+		}
 	]
 },
 
@@ -69,7 +81,7 @@
 },
 
 {
-	"id": "human_arm",
+	"id": "human_left_arm",
 	"type": "PhysicalAmalgamData",
 	
 	"name": "human arm",
@@ -89,7 +101,33 @@
 			"independentSpawn": false
 		},
 		{
-			"id": "human_hand",
+			"id": "human_left_hand",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		}
+	]
+},
+
+{
+	"id": "human_right_arm",
+	"basedOn": "human_left_arm",
+	
+	"parts": [
+		{
+			"id": "human_upperArm",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "human_lowerArm",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "human_right_hand",
 			"spawnChance": 1,
 			"spawnQuantity": 1,
 			"independentSpawn": false
@@ -130,11 +168,11 @@
 },
 
 {
-	"id": "human_hand",
+	"id": "human_left_hand",
 	"type": "PhysicalData",
 	
-	"name": "human hand",
-	"description": "the hand of a human",
+	"name": "human left hand",
+	"description": "the left hand of a human",
 	
 	"volume": "0.42",
 	"materials": [
@@ -156,11 +194,18 @@
 			"possession":  "EMBODIMENT"
 		}
 	]
-	
 },
 
 {
-	"id": "human_leg",
+	"id": "human_right_hand",
+	"basedOn": "human_left_hand",
+	
+	"name": "human right hand",
+	"description": "the right hand of a human"
+},
+
+{
+	"id": "human_left_leg",
 	"type": "PhysicalAmalgamData",
 	
 	"name": "human leg",
@@ -180,11 +225,37 @@
 			"independentSpawn": false
 		},
 		{
-			"id": "human_foot",
+			"id": "human_left_foot",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		}
+	]
+},
+
+{
+	"id": "human_right_leg",
+	"basedOn": "human_left_leg",
+	
+	"parts": [
+		{
+			"id": "human_upperLeg",
 			"spawnChance": 1,
 			"spawnQuantity": 1,
 			"independentSpawn": false
 		},
+		{
+			"id": "human_lowerLeg",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		},
+		{
+			"id": "human_right_foot",
+			"spawnChance": 1,
+			"spawnQuantity": 1,
+			"independentSpawn": false
+		}
 	]
 },
 
@@ -221,11 +292,11 @@
 },
 
 {
-	"id": "human_foot",
+	"id": "human_left_foot",
 	"type": "PhysicalData",
 	
-	"name": "human foot",
-	"description": "the foot of a human",
+	"name": "human left foot",
+	"description": "the left foot of a human",
 	
 	"volume": "0.98",
 	"materials": [
@@ -241,6 +312,14 @@
 			"possession": "EMBODIMENT"
 		}
 	]
+},
+
+{
+	"id": "human_right_foot",
+	"basedOn": "human_left_foot",
+	
+	"name": "human right foot",
+	"description": "the right foot of a human"
 }
 
 ]

@@ -9,9 +9,14 @@ public class DefaultBehaviour : IBehaviourScript
 {
     public virtual bool Construct(Behaviour behaviour, Dictionary<string, object> data)
     {
+        GameManager.instance.world.OnWorldLoaded += behaviour.OnWorldLoaded;
         return true;
     }
     public virtual bool OnAssign(Behaviour behaviour)
+    {
+        return true;
+    }
+    public virtual bool OnWorldLoaded(Behaviour behaviour)
     {
         return true;
     }

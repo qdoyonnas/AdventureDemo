@@ -44,7 +44,7 @@ namespace AdventureCore
             if( data.ContainsKey("gameObject") ) {
                 try {
                     GameObject obj = data["gameObject"] as GameObject;
-                    data1.Inlines.Add( observer.Observe(obj, "name upper").span );
+                    data1.Inlines.Add( observer.Observe(obj, "name upper top").span );
                 } catch( Exception e ) {
                     WaywardManager.instance.Log($@"<orange>WARNING: TimelinePage failed to resolve gameObject: {e}</orange>");
                     data1.Inlines.Add( WaywardTextParser.Parse($"<i>unknown</i>") );

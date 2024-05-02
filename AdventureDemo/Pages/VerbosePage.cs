@@ -32,7 +32,7 @@ namespace AdventureCore
         {
             _observer = observer;
             observer.ObservedActionTaken += OnObservedActionTaken;
-            TimelineManager.instance.onTimeAdvanceStart += TurnPage;
+            //TimelineManager.instance.onTimeAdvanceStart += TurnPage;
 
             SetTitle(". . .");
             FrameworkElement panel = GameManager.instance.GetResource<FrameworkElement>("VerbosePage");
@@ -76,6 +76,10 @@ namespace AdventureCore
 
             if( data.ContainsKey("message") ) {
                 ObservableText observableText = data["message"] as ObservableText;
+                if (observableText == null) {
+                    WaywardManager.instance.Log($"<red>VerbosePage found none ObservableText message:</red> {data["message"]}");
+                    return;
+                }
                 TextBlock block = observableText.Observed(observer);
                 descriptions.Children.Add(block);
             }
